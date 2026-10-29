@@ -1,1 +1,9 @@
-{"berita":[]}
+{
+  "berita": [
+    {
+      "judul": "Berita Percobaan — Uji CMS",
+      "ringkasan": "Ini adalah berita percobaan untuk menguji halaman admin Decap CMS. Berita ini akan dihapus setelah pengujian selesai.",
+      "isi": "Ini adalah berita percobaan untuk menguji halaman admin Decap CMS. Berita ini akan dihapus setelah pengujian selesai."
+    }
+  ]
+}
