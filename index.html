@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SD Negeri 1 Gerduren — Website Resmi Sekolah</title>
+<meta name="description" content="Website resmi SD Negeri 1 Gerduren, Desa Gerduren, Kecamatan Purwojati, Kabupaten Banyumas. NPSN 20302352. Profil, akademik, kegiatan, PPDB, dan kontak sekolah.">
+<meta property="og:title" content="SD Negeri 1 Gerduren">
+<meta property="og:description" content="Sekolah dasar negeri di Desa Gerduren, Purwojati, Banyumas. NPSN 20302352.">
+<style>
+  :root{
+    --green:#0b6b43; --green-dark:#084d30; --green-light:#e6f4ec;
+    --blue:#0277bd; --gold:#f2b705; --gold-soft:#fff7d6;
+    --ink:#17301f; --muted:#5a6b60; --line:#dce8df; --bg:#f7faf8; --white:#fff;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--green)}
+  .skip{position:absolute;left:-999px;top:0;background:var(--gold);color:#000;padding:10px 14px;z-index:99}
+  .skip:focus{left:10px;top:10px}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+  .logo{width:52px;height:52px;border-radius:14px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px;box-shadow:0 6px 18px rgba(11,107,67,.25)}
+  .brand b{display:block;line-height:1.15;font-size:18px}
+  .brand span{font-size:13px;color:var(--muted)}
+  nav{display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;padding:8px 12px;border-radius:999px}
+  nav a:hover,nav a:focus{background:var(--green-light);color:var(--green-dark)}
+  .cta{background:var(--green);color:#fff!important}
+  .cta:hover{background:var(--green-dark)}
+  @media(max-width:820px){nav{display:none} .topbar{flex-wrap:wrap}}
+  .hero{background:linear-gradient(135deg,#0b6b43 0%,#0e8a5a 55%,#0277bd 130%);color:#fff;overflow:hidden}
+  .hero-inner{padding:56px 0 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
+  @media(max-width:820px){.hero-inner{grid-template-columns:1fr;padding:40px 0}}
+  .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700}
+  .hero h1{font-size:clamp(32px,5vw,54px);line-height:1.05;margin:16px 0 12px}
+  .hero p{font-size:18px;opacity:.95;max-width:620px}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .btn{display:inline-block;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:999px}
+  .btn-gold{background:var(--gold);color:#1a1a1a}
+  .btn-outline{border:2px solid #fff;color:#fff}
+  .hero-card{background:#fff;color:var(--ink);border-radius:var(--radius);padding:22px;box-shadow:0 18px 40px rgba(0,0,0,.22)}
+  .hero-card h2{margin:0 0 8px;font-size:20px}
+  .hero-card p{font-size:15px;color:var(--muted);margin:0 0 14px}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:-24px 0 0;position:relative;z-index:2}
+  @media(max-width:820px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  .stat strong{display:block;font-size:30px;color:var(--green);line-height:1}
+  .stat span{font-size:13px;color:var(--muted);font-weight:600}
+  section{padding:52px 0}
+  section h2{font-size:30px;margin:0 0 8px}
+  .lede{color:var(--muted);max-width:760px;margin:0 0 24px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:820px){.cards{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .card h3{margin:8px 0}
+  .icon{font-size:28px}
+  .notice{background:var(--gold-soft);border:1px solid #f0d97a;border-radius:14px;padding:16px 18px}
+  .notice b{color:#7a5b00}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:15px}
+  th{background:var(--green);color:#fff}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:820px){.two{grid-template-columns:1fr}}
+  .ppdb-steps{counter-reset:step}
+  .ppdb-steps li{list-style:none;position:relative;padding-left:44px;margin-bottom:16px}
+  .ppdb-steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800}
+  footer{background:var(--green-dark);color:#d9ece1;padding:36px 0}
+  footer a{color:#fff}
+  .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px}
+  @media(max-width:820px){.footer-grid{grid-template-columns:1fr}}
+  .small{font-size:13px;color:var(--muted)}
+  .pill{display:inline-block;background:var(--green-light);color:var(--green-dark);font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px}
+</style>
+</head>
+<body>
+<a class="skip" href="#beranda">Lewati ke konten utama</a>
+<header>
+  <div class="wrap topbar">
+    <a class="brand" href="#beranda" aria-label="Beranda SD Negeri 1 Gerduren">
+      <span class="logo" aria-hidden="true">SD</span>
+      <span><b>SD Negeri 1 Gerduren</b><span>Purwojati &bull; Banyumas &bull; NPSN 20302352</span></span>
+    </a>
+    <nav aria-label="Navigasi utama">
+      <a href="#profil">Profil</a>
+      <a href="#akademik">Akademik</a>
+      <a href="#kegiatan">Kegiatan</a>
+      <a href="#ppdb">PPDB</a>
+      <a href="#kontak">Kontak</a>
+      <a class="cta" href="#ppdb">Info PPDB &rarr;</a>
+    </nav>
+  </div>
+</header>
+
+<main id="beranda">
+  <div class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <span class="badge">Website Resmi Sekolah &bull; Tahun Ajaran 2026/2027</span>
+        <h1>Belajar, Berkarakter, dan Tumbuh Bersama di Gerduren</h1>
+        <p>SD Negeri 1 Gerduren melayani pendidikan dasar untuk anak-anak Desa Gerduren dan sekitarnya, dengan fokus pada literasi dasar, karakter, dan lingkungan belajar yang aman dan ramah anak.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="#profil">Kenali Sekolah Kami</a>
+          <a class="btn btn-outline" href="#kontak">Hubungi Sekolah</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <span class="pill">Data terverifikasi</span>
+        <h2>Profil Singkat</h2>
+        <p><strong>Kepala Sekolah:</strong> Yudhy Idapriyanto<br>
+        <strong>Lokasi:</strong> Desa Gerduren, Kecamatan Purwojati, Kabupaten Banyumas, Jawa Tengah<br>
+        <strong>NPSN:</strong> 20302352</p>
+        <p class="small">Data agregat di halaman ini bersumber dari data sekolah Tahun Ajaran 2026/2027 (Dapodik, 7 September 2026). Situs ini tidak menampilkan nama siswa, NISN, nilai, maupun data pribadi apa pun.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="stat-grid" aria-label="Statistik sekolah">
+      <div class="stat"><strong>126</strong><span>Siswa (Kelas 1&ndash;6)</span></div>
+      <div class="stat"><strong>6</strong><span>Guru</span></div>
+      <div class="stat"><strong>4</strong><span>Tenaga Kependidikan</span></div>
+      <div class="stat"><strong>6</strong><span>Rombongan Belajar</span></div>
+    </div>
+  </div>
+
+  <section id="profil">
+    <div class="wrap">
+      <h2>Profil Sekolah</h2>
+      <p class="lede">SD Negeri 1 Gerduren adalah sekolah dasar negeri di bawah Korwilcam Dinas Pendidikan Purwojati, Kabupaten Banyumas. Halaman ini hanya memuat data yang sudah terverifikasi — bagian yang belum resmi akan ditulis “menyusul”, bukan dikarang.</p>
+      <div class="two">
+        <div class="card">
+          <h3>Identitas Sekolah</h3>
+          <table>
+            <tr><th style="width:42%">Nama</th><td>SD Negeri 1 Gerduren</td></tr>
+            <tr><th>NPSN</th><td>20302352</td></tr>
+            <tr><th>Status</th><td>Negeri</td></tr>
+            <tr><th>Wilayah</th><td>Desa Gerduren, Kec. Purwojati, Kab. Banyumas</td></tr>
+            <tr><th>Kepala Sekolah</th><td>Yudhy Idapriyanto</td></tr>
+            <tr><th>Tahun Ajaran</th><td>2026/2027</td></tr>
+          </table>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Sambutan Kepala Sekolah</h3>
+            <p>Sambutan resmi Kepala Sekolah akan dimuat setelah dikonfirmasi langsung oleh Bapak Yudhy Idapriyanto. Kami tidak menampilkan kutipan yang belum disetujui beliau.</p>
+          </div>
+          <div class="notice" style="margin-top:16px">
+            <b>Transparansi data:</b> Visi, misi, sejarah sekolah, akreditasi, alamat lengkap, dan kontak resmi masih dalam tahap konfirmasi ke sekolah. Begitu resmi, bagian tersebut langsung diperbarui di sini.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="akademik" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <h2>Akademik</h2>
+      <p class="lede">Pembelajaran mengikuti struktur fase Kurikulum Merdeka. Fokus utama di kelas awal adalah literasi baca-tulis sebagai fondasi belajar anak.</p>
+      <div class="cards">
+        <div class="card"><div class="icon">&#128214;</div><h3>Fase A — Kelas 1 &amp; 2</h3><p>Fondasi literasi dan numerasi: membaca, menulis, berhitung dasar, serta pembiasaan karakter dan kemandirian.</p></div>
+        <div class="card"><div class="icon">&#9997;&#65039;</div><h3>Fase B — Kelas 3 &amp; 4</h3><p>Penguatan literasi-numerasi, pemahaman konsep, dan keterampilan belajar mandiri.</p></div>
+        <div class="card"><div class="icon">&#127891;</div><h3>Fase C — Kelas 5 &amp; 6</h3><p>Pendalaman konsep, penalaran, proyek, dan kesiapan melanjutkan ke jenjang berikutnya.</p></div>
+      </div>
+      <p class="small" style="margin-top:16px">Mata pelajaran dan jadwal harian mengikuti jadwal resmi sekolah. Jadwal per kelas tidak dipublikasikan di situs ini.</p>
+    </div>
+  </section>
+
+  <section id="kegiatan">
+    <div class="wrap">
+      <h2>Kegiatan &amp; Berita</h2>
+      <p class="lede">Ruang ini untuk pengumuman dan dokumentasi kegiatan sekolah. Hanya kegiatan yang sudah terverifikasi dan foto yang sudah mendapat izin tayang yang akan dimuat.</p>
+      <div class="cards"><div class="cards" id="berita-list">
+        <div class="card"><span class="pill">Segera hadir</span><h3>Berita Sekolah</h3><p>Pengumuman resmi sekolah akan tampil di sini, lengkap dengan tanggal dan sumbernya.</p></div>
+        <div class="card"><span class="pill">Segera hadir</span><h3>Kegiatan Siswa</h3><p>Upacara, literasi, olahraga, seni, dan kegiatan kokurikuler — setelah dokumentasi resmi tersedia.</p></div>
+        <div class="card"><span class="pill">Segera hadir</span><h3>Prestasi</h3><p>Hanya prestasi yang sudah terverifikasi namanya (tanpa data pribadi siswa) yang akan ditampilkan.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ppdb" style="background:var(--green-light)">
+    <div class="wrap">
+      <h2>PPDB — Penerimaan Peserta Didik Baru</h2>
+      <p class="lede">Jadwal, kuota, dan ketentuan PPDB mengikuti pengumuman resmi Dinas Pendidikan dan sekolah. Jangan percaya informasi PPDB dari sumber yang tidak resmi.</p>
+      <div class="two">
+        <div class="card">
+          <h3>Alur Umum (konfirmasi ke sekolah)</h3>
+          <ol class="ppdb-steps">
+            <li><strong>Pantau pengumuman resmi</strong> — jadwal dan kuota diumumkan sekolah/dinas.</li>
+            <li><strong>Siapkan dokumen</strong> — umumnya Kartu Keluarga, akta kelahiran, dan dokumen pendukung lain sesuai ketentuan resmi yang berlaku saat itu.</li>
+            <li><strong>Daftar sesuai jadwal</strong> — datang ke sekolah atau lewat jalur yang diumumkan resmi.</li>
+            <li><strong>Verifikasi &amp; pengumuman hasil</strong> — ikuti pengumuman resmi sekolah.</li>
+          </ol>
+        </div>
+        <div class="notice">
+          <b>Status PPDB saat ini: menyusul.</b><br>
+          Jadwal PPDB tahun ajaran berikutnya belum diumumkan di halaman ini. Silakan hubungi sekolah langsung (lihat Kontak) atau datang ke sekolah pada jam layanan untuk informasi terbaru.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontak">
+    <div class="wrap">
+      <h2>Kontak &amp; Lokasi</h2>
+      <div class="two">
+        <div class="card">
+          <h3>Alamat</h3>
+          <p>SD Negeri 1 Gerduren<br>Desa Gerduren, Kecamatan Purwojati<br>Kabupaten Banyumas, Jawa Tengah</p>
+          <p class="small">Alamat lengkap (nama jalan/nomor) dan titik peta akan ditambahkan setelah dikonfirmasi sekolah.</p>
+        </div>
+        <div class="card">
+          <h3>Hubungi Kami</h3>
+          <p>Telepon / WhatsApp resmi: <strong>menyusul</strong><br>
+          Email resmi: <strong>menyusul</strong><br>
+          Jam layanan: <strong>hari dan jam kerja sekolah</strong></p>
+          <p class="small">Kami sengaja tidak menampilkan nomor pribadi guru atau tenaga kependidikan di situs publik ini.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <strong style="color:#fff;font-size:18px">SD Negeri 1 Gerduren</strong>
+      <p>Desa Gerduren, Purwojati, Banyumas &bull; NPSN 20302352</p>
+      <p class="small" style="color:#bcd8c8">Situs statis ini dihosting gratis di Cloudflare Pages. Tidak ada data siswa, nilai, atau data pribadi yang disimpan atau ditampilkan di situs ini.</p>
+    </div>
+    <div>
+      <strong style="color:#fff">Navigasi</strong><br>
+      <a href="#profil">Profil</a> &bull; <a href="#akademik">Akademik</a> &bull; <a href="#kegiatan">Kegiatan</a> &bull; <a href="#ppdb">PPDB</a> &bull; <a href="#kontak">Kontak</a>
+    </div>
+    <div>
+      <strong style="color:#fff">Catatan</strong>
+      <p class="small" style="color:#bcd8c8">Versi 1.0 — data agregat TA 2026/2027. Koreksi dan pembaruan resmi dari sekolah selalu didahulukan daripada versi sebelumnya.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var el = document.getElementById('berita-list');
+  if(!el) return;
+  fetch('content/berita.json').then(function(r){ return r.json(); }).then(function(data){
+    var list = (data && data.berita) || [];
+    if(!list.length) return; // keep Segera hadir fallback
+    el.innerHTML = list.map(function(b){
+      var t = b.tanggal ? '<span class="pill">'+b.tanggal+'</span>' : '';
+      var foto = b.foto ? '<p><img src="'+b.foto+'" alt="" style="width:100%;border-radius:12px"></p>' : '';
+      var isi = b.ringkasan || b.isi || '';
+      return '<div class="card">'+t+'<h3>'+b.judul+'</h3>'+foto+'<p>'+isi+'</p></div>';
+    }).join('');
+  }).catch(function(){ /* keep fallback */ });
+})();
+</script>
+</body>
+</html>

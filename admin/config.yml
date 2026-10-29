@@ -1,0 +1,28 @@
+# Decap CMS — SD Negeri 1 Gerduren
+# PENTING: ganti <repo> dan <project> di bawah setelah repo GitHub & proyek Cloudflare Pages Git dibuat.
+# Jangan pernah menulis GITHUB_CLIENT_SECRET di file ini.
+backend:
+  name: github
+  repo: anggerukmo01-eng/sdn1gerduren-website
+  branch: main
+  base_url: https://sdn1gerduren-cms.pages.dev
+  auth_endpoint: /api/auth
+media_folder: images/uploads
+public_folder: /images/uploads
+collections:
+  - name: berita
+    label: Berita
+    files:
+      - name: daftar
+        label: Daftar Berita
+        file: content/berita.json
+        fields:
+          - label: Daftar Berita
+            name: berita
+            widget: list
+            fields:
+              - { label: Judul, name: judul, widget: string }
+              - { label: Tanggal, name: tanggal, widget: date, format: YYYY-MM-DD }
+              - { label: Ringkasan, name: ringkasan, widget: text }
+              - { label: Isi Lengkap, name: isi, widget: markdown, required: false }
+              - { label: Foto, name: foto, widget: image, required: false }
