@@ -5,7 +5,7 @@ backend:
   name: github
   repo: anggerukmo01-eng/sdn1gerduren-website
   branch: main
-  base_url: https://sdn1gerduren-cms.pages.dev
+  base_url: https://sdn1gerduren.pages.dev
   auth_endpoint: /api/auth
 media_folder: images/uploads
 public_folder: /images/uploads
