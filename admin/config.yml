@@ -22,7 +22,7 @@ collections:
             widget: list
             fields:
               - { label: Judul, name: judul, widget: string }
-              - { label: Tanggal, name: tanggal, widget: date, format: YYYY-MM-DD }
+              - { label: Tanggal, name: tanggal, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
               - { label: Ringkasan, name: ringkasan, widget: text }
               - { label: Isi Lengkap, name: isi, widget: markdown, required: false }
               - { label: Foto, name: foto, widget: image, required: false }
