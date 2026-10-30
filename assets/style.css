@@ -212,3 +212,12 @@ section{animation:fadeUp .55s ease both}
 .share-label{font-weight:700;color:var(--muted)}
 .share-btn{display:inline-block;background:var(--bg-soft);border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;cursor:pointer;transition:transform .15s ease,background .15s ease}
 .share-btn:hover{background:var(--gold-soft);transform:translateY(-2px)}
+
+/* Galeri foto berita & kegiatan */
+.berita-galeri,.galeri-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+.galeri-grid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.galeri-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.berita-galeri,.galeri-grid{grid-template-columns:1fr}}
+.berita-galeri figure,.galeri-grid figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.berita-galeri img,.galeri-grid img{width:100%;height:220px;object-fit:cover;display:block;margin:0}
+.berita-galeri figcaption,.galeri-grid figcaption{font-size:14px;color:var(--muted);padding:10px 14px 12px}

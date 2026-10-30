@@ -131,7 +131,13 @@
     if(item.ringkasan) body += '<p><strong>' + esc(item.ringkasan) + '</strong></p>';
     if(item.isi) body += paragraphs(item.isi);
     if(!body) body = '<p>Isi lengkap berita ini belum tersedia.</p>';
-    document.getElementById('modal-body').innerHTML = body + shareHtml(item);
+    var galeriHtml = '';
+    if(item.galeri && item.galeri.length){
+      galeriHtml = '<h3 style="margin-top:24px">Galeri Foto</h3><div class="berita-galeri">' + item.galeri.map(function(g){
+        return '<figure><img src="' + esc(fotoUrl(g.foto)) + '" alt="' + esc(g.keterangan || 'Foto berita') + '" loading="lazy"><figcaption>' + esc(g.keterangan || '') + '</figcaption></figure>';
+      }).join('') + '</div>';
+    }
+    document.getElementById('modal-body').innerHTML = body + galeriHtml + shareHtml(item);
     bindShare(document.getElementById('modal-body'));
     backdrop.classList.add('open');
     document.getElementById('modal-close').focus();
@@ -207,7 +213,7 @@
   fetch(beritaPath).then(function(r){ return r.json(); }).then(function(data){
     var list = (data && data.berita) || [];
     all = list.map(function(b, i){
-      return { judul: b.judul, tanggal: b.tanggal, ringkasan: b.ringkasan, isi: b.isi, foto: b.foto, kategori: b.kategori || 'Berita', penulis: b.penulis || '', _i: i };
+      return { judul: b.judul, tanggal: b.tanggal, ringkasan: b.ringkasan, isi: b.isi, foto: b.foto, kategori: b.kategori || 'Berita', penulis: b.penulis || '', galeri: b.galeri || [], _i: i };
     }).sort(function(a, b){
       var da = a.tanggal || '', db = b.tanggal || '';
       if(da === db) return a._i - b._i;
