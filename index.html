@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SD Negeri 1 Gerduren — Website Resmi Sekolah</title>
-<meta name="description" content="Website resmi SD Negeri 1 Gerduren, Desa Gerduren, Kecamatan Purwojati, Kabupaten Banyumas. NPSN 20302352. Profil, akademik, kegiatan, PPDB, dan kontak sekolah.">
+<meta name="description" content="Website resmi SD Negeri 1 Gerduren, Desa Gerduren, Kecamatan Purwojati, Kabupaten Banyumas. NPSN 20302352. Profil, visi misi, akademik, berita, kegiatan, PPDB, dan kontak sekolah.">
 <meta property="og:title" content="SD Negeri 1 Gerduren">
 <meta property="og:description" content="Sekolah dasar negeri di Desa Gerduren, Purwojati, Banyumas. NPSN 20302352.">
 <style>
@@ -12,27 +12,35 @@
     --green:#0b6b43; --green-dark:#084d30; --green-light:#e6f4ec;
     --blue:#0277bd; --gold:#f2b705; --gold-soft:#fff7d6;
     --ink:#17301f; --muted:#5a6b60; --line:#dce8df; --bg:#f7faf8; --white:#fff;
-    --radius:18px;
+    --radius:18px; --shadow:0 8px 24px rgba(0,0,0,.06);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
   a{color:var(--green)}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   .skip{position:absolute;left:-999px;top:0;background:var(--gold);color:#000;padding:10px 14px;z-index:99}
   .skip:focus{left:10px;top:10px}
-  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
-  .logo{width:52px;height:52px;border-radius:14px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px;box-shadow:0 6px 18px rgba(11,107,67,.25)}
+  .logo{width:52px;height:52px;border-radius:14px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px;box-shadow:0 6px 18px rgba(11,107,67,.25);flex:none}
   .brand b{display:block;line-height:1.15;font-size:18px}
   .brand span{font-size:13px;color:var(--muted)}
-  nav{display:flex;gap:6px;flex-wrap:wrap}
+  nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   nav a{text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;padding:8px 12px;border-radius:999px}
   nav a:hover,nav a:focus{background:var(--green-light);color:var(--green-dark)}
   .cta{background:var(--green);color:#fff!important}
   .cta:hover{background:var(--green-dark)}
-  @media(max-width:820px){nav{display:none} .topbar{flex-wrap:wrap}}
+  .menu-btn{display:none;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font-weight:700;font-size:15px;cursor:pointer;color:var(--ink)}
+  @media(max-width:900px){
+    .menu-btn{display:block}
+    nav{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;padding:12px 20px 18px;box-shadow:0 18px 30px rgba(0,0,0,.08)}
+    nav.open{display:flex}
+    nav a{padding:12px}
+    .topbar{position:relative;flex-wrap:wrap}
+  }
   .hero{background:linear-gradient(135deg,#0b6b43 0%,#0e8a5a 55%,#0277bd 130%);color:#fff;overflow:hidden}
   .hero-inner{padding:56px 0 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
   @media(max-width:820px){.hero-inner{grid-template-columns:1fr;padding:40px 0}}
@@ -46,35 +54,76 @@
   .hero-card{background:#fff;color:var(--ink);border-radius:var(--radius);padding:22px;box-shadow:0 18px 40px rgba(0,0,0,.22)}
   .hero-card h2{margin:0 0 8px;font-size:20px}
   .hero-card p{font-size:15px;color:var(--muted);margin:0 0 14px}
-  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:-24px 0 0;position:relative;z-index:2}
+  .latest-strip{background:#fff;border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:14px;padding:14px 18px;margin:-10px 0 0;position:relative;z-index:2;box-shadow:var(--shadow);display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+  .latest-strip b{color:var(--green-dark)}
+  .latest-strip a{font-weight:700;text-decoration:none}
+  .latest-strip a:hover{text-decoration:underline}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0 0;position:relative;z-index:2}
   @media(max-width:820px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
-  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-align:center;box-shadow:var(--shadow)}
   .stat strong{display:block;font-size:30px;color:var(--green);line-height:1}
   .stat span{font-size:13px;color:var(--muted);font-weight:600}
-  section{padding:52px 0}
-  section h2{font-size:30px;margin:0 0 8px}
+  section{padding:52px 0;scroll-margin-top:84px}
+  section h2{font-size:30px;margin:0 0 8px;line-height:1.2}
+  .eyebrow{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin:0 0 6px}
   .lede{color:var(--muted);max-width:760px;margin:0 0 24px}
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  @media(max-width:820px){.cards{grid-template-columns:1fr}}
+  @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.cards{grid-template-columns:1fr}}
   .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px}
-  .card h3{margin:8px 0}
+  .card h3{margin:8px 0;line-height:1.35}
   .icon{font-size:28px}
   .notice{background:var(--gold-soft);border:1px solid #f0d97a;border-radius:14px;padding:16px 18px}
   .notice b{color:#7a5b00}
   table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden}
-  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:15px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:15px;vertical-align:top}
   th{background:var(--green);color:#fff}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media(max-width:820px){.two{grid-template-columns:1fr}}
-  .ppdb-steps{counter-reset:step}
+  .ppdb-steps{counter-reset:step;padding-left:0}
   .ppdb-steps li{list-style:none;position:relative;padding-left:44px;margin-bottom:16px}
   .ppdb-steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800}
+  /* Berita: satu grid saja, tidak bersarang. Kartu pertama jadi sorotan. */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-weight:700;font-size:14px;cursor:pointer;color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--green);color:#fff;border-color:var(--green)}
+  .news-featured{display:grid;grid-template-columns:1.1fr 1fr;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px}
+  @media(max-width:820px){.news-featured{grid-template-columns:1fr}}
+  .news-featured .news-media{aspect-ratio:16/10;background:var(--green-light)}
+  .news-featured .news-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .news-featured .news-body{padding:26px}
+  .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:900px){.news-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.news-grid{grid-template-columns:1fr}}
+  .news-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+  .news-media{aspect-ratio:16/9;background:linear-gradient(135deg,var(--green-light),#dbeafe);display:grid;place-items:center;color:var(--green-dark);font-weight:800;font-size:28px}
+  .news-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .news-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .news-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .news-date{font-size:13px;color:var(--muted);font-weight:600}
+  .news-title{font-size:19px;line-height:1.35;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .news-featured .news-title{font-size:24px;-webkit-line-clamp:3}
+  .news-excerpt{color:var(--muted);font-size:15px;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .news-featured .news-excerpt{-webkit-line-clamp:4}
+  .read-more{margin-top:auto;font-weight:700;text-decoration:none;background:none;border:0;padding:0;color:var(--green);cursor:pointer;font-size:15px;text-align:left}
+  .read-more:hover{text-decoration:underline}
+  .show-more-wrap{text-align:center;margin-top:22px}
+  .btn-green{background:var(--green);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;cursor:pointer}
+  .empty-card{background:#fff;border:1px dashed var(--line);border-radius:var(--radius);padding:28px;text-align:center;color:var(--muted)}
   footer{background:var(--green-dark);color:#d9ece1;padding:36px 0}
   footer a{color:#fff}
   .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px}
   @media(max-width:820px){.footer-grid{grid-template-columns:1fr}}
+  .footer-links{list-style:none;padding:0;margin:0;display:grid;gap:6px}
   .small{font-size:13px;color:var(--muted)}
   .pill{display:inline-block;background:var(--green-light);color:var(--green-dark);font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px}
+  .pill-gold{background:var(--gold-soft);color:#7a5b00}
+  /* Jendela baca berita lengkap */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow:auto}
+  .modal-backdrop.open{display:flex}
+  .modal{background:#fff;border-radius:var(--radius);max-width:760px;width:100%;padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+  .modal img{width:100%;border-radius:12px;margin:16px 0}
+  .modal-close{float:right;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
@@ -85,13 +134,16 @@
       <span class="logo" aria-hidden="true">SD</span>
       <span><b>SD Negeri 1 Gerduren</b><span>Purwojati &bull; Banyumas &bull; NPSN 20302352</span></span>
     </a>
-    <nav aria-label="Navigasi utama">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-utama" id="menu-btn">&#9776; Menu</button>
+    <nav aria-label="Navigasi utama" id="nav-utama">
+      <a href="#beranda">Beranda</a>
       <a href="#profil">Profil</a>
       <a href="#akademik">Akademik</a>
+      <a href="#berita">Berita</a>
       <a href="#kegiatan">Kegiatan</a>
       <a href="#ppdb">PPDB</a>
       <a href="#kontak">Kontak</a>
-      <a class="cta" href="#ppdb">Info PPDB &rarr;</a>
+      <a class="cta" href="#berita">Berita Terbaru &rarr;</a>
     </nav>
   </div>
 </header>
@@ -120,6 +172,9 @@
   </div>
 
   <div class="wrap">
+    <div class="latest-strip" id="latest-strip" hidden>
+      <b>Berita terbaru:</b> <a href="#berita" id="latest-link"></a> <span class="news-date" id="latest-date"></span>
+    </div>
     <div class="stat-grid" aria-label="Statistik sekolah">
       <div class="stat"><strong>126</strong><span>Siswa (Kelas 1&ndash;6)</span></div>
       <div class="stat"><strong>6</strong><span>Guru</span></div>
@@ -130,6 +185,7 @@
 
   <section id="profil">
     <div class="wrap">
+      <p class="eyebrow">Profil Sekolah</p>
       <h2>Profil Sekolah</h2>
       <p class="lede">SD Negeri 1 Gerduren adalah sekolah dasar negeri di bawah Korwilcam Dinas Pendidikan Purwojati, Kabupaten Banyumas. Halaman ini hanya memuat data yang sudah terverifikasi — bagian yang belum resmi akan ditulis “menyusul”, bukan dikarang.</p>
       <div class="two">
@@ -145,20 +201,25 @@
           </table>
         </div>
         <div>
-          <div class="card">
+          <div class="card" id="sambutan">
             <h3>Sambutan Kepala Sekolah</h3>
             <p>Sambutan resmi Kepala Sekolah akan dimuat setelah dikonfirmasi langsung oleh Bapak Yudhy Idapriyanto. Kami tidak menampilkan kutipan yang belum disetujui beliau.</p>
           </div>
-          <div class="notice" style="margin-top:16px">
-            <b>Transparansi data:</b> Visi, misi, sejarah sekolah, akreditasi, alamat lengkap, dan kontak resmi masih dalam tahap konfirmasi ke sekolah. Begitu resmi, bagian tersebut langsung diperbarui di sini.
+          <div class="card" id="visi" style="margin-top:16px">
+            <h3>Visi &amp; Misi</h3>
+            <p>Visi dan misi resmi sekolah masih dalam tahap konfirmasi dan akan ditampilkan di sini begitu sudah ditetapkan secara resmi — bukan dikarang.</p>
           </div>
         </div>
+      </div>
+      <div class="notice" style="margin-top:16px">
+        <b>Transparansi data:</b> Sejarah sekolah, akreditasi, alamat lengkap, dan kontak resmi masih dalam tahap konfirmasi ke sekolah. Begitu resmi, bagian tersebut langsung diperbarui di sini.
       </div>
     </div>
   </section>
 
   <section id="akademik" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
     <div class="wrap">
+      <p class="eyebrow">Akademik</p>
       <h2>Akademik</h2>
       <p class="lede">Pembelajaran mengikuti struktur fase Kurikulum Merdeka. Fokus utama di kelas awal adalah literasi baca-tulis sebagai fondasi belajar anak.</p>
       <div class="cards">
@@ -170,21 +231,45 @@
     </div>
   </section>
 
-  <section id="kegiatan">
+  <section id="berita">
     <div class="wrap">
-      <h2>Kegiatan &amp; Berita</h2>
-      <p class="lede">Ruang ini untuk pengumuman dan dokumentasi kegiatan sekolah. Hanya kegiatan yang sudah terverifikasi dan foto yang sudah mendapat izin tayang yang akan dimuat.</p>
-      <div class="cards"><div class="cards" id="berita-list">
-        <div class="card"><span class="pill">Segera hadir</span><h3>Berita Sekolah</h3><p>Pengumuman resmi sekolah akan tampil di sini, lengkap dengan tanggal dan sumbernya.</p></div>
-        <div class="card"><span class="pill">Segera hadir</span><h3>Kegiatan Siswa</h3><p>Upacara, literasi, olahraga, seni, dan kegiatan kokurikuler — setelah dokumentasi resmi tersedia.</p></div>
-        <div class="card"><span class="pill">Segera hadir</span><h3>Prestasi</h3><p>Hanya prestasi yang sudah terverifikasi namanya (tanpa data pribadi siswa) yang akan ditampilkan.</p></div>
+      <p class="eyebrow">Kabar Sekolah</p>
+      <h2>Berita &amp; Pengumuman</h2>
+      <p class="lede">Pengumuman resmi dan dokumentasi kegiatan sekolah. Hanya kegiatan yang sudah terverifikasi dan foto yang sudah mendapat izin tayang yang dimuat. Klik “Baca selengkapnya” untuk membaca isi lengkapnya.</p>
+      <div class="filters" id="berita-filters" role="group" aria-label="Saring berita">
+        <button class="chip" type="button" data-filter="Semua" aria-pressed="true">Semua</button>
+        <button class="chip" type="button" data-filter="Berita" aria-pressed="false">Berita</button>
+        <button class="chip" type="button" data-filter="Pengumuman" aria-pressed="false">Pengumuman</button>
+        <button class="chip" type="button" data-filter="Kegiatan" aria-pressed="false">Kegiatan</button>
+      </div>
+      <div id="berita-featured"></div>
+      <div class="news-grid" id="berita-list"></div>
+      <div class="show-more-wrap" id="show-more-wrap" hidden>
+        <button class="btn-green" type="button" id="show-more-btn">Tampilkan semua berita</button>
+      </div>
+      <div id="berita-empty" hidden>
+        <div class="empty-card"><strong>Belum ada berita.</strong><br>Berita dan pengumuman resmi sekolah akan tampil di sini begitu diterbitkan lewat halaman admin.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kegiatan" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <p class="eyebrow">Kegiatan &amp; Galeri</p>
+      <h2>Kegiatan Siswa</h2>
+      <p class="lede">Upacara, literasi, olahraga, seni, dan kegiatan kokurikuler. Galeri foto hanya menampilkan dokumentasi yang sudah mendapat izin tayang.</p>
+      <div class="cards">
+        <div class="card" id="galeri"><span class="pill pill-gold">Segera hadir</span><h3>Galeri Foto</h3><p>Dokumentasi kegiatan sekolah akan tampil di sini setelah foto resmi dan izin tayang tersedia.</p></div>
+        <div class="card" id="ekstrakurikuler"><span class="pill pill-gold">Menyusul</span><h3>Ekstrakurikuler</h3><p>Daftar ekstrakurikuler resmi akan ditampilkan di sini setelah dikonfirmasi sekolah — bukan dikarang.</p></div>
+        <div class="card" id="prestasi"><span class="pill pill-gold">Menyusul</span><h3>Prestasi</h3><p>Hanya prestasi yang sudah terverifikasi (tanpa data pribadi siswa) yang akan ditampilkan di sini.</p></div>
       </div>
     </div>
   </section>
 
   <section id="ppdb" style="background:var(--green-light)">
     <div class="wrap">
-      <h2>PPDB — Penerimaan Peserta Didik Baru</h2>
+      <p class="eyebrow">Penerimaan Peserta Didik Baru</p>
+      <h2>PPDB</h2>
       <p class="lede">Jadwal, kuota, dan ketentuan PPDB mengikuti pengumuman resmi Dinas Pendidikan dan sekolah. Jangan percaya informasi PPDB dari sumber yang tidak resmi.</p>
       <div class="two">
         <div class="card">
@@ -206,12 +291,15 @@
 
   <section id="kontak">
     <div class="wrap">
+      <p class="eyebrow">Kontak &amp; Lokasi</p>
       <h2>Kontak &amp; Lokasi</h2>
       <div class="two">
-        <div class="card">
+        <div class="card" id="unduhan">
           <h3>Alamat</h3>
           <p>SD Negeri 1 Gerduren<br>Desa Gerduren, Kecamatan Purwojati<br>Kabupaten Banyumas, Jawa Tengah</p>
           <p class="small">Alamat lengkap (nama jalan/nomor) dan titik peta akan ditambahkan setelah dikonfirmasi sekolah.</p>
+          <h3 style="margin-top:20px">Unduhan</h3>
+          <p class="small">Dokumen resmi yang bisa diunduh (misalnya formulir PPDB) akan ditautkan di sini setelah tersedia dari sekolah.</p>
         </div>
         <div class="card">
           <h3>Hubungi Kami</h3>
@@ -233,30 +321,198 @@
       <p class="small" style="color:#bcd8c8">Situs statis ini dihosting gratis di Cloudflare Pages. Tidak ada data siswa, nilai, atau data pribadi yang disimpan atau ditampilkan di situs ini.</p>
     </div>
     <div>
-      <strong style="color:#fff">Navigasi</strong><br>
-      <a href="#profil">Profil</a> &bull; <a href="#akademik">Akademik</a> &bull; <a href="#kegiatan">Kegiatan</a> &bull; <a href="#ppdb">PPDB</a> &bull; <a href="#kontak">Kontak</a>
+      <strong style="color:#fff">Navigasi</strong>
+      <ul class="footer-links">
+        <li><a href="#profil">Profil</a> &bull; <a href="#visi">Visi &amp; Misi</a> &bull; <a href="#sambutan">Sambutan Kepsek</a></li>
+        <li><a href="#akademik">Akademik</a> &bull; <a href="#berita">Berita</a> &bull; <a href="#kegiatan">Kegiatan</a></li>
+        <li><a href="#galeri">Galeri</a> &bull; <a href="#ekstrakurikuler">Ekstrakurikuler</a> &bull; <a href="#prestasi">Prestasi</a></li>
+        <li><a href="#ppdb">PPDB</a> &bull; <a href="#kontak">Kontak</a> &bull; <a href="#unduhan">Unduhan</a></li>
+      </ul>
     </div>
     <div>
       <strong style="color:#fff">Catatan</strong>
-      <p class="small" style="color:#bcd8c8">Versi 1.0 — data agregat TA 2026/2027. Koreksi dan pembaruan resmi dari sekolah selalu didahulukan daripada versi sebelumnya.</p>
+      <p class="small" style="color:#bcd8c8">Versi 2.0 — data agregat TA 2026/2027. Koreksi dan pembaruan resmi dari sekolah selalu didahulukan daripada versi sebelumnya.</p>
+      <p class="small" style="color:#bcd8c8"><a href="/admin">Kelola Berita (Admin)</a></p>
     </div>
   </div>
 </footer>
 
+<div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <button class="modal-close" type="button" id="modal-close">Tutup &times;</button>
+    <div class="news-meta" id="modal-meta"></div>
+    <h2 class="news-title" id="modal-title" style="font-size:26px;-webkit-line-clamp:unset"></h2>
+    <div id="modal-media"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
 <script>
 (function(){
-  var el = document.getElementById('berita-list');
-  if(!el) return;
+  // Menu mobile
+  var menuBtn = document.getElementById('menu-btn');
+  var nav = document.getElementById('nav-utama');
+  if (menuBtn && nav) {
+    menuBtn.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); });
+    });
+  }
+
+  // Jendela baca berita
+  var backdrop = document.getElementById('modal-backdrop');
+  function closeModal(){ if(backdrop) backdrop.classList.remove('open'); }
+  var closeBtn = document.getElementById('modal-close');
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', function(e){ if(e.target === backdrop) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  var BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  function fmtDate(iso){
+    if(!iso) return '';
+    var p = String(iso).slice(0,10).split('-');
+    if(p.length !== 3) return esc(iso);
+    var d = parseInt(p[2],10), m = parseInt(p[1],10), y = p[0];
+    if(!BULAN[m-1]) return esc(iso);
+    return d + ' ' + BULAN[m-1] + ' ' + y;
+  }
+  function fotoUrl(u){
+    if(!u) return '';
+    var s = String(u);
+    // Tautan Dropbox ?dl=0 membuka halaman pratinjau, bukan gambar.
+    // ?raw=1 menampilkan berkasnya langsung sebagai gambar.
+    if (s.indexOf('dropbox.com') !== -1) s = s.replace('dl=0','raw=1').replace('dl=1','raw=1');
+    return s;
+  }
+  function mediaHtml(b, big){
+    var src = fotoUrl(b.foto);
+    if(!src) return '<div class="news-media" aria-hidden="true">SD</div>';
+    var cls = big ? 'news-media' : 'news-media';
+    return '<div class="' + cls + '"><img src="' + esc(src) + '" alt="' + esc(b.judul || 'Foto berita') + '" loading="lazy" onerror="this.parentElement.outerHTML=\'<div class=&quot;news-media&quot; aria-hidden=&quot;true&quot;>SD</div>\'"></div>';
+  }
+  function paragraphs(text){
+    return String(text || '').split(/\n\s*\n/).map(function(p){
+      var t = esc(p.trim()).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+      return t ? '<p>' + t + '</p>' : '';
+    }).join('');
+  }
+
+  var featuredEl = document.getElementById('berita-featured');
+  var listEl = document.getElementById('berita-list');
+  var emptyEl = document.getElementById('berita-empty');
+  var filtersEl = document.getElementById('berita-filters');
+  var showWrap = document.getElementById('show-more-wrap');
+  var showBtn = document.getElementById('show-more-btn');
+  var all = [];
+  var currentFilter = 'Semua';
+  var showAll = false;
+
+  function openNews(item){
+    document.getElementById('modal-meta').innerHTML =
+      '<span class="pill">' + esc(item.kategori || 'Berita') + '</span> <span class="news-date">' + fmtDate(item.tanggal) + '</span>';
+    document.getElementById('modal-title').textContent = item.judul || '';
+    var src = fotoUrl(item.foto);
+    document.getElementById('modal-media').innerHTML = src
+      ? '<img src="' + esc(src) + '" alt="' + esc(item.judul || 'Foto berita') + '" onerror="this.remove()">'
+      : '';
+    var body = '';
+    if (item.ringkasan) body += '<p><strong>' + esc(item.ringkasan) + '</strong></p>';
+    if (item.isi) body += paragraphs(item.isi);
+    if (!body) body = '<p>Isi lengkap berita ini belum tersedia.</p>';
+    document.getElementById('modal-body').innerHTML = body;
+    backdrop.classList.add('open');
+    document.getElementById('modal-close').focus();
+  }
+
+  function cardHtml(item, idx){
+    return '<article class="news-card">' + mediaHtml(item, false) +
+      '<div class="news-body"><div class="news-meta"><span class="pill">' + esc(item.kategori || 'Berita') + '</span>' +
+      '<span class="news-date">' + fmtDate(item.tanggal) + '</span></div>' +
+      '<h3 class="news-title">' + esc(item.judul || '') + '</h3>' +
+      '<p class="news-excerpt">' + esc(item.ringkasan || item.isi || '') + '</p>' +
+      '<button class="read-more" type="button" data-idx="' + idx + '">Baca selengkapnya &rarr;</button></div></article>';
+  }
+
+  function render(){
+    var filtered = all.filter(function(b){ return currentFilter === 'Semua' || (b.kategori || 'Berita') === currentFilter; });
+    if(!all.length){
+      featuredEl.innerHTML = ''; listEl.innerHTML = '';
+      emptyEl.hidden = false; showWrap.hidden = true;
+      if(filtersEl) filtersEl.style.display = 'none';
+      return;
+    }
+    emptyEl.hidden = true;
+    if(filtersEl) filtersEl.style.display = 'flex';
+    if(!filtered.length){
+      featuredEl.innerHTML = ''; listEl.innerHTML = '';
+      listEl.innerHTML = '<div class="empty-card" style="grid-column:1/-1">Belum ada berita berkategori ' + esc(currentFilter) + '.</div>';
+      showWrap.hidden = true;
+      return;
+    }
+    var first = filtered[0], rest = filtered.slice(1);
+    featuredEl.innerHTML = '<article class="news-featured">' + mediaHtml(first, true) +
+      '<div class="news-body"><div class="news-meta"><span class="pill pill-gold">Sorotan</span>' +
+      '<span class="pill">' + esc(first.kategori || 'Berita') + '</span>' +
+      '<span class="news-date">' + fmtDate(first.tanggal) + '</span></div>' +
+      '<h3 class="news-title">' + esc(first.judul || '') + '</h3>' +
+      '<p class="news-excerpt">' + esc(first.ringkasan || first.isi || '') + '</p>' +
+      '<button class="read-more" type="button" data-idx="0">Baca selengkapnya &rarr;</button></div></article>';
+    var shown = showAll ? rest : rest.slice(0, 6);
+    listEl.innerHTML = shown.map(function(item, i){ return cardHtml(item, i + 1); }).join('');
+    if (rest.length > 6) {
+      showWrap.hidden = false;
+      showBtn.textContent = showAll ? 'Tampilkan lebih sedikit' : 'Tampilkan semua berita (' + rest.length + ')';
+    } else {
+      showWrap.hidden = true;
+    }
+    listEl.querySelectorAll('[data-idx]').forEach(function(btn){
+      btn.addEventListener('click', function(){ openNews(filtered[parseInt(btn.getAttribute('data-idx'),10)]); });
+    });
+    featuredEl.querySelectorAll('[data-idx]').forEach(function(btn){
+      btn.addEventListener('click', function(){ openNews(filtered[parseInt(btn.getAttribute('data-idx'),10)]); });
+    });
+  }
+
+  if (filtersEl) {
+    filtersEl.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        currentFilter = chip.getAttribute('data-filter'); showAll = false;
+        filtersEl.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        render();
+      });
+    });
+  }
+  if (showBtn) showBtn.addEventListener('click', function(){ showAll = !showAll; render(); });
+
   fetch('content/berita.json').then(function(r){ return r.json(); }).then(function(data){
     var list = (data && data.berita) || [];
-    if(!list.length) return; // keep Segera hadir fallback
-    el.innerHTML = list.map(function(b){
-      var t = b.tanggal ? '<span class="pill">'+b.tanggal+'</span>' : '';
-      var foto = b.foto ? '<p><img src="'+b.foto+'" alt="" style="width:100%;border-radius:12px"></p>' : '';
-      var isi = b.ringkasan || b.isi || '';
-      return '<div class="card">'+t+'<h3>'+b.judul+'</h3>'+foto+'<p>'+isi+'</p></div>';
-    }).join('');
-  }).catch(function(){ /* keep fallback */ });
+    // Terbaru dulu, sesuai tanggal; tanpa tanggal tetap di akhir sesuai urutan asal.
+    all = list.map(function(b, i){
+      return { judul: b.judul, tanggal: b.tanggal, ringkasan: b.ringkasan, isi: b.isi, foto: b.foto, kategori: b.kategori || 'Berita', _i: i };
+    }).sort(function(a, b){
+      var da = a.tanggal || '', db = b.tanggal || '';
+      if (da === db) return a._i - b._i;
+      if (!da) return 1; if (!db) return -1;
+      return db.localeCompare(da);
+    });
+    if (all.length) {
+      var strip = document.getElementById('latest-strip');
+      var link = document.getElementById('latest-link');
+      var dateEl = document.getElementById('latest-date');
+      if (strip && link) {
+        link.textContent = all[0].judul || '';
+        if (dateEl) dateEl.textContent = fmtDate(all[0].tanggal);
+        strip.hidden = false;
+      }
+    }
+    render();
+  }).catch(function(){ render(); });
 })();
 </script>
 </body>
