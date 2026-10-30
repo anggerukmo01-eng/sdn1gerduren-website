@@ -28,10 +28,37 @@
     });
   }
 
-  // Widget jam & tanggal (WIB) — diperbarui tiap detik
+  // Widget jam & tanggal (WIB) — diperbarui tiap detik, plus status sekolah live
   var clockEl = document.getElementById('clock-widget');
+  var statusEl = null;
+  if(clockEl && clockEl.parentNode){
+    statusEl = document.createElement('span');
+    statusEl.id = 'school-status'; statusEl.className = 'status-pill status-luar';
+    statusEl.innerHTML = '<span class="dot" aria-hidden="true"></span><span class="status-text">Memuat status&hellip;</span>';
+    clockEl.parentNode.appendChild(statusEl);
+  }
+  function schoolStatus(){
+    try{
+      var parts = new Intl.DateTimeFormat('id-ID', { timeZone:'Asia/Jakarta', weekday:'short', hour:'2-digit', minute:'2-digit', hour12:false }).formatToParts(new Date());
+      var wd = '', h = 0, m = 0;
+      parts.forEach(function(x){ if(x.type === 'weekday') wd = x.value; if(x.type === 'hour') h = parseInt(x.value,10); if(x.type === 'minute') m = parseInt(x.value,10); });
+      var min = h*60 + m;
+      if(wd === 'Sab' || wd === 'Min') return { cls:'status-libur', text:'Hari Libur' };
+      if((min >= 525 && min < 540) || (min >= 645 && min < 660)) return { cls:'status-istirahat', text:'Istirahat' };
+      if(min >= 420 && min < 810) return { cls:'status-aktif', text:'Jam Kegiatan Belajar Aktif' };
+      return { cls:'status-luar', text:'Di Luar Jam Pelajaran' };
+    }catch(e){ return { cls:'status-luar', text:'Di Luar Jam Pelajaran' }; }
+  }
   function tick(){
     if(!clockEl) return;
+    if(statusEl){
+      var s = schoolStatus();
+      if(statusEl.getAttribute('data-status') !== s.cls){
+        statusEl.className = 'status-pill ' + s.cls;
+        statusEl.setAttribute('data-status', s.cls);
+        var st = statusEl.querySelector('.status-text'); if(st) st.textContent = s.text;
+      }
+    }
     try{
       var now = new Date();
       var hari = new Intl.DateTimeFormat('id-ID', { timeZone:'Asia/Jakarta', weekday:'long', day:'numeric', month:'long', year:'numeric' }).format(now);
@@ -281,6 +308,8 @@
   var DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat'];
   var today = todayName();
   var selected = DAYS.indexOf(today) >= 0 ? today : 'Senin';
+  var kelasTabs = document.getElementById('jadwal-kelas-tabs');
+  var selectedKelas = 'Semua Kelas';
   var data = null;
   function render(){
     if(!data) return;
@@ -293,10 +322,14 @@
     if(dayTabs){
       dayTabs.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c.getAttribute('data-hari') === selected ? 'true' : 'false'); });
     }
+    if(kelasTabs){
+      kelasTabs.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c.getAttribute('data-kelas') === selectedKelas ? 'true' : 'false'); });
+    }
     var nowMin = nowMinutesWIB();
     var isToday = (selected === today);
     var html = '';
     Object.keys(data.kelas).forEach(function(kelas){
+      if(selectedKelas !== 'Semua Kelas' && kelas !== selectedKelas) return;
       var rows = data.kelas[kelas][selected] || [];
       html += '<article class="jadwal-card"><h3>' + esc(kelas) + '</h3><p class="small" style="margin:0 0 8px">Wali kelas: ' + esc(data.wali[kelas] || '') + '</p>';
       rows.forEach(function(r){
@@ -317,8 +350,38 @@
       chip.addEventListener('click', function(){ selected = chip.getAttribute('data-hari'); render(); });
     });
   }
+  if(kelasTabs){
+    kelasTabs.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(){ selectedKelas = chip.getAttribute('data-kelas'); render(); });
+    });
+  }
   var path = document.body.getAttribute('data-jadwal-path') || 'content/jadwal.json';
   fetch(path).then(function(r){ return r.json(); }).then(function(j){
     data = j; render(); setInterval(render, 60000);
   }).catch(function(){ container.innerHTML = '<div class="empty-card">Jadwal belum dapat dimuat. Silakan buka halaman <a href="/jadwal/">Jadwal</a>.</div>'; });
+})();
+
+/* Filter tabel seminggu per kelas (halaman Jadwal) + Quick Bar HP */
+(function(){
+  var tabs = document.getElementById('jadwal-mingguan-tabs');
+  if(tabs){
+    var cards = [];
+    document.querySelectorAll('div.card > h3').forEach(function(h){
+      var m = h.textContent.match(/^Kelas \d/);
+      if(m) cards.push({ el: h.parentNode, kelas: m[0] });
+    });
+    tabs.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        var k = chip.getAttribute('data-kelas');
+        tabs.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        cards.forEach(function(c){ c.el.style.display = (k === 'Semua Kelas' || c.kelas === k) ? '' : 'none'; });
+      });
+    });
+  }
+  if(window.innerWidth <= 960 && !document.querySelector('.quickbar')){
+    var bar = document.createElement('nav');
+    bar.className = 'quickbar'; bar.setAttribute('aria-label', 'Navigasi cepat');
+    bar.innerHTML = '<a href="/"><span class="qi" aria-hidden="true">🏠</span>Beranda</a><a href="/jadwal/"><span class="qi" aria-hidden="true">🗓️</span>Jadwal</a><a href="/ppdb/"><span class="qi" aria-hidden="true">📝</span>PPDB</a><a href="/kontak/"><span class="qi" aria-hidden="true">📞</span>Kontak</a>';
+    document.body.appendChild(bar);
+  }
 })();

@@ -222,3 +222,47 @@ section{animation:fadeUp .55s ease both}
 .berita-galeri figure,.galeri-grid figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
 .berita-galeri img,.galeri-grid img{width:100%;height:220px;object-fit:cover;display:block;margin:0}
 .berita-galeri figcaption,.galeri-grid figcaption{font-size:14px;color:var(--muted);padding:10px 14px 12px}
+
+/* === Crystal Edition (integrasi pedoman UI/UX, 30 Okt 2026) === */
+body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+h1,h2,h3,.brand b,.stat strong{font-family:"Fredoka","Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.01em}
+nav a span[aria-hidden="true"]{margin-right:6px}
+/* Ikon kristal: gradasi 135deg + kilau dalam + glow luar */
+.crystal-icon{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:16px;font-size:26px;line-height:1;box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(2,119,189,.45);background:linear-gradient(135deg,#38bdf8,#6366f1)}
+.ci-blue{background:linear-gradient(135deg,#38bdf8,#6366f1);box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(99,102,241,.5)}
+.ci-emerald{background:linear-gradient(135deg,#34d399,#0d9488);box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(13,148,136,.5)}
+.ci-amber{background:linear-gradient(135deg,#fbbf24,#f97316);box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(249,115,22,.5)}
+.ci-rose{background:linear-gradient(135deg,#fb7185,#e11d48);box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(225,29,72,.5)}
+.ci-cyan{background:linear-gradient(135deg,#22d3ee,#0284c7);box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(2,132,199,.5)}
+.ci-violet{background:linear-gradient(135deg,#a78bfa,#7c3aed);box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(124,58,237,.5)}
+.ci-green{background:linear-gradient(135deg,#4ade80,#15803d);box-shadow:inset 0 2px 4px rgba(255,255,255,.75),inset 0 -3px 6px rgba(0,0,0,.12),0 8px 18px -4px rgba(21,128,61,.5)}
+.cards .card .crystal-icon{margin-bottom:6px}
+/* Pita 5 karakter (kaca) */
+.karakter-ribbon{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(10px);border-radius:22px;padding:16px;box-shadow:var(--shadow);margin-top:24px}
+[data-theme="dark"] .karakter-ribbon{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.karakter-ribbon .ribbon-title{flex-basis:100%;text-align:center;font-family:"Fredoka",sans-serif;font-size:18px;margin:0 0 2px}
+.karakter-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:999px;color:#fff;font-weight:800;font-size:14px;box-shadow:inset 0 2px 4px rgba(255,255,255,.6),0 6px 14px -4px rgba(0,0,0,.3)}
+.karakter-pill .mini{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.28);display:inline-flex;align-items:center;justify-content:center;font-size:17px}
+/* Pil status sekolah di utilbar */
+.status-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap}
+.status-pill .dot{width:9px;height:9px;border-radius:50%;background:currentColor;animation:pulse-dot 1.6s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.75)}}
+.status-aktif{background:#dcfce7;color:#166534}
+.status-istirahat{background:#fef3c7;color:#92400e}
+.status-luar{background:#dbeafe;color:#1e40af}
+.status-libur{background:#e0e7ff;color:#3730a3}
+[data-theme="dark"] .status-aktif{background:#14532d;color:#bbf7d0}
+[data-theme="dark"] .status-istirahat{background:#78350f;color:#fde68a}
+[data-theme="dark"] .status-luar{background:#1e3a8a;color:#bfdbfe}
+[data-theme="dark"] .status-libur{background:#312e81;color:#c7d2fe}
+/* Quick bar HP (hanya layar sempit) */
+.quickbar{display:none}
+@media(max-width:960px){
+  .quickbar{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:60;background:rgba(251,254,252,.92);border:1px solid var(--line);backdrop-filter:blur(10px);border-radius:20px;box-shadow:0 12px 30px rgba(0,0,0,.22);padding:8px;justify-content:space-around}
+  [data-theme="dark"] .quickbar{background:rgba(26,47,37,.94)}
+  .quickbar a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--ink);font-size:11px;font-weight:700;padding:6px 10px;border-radius:14px}
+  .quickbar a .qi{font-size:20px}
+  .quickbar a:active,.quickbar a:hover{background:var(--green-light)}
+  body{padding-bottom:84px}
+}
+@media(prefers-reduced-motion:reduce){.status-pill .dot{animation:none}}
