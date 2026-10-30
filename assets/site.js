@@ -74,6 +74,29 @@
     if(!src) return '<div class="news-media" aria-hidden="true">SD</div>';
     return '<div class="news-media"><img src="' + esc(src) + '" alt="' + esc(b.judul || 'Foto berita') + '" loading="lazy" onerror="this.parentElement.outerHTML=\'<div class=&quot;news-media&quot; aria-hidden=&quot;true&quot;>SD</div>\'"></div>';
   }
+  function shareHtml(item){
+    var url = 'https://sdn1gerduren.pages.dev/berita/';
+    var text = encodeURIComponent((item.judul || '') + ' ' + url);
+    var u = encodeURIComponent(url);
+    return '<div class="share-row"><span class="share-label">Bagikan:</span>' +
+      '<a class="share-btn" target="_blank" rel="noopener" href="https://wa.me/?text=' + text + '">WhatsApp</a>' +
+      '<a class="share-btn" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + u + '">Facebook</a>' +
+      '<a class="share-btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=' + text + '">X</a>' +
+      '<a class="share-btn" target="_blank" rel="noopener" href="https://t.me/share/url?url=' + u + '&text=' + encodeURIComponent(item.judul || '') + '">Telegram</a>' +
+      '<button class="share-btn share-copy" type="button" data-url="' + url + '">Salin tautan</button></div>';
+  }
+  function bindShare(container){
+    if(!container) return;
+    container.querySelectorAll('.share-copy').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var url = btn.getAttribute('data-url');
+        function done(){ var old = btn.textContent; btn.textContent = 'Tersalin!'; setTimeout(function(){ btn.textContent = old; }, 2000); }
+        if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(done).catch(done); }
+        else { var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); done(); }
+      });
+    });
+  }
+  function authorHtml(item){ return item.penulis ? '<span class="news-author">Oleh ' + esc(item.penulis) + '</span>' : ''; }
   function paragraphs(text){
     return String(text || '').split(/\n\s*\n/).map(function(p){
       var t = esc(p.trim()).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
@@ -98,7 +121,7 @@
   function openNews(item){
     if(!backdrop) return;
     document.getElementById('modal-meta').innerHTML =
-      '<span class="pill">' + esc(item.kategori || 'Berita') + '</span> <span class="news-date">' + fmtDate(item.tanggal) + '</span>';
+      '<span class="pill">' + esc(item.kategori || 'Berita') + '</span> ' + authorHtml(item) + ' <span class="news-date">' + fmtDate(item.tanggal) + '</span>';
     document.getElementById('modal-title').textContent = item.judul || '';
     var src = fotoUrl(item.foto);
     document.getElementById('modal-media').innerHTML = src
@@ -108,17 +131,18 @@
     if(item.ringkasan) body += '<p><strong>' + esc(item.ringkasan) + '</strong></p>';
     if(item.isi) body += paragraphs(item.isi);
     if(!body) body = '<p>Isi lengkap berita ini belum tersedia.</p>';
-    document.getElementById('modal-body').innerHTML = body;
+    document.getElementById('modal-body').innerHTML = body + shareHtml(item);
+    bindShare(document.getElementById('modal-body'));
     backdrop.classList.add('open');
     document.getElementById('modal-close').focus();
   }
   function cardHtml(item, idx){
     return '<article class="news-card">' + mediaHtml(item) +
-      '<div class="news-body"><div class="news-meta"><span class="pill">' + esc(item.kategori || 'Berita') + '</span>' +
+      '<div class="news-body"><div class="news-meta"><span class="pill">' + esc(item.kategori || 'Berita') + '</span>' + authorHtml(item) +
       '<span class="news-date">' + fmtDate(item.tanggal) + '</span></div>' +
       '<h3 class="news-title">' + esc(item.judul || '') + '</h3>' +
       '<p class="news-excerpt">' + esc(item.ringkasan || item.isi || '') + '</p>' +
-      '<button class="read-more" type="button" data-idx="' + idx + '">Baca selengkapnya &rarr;</button></div></article>';
+      '<button class="read-more" type="button" data-idx="' + idx + '">Baca selengkapnya &rarr;</button>' + shareHtml(item) + '</div></article>';
   }
   function bindOpen(container, filtered){
     if(!container) return;
@@ -145,11 +169,11 @@
     var first = filtered[0], rest = filtered.slice(1);
     featuredEl.innerHTML = '<article class="news-featured">' + mediaHtml(first) +
       '<div class="news-body"><div class="news-meta"><span class="pill pill-gold">Sorotan</span>' +
-      '<span class="pill">' + esc(first.kategori || 'Berita') + '</span>' +
+      '<span class="pill">' + esc(first.kategori || 'Berita') + '</span>' + authorHtml(first) +
       '<span class="news-date">' + fmtDate(first.tanggal) + '</span></div>' +
       '<h3 class="news-title">' + esc(first.judul || '') + '</h3>' +
       '<p class="news-excerpt">' + esc(first.ringkasan || first.isi || '') + '</p>' +
-      '<button class="read-more" type="button" data-idx="0">Baca selengkapnya &rarr;</button></div></article>';
+      '<button class="read-more" type="button" data-idx="0">Baca selengkapnya &rarr;</button>' + shareHtml(first) + '</div></article>';
     var shown = rest;
     if(homeLimit !== null && !showAll) shown = rest.slice(0, homeLimit);
     else if(!showAll && rest.length > 6) shown = rest.slice(0, 6);
@@ -165,7 +189,7 @@
         showWrap.hidden = true;
       }
     }
-    bindOpen(listEl, filtered); bindOpen(featuredEl, filtered);
+    bindOpen(listEl, filtered); bindOpen(featuredEl, filtered); bindShare(listEl); bindShare(featuredEl);
   }
   if(filtersEl){
     filtersEl.querySelectorAll('.chip').forEach(function(chip){
@@ -183,7 +207,7 @@
   fetch(beritaPath).then(function(r){ return r.json(); }).then(function(data){
     var list = (data && data.berita) || [];
     all = list.map(function(b, i){
-      return { judul: b.judul, tanggal: b.tanggal, ringkasan: b.ringkasan, isi: b.isi, foto: b.foto, kategori: b.kategori || 'Berita', _i: i };
+      return { judul: b.judul, tanggal: b.tanggal, ringkasan: b.ringkasan, isi: b.isi, foto: b.foto, kategori: b.kategori || 'Berita', penulis: b.penulis || '', _i: i };
     }).sort(function(a, b){
       var da = a.tanggal || '', db = b.tanggal || '';
       if(da === db) return a._i - b._i;
