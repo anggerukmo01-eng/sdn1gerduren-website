@@ -9,6 +9,9 @@
 <meta property="og:description" content="Sekolah dasar negeri di Desa Gerduren, Purwojati, Banyumas. NPSN 20302352.">
 <link rel="icon" href="/images/logo-sdn1gerduren.png">
 <script>try{var t=localStorage.getItem('sdn-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body data-berita-path="content/berita.json" data-jadwal-path="content/jadwal.json">
@@ -25,7 +28,7 @@
       <button class="theme-btn" type="button" id="theme-btn" aria-label="Ubah mode gelap atau terang">&#127769; Mode Gelap</button>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-utama" id="menu-btn">&#9776; Menu</button>
     </div>
-    <nav aria-label="Navigasi utama" id="nav-utama"><a href="/" class="active">Beranda</a><a href="/profil/">Profil</a><a href="/guru/">Guru</a><a href="/akademik/">Akademik</a><a href="/berita/">Berita</a><a href="/kegiatan/">Kegiatan</a><a href="/jadwal/">Jadwal</a><a href="/ppdb/">PPDB</a><a href="/kontak/">Kontak</a><a class="cta" href="/berita/">Berita Terbaru &rarr;</a></nav>
+    <nav aria-label="Navigasi utama" id="nav-utama"><a href="/" class="active"><span aria-hidden="true">🏠</span> Beranda</a><a href="/profil/"><span aria-hidden="true">🏫</span> Profil</a><a href="/guru/"><span aria-hidden="true">👩‍🏫</span> Guru</a><a href="/akademik/"><span aria-hidden="true">📚</span> Akademik</a><a href="/berita/"><span aria-hidden="true">📰</span> Berita</a><a href="/kegiatan/"><span aria-hidden="true">🎨</span> Kegiatan</a><a href="/jadwal/"><span aria-hidden="true">🗓️</span> Jadwal</a><a href="/ppdb/"><span aria-hidden="true">📝</span> PPDB</a><a href="/kontak/"><span aria-hidden="true">📞</span> Kontak</a><a class="cta" href="/berita/">Berita Terbaru &rarr;</a></nav>
   </div>
 </header>
 <main id="konten">
@@ -62,6 +65,14 @@
       <div class="stat"><strong>4</strong><span>Tenaga Kependidikan</span></div>
       <div class="stat"><strong>6</strong><span>Rombongan Belajar</span></div>
     </div>
+    <div class="karakter-ribbon" aria-label="Lima karakter unggulan sekolah">
+      <p class="ribbon-title">5 Pilar Karakter Utama Kami</p>
+      <span class="karakter-pill ci-emerald"><span class="mini">🕌</span>Taqwa</span>
+      <span class="karakter-pill ci-blue"><span class="mini">🧠</span>Cerdas</span>
+      <span class="karakter-pill ci-green"><span class="mini">💪</span>Sehat</span>
+      <span class="karakter-pill ci-amber"><span class="mini">🎭</span>Berbudaya</span>
+      <span class="karakter-pill ci-cyan"><span class="mini">🌏</span>Berwawasan Global</span>
+    </div>
   </div>
 
   <section>
@@ -70,14 +81,13 @@
       <h2>Sekilas Sekolah</h2>
       <p class="lede">Ringkasan singkat — selengkapnya ada di halaman masing-masing.</p>
       <div class="cards">
-        <div class="card"><h3>Profil &amp; Visi Misi</h3><p>“Terwujudnya Warga Sekolah yang Taqwa, Cerdas, Sehat, Berbudaya, dan Berwawasan Global.”</p><p><a href="/profil/">Lihat Profil &rarr;</a></p></div>
-        <div class="card"><h3>Akademik</h3><p>Pembelajaran Kurikulum Merdeka Fase A (Kelas 1&ndash;2), Fase B (Kelas 3&ndash;4), dan Fase C (Kelas 5&ndash;6), dengan fokus literasi di kelas awal.</p><p><a href="/akademik/">Lihat Akademik &rarr;</a></p></div>
-        <div class="card"><h3>Kegiatan</h3><p>Galeri, ekstrakurikuler, dan prestasi.</p><p><a href="/kegiatan/">Lihat Kegiatan &rarr;</a></p></div>
-        <div class="card"><h3>PPDB</h3><p>Jadwal, kuota, dan ketentuan mengikuti pengumuman resmi Dinas Pendidikan dan sekolah. Status saat ini: menyusul.</p><p><a href="/ppdb/">Info PPDB &rarr;</a></p></div>
-        <div class="card"><h3>Guru &amp; Tendik</h3><p>10 pendidik dan tenaga kependidikan, dari Kepala Sekolah sampai penjaga — lengkap dengan jabatan dan guru kelasnya.</p><p><a href="/guru/">Lihat Guru &amp; Tendik &rarr;</a></p></div>
-        <div class="card"><h3>Jadwal Pelajaran</h3><p>Jadwal Kelas 1&ndash;6 Senin&ndash;Jumat, plus jadwal hari ini.</p><p><a href="/jadwal/">Lihat Jadwal &rarr;</a></p></div>
-        <div class="card"><h3>Kontak</h3><p>Desa Gerduren, Purwojati, Banyumas. Telepon/WhatsApp dan email resmi: menyusul.</p><p><a href="/kontak/">Lihat Kontak &rarr;</a></p></div>
-        <div class="card"><h3>Kelola Berita</h3><p>Pengelola sekolah dapat menambah berita lewat halaman admin setelah login GitHub.</p><p><a href="/admin">Buka Admin &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-blue" aria-hidden="true">🏫</span><h3>Profil &amp; Visi Misi</h3><p>“Terwujudnya Warga Sekolah yang Taqwa, Cerdas, Sehat, Berbudaya, dan Berwawasan Global.”</p><p><a href="/profil/">Lihat Profil &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-violet" aria-hidden="true">📚</span><h3>Akademik</h3><p>Pembelajaran Kurikulum Merdeka Fase A (Kelas 1&ndash;2), Fase B (Kelas 3&ndash;4), dan Fase C (Kelas 5&ndash;6), dengan fokus literasi di kelas awal.</p><p><a href="/akademik/">Lihat Akademik &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-rose" aria-hidden="true">🎨</span><h3>Kegiatan</h3><p>Galeri, ekstrakurikuler, dan prestasi.</p><p><a href="/kegiatan/">Lihat Kegiatan &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-amber" aria-hidden="true">📝</span><h3>PPDB</h3><p>Jadwal, kuota, dan ketentuan PPDB diumumkan di halaman PPDB.</p><p><a href="/ppdb/">Info PPDB &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-emerald" aria-hidden="true">👩‍🏫</span><h3>Guru &amp; Tendik</h3><p>10 pendidik dan tenaga kependidikan, dari Kepala Sekolah sampai penjaga — lengkap dengan jabatan dan guru kelasnya.</p><p><a href="/guru/">Lihat Guru &amp; Tendik &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-cyan" aria-hidden="true">🗓️</span><h3>Jadwal Pelajaran</h3><p>Jadwal Kelas 1&ndash;6 Senin&ndash;Jumat, plus jadwal hari ini.</p><p><a href="/jadwal/">Lihat Jadwal &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-green" aria-hidden="true">📞</span><h3>Kontak</h3><p>Desa Gerduren, Purwojati, Banyumas, beserta email resmi sekolah.</p><p><a href="/kontak/">Lihat Kontak &rarr;</a></p></div>
       </div>
     </div>
   </section>
@@ -93,6 +103,15 @@
         <button class="chip" type="button" data-hari="Rabu" aria-pressed="false">Rabu</button>
         <button class="chip" type="button" data-hari="Kamis" aria-pressed="false">Kamis</button>
         <button class="chip" type="button" data-hari="Jumat" aria-pressed="false">Jumat</button>
+      </div>
+      <div class="filters" id="jadwal-kelas-tabs" role="group" aria-label="Filter kelas">
+        <button class="chip" type="button" data-kelas="Semua Kelas" aria-pressed="true">Semua Kelas</button>
+        <button class="chip" type="button" data-kelas="Kelas 1" aria-pressed="false">Kelas 1</button>
+        <button class="chip" type="button" data-kelas="Kelas 2" aria-pressed="false">Kelas 2</button>
+        <button class="chip" type="button" data-kelas="Kelas 3" aria-pressed="false">Kelas 3</button>
+        <button class="chip" type="button" data-kelas="Kelas 4" aria-pressed="false">Kelas 4</button>
+        <button class="chip" type="button" data-kelas="Kelas 5" aria-pressed="false">Kelas 5</button>
+        <button class="chip" type="button" data-kelas="Kelas 6" aria-pressed="false">Kelas 6</button>
       </div>
       <div class="jadwal-grid" id="jadwal-hari-ini"><div class="empty-card">Memuat jadwal&hellip;</div></div>
       <p style="text-align:center;margin-top:22px"><a class="btn btn-gold" href="/jadwal/">Lihat Jadwal Seminggu Penuh &rarr;</a></p>
