@@ -102,7 +102,7 @@
     return '<div class="news-media"><img src="' + esc(src) + '" alt="' + esc(b.judul || 'Foto berita') + '" loading="lazy" onerror="this.parentElement.outerHTML=\'<div class=&quot;news-media&quot; aria-hidden=&quot;true&quot;>SD</div>\'"></div>';
   }
   function shareHtml(item){
-    var url = 'https://sdn1gerduren.pages.dev/berita/';
+    var url = item.halaman ? 'https://sdn1gerduren.pages.dev' + item.halaman : 'https://sdn1gerduren.pages.dev/berita/';
     var text = encodeURIComponent((item.judul || '') + ' ' + url);
     var u = encodeURIComponent(url);
     return '<div class="share-row"><span class="share-label">Bagikan:</span>' +
@@ -240,7 +240,7 @@
   fetch(beritaPath).then(function(r){ return r.json(); }).then(function(data){
     var list = (data && data.berita) || [];
     all = list.map(function(b, i){
-      return { judul: b.judul, tanggal: b.tanggal, ringkasan: b.ringkasan, isi: b.isi, foto: b.foto, kategori: b.kategori || 'Berita', penulis: b.penulis || '', galeri: b.galeri || [], _i: i };
+      return { judul: b.judul, tanggal: b.tanggal, ringkasan: b.ringkasan, isi: b.isi, foto: b.foto, kategori: b.kategori || 'Berita', penulis: b.penulis || '', galeri: b.galeri || [], halaman: b.halaman || '', _i: i };
     }).sort(function(a, b){
       var da = a.tanggal || '', db = b.tanggal || '';
       if(da === db) return a._i - b._i;
