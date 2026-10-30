@@ -234,7 +234,7 @@
   }).catch(function(){ render(); });
 })();
 
-/* Jadwal pelajaran dari KSP TA 2026/2027 (content/jadwal.json) */
+/* Jadwal pelajaran (content/jadwal.json) */
 (function(){
   var container = document.getElementById('jadwal-hari-ini');
   if(!container) return;
@@ -288,7 +288,7 @@
     if(noteEl){
       if(DAYS.indexOf(today) < 0 && selected === 'Senin') noteEl.textContent = 'Hari ini ' + today + ' — tidak ada jadwal (Senin–Jumat). Menampilkan jadwal Senin.';
       else if(selected !== today && DAYS.indexOf(today) >= 0) noteEl.textContent = 'Menampilkan jadwal ' + selected + '. Hari ini adalah ' + today + '.';
-      else noteEl.textContent = 'Jadwal hari ini, ' + today + ', sesuai KSP TA 2026/2027.';
+      else noteEl.textContent = 'Jadwal hari ini, ' + today + '.';
     }
     if(dayTabs){
       dayTabs.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c.getAttribute('data-hari') === selected ? 'true' : 'false'); });
@@ -300,7 +300,7 @@
       var rows = data.kelas[kelas][selected] || [];
       html += '<article class="jadwal-card"><h3>' + esc(kelas) + '</h3><p class="small" style="margin:0 0 8px">Wali kelas: ' + esc(data.wali[kelas] || '') + '</p>';
       rows.forEach(function(r){
-        // waktu KSP ditulis "06.30 – 07.00": ubah titik jadi titik-dua sebelum dihitung
+        // waktu ditulis "06.30 – 07.00": ubah titik jadi titik-dua sebelum dihitung
         var w = String(r.waktu).replace(/\./g, ':');
         var wp = w.split('–'); var sMin = wp[0] ? parseTime(wp[0].trim()) : 0; var eMin = wp[1] ? parseTime(wp[1].trim()) : 0;
         var isNow = isToday && sMin && eMin && nowMin >= sMin && nowMin < eMin && r.mapel !== 'Istirahat';
