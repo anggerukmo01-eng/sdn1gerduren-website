@@ -1,0 +1,1716 @@
+{
+ "sumber": "KSP SD Negeri 1 Gerduren TA 2026/2027, Tabel 3.5-3.9",
+ "hari": [
+  "Senin",
+  "Selasa",
+  "Rabu",
+  "Kamis",
+  "Jumat"
+ ],
+ "kelas": {
+  "Kelas 1": {
+   "Senin": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Upacara Bendera"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 – 11.35",
+     "mapel": "Kokurikuler"
+    }
+   ],
+   "Selasa": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 – 11.35",
+     "mapel": "B. Indonesia"
+    }
+   ],
+   "Rabu": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Senam"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 – 11.35",
+     "mapel": "Kokurikuler"
+    }
+   ],
+   "Kamis": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    }
+   ],
+   "Jumat": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Tadarus"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Bhs Jawa"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Bhs Jawa"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    }
+   ]
+  },
+  "Kelas 2": {
+   "Senin": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Upacara Bendera"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 – 11.35",
+     "mapel": "Pancasila"
+    }
+   ],
+   "Selasa": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 – 11.35",
+     "mapel": "Kokurikuler"
+    }
+   ],
+   "Rabu": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Senam"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 – 11.35",
+     "mapel": "Seni Rupa"
+    }
+   ],
+   "Kamis": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 – 11.35",
+     "mapel": "Kokurikuler"
+    }
+   ],
+   "Jumat": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Tadarus"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "B. Jawa"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "B. Jawa"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    }
+   ]
+  },
+  "Kelas 3": {
+   "Senin": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Upacara Bendera"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Bud. BMS"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "Bud BMS"
+    }
+   ],
+   "Selasa": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "IPAS"
+    }
+   ],
+   "Rabu": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Senam"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Jawa"
+    }
+   ],
+   "Kamis": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "Pancasila"
+    }
+   ],
+   "Jumat": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Tadarus"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "B. Inggris"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "B. Inggris"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "B. Jawa"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    }
+   ]
+  },
+  "Kelas 4": {
+   "Senin": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Upacara Bendera"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "B. Jawa"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Jawa"
+    }
+   ],
+   "Selasa": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "Pancasila"
+    }
+   ],
+   "Rabu": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Senam"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Inggris"
+    }
+   ],
+   "Kamis": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Bud. BMS"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Bud. BMS"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Inggris"
+    }
+   ],
+   "Jumat": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Tadarus"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    }
+   ]
+  },
+  "Kelas 5": {
+   "Senin": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Upacara Bendera"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "IPAS"
+    }
+   ],
+   "Selasa": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B. Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "KAA"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "KKA"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Bud. BMS"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "Bud. BMS"
+    }
+   ],
+   "Rabu": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Senam"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "B. Jawa"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Jawa"
+    }
+   ],
+   "Kamis": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Inggris"
+    }
+   ],
+   "Jumat": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Tadarus"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "B. Inggris"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    }
+   ]
+  },
+  "Kelas 6": {
+   "Senin": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Upacara Bendera"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PJOK"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "B. Jawa"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Jawa"
+    }
+   ],
+   "Selasa": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "Seni Rupa"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "Seni Rupa"
+    }
+   ],
+   "Rabu": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Senam"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "B.Indonesia"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "B. Inggris"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "B. Inggris"
+    }
+   ],
+   "Kamis": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Literasi"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "Matematika"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Pancasila"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "7",
+     "waktu": "11.00 - 11.35",
+     "mapel": "IPAS"
+    },
+    {
+     "jam": "8",
+     "waktu": "11.35 – 12.10",
+     "mapel": "KKA"
+    },
+    {
+     "jam": "9",
+     "waktu": "12.10 – 12.45",
+     "mapel": "KKA"
+    }
+   ],
+   "Jumat": [
+    {
+     "jam": "0",
+     "waktu": "06.30 – 07.00",
+     "mapel": "Tadarus"
+    },
+    {
+     "jam": "1",
+     "waktu": "07.00 – 07.35",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "2",
+     "waktu": "07.35 – 08.10",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "3",
+     "waktu": "08.10 – 08.45",
+     "mapel": "PAIBP"
+    },
+    {
+     "jam": "",
+     "waktu": "08.45 – 09.00",
+     "mapel": "Istirahat"
+    },
+    {
+     "jam": "4",
+     "waktu": "09.00 – 09.35",
+     "mapel": "Kokurikuler"
+    },
+    {
+     "jam": "5",
+     "waktu": "09.35 – 10.10",
+     "mapel": "Bud. BMS"
+    },
+    {
+     "jam": "6",
+     "waktu": "10.10 - 10.45",
+     "mapel": "Bud. BMS"
+    },
+    {
+     "jam": "",
+     "waktu": "10.45 – 11.00",
+     "mapel": "Istirahat"
+    }
+   ]
+  }
+ },
+ "wali": {
+  "Kelas 1": "Zaenul Kirom Anggi Pamukti, S.Pd.SD",
+  "Kelas 2": "Ahmad Riyanto, S.Pd.SD",
+  "Kelas 3": "Guntur Prasongko, S.Pd.",
+  "Kelas 4": "Rusminah, S.Pd.SD",
+  "Kelas 5": "Aenal Fitri Habibah",
+  "Kelas 6": "Sri Sudaryanti, S.Pd.SD"
+ },
+ "guru_mapel": {
+  "PABP": "Azizah Fara Zahra, S.Pd.",
+  "PJOK": "Linggarjati Gary Sandika"
+ }
+}
