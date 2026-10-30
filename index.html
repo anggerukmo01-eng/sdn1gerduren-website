@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SD Negeri 1 Gerduren — Website Resmi Sekolah</title>
 <meta name="description" content="Website resmi SD Negeri 1 Gerduren, Desa Gerduren, Kecamatan Purwojati, Kabupaten Banyumas. NPSN 20302352. Profil, visi misi, akademik, berita, kegiatan, PPDB, dan kontak sekolah.">
+<link rel="icon" href="images/logo-sdn1gerduren.png">
 <meta property="og:title" content="SD Negeri 1 Gerduren">
+<meta property="og:image" content="https://sdn1gerduren.pages.dev/images/logo-sdn1gerduren.png">
 <meta property="og:description" content="Sekolah dasar negeri di Desa Gerduren, Purwojati, Banyumas. NPSN 20302352.">
 <style>
   :root{
     --green:#0b6b43; --green-dark:#084d30; --green-light:#e6f4ec;
-    --blue:#0277bd; --gold:#f2b705; --gold-soft:#fff7d6;
+    --blue:#0277bd; --cyan:#00a6c4; --cyan-light:#e0f5fa; --red:#c62828; --red-soft:#fdecea;
+    --gold:#f2b705; --gold-soft:#fff7d6;
     --ink:#17301f; --muted:#5a6b60; --line:#dce8df; --bg:#f7faf8; --white:#fff;
     --radius:18px; --shadow:0 8px 24px rgba(0,0,0,.06);
   }
@@ -21,7 +24,12 @@
   a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   .skip{position:absolute;left:-999px;top:0;background:var(--gold);color:#000;padding:10px 14px;z-index:99}
   .skip:focus{left:10px;top:10px}
+  .topstrip{height:6px;background:linear-gradient(90deg,#0b6b43 0%,#f2b705 25%,#00a6c4 50%,#c62828 75%,#0277bd 100%)}
   header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .brand-logos{display:flex;gap:8px;align-items:center;flex:none}
+  .brand-logos img{height:56px;width:auto;display:block}
+  .brand-logos img.logo-bms{background:#fff;border-radius:10px;padding:2px}
+  @media(max-width:600px){.brand-logos img{height:44px}}
   .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
@@ -41,7 +49,7 @@
     nav a{padding:12px}
     .topbar{position:relative;flex-wrap:wrap}
   }
-  .hero{background:linear-gradient(135deg,#0b6b43 0%,#0e8a5a 55%,#0277bd 130%);color:#fff;overflow:hidden}
+  .hero{background:linear-gradient(120deg,#0b6b43 0%,#0e8a5a 35%,#00a6c4 70%,#0277bd 100%);color:#fff;overflow:hidden}
   .hero-inner{padding:56px 0 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
   @media(max-width:820px){.hero-inner{grid-template-columns:1fr;padding:40px 0}}
   .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700}
@@ -65,6 +73,10 @@
   .stat span{font-size:13px;color:var(--muted);font-weight:600}
   section{padding:52px 0;scroll-margin-top:84px}
   section h2{font-size:30px;margin:0 0 8px;line-height:1.2}
+  section h2::after{content:"";display:block;width:64px;height:5px;border-radius:999px;margin-top:10px;background:linear-gradient(90deg,#0b6b43,#f2b705,#00a6c4)}
+  .stat:nth-child(1) strong{color:var(--green)} .stat:nth-child(2) strong{color:var(--blue)} .stat:nth-child(3) strong{color:#b58900} .stat:nth-child(4) strong{color:var(--cyan)}
+  .cards .card:nth-child(3n+1){border-top:4px solid var(--green)} .cards .card:nth-child(3n+2){border-top:4px solid var(--gold)} .cards .card:nth-child(3n){border-top:4px solid var(--cyan)}
+  .news-card:nth-child(3n+1){border-top:4px solid var(--green)} .news-card:nth-child(3n+2){border-top:4px solid var(--gold)} .news-card:nth-child(3n){border-top:4px solid var(--cyan)}
   .eyebrow{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin:0 0 6px}
   .lede{color:var(--muted);max-width:760px;margin:0 0 24px}
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -110,7 +122,9 @@
   .show-more-wrap{text-align:center;margin-top:22px}
   .btn-green{background:var(--green);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;cursor:pointer}
   .empty-card{background:#fff;border:1px dashed var(--line);border-radius:var(--radius);padding:28px;text-align:center;color:var(--muted)}
-  footer{background:var(--green-dark);color:#d9ece1;padding:36px 0}
+  footer{background:linear-gradient(120deg,#084d30,#0b6b43 45%,#01579b);color:#d9ece1;padding:36px 0}
+  .footer-logos{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+  .footer-logos img{height:52px;width:auto;background:#fff;border-radius:10px;padding:3px}
   footer a{color:#fff}
   .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px}
   @media(max-width:820px){.footer-grid{grid-template-columns:1fr}}
@@ -128,10 +142,11 @@
 </head>
 <body>
 <a class="skip" href="#beranda">Lewati ke konten utama</a>
+<div class="topstrip" aria-hidden="true"></div>
 <header>
   <div class="wrap topbar">
     <a class="brand" href="#beranda" aria-label="Beranda SD Negeri 1 Gerduren">
-      <span class="logo" aria-hidden="true">SD</span>
+      <span class="brand-logos" aria-hidden="true"><img src="images/logo-sdn1gerduren.png" alt=""><img class="logo-bms" src="images/logo-banyumas.jpg" alt=""></span>
       <span><b>SD Negeri 1 Gerduren</b><span>Purwojati &bull; Banyumas &bull; NPSN 20302352</span></span>
     </a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-utama" id="menu-btn">&#9776; Menu</button>
@@ -250,7 +265,7 @@
     </div>
   </section>
 
-  <section id="akademik" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <section id="akademik" style="background:linear-gradient(180deg,#e0f5fa,#ffffff);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
     <div class="wrap">
       <p class="eyebrow">Akademik</p>
       <h2>Akademik</h2>
@@ -264,7 +279,7 @@
     </div>
   </section>
 
-  <section id="berita">
+  <section id="berita" style="background:linear-gradient(180deg,#fff7d6,#f7faf8)">
     <div class="wrap">
       <p class="eyebrow">Kabar Sekolah</p>
       <h2>Berita &amp; Pengumuman</h2>
@@ -349,6 +364,7 @@
 <footer>
   <div class="wrap footer-grid">
     <div>
+      <div class="footer-logos"><img src="images/logo-sdn1gerduren.png" alt="Logo SD Negeri 1 Gerduren"><img src="images/logo-banyumas.jpg" alt="Logo Kabupaten Banyumas"></div>
       <strong style="color:#fff;font-size:18px">SD Negeri 1 Gerduren</strong>
       <p>Desa Gerduren, Purwojati, Banyumas &bull; NPSN 20302352</p>
       <p class="small" style="color:#bcd8c8">Situs statis ini dihosting gratis di Cloudflare Pages. Tidak ada data siswa, nilai, atau data pribadi yang disimpan atau ditampilkan di situs ini.</p>
@@ -364,7 +380,7 @@
     </div>
     <div>
       <strong style="color:#fff">Catatan</strong>
-      <p class="small" style="color:#bcd8c8">Versi 2.1 — data agregat TA 2026/2027, Visi &amp; Misi resmi TA 2026/2027. Koreksi dan pembaruan resmi dari sekolah selalu didahulukan daripada versi sebelumnya.</p>
+      <p class="small" style="color:#bcd8c8">Versi 2.2 — data agregat TA 2026/2027, Visi &amp; Misi resmi TA 2026/2027, logo resmi sekolah &amp; Kabupaten Banyumas. Koreksi dan pembaruan resmi dari sekolah selalu didahulukan daripada versi sebelumnya.</p>
       <p class="small" style="color:#bcd8c8"><a href="/admin">Kelola Berita (Admin)</a></p>
     </div>
   </div>
