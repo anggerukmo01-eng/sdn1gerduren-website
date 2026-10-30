@@ -203,3 +203,92 @@
     render();
   }).catch(function(){ render(); });
 })();
+
+/* Jadwal pelajaran dari KSP TA 2026/2027 (content/jadwal.json) */
+(function(){
+  var container = document.getElementById('jadwal-hari-ini');
+  if(!container) return;
+  var dayTabs = document.getElementById('jadwal-hari-tabs');
+  var titleEl = document.getElementById('jadwal-hari-judul');
+  var noteEl = document.getElementById('jadwal-hari-catatan');
+  function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function displayMapel(m){
+    var t = String(m).replace(/\s+/g, ' ').trim();
+    var map = {'B.Indonesia':'B. Indonesia','B. Indonesia':'B. Indonesia','Bhs Jawa':'Bahasa Jawa','B. Jawa':'Bahasa Jawa','B. Inggris':'Bahasa Inggris','Bud. BMS':'Budaya Banyumasan','Bud BMS':'Budaya Banyumasan','KAA':'KKA','Seni Rupa':'Seni Rupa'};
+    return map[t] || t;
+  }
+  function mapelClass(m){
+    var t = displayMapel(m);
+    if(t === 'PAIBP') return 'mp-paibp';
+    if(t === 'Matematika') return 'mp-matematika';
+    if(t === 'B. Indonesia') return 'mp-bindonesia';
+    if(t === 'PJOK') return 'mp-pjok';
+    if(t === 'Pancasila') return 'mp-pancasila';
+    if(t === 'IPAS') return 'mp-ipas';
+    if(t === 'Seni Rupa') return 'mp-seni';
+    if(t === 'Bahasa Jawa') return 'mp-jawa';
+    if(t === 'Bahasa Inggris') return 'mp-inggris';
+    if(t === 'KKA') return 'mp-kka';
+    if(t === 'Budaya Banyumasan') return 'mp-budaya';
+    if(t === 'Kokurikuler') return 'mp-kokurikuler';
+    if(t === 'Istirahat') return 'mp-istirahat';
+    return 'mp-lain';
+  }
+  function parseTime(s){
+    var p = String(s).split(':'); return parseInt(p[0],10)*60 + parseInt(p[1],10);
+  }
+  function nowMinutesWIB(){
+    try{
+      var parts = new Intl.DateTimeFormat('id-ID', { timeZone:'Asia/Jakarta', hour:'2-digit', minute:'2-digit', hour12:false }).formatToParts(new Date());
+      var h = 0, m = 0; parts.forEach(function(x){ if(x.type === 'hour') h = parseInt(x.value,10); if(x.type === 'minute') m = parseInt(x.value,10); });
+      return h*60 + m;
+    }catch(e){ var d = new Date(); return d.getHours()*60 + d.getMinutes(); }
+  }
+  function todayName(){
+    try{ return new Intl.DateTimeFormat('id-ID', { timeZone:'Asia/Jakarta', weekday:'long' }).format(new Date()); }
+    catch(e){ return ''; }
+  }
+  var DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat'];
+  var today = todayName();
+  var selected = DAYS.indexOf(today) >= 0 ? today : 'Senin';
+  var data = null;
+  function render(){
+    if(!data) return;
+    if(titleEl) titleEl.textContent = 'Jadwal Hari ' + selected;
+    if(noteEl){
+      if(DAYS.indexOf(today) < 0 && selected === 'Senin') noteEl.textContent = 'Hari ini ' + today + ' — tidak ada jadwal (Senin–Jumat). Menampilkan jadwal Senin.';
+      else if(selected !== today && DAYS.indexOf(today) >= 0) noteEl.textContent = 'Menampilkan jadwal ' + selected + '. Hari ini adalah ' + today + '.';
+      else noteEl.textContent = 'Jadwal hari ini, ' + today + ', sesuai KSP TA 2026/2027.';
+    }
+    if(dayTabs){
+      dayTabs.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed', c.getAttribute('data-hari') === selected ? 'true' : 'false'); });
+    }
+    var nowMin = nowMinutesWIB();
+    var isToday = (selected === today);
+    var html = '';
+    Object.keys(data.kelas).forEach(function(kelas){
+      var rows = data.kelas[kelas][selected] || [];
+      html += '<article class="jadwal-card"><h3>' + esc(kelas) + '</h3><p class="small" style="margin:0 0 8px">Wali kelas: ' + esc(data.wali[kelas] || '') + '</p>';
+      rows.forEach(function(r){
+        // waktu KSP ditulis "06.30 – 07.00": ubah titik jadi titik-dua sebelum dihitung
+        var w = String(r.waktu).replace(/\./g, ':');
+        var wp = w.split('–'); var sMin = wp[0] ? parseTime(wp[0].trim()) : 0; var eMin = wp[1] ? parseTime(wp[1].trim()) : 0;
+        var isNow = isToday && sMin && eMin && nowMin >= sMin && nowMin < eMin && r.mapel !== 'Istirahat';
+        var cls = r.mapel === 'Istirahat' ? 'jadwal-row istirahat' : 'jadwal-row';
+        if(isNow) cls += ' now';
+        html += '<div class="' + cls + '"><span class="jadwal-jam">' + (r.jam ? 'Jam ' + esc(r.jam) : '—') + '</span><span class="jadwal-waktu">' + esc(r.waktu) + '</span><span class="jadwal-mapel"><span class="mp ' + mapelClass(r.mapel) + '">' + esc(displayMapel(r.mapel)) + '</span>' + (isNow ? '<span class="now-badge">Sedang berlangsung</span>' : '') + '</span></div>';
+      });
+      html += '</article>';
+    });
+    container.innerHTML = html;
+  }
+  if(dayTabs){
+    dayTabs.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(){ selected = chip.getAttribute('data-hari'); render(); });
+    });
+  }
+  var path = document.body.getAttribute('data-jadwal-path') || 'content/jadwal.json';
+  fetch(path).then(function(r){ return r.json(); }).then(function(j){
+    data = j; render(); setInterval(render, 60000);
+  }).catch(function(){ container.innerHTML = '<div class="empty-card">Jadwal belum dapat dimuat. Silakan buka halaman <a href="/jadwal/">Jadwal</a>.</div>'; });
+})();

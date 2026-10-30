@@ -156,3 +156,39 @@ footer a{color:#fff}
 [data-theme="dark"] .page-head{background:linear-gradient(120deg,#084d30,#0a5c40 50%,#0a6d84)}
 .page-head h1{margin:6px 0 4px;font-size:clamp(28px,4vw,40px);line-height:1.15}
 .page-head p{opacity:.95;max-width:720px;margin:0}
+/* Animasi halus (nonaktifkan bila perangkat meminta gerakan minimal) */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes heroShift{from{background-position:0% 50%}to{background-position:100% 50%}}
+@keyframes pulseNow{0%,100%{box-shadow:0 0 0 0 rgba(242,183,5,.55)}50%{box-shadow:0 0 0 7px rgba(242,183,5,0)}}
+section{animation:fadeUp .55s ease both}
+.hero{background-size:200% 200%;animation:heroShift 18s ease-in-out infinite alternate}
+.card,.news-card,.stat{transition:transform .2s ease,box-shadow .2s ease}
+.card:hover,.news-card:hover,.stat:hover{transform:translateY(-4px)}
+@media (prefers-reduced-motion: reduce){
+  section,.hero{animation:none}
+  .card:hover,.news-card:hover,.stat:hover{transform:none}
+}
+/* Jadwal: huruf besar, kontras tinggi, warna per mapel */
+.jadwal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.jadwal-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.jadwal-grid{grid-template-columns:1fr}}
+.jadwal-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.jadwal-card h3{margin:0 0 4px;font-size:20px}
+.jadwal-row{display:grid;grid-template-columns:52px 108px 1fr;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:16px}
+.jadwal-row:last-child{border-bottom:0}
+.jadwal-jam{font-weight:800;color:var(--muted);font-size:14px}
+.jadwal-waktu{font-weight:700;font-size:15px;white-space:nowrap}
+.jadwal-mapel{font-weight:700;font-size:17px;line-height:1.3}
+.jadwal-row.istirahat .jadwal-mapel{color:var(--muted);font-style:italic}
+.jadwal-row.now{background:var(--gold-soft);border:2px solid var(--gold);border-radius:12px;padding:9px 10px;animation:pulseNow 2s ease infinite}
+.now-badge{display:inline-block;background:var(--gold);color:#1a1a1a;font-weight:800;font-size:12px;padding:3px 9px;border-radius:999px;margin-left:8px}
+.mp{display:inline-block;padding:4px 11px;border-radius:999px;font-size:16px}
+.mp-paibp{background:#d7ead9;color:#144d24} .mp-matematika{background:#dbeafe;color:#123a6b}
+.mp-bindonesia{background:#fef3c7;color:#6b4a00} .mp-pjok{background:#fecaca;color:#7f1d1d}
+.mp-pancasila{background:#e9d5ff;color:#4a1d6b} .mp-ipas{background:#cffafe;color:#164e63}
+.mp-seni{background:#fce7f3;color:#6b1d3f} .mp-jawa{background:#ccfbf1;color:#134e4a}
+.mp-inggris{background:#e0e7ff;color:#1e2a5a} .mp-kka{background:#ede9fe;color:#312e81}
+.mp-budaya{background:#fef9c3;color:#5a4a00} .mp-kokurikuler{background:#e2e8f0;color:#1e293b}
+.mp-lain{background:#e6f4ec;color:#17301f} .mp-istirahat{background:#f1f5f9;color:#475569}
+[data-theme="dark"] .mp{filter:brightness(1.15) saturate(.9)}
+.jadwal-legend{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;font-size:14px;color:var(--muted)}
