@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Pos Tanda Pengenal — Taman 2 Pesta Siaga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#eaf6ff; --bg2:#fff7e0; --surface:#ffffff; --surface2:#f2faff;
+  --ink:#17324f; --muted:#47617d; --line:#cfe6f5;
+  --blue:#1d7ed6; --blue-dark:#1663ab; --red:#e63946; --red-dark:#c22533;
+  --yellow:#ffc93c; --yellow-soft:#fff1bf; --green:#25a244; --green-soft:#d8f5df;
+  --orange:#f76707; --teal:#0ca678; --radius:20px;
+  --shadow:0 6px 0 rgba(23,50,79,.08), 0 14px 28px rgba(23,50,79,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0d2233; --bg2:#12293d; --surface:#17344a; --surface2:#1c3d55;
+    --ink:#f2f8fc; --muted:#b9d2e4; --line:#2c506e;
+    --blue:#4dabf7; --blue-dark:#339af0; --yellow-soft:#4d3f10; --green-soft:#14401f;
+    --shadow:0 6px 0 rgba(0,0,0,.25), 0 14px 28px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:18px; line-height:1.55;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,201,60,.35) 0 90px, transparent 91px),
+    radial-gradient(circle at 92% 22%, rgba(29,126,214,.18) 0 120px, transparent 121px),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+  background-attachment:fixed;
+}
+h1,h2,h3,.font-display{font-family:"Fredoka","Nunito",system-ui,sans-serif; letter-spacing:.2px}
+.wrap{max-width:1120px; margin:0 auto; padding:20px 16px 56px}
+button{font-family:inherit; cursor:pointer; touch-action:manipulation}
+:focus-visible{outline:4px solid var(--yellow); outline-offset:2px}
+
+/* ===== Header ===== */
+.hero{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before{content:""; position:absolute; inset:0 0 auto 0; height:10px;
+  background:repeating-linear-gradient(90deg,var(--red) 0 44px,var(--yellow) 44px 88px,var(--blue) 88px 132px,var(--green) 132px 176px)}
+.hero .pos-badge{
+  display:inline-block; margin-top:8px; background:var(--red); color:#fff; font-weight:900;
+  font-size:15px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 16px; border-radius:999px;
+}
+.hero h1{font-size:clamp(32px,6.5vw,54px); line-height:1.08; margin:12px 0 6px; font-weight:700}
+.hero h1 .accent{color:var(--red)}
+.hero p.sub{font-size:clamp(17px,3vw,21px); color:var(--muted); font-weight:700; margin:0 auto; max-width:640px}
+.score-pill{
+  display:inline-flex; align-items:center; gap:10px; margin-top:16px;
+  background:var(--yellow); color:#5c4300; border-radius:999px; padding:10px 22px;
+  font-size:clamp(19px,3.4vw,24px); font-weight:900; border:3px solid #e8ae00;
+}
+.rule-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:20px; text-align:left}
+.rule-card{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:14px}
+.rule-card .num{
+  width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;margin-bottom:8px}
+.rule-card:nth-child(2) .num{background:var(--orange)}
+.rule-card:nth-child(3) .num{background:var(--green)}
+.rule-card:nth-child(4) .num{background:var(--red)}
+.rule-card p{margin:0; font-size:16.5px; font-weight:700}
+.rule-card p b{font-size:19px}
+@media (max-width:760px){ .rule-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:430px){ .rule-grid{grid-template-columns:1fr} }
+
+/* ===== Sections / tabs ===== */
+section.block{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px; margin-top:26px;
+}
+.sec-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.sec-num{
+  flex:0 0 auto; width:52px;height:52px;border-radius:16px; color:#fff; background:var(--blue);
+  display:flex;align-items:center;justify-content:center; font-family:"Fredoka"; font-size:26px; font-weight:700}
+.sec-num.red{background:var(--red)} .sec-num.green{background:var(--green)}
+.sec-head h2{font-size:clamp(25px,4.5vw,34px); margin:0; font-weight:600}
+.sec-lead{color:var(--muted); font-weight:700; font-size:17.5px; margin:4px 0 18px}
+.mode-tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px}
+.mode-tab{
+  flex:1 1 180px; border:3px solid var(--line); background:var(--surface2); color:var(--ink);
+  border-radius:16px; padding:14px 12px; font-size:18px; font-weight:900; min-height:64px}
+.mode-tab small{display:block; font-size:14.5px; color:var(--muted); font-weight:800; margin-top:2px}
+.mode-tab.active{border-color:var(--red); background:var(--yellow-soft)}
+.hidden{display:none !important}
+
+/* ===== Game ===== */
+.quiz-top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+.progress-text{font-weight:900; font-size:18px}
+.score-badge{background:var(--blue); color:#fff; border-radius:999px; padding:9px 18px; font-weight:900; font-size:19px}
+.progress-bar{height:16px; background:var(--surface2); border:2px solid var(--line); border-radius:999px; overflow:hidden; margin-bottom:18px}
+.progress-fill{height:100%; width:0%; background:repeating-linear-gradient(45deg,var(--green) 0 16px,#2fbf5a 16px 32px); transition:width .4s}
+.game-wrap{display:grid; grid-template-columns:minmax(0,340px) 1fr; gap:22px; align-items:start}
+@media (max-width:860px){ .game-wrap{grid-template-columns:1fr} }
+.q-card{border:3px solid var(--line); border-radius:20px; padding:22px; background:var(--surface2); text-align:center}
+.q-label{font-weight:900; color:var(--muted); font-size:16px; letter-spacing:1px; text-transform:uppercase}
+.step-tag{display:inline-block; background:var(--blue); color:#fff; font-weight:900; border-radius:999px; padding:6px 16px; font-size:16px; margin-bottom:10px}
+.step-tag.step2{background:var(--orange)}
+.attr-card{
+  background:var(--surface); border:3px dashed #e8ae00; border-radius:20px; padding:20px 16px; margin-top:10px;
+}
+.attr-card .attr-icon{font-size:64px; line-height:1}
+.attr-card .attr-clue{font-family:"Fredoka"; font-size:clamp(21px,4vw,26px); font-weight:600; line-height:1.3; margin-top:8px}
+.attr-card .attr-hint{font-size:17px; font-weight:700; color:var(--muted); margin:8px 0 0}
+.q-sub{font-size:19px; font-weight:800; margin:14px 0 6px}
+.choices{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px}
+@media (max-width:560px){ .choices{grid-template-columns:1fr} }
+.choice{
+  border:3px solid var(--blue); background:var(--surface); color:var(--ink); border-radius:16px;
+  padding:18px 14px; font-size:clamp(18px,3.6vw,22px); font-weight:900; min-height:72px;
+  font-family:"Fredoka"; font-weight:600}
+.choice:hover:not(:disabled){background:var(--yellow-soft)}
+.choice:disabled{cursor:default; opacity:.85}
+.choice.correct{background:var(--green); border-color:#1c7432; color:#fff; opacity:1}
+.choice.wrong{background:var(--red); border-color:var(--red-dark); color:#fff; opacity:1}
+.feedback{border-radius:16px; padding:16px 18px; margin-top:16px; font-size:19px; font-weight:800; display:none; text-align:left}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-soft); border:2.5px solid var(--green)}
+.feedback.no{background:#ffe3e6; border:2.5px solid var(--red); color:#5f1220}
+@media (prefers-color-scheme: dark){ .feedback.no{background:#4a1620; color:#ffd7db} }
+.feedback .fb-title{font-family:"Fredoka"; font-size:23px; font-weight:600}
+.quiz-actions{margin-top:16px; display:flex; gap:12px; flex-wrap:wrap}
+.btn{
+  border:none; border-radius:16px; padding:16px 22px; font-size:20px; font-weight:900;
+  min-height:62px; color:#fff; background:var(--blue); box-shadow:0 5px 0 var(--blue-dark);
+  transition:transform .08s, box-shadow .08s;
+}
+.btn:active{transform:translateY(4px); box-shadow:0 1px 0 var(--blue-dark)}
+.btn.red{background:var(--red); box-shadow:0 5px 0 var(--red-dark)}
+.btn.red:active{box-shadow:0 1px 0 var(--red-dark)}
+.btn.green{background:var(--green); box-shadow:0 5px 0 #1c7432}
+.btn.green:active{box-shadow:0 1px 0 #1c7432}
+.btn.ghost{background:var(--surface); color:var(--ink); border:3px solid var(--line); box-shadow:0 5px 0 var(--line)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--line)}
+.quiz-actions .btn{flex:1 1 200px}
+.sim-score{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; justify-content:center}
+.sim-score span{background:var(--surface); border:2.5px solid var(--line); border-radius:999px; padding:7px 14px; font-weight:900; font-size:16.5px}
+.finish-box{text-align:center; padding:14px 6px}
+.finish-box .final-score{font-family:"Fredoka"; font-size:clamp(46px,9vw,68px); font-weight:700; color:var(--green); line-height:1}
+.finish-box .final-msg{font-size:21px; font-weight:900; margin:10px auto 4px; max-width:520px}
+.finish-box .stars{font-size:38px; letter-spacing:6px; color:#e8ae00}
+
+/* ===== Uniform diagram ===== */
+.uniform-stage{position:relative; width:100%; max-width:340px; margin:0 auto}
+.uniform-stage svg{width:100%; height:auto; display:block}
+.zone{cursor:pointer}
+.zone rect{fill:#fff8e1; stroke:#1663ab; stroke-width:2.5; transition:fill .15s}
+.zone text{font-family:"Nunito"; font-weight:900; fill:#17324f; pointer-events:none}
+.zone:hover rect,.zone:focus rect{fill:var(--yellow)}
+.zone.placed-right rect{fill:var(--green); stroke:#1c7432}
+.zone.placed-right text{fill:#fff}
+.zone.placed-wrong rect{fill:var(--red); stroke:var(--red-dark)}
+.zone.placed-wrong text{fill:#fff}
+.zone:disabled,.zone.disabled{cursor:default}
+.zone.disabled rect{fill:#eef4f8; stroke:#9db8cc}
+.zone.disabled text{fill:#7d97ab}
+.zone .zone-sub{font-weight:800; fill:#47617d}
+.zone.placed-right .zone-sub,.zone.placed-wrong .zone-sub{fill:#fff}
+.uniform-note{text-align:center; font-weight:800; color:var(--muted); margin:10px 0 0; font-size:16.5px}
+
+/* ===== Materi ===== */
+.materi-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media (max-width:820px){ .materi-grid{grid-template-columns:1fr} }
+.materi-card{border:2.5px solid var(--line); border-radius:18px; padding:18px; background:var(--surface2)}
+.materi-card h3{margin:0 0 8px; font-size:21px; font-weight:600; display:flex; align-items:center; gap:10px}
+.materi-card .ic{
+  flex:0 0 auto; width:44px;height:44px;border-radius:12px; display:flex;align-items:center;justify-content:center;
+  background:var(--blue); color:#fff; font-size:24px}
+.materi-card p{font-size:17.5px; font-weight:600; margin:0 0 8px}
+.materi-card .pos{font-size:16.5px; font-weight:800; color:var(--blue-dark); margin:0}
+@media (prefers-color-scheme: dark){ .materi-card .pos{color:#74c0fc} }
+.materi-note{
+  border:2.5px dashed #e8ae00; background:var(--yellow-soft); border-radius:16px; padding:16px 18px;
+  font-size:17.5px; font-weight:800; margin-top:16px;
+}
+footer.site{margin-top:30px; text-align:center; color:var(--muted); font-weight:700; font-size:16px; padding:0 10px}
+footer.site .src{background:var(--surface); border:2.5px solid var(--line); border-radius:14px; padding:12px 18px; display:inline-block}
+</style>
+</head>
+<body>
+<div style="background:#17324f;color:#fff;font-family:system-ui,sans-serif;font-size:14px;padding:8px 16px"><a href="/" style="color:#ffe082">← Beranda SDN 1 Gerduren</a> &nbsp;·&nbsp; <a href="/pesta-siaga/tanda-pengenal/" style="color:#fff">Halaman Media Pos Tanda Pengenal</a></div>
+<div class="wrap">
+
+  <!-- ================= HEADER ================= -->
+  <header class="hero">
+    <span class="pos-badge">Taman 2 &bull; Pesta Siaga</span>
+    <h1>Pos <span class="accent">Tanda Pengenal</span> Seragam Pramuka</h1>
+    <p class="sub">Ambil satu atribut dari amplop, sebutkan namanya, lalu pasang di seragam — seperti lomba sungguhan!</p>
+    <div><span class="score-pill">SKOR MAKSIMAL: 80</span></div>
+    <div class="rule-grid" aria-label="Aturan lomba Taman Tanda Pengenal">
+      <div class="rule-card"><div class="num">1</div><p><b>8 anak</b> dalam satu barung ikut bermain di pos ini.</p></div>
+      <div class="rule-card"><div class="num">2</div><p>Setiap anak <b>mengambil 1 amplop berisi atribut</b>, lalu <b>menyebutkan nama atribut</b> itu.</p></div>
+      <div class="rule-card"><div class="num">3</div><p>Benar menyebutkan nama atribut dapat <b>5 poin</b>.</p></div>
+      <div class="rule-card"><div class="num">4</div><p>Benar <b>memasangkan atribut pada seragam</b> dapat <b>5 poin</b>.</p></div>
+    </div>
+  </header>
+
+  <!-- ================= TAB ================= -->
+  <section class="block" id="permainan">
+    <div class="sec-head"><div class="sec-num">1</div><h2>Simulasi Lomba: Sebut + Pasang</h2></div>
+    <p class="sec-lead">Satu permainan = 8 ronde, seperti 8 anak dalam satu barung. Tiap ronde: Langkah 1 sebutkan nama atribut (+5), Langkah 2 pasang di seragam (+5). Skor maksimal 80. Skor hanya untuk sesi bermain ini — tidak disimpan.</p>
+
+    <div class="mode-tabs" role="tablist" aria-label="Pilih tampilan">
+      <button class="mode-tab active" id="tabMain" type="button" role="tab" aria-selected="true">🎮 Main<small>Simulasi lomba 8 ronde</small></button>
+      <button class="mode-tab" id="tabMateri" type="button" role="tab" aria-selected="false">📖 Materi<small>10 atribut &amp; fungsinya</small></button>
+    </div>
+
+    <!-- ===== GAME ===== -->
+    <div id="panelMain">
+      <div class="quiz-top">
+        <span class="progress-text" id="gProgress">Ronde 1 dari 8</span>
+        <span class="score-badge" id="gScore">Skor: 0 / 80</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="gBar"></div></div>
+
+      <div class="game-wrap">
+        <div>
+          <div class="uniform-stage">
+            <svg id="uniformSvg" viewBox="0 0 340 380" role="group" aria-label="Diagram seragam Pramuka Siaga dengan zona tempat memasang atribut"></svg>
+          </div>
+          <p class="uniform-note" id="uniformNote">Diagram seragam — tempat memasang atribut (Langkah 2)</p>
+        </div>
+        <div>
+          <div class="q-card" id="gCardMain">
+            <span class="step-tag" id="gStepTag">Langkah 1: Sebutkan Namanya</span>
+            <div class="q-label">Kamu mengambil amplop berisi</div>
+            <div class="attr-card">
+              <div class="attr-icon" id="attrIcon" aria-hidden="true">🦅</div>
+              <div class="attr-clue" id="attrClue">Tanda pencapaian tertinggi Siaga</div>
+              <p class="attr-hint" id="attrHint">Atribut apakah ini? Sebutkan dengan keras, lalu sentuh jawabanmu!</p>
+            </div>
+            <p class="q-sub" id="gSub">Pilih nama atributnya:</p>
+            <div class="choices" id="gChoices"></div>
+            <div class="feedback" id="gFeedback" aria-live="polite"></div>
+            <div class="sim-score">
+              <span>Menyebut: <b id="gSayScore">0</b> / 40</span>
+              <span>Memasang: <b id="gStickScore">0</b> / 40</span>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn green hidden" id="btnNext" type="button">RONDE BERIKUTNYA &rarr;</button>
+            </div>
+          </div>
+          <div class="q-card hidden" id="gFinish" style="margin-top:16px">
+            <div class="finish-box">
+              <div class="q-label">Skor akhir permainan</div>
+              <div class="final-score" id="finalScore">0 / 80</div>
+              <div class="stars" id="finalStars" aria-hidden="true"></div>
+              <p class="final-msg" id="finalMsg"></p>
+              <p style="font-weight:800; color:var(--muted)" id="finalDetail"></p>
+              <div class="quiz-actions" style="justify-content:center">
+                <button class="btn red" id="btnAgain" type="button" style="flex:0 1 320px">MAIN LAGI</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MATERI ===== -->
+    <div id="panelMateri" class="hidden">
+      <p class="sec-lead">Hafalkan 10 atribut di bawah ini sebelum bermain. Setiap atribut punya fungsi dan tempat memasangnya sendiri di seragam.</p>
+      <div class="materi-grid" id="materiGrid"></div>
+      <div class="materi-note">📌 Catatan: posisi memasang mengikuti PP No. 174 Tahun 2012 tentang Pakaian Seragam Pramuka, sebagaimana dirujuk juklak. Keterangan tempat pada diagram dan kartu di atas bersifat umum menurut fungsi atribut — untuk posisi persisnya, cocokkan dengan seragam contoh dan pedoman pakaian seragam yang berlaku di gugus depan; pembina memeriksa.</div>
+    </div>
+  </section>
+
+  <footer class="site">
+    <span class="src">Disusun dari Juklak Pesta Siaga Cabang Banyumas 2026, Taman Tanda Pengenal Seragam Pramuka &bull; Untuk latihan Barung Kwarran Purwojati</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* 10 atribut persis Juklak Pesta Siaga Cabang Banyumas 2026, Taman Tanda Pengenal.
+   Fungsi + tempat umum mengikuti Media Belajar Pesta Siaga per Taman (Taman 2).
+   Zona diagram adalah penyederhanaan skematis; posisi persis mengikuti
+   PP No. 174 Tahun 2012 — pembina memeriksa. */
+var ATTRS=[
+ {id:"garuda",   name:"Tanda Pramuka Garuda",    icon:"🦅", clue:"Tanda pencapaian tertinggi Siaga",            fungsi:"Tanda pencapaian tertinggi Pramuka Siaga.",                       zone:"dada-kiri-atas",   zoneLabel:"Dada kiri atas"},
+ {id:"pelantikan",name:"Tanda Pelantikan",       icon:"🎖️", clue:"Tanda sudah dilantik menjadi Pramuka",        fungsi:"Tanda bahwa anak sudah dilantik menjadi Pramuka.",               zone:"dada-kiri-tengah", zoneLabel:"Dada kiri tengah"},
+ {id:"pandu",    name:"Tanda Pandu Dunia",       icon:"🌍", clue:"Lambang kepanduan dunia (WOSM)",              fungsi:"Lambang kepanduan dunia (WOSM).",                               zone:"dada-kanan-atas",  zoneLabel:"Dada kanan atas"},
+ {id:"barung",   name:"Tanda Barung Hijau",      icon:"🟢", clue:"Tanda warna barung anak",                      fungsi:"Tanda warna barung tempat anak berada.",                         zone:"lengan-kiri-atas", zoneLabel:"Lengan kiri atas"},
+ {id:"pinrung",  name:"Tanda Jabatan Pinrung",   icon:"⭐", clue:"Tanda jabatan Pimpinan Barung",                fungsi:"Tanda jabatan Pimpinan Barung (Pinrung).",                       zone:"lengan-kanan-atas",zoneLabel:"Lengan kanan atas"},
+ {id:"tku",      name:"TKU Tata",                icon:"🔶", clue:"Tanda Kecakapan Umum tingkat Tata",            fungsi:"Tanda Kecakapan Umum (TKU) tingkat Tata.",                        zone:"lengan-kiri-tengah",zoneLabel:"Lengan kiri tengah"},
+ {id:"tkk",      name:"TKK Penabung",            icon:"💰", clue:"Tanda Kecakapan Khusus bidang menabung",        fungsi:"Tanda Kecakapan Khusus (TKK) bidang menabung.",                    zone:"lengan-kanan-tengah",zoneLabel:"Lengan kanan tengah"},
+ {id:"nama",     name:"Papan Nama",              icon:"🏷️", clue:"Papan berisi nama anak",                      fungsi:"Papan berisi nama anak; dipasang di dada kanan seragam.",          zone:"dada-kanan-tengah", zoneLabel:"Dada kanan tengah"},
+ {id:"lokasi",   name:"Tanda Lokasi",            icon:"📍", clue:"Tanda gugus depan / kwartir tempat bernaung",  fungsi:"Tanda gugus depan / kwartir tempat anak bernaung.",                zone:"lengan-kiri-bawah", zoneLabel:"Lengan kiri bawah"},
+ {id:"badge",    name:"Badge Jawa Tengah",       icon:"🛡️", clue:"Badge daerah Jawa Tengah",                     fungsi:"Badge daerah Jawa Tengah.",                                      zone:"lengan-kanan-bawah",zoneLabel:"Lengan kanan bawah"}
+];
+function byId(id){ for(var i=0;i<ATTRS.length;i++) if(ATTRS[i].id===id) return ATTRS[i]; return ATTRS[0]; }
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+var SVGNS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){ var n=document.createElementNS(SVGNS,tag); for(var k in attrs) n.setAttribute(k,attrs[k]); if(parent) parent.appendChild(n); return n; }
+function txt(parent,x,y,str,size,anchor,cls){ var t=el("text",{x:x,y:y,"font-size":size,"text-anchor":anchor||"middle","dominant-baseline":"middle"},parent); if(cls) t.setAttribute("class",cls); t.textContent=str; return t; }
+
+/* ============ DIAGRAM SERAGAM ============ */
+/* Seragam sederhana berzona: badan + 2 lengan, 10 zona klik (4 dada, 6 lengan).
+   Sisi "kiri/kanan" dilihat dari depan (pemakai menghadap kita). */
+var svg=document.getElementById("uniformSvg");
+var zoneEls={};
+/* Zona: [id, x, y, w, h, label baris 1, label baris 2] */
+var ZONES=[
+ ["dada-kiri-atas",    128, 96, 46, 44, "Dada",  "kiri atas"],
+ ["dada-kanan-atas",   178, 96, 46, 44, "Dada",  "kanan atas"],
+ ["dada-kiri-tengah",  128,146, 46, 44, "Dada",  "kiri tengah"],
+ ["dada-kanan-tengah", 178,146, 46, 44, "Dada",  "kanan tengah"],
+ ["lengan-kiri-atas",   58,108, 52, 40, "Lengan", "kiri atas"],
+ ["lengan-kanan-atas", 242,108, 52, 40, "Lengan", "kanan atas"],
+ ["lengan-kiri-tengah", 58,154, 52, 40, "Lengan", "kiri tengah"],
+ ["lengan-kanan-tengah",242,154, 52, 40, "Lengan", "kanan tengah"],
+ ["lengan-kiri-bawah",  58,200, 52, 40, "Lengan", "kiri bawah"],
+ ["lengan-kanan-bawah",242,200, 52, 40, "Lengan", "kanan bawah"]
+];
+(function buildUniform(){
+  /* lengan kiri + kanan (di belakang badan) */
+  el("path",{d:"M118,88 L58,100 L44,238 Q44,252 58,252 L100,252 L112,200 Z",fill:"#a5d8ff",stroke:"#17324f","stroke-width":3,"stroke-linejoin":"round"},svg);
+  el("path",{d:"M234,88 L294,100 L308,238 Q308,252 294,252 L252,252 L240,200 Z",fill:"#a5d8ff",stroke:"#17324f","stroke-width":3,"stroke-linejoin":"round"},svg);
+  /* badan seragam */
+  el("path",{d:"M118,84 L146,84 L176,108 L206,84 L234,84 L240,200 L240,330 Q240,344 226,344 L126,344 Q112,344 112,330 L112,200 Z",fill:"#fff8e1",stroke:"#17324f","stroke-width":3,"stroke-linejoin":"round"},svg);
+  /* kerah */
+  el("path",{d:"M146,84 L176,108 L206,84 L206,72 L146,72 Z",fill:"#ffd43b",stroke:"#17324f","stroke-width":2.5,"stroke-linejoin":"round"},svg);
+  /* saku */
+  el("rect",{x:128,y:214,width:40,height:34,rx:5,fill:"none",stroke:"#9db8cc","stroke-width":2},svg);
+  el("rect",{x:184,y:214,width:40,height:34,rx:5,fill:"none",stroke:"#9db8cc","stroke-width":2},svg);
+  /* kancing */
+  [140,170,200].forEach(function(y){ el("circle",{cx:176,cy:y,r:4,fill:"#17324f"},svg); });
+  /* zona klik */
+  ZONES.forEach(function(z){
+    var g=el("g",{"class":"zone disabled","data-zone":z[0],tabindex:"0",role:"button","aria-label":"Pasang di zona "+z[5]+" "+z[6]},svg);
+    el("rect",{x:z[1],y:z[2],width:z[3],height:z[4],rx:8},g);
+    txt(g,z[1]+z[3]/2,z[2]+z[4]/2-8,z[5],13.5);
+    txt(g,z[1]+z[3]/2,z[2]+z[4]/2+9,z[6],13.5,"middle","zone-sub");
+    zoneEls[z[0]]=g;
+    g.addEventListener("click",function(){ stickAnswer(z[0]); });
+    g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); stickAnswer(z[0]); } });
+  });
+  txt(svg,176,362,"SERAGAM PRAMUKA SIAGA",13);
+})();
+function setZonesEnabled(on){
+  for(var k in zoneEls){
+    zoneEls[k].classList.toggle("disabled",!on);
+  }
+}
+function clearZoneMarks(){
+  for(var k in zoneEls) zoneEls[k].classList.remove("placed-right","placed-wrong");
+}
+
+/* ============ MATERI ============ */
+var materiGrid=document.getElementById("materiGrid");
+ATTRS.forEach(function(a,i){
+  var card=document.createElement("div");
+  card.className="materi-card";
+  card.innerHTML='<h3><span class="ic" aria-hidden="true">'+a.icon+'</span>'+(i+1)+'. '+a.name+'</h3>'
+    +'<p>'+a.fungsi+'</p>'
+    +'<p class="pos">📍 Posisi di diagram: '+a.zoneLabel+'.</p>';
+  materiGrid.appendChild(card);
+});
+
+/* ============ GAME ============ */
+var game={order:[], idx:0, score:0, say:0, stick:0, phase:0, locked:false, sayRight:false};
+var gProgress=document.getElementById("gProgress"), gScore=document.getElementById("gScore"),
+    gBar=document.getElementById("gBar"), gStepTag=document.getElementById("gStepTag"),
+    gSub=document.getElementById("gSub"), gChoices=document.getElementById("gChoices"),
+    gFeedback=document.getElementById("gFeedback"), btnNext=document.getElementById("btnNext"),
+    gCardMain=document.getElementById("gCardMain"), gFinish=document.getElementById("gFinish"),
+    attrIcon=document.getElementById("attrIcon"), attrClue=document.getElementById("attrClue"),
+    attrHint=document.getElementById("attrHint"), uniformNote=document.getElementById("uniformNote");
+
+function startGame(){
+  game.order=shuffle(ATTRS); game.idx=0; game.score=0; game.say=0; game.stick=0;
+  gFinish.classList.add("hidden"); gCardMain.classList.remove("hidden");
+  renderRound();
+}
+function renderRound(){
+  var a=game.order[game.idx]; game.phase=1; game.locked=false;
+  gProgress.textContent="Ronde "+(game.idx+1)+" dari 8";
+  gScore.textContent="Skor: "+game.score+" / 80";
+  gBar.style.width=(game.idx/8*100)+"%";
+  document.getElementById("gSayScore").textContent=game.say;
+  document.getElementById("gStickScore").textContent=game.stick;
+  attrIcon.textContent=a.icon;
+  attrClue.textContent=a.clue;
+  attrHint.textContent="Atribut apakah ini? Sebutkan dengan keras, lalu sentuh jawabanmu!";
+  gStepTag.textContent="Langkah 1: Sebutkan Namanya"; gStepTag.classList.remove("step2");
+  gSub.textContent="Pilih nama atributnya:";
+  gFeedback.className="feedback"; gFeedback.innerHTML="";
+  btnNext.classList.add("hidden");
+  clearZoneMarks(); setZonesEnabled(false);
+  uniformNote.textContent="Diagram seragam — tunggu Langkah 2 untuk memasang";
+  var others=shuffle(ATTRS.filter(function(x){ return x.id!==a.id; })).slice(0,3);
+  var choices=shuffle([a].concat(others));
+  gChoices.innerHTML="";
+  choices.forEach(function(c){
+    var b=document.createElement("button");
+    b.type="button"; b.className="choice"; b.textContent=c.name;
+    b.addEventListener("click",function(){ sayAnswer(b,c,a); });
+    gChoices.appendChild(b);
+  });
+}
+function sayAnswer(btn,chosen,a){
+  if(game.phase!==1||game.locked) return; game.locked=true;
+  var right=chosen.id===a.id; game.sayRight=right;
+  if(right){ game.say+=5; game.score+=5; }
+  var btns=gChoices.querySelectorAll(".choice");
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled=true;
+    if(btns[i].textContent===a.name) btns[i].classList.add("correct");
+    else if(btns[i]===btn) btns[i].classList.add("wrong");
+  }
+  document.getElementById("gSayScore").textContent=game.say;
+  gScore.textContent="Skor: "+game.score+" / 80";
+  game.phase=2; game.locked=false;
+  gStepTag.textContent="Langkah 2: Pasang di Seragam"; gStepTag.classList.add("step2");
+  gSub.textContent="Sekarang pasang atribut ini: sentuh zona yang benar pada diagram seragam!";
+  attrHint.textContent="Petunjuk: "+a.fungsi+" ("+a.zoneLabel+" di diagram.)";
+  setZonesEnabled(true);
+  uniformNote.textContent="Sentuh zona yang benar pada diagram seragam!";
+  gFeedback.className="feedback show "+(right?"ok":"no");
+  gFeedback.innerHTML=(right
+    ? "<span class='fb-title'>Menyebut: BENAR! +5 poin</span><br>"
+    : "<span class='fb-title'>Menyebut: belum tepat.</span> Atribut ini adalah <b>"+a.name+"</b>.<br>")
+    +"Lanjut ke Langkah 2: pasang atributnya pada diagram seragam.";
+}
+function stickAnswer(zoneId){
+  if(game.phase!==2||game.locked) return; game.locked=true;
+  var a=game.order[game.idx];
+  var right=zoneId===a.zone;
+  if(right){ game.stick+=5; game.score+=5; }
+  zoneEls[a.zone].classList.add("placed-right");
+  if(!right) zoneEls[zoneId].classList.add("placed-wrong");
+  setZonesEnabled(false);
+  document.getElementById("gStickScore").textContent=game.stick;
+  gScore.textContent="Skor: "+game.score+" / 80";
+  gBar.style.width=((game.idx+1)/8*100)+"%";
+  var sayTxt=game.sayRight?"menyebut +5":"menyebut +0";
+  var stickTxt=right?"memasang +5":"memasang +0";
+  var correctZone=byId(a.id).zoneLabel;
+  gFeedback.className="feedback show "+(right?"ok":"no");
+  gFeedback.innerHTML="<span class='fb-title'>"+(right?"Memasang: TEPAT SEKALI! +5 poin":"Memasang: belum tepat.")+"</span><br>"
+    +"Ronde ini: "+sayTxt+", "+stickTxt+". <b>"+a.name+"</b> — "+a.fungsi+" Tempatnya: <b>"+correctZone+"</b>.";
+  btnNext.textContent=(game.idx===7)?"LIHAT SKOR AKHIR":"RONDE BERIKUTNYA →";
+  btnNext.classList.remove("hidden"); btnNext.focus();
+}
+btnNext.addEventListener("click",function(){
+  game.idx++;
+  if(game.idx>=8){ showFinish(); } else { renderRound(); }
+});
+function starStr(score){ var n=Math.round(score/80*5), s=""; for(var i=0;i<5;i++) s+=(i<n?"★":"☆"); return s; }
+function cheer(score){
+  if(score>=80) return "SEMPURNA! Kamu sudah hafal semua atribut dan tempat memasangnya. Barungmu pasti bangga!";
+  if(score>=60) return "Hebat! Sedikit lagi menuju sempurna. Coba sekali lagi untuk dapat 80!";
+  if(score>=40) return "Bagus, kamu sudah bisa setengahnya! Baca lagi materinya, lalu coba lagi.";
+  return "Tidak apa-apa, namanya juga belajar! Baca lagi 10 atribut di tab Materi, lalu coba lagi. Kamu pasti bisa!";
+}
+function showFinish(){
+  gCardMain.classList.add("hidden"); gFinish.classList.remove("hidden");
+  document.getElementById("finalScore").textContent=game.score+" / 80";
+  document.getElementById("finalStars").textContent=starStr(game.score);
+  document.getElementById("finalMsg").textContent=cheer(game.score);
+  document.getElementById("finalDetail").textContent="Menyebut: "+game.say+" / 40 • Memasang: "+game.stick+" / 40 • 8 ronde selesai";
+  gProgress.textContent="Permainan selesai — 8 ronde";
+  gBar.style.width="100%";
+  clearZoneMarks(); setZonesEnabled(false);
+}
+document.getElementById("btnAgain").addEventListener("click",startGame);
+
+/* tabs */
+var tabMain=document.getElementById("tabMain"), tabMateri=document.getElementById("tabMateri");
+function setTab(which){
+  tabMain.classList.toggle("active",which==="main"); tabMain.setAttribute("aria-selected",which==="main");
+  tabMateri.classList.toggle("active",which==="materi"); tabMateri.setAttribute("aria-selected",which==="materi");
+  document.getElementById("panelMain").classList.toggle("hidden",which!=="main");
+  document.getElementById("panelMateri").classList.toggle("hidden",which!=="materi");
+}
+tabMain.addEventListener("click",function(){ setTab("main"); });
+tabMateri.addEventListener("click",function(){ setTab("materi"); });
+startGame();
+})();
+</script>
+</body>
+</html>
