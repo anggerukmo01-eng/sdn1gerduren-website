@@ -28,7 +28,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
 .utilbar-inner{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:7px 0}
 .clock{font-weight:700;white-space:nowrap}
 header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 0 0}
 .brand{flex:1 1 auto}
 .header-actions{margin-left:auto}
@@ -44,7 +44,7 @@ header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-fil
 .menu-btn{display:none;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;font-weight:700;font-size:15px;cursor:pointer;color:var(--ink)}
 nav{display:flex;gap:2px;flex-wrap:nowrap;align-items:center;flex-basis:100%;border-top:1px solid var(--line);margin-top:12px;padding:10px 0 12px;overflow-x:auto;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
-nav a{text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;padding:8px 11px;border-radius:999px;white-space:nowrap;flex:0 0 auto}
+nav a{text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;padding:8px 10px;border-radius:999px;white-space:nowrap;flex:0 0 auto}
 nav a:hover,nav a:focus{background:var(--green-light);color:var(--green-dark)}
 [data-theme="dark"] nav a:hover,[data-theme="dark"] nav a:focus{color:#a5e8c0}
 nav a.active{background:var(--green);color:#fff}
