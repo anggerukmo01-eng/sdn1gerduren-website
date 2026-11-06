@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Pos Bumbung Kemanusiaan — Taman 9 Pesta Siaga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#fff4e0; --bg2:#eaf6ff; --surface:#ffffff; --surface2:#fff8e1;
+  --ink:#17324f; --muted:#47617d; --line:#f0d9a8;
+  --blue:#1d7ed6; --blue-dark:#1663ab; --red:#e63946; --red-dark:#c22533;
+  --yellow:#ffc93c; --yellow-soft:#fff1bf; --green:#25a244; --green-soft:#d8f5df;
+  --orange:#f76707; --teal:#0ca678; --radius:20px;
+  --shadow:0 6px 0 rgba(23,50,79,.08), 0 14px 28px rgba(23,50,79,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#241a08; --bg2:#0d2233; --surface:#17344a; --surface2:#2a2110;
+    --ink:#f2f8fc; --muted:#b9d2e4; --line:#2c506e;
+    --blue:#4dabf7; --blue-dark:#339af0; --yellow-soft:#4d3f10; --green-soft:#14401f;
+    --shadow:0 6px 0 rgba(0,0,0,.25), 0 14px 28px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:18px; line-height:1.55;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,201,60,.35) 0 90px, transparent 91px),
+    radial-gradient(circle at 92% 22%, rgba(230,57,70,.14) 0 120px, transparent 121px),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+  background-attachment:fixed;
+}
+h1,h2,h3,.font-display{font-family:"Fredoka","Nunito",system-ui,sans-serif; letter-spacing:.2px}
+.wrap{max-width:1120px; margin:0 auto; padding:20px 16px 56px}
+button{font-family:inherit; cursor:pointer; touch-action:manipulation}
+button:disabled{cursor:not-allowed; opacity:.55}
+:focus-visible{outline:4px solid var(--yellow); outline-offset:2px}
+
+/* ===== Banner simulasi ===== */
+.sim-banner{
+  background:var(--red); color:#fff; border-radius:18px; padding:16px 20px;
+  font-size:clamp(18px,3.4vw,23px); font-weight:900; text-align:center;
+  box-shadow:var(--shadow); margin-bottom:18px; line-height:1.35;
+}
+.sim-banner small{display:block; font-size:15px; font-weight:800; opacity:.95; margin-top:4px}
+
+/* ===== Header ===== */
+.hero{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before{content:""; position:absolute; inset:0 0 auto 0; height:10px;
+  background:repeating-linear-gradient(90deg,var(--red) 0 44px,var(--yellow) 44px 88px,var(--blue) 88px 132px,var(--green) 132px 176px)}
+.hero .pos-badge{
+  display:inline-block; margin-top:8px; background:var(--red); color:#fff; font-weight:900;
+  font-size:15px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 16px; border-radius:999px;
+}
+.hero h1{font-size:clamp(32px,6.5vw,54px); line-height:1.08; margin:12px 0 6px; font-weight:700}
+.hero h1 .bumbung-word{color:var(--red)}
+.hero p.sub{font-size:clamp(17px,3vw,21px); color:var(--muted); font-weight:700; margin:0 auto; max-width:660px}
+.score-row{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:18px}
+.score-pill{
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--yellow); color:#5c4300; border-radius:999px; padding:10px 22px;
+  font-size:clamp(19px,3.4vw,24px); font-weight:900; border:3px solid #e8ae00;
+}
+.score-pill.blue{background:#dbeafe; color:#17324f; border-color:#93c5fd}
+.score-pill.green{background:var(--green-soft); color:#14532d; border-color:#86efac}
+.rule-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:20px; text-align:left}
+.rule-card{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:14px}
+.rule-card .num{
+  width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;margin-bottom:8px}
+.rule-card:nth-child(2) .num{background:var(--orange)}
+.rule-card:nth-child(3) .num{background:var(--green)}
+.rule-card:nth-child(4) .num{background:var(--red)}
+.rule-card p{margin:0; font-size:16.5px; font-weight:700}
+.rule-card p b{font-size:19px}
+@media (max-width:760px){ .rule-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:430px){ .rule-grid{grid-template-columns:1fr} }
+
+/* ===== Sections ===== */
+section.block{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px; margin-top:26px;
+}
+.sec-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.sec-num{
+  flex:0 0 auto; width:52px;height:52px;border-radius:16px; color:#fff; background:var(--red);
+  display:flex;align-items:center;justify-content:center; font-family:"Fredoka"; font-size:26px; font-weight:700}
+.sec-num.green{background:var(--green)} .sec-num.blue{background:var(--blue)} .sec-num.orange{background:var(--orange)}
+.sec-head h2{font-size:clamp(25px,4.5vw,34px); margin:0; font-weight:600}
+.sec-lead{color:var(--muted); font-weight:700; font-size:17.5px; margin:4px 0 18px}
+
+/* ===== Anak / bumbung ===== */
+.kids-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+@media (max-width:760px){ .kids-grid{grid-template-columns:1fr} }
+.kid-card{
+  border:3px solid var(--line); border-radius:20px; padding:18px;
+  background:var(--surface2); position:relative;
+}
+.kid-card.done{border-color:var(--green); background:var(--green-soft)}
+.kid-card.active{border-color:var(--blue); box-shadow:0 0 0 3px rgba(29,126,214,.25)}
+.kid-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.kid-avatar{
+  width:56px;height:56px;border-radius:50%; background:var(--yellow); color:#5c4300;
+  display:flex;align-items:center;justify-content:center; font-size:30px; flex:0 0 auto;
+  border:3px solid #e8ae00;
+}
+.kid-card.done .kid-avatar{background:var(--green); color:#fff; border-color:#15803d}
+.kid-head h3{margin:0; font-size:23px}
+.kid-head .kid-status{font-size:15px; font-weight:900; color:var(--muted)}
+.kid-card.done .kid-status{color:var(--green)}
+.amount-line{font-size:clamp(24px,4.5vw,30px); font-weight:900; margin:14px 0 2px; font-family:"Fredoka"}
+.amount-line .target{color:var(--muted); font-size:18px}
+.status-msg{font-weight:900; font-size:17px; min-height:26px; margin:2px 0 12px}
+.status-msg.warn{color:var(--red-dark)}
+.status-msg.ok{color:#15803d}
+.status-msg.idle{color:var(--muted)}
+@media (prefers-color-scheme: dark){ .status-msg.warn{color:#ff8f98} }
+.pieces{display:flex; flex-wrap:wrap; gap:8px; min-height:44px; margin-bottom:14px}
+.piece{
+  background:#fff; color:#17324f; border:2.5px solid var(--blue); border-radius:999px;
+  padding:6px 14px; font-weight:900; font-size:16px;
+}
+.piece .x{color:var(--red); font-weight:900; margin-left:4px}
+.denom-row{display:flex; flex-wrap:wrap; gap:10px}
+.denom{
+  flex:1 1 100px; min-height:64px; border-radius:14px; border:3px solid var(--blue);
+  background:#fff; color:#17324f; font-size:19px; font-weight:900;
+  box-shadow:0 4px 0 var(--blue-dark);
+}
+.denom:active{transform:translateY(3px); box-shadow:0 1px 0 var(--blue-dark)}
+.denom small{display:block; font-size:13px; font-weight:800; color:var(--muted)}
+.kid-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+.btn{
+  flex:1 1 140px; min-height:62px; border:0; border-radius:16px; padding:12px 18px;
+  font-size:19px; font-weight:900; color:#fff; background:var(--green); box-shadow:0 5px 0 #15803d;
+}
+.btn:active{transform:translateY(4px); box-shadow:0 1px 0 #15803d}
+.btn.blue{background:var(--blue); box-shadow:0 5px 0 var(--blue-dark)}
+.btn.blue:active{box-shadow:0 1px 0 var(--blue-dark)}
+.btn.red{background:var(--red); box-shadow:0 5px 0 var(--red-dark)}
+.btn.red:active{box-shadow:0 1px 0 var(--red-dark)}
+.btn.ghost{background:#fff; color:var(--ink); border:3px solid var(--line); box-shadow:0 5px 0 rgba(23,50,79,.15)}
+.btn.ghost:active{box-shadow:0 1px 0 rgba(23,50,79,.15)}
+.warn-box{
+  display:none; margin-top:14px; background:#fde8e8; border:3px solid var(--red);
+  color:#7f1d1d; border-radius:14px; padding:12px 14px; font-weight:900; font-size:17px;
+}
+.warn-box.show{display:block}
+@media (prefers-color-scheme: dark){ .warn-box{background:#4a1620; color:#fecaca} }
+
+/* ===== Hasil akhir ===== */
+.finish{
+  display:none; text-align:center; background:var(--green-soft); border:3px solid var(--green);
+  border-radius:20px; padding:24px 18px; margin-top:20px;
+}
+.finish.show{display:block}
+.finish .big-score{font-family:"Fredoka"; font-size:clamp(44px,9vw,72px); font-weight:700; line-height:1; color:#15803d}
+.finish p{font-weight:800; font-size:19px; margin:8px 0}
+
+/* ===== Materi ===== */
+.materi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+@media (max-width:760px){ .materi-grid{grid-template-columns:1fr} }
+.materi-card{background:var(--surface2); border:2.5px solid var(--line); border-radius:18px; padding:18px}
+.materi-card .emoji{font-size:40px}
+.materi-card h3{margin:8px 0 6px; font-size:22px}
+.materi-card p{margin:0; font-size:17px; font-weight:700}
+.materi-card ul{margin:8px 0 0; padding-left:20px; font-size:16.5px; font-weight:700}
+.materi-card li{margin-bottom:4px}
+.reset-row{display:flex; justify-content:center; margin-top:22px}
+.note{font-size:15.5px; color:var(--muted); font-weight:700; text-align:center; margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="sim-banner" role="alert">
+    ⚠️ Simulasi latihan — tidak ada uang asli yang dikirim
+    <small>Game ini hanya latihan menyusun uang pas. Jangan memasukkan uang sungguhan ke layar.</small>
+  </div>
+
+  <header class="hero">
+    <span class="pos-badge">Taman 9 &bull; Pesta Siaga Cabang Banyumas 2026</span>
+    <h1>Pos <span class="bumbung-word">Bumbung</span> Kemanusiaan 🪙</h1>
+    <p class="sub">Susun uang pas Rp10.000 untuk setiap anak, lalu masukkan ke bumbung. Berbagi itu menyenangkan!</p>
+    <div class="score-row" aria-live="polite">
+      <span class="score-pill">⭐ Skor: <span id="score-pill">0</span> / 80</span>
+      <span class="score-pill blue">👧🧒 Anak selesai: <span id="done-pill">0</span> / 8</span>
+      <span class="score-pill green">💰 Terkumpul: Rp<span id="money-pill">0</span></span>
+    </div>
+    <div class="rule-grid">
+      <div class="rule-card"><div class="num">1</div><p><b>8 anak</b> dalam satu barung, masing-masing membawa uang saku simulasi.</p></div>
+      <div class="rule-card"><div class="num">2</div><p>Susun uang <b>pas Rp10.000</b> dari pecahan koin/uang di bawah.</p></div>
+      <div class="rule-card"><div class="num">3</div><p>Tekan <b>“Taruh ke Bumbung”</b> — tunjukkan dulu jumlahnya seperti kepada juri.</p></div>
+      <div class="rule-card"><div class="num">4</div><p>Tiap anak yang memasukkan tepat Rp10.000 = <b>10 poin</b>. Maksimal <b>80</b>!</p></div>
+    </div>
+  </header>
+
+  <section class="block" aria-labelledby="judul-main">
+    <div class="sec-head"><span class="sec-num">🪙</span><h2 id="judul-main">Susun Uang Pas, Masukkan ke Bumbung!</h2></div>
+    <p class="sec-lead">Ketuk pecahan uang untuk menambahkannya. Kalau salah jumlah, jangan khawatir — kurangi atau hapus, lalu susun lagi. Hanya uang pas Rp10.000 yang bisa masuk ke bumbung.</p>
+    <div class="kids-grid" id="kids-grid"></div>
+
+    <div class="finish" id="finish-panel" role="status">
+      <div style="font-size:52px">🎉</div>
+      <div class="big-score"><span id="final-score">80</span> / 80</div>
+      <p id="final-text">Hebat! Seluruh barung sudah berbagi — total Rp80.000 masuk ke Bumbung Kemanusiaan.</p>
+      <p>Ingat: berbagi sedikit demi sedikit, kalau dilakukan bersama-sama, jadi bantuan yang besar. 💛</p>
+      <button class="btn blue" type="button" id="btn-play-again" style="flex:0 1 260px">🔄 Main Lagi</button>
+    </div>
+
+    <div class="reset-row">
+      <button class="btn ghost" type="button" id="btn-reset" style="flex:0 1 260px">↺ Ulangi dari Awal</button>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="judul-materi">
+    <div class="sec-head"><span class="sec-num green">💛</span><h2 id="judul-materi">Materi Singkat: Berbagi &amp; Menabung</h2></div>
+    <p class="sec-lead">Tiga hal yang dilatih di Taman Bumbung Kemanusiaan — sesuai Juklak Pesta Siaga Cabang Banyumas 2026.</p>
+    <div class="materi-grid">
+      <div class="materi-card">
+        <div class="emoji" aria-hidden="true">🤝</div>
+        <h3>Berbagi itu Peduli</h3>
+        <p>Menyisihkan sebagian uang saku untuk teman yang membutuhkan adalah wujud kepedulian. Berbagi tidak harus besar — yang penting ikhlas dan rutin.</p>
+      </div>
+      <div class="materi-card">
+        <div class="emoji" aria-hidden="true">🐷</div>
+        <h3>Menabung Sedikit demi Sedikit</h3>
+        <p>Sisihkan uang saku sedikit demi sedikit ke dalam celengan atau amplop latihan. Lama-lama terkumpul juga — seperti target donasi Rp10.000 di taman ini.</p>
+        <ul>
+          <li>Tentukan target: Rp10.000</li>
+          <li>Sisihkan tiap hari, jangan menunggu sisa</li>
+          <li>Hitung lagi sebelum diserahkan</li>
+        </ul>
+      </div>
+      <div class="materi-card">
+        <div class="emoji" aria-hidden="true">🧑‍⚖️</div>
+        <h3>Aturan di Lomba</h3>
+        <p>Di lomba sungguhan, sebelum memasukkan donasi, anak menunjukkannya dulu kepada panitia/juri yang menilai. Tiap anak yang memasukkan donasi bernilai 10 — maksimal 80 per barung (8 × Rp10.000 = Rp80.000).</p>
+      </div>
+    </div>
+    <p class="note">Sumber aturan: Juklak Pesta Siaga Cabang Banyumas 2026 — Taman Bumbung Kemanusiaan (8 anak, Rp10.000/anak, nilai 10/anak, maksimal 80). Game ini simulasi latihan; bukan pengumpulan donasi sungguhan.</p>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var TARGET = 10000, POINTS = 10, KIDS = 8;
+  var DENOMS = [
+    {v:1000, label:"Rp1.000", sub:"koin"},
+    {v:2000, label:"Rp2.000", sub:"koin"},
+    {v:5000, label:"Rp5.000", sub:"uang kertas"},
+    {v:10000, label:"Rp10.000", sub:"uang kertas"}
+  ];
+  var AVATARS = ["😀","😊","😄","🤗","😎","🥰","🤩","😁"];
+
+  var state = [];
+  function freshState(){
+    state = [];
+    for(var i=0;i<KIDS;i++){ state.push({pieces:[], done:false}); }
+  }
+  freshState();
+
+  var grid = document.getElementById("kids-grid");
+  var scorePill = document.getElementById("score-pill");
+  var donePill = document.getElementById("done-pill");
+  var moneyPill = document.getElementById("money-pill");
+  var finishPanel = document.getElementById("finish-panel");
+  var finalScore = document.getElementById("final-score");
+
+  function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  function sum(kid){ return kid.pieces.reduce(function(a,b){ return a+b; }, 0); }
+  function totalScore(){ return state.filter(function(k){ return k.done; }).length * POINTS; }
+  function totalMoney(){ return state.filter(function(k){ return k.done; }).length * TARGET; }
+
+  function render(){
+    scorePill.textContent = totalScore();
+    donePill.textContent = state.filter(function(k){ return k.done; }).length;
+    moneyPill.textContent = fmt(totalMoney());
+    var allDone = state.every(function(k){ return k.done; });
+    finishPanel.classList.toggle("show", allDone);
+    if(allDone){ finalScore.textContent = totalScore(); }
+    for(var i=0;i<KIDS;i++){ renderKid(i); }
+  }
+
+  function renderKid(i){
+    var kid = state[i];
+    var card = document.getElementById("kid-"+i);
+    if(!card){ return; }
+    var total = sum(kid);
+    card.classList.toggle("done", kid.done);
+    card.classList.toggle("active", !kid.done);
+    var amt = card.querySelector(".amount-line");
+    amt.innerHTML = kid.done
+      ? "✅ Rp10.000 <span class='target'>/ Rp10.000 — sudah masuk bumbung!</span>"
+      : "Rp" + fmt(total) + " <span class='target'>/ Rp10.000</span>";
+    var status = card.querySelector(".status-msg");
+    if(kid.done){
+      status.textContent = "🎉 +10 poin! Terima kasih sudah berbagi.";
+      status.className = "status-msg ok";
+    } else if(total === 0){
+      status.textContent = "Pilih pecahan uang di bawah untuk mulai menyusun.";
+      status.className = "status-msg idle";
+    } else if(total < TARGET){
+      status.textContent = "⚠️ Masih kurang Rp" + fmt(TARGET - total) + " — tambah lagi ya!";
+      status.className = "status-msg warn";
+    } else if(total > TARGET){
+      status.textContent = "⚠️ Kelebihan Rp" + fmt(total - TARGET) + " — kurangi dulu, harus pas Rp10.000!";
+      status.className = "status-msg warn";
+    } else {
+      status.textContent = "✅ Pas Rp10.000! Siap dimasukkan ke bumbung.";
+      status.className = "status-msg ok";
+    }
+    var pieces = card.querySelector(".pieces");
+    pieces.innerHTML = "";
+    if(kid.pieces.length === 0 && !kid.done){
+      var em = document.createElement("span");
+      em.style.cssText = "color:var(--muted);font-weight:700";
+      em.textContent = "Belum ada uang yang disusun.";
+      pieces.appendChild(em);
+    }
+    kid.pieces.forEach(function(v, idx){
+      var chip = document.createElement("span");
+      chip.className = "piece";
+      chip.textContent = "Rp" + fmt(v);
+      if(!kid.done){
+        var x = document.createElement("button");
+        x.type = "button"; x.className = "x"; x.textContent = "✕";
+        x.setAttribute("aria-label", "Hapus pecahan Rp" + fmt(v));
+        x.style.cssText = "background:none;border:0;font-size:16px;cursor:pointer;padding:0 2px";
+        x.addEventListener("click", function(){ kid.pieces.splice(idx,1); hideWarn(card); render(); });
+        chip.appendChild(x);
+      }
+      pieces.appendChild(chip);
+    });
+    var btns = card.querySelectorAll(".denom");
+    btns.forEach(function(b){ b.disabled = kid.done; });
+    card.querySelector(".btn-undo").disabled = kid.done || kid.pieces.length === 0;
+    card.querySelector(".btn-deposit").disabled = kid.done;
+  }
+
+  function hideWarn(card){ card.querySelector(".warn-box").classList.remove("show"); }
+
+  function buildKid(i){
+    var card = document.createElement("article");
+    card.className = "kid-card active";
+    card.id = "kid-" + i;
+    card.innerHTML =
+      '<div class="kid-head">' +
+        '<span class="kid-avatar" aria-hidden="true">' + AVATARS[i] + '</span>' +
+        '<div><h3>Anak ' + (i+1) + '</h3><span class="kid-status">Uang saku simulasi • target Rp10.000</span></div>' +
+      '</div>' +
+      '<div class="amount-line">Rp0 <span class="target">/ Rp10.000</span></div>' +
+      '<div class="status-msg idle" aria-live="polite">Pilih pecahan uang di bawah untuk mulai menyusun.</div>' +
+      '<div class="pieces"></div>' +
+      '<div class="denom-row"></div>' +
+      '<div class="kid-actions">' +
+        '<button class="btn btn-deposit" type="button">🪙 Taruh ke Bumbung</button>' +
+        '<button class="btn ghost btn-undo" type="button">↩️ Batalkan Terakhir</button>' +
+      '</div>' +
+      '<div class="warn-box" role="alert"></div>';
+    var row = card.querySelector(".denom-row");
+    DENOMS.forEach(function(d){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "denom";
+      b.innerHTML = d.label + "<small>" + d.sub + " • +Rp" + fmt(d.v) + "</small>";
+      b.setAttribute("aria-label", "Tambah " + d.label);
+      b.addEventListener("click", function(){
+        state[i].pieces.push(d.v);
+        hideWarn(card);
+        render();
+      });
+      row.appendChild(b);
+    });
+    card.querySelector(".btn-undo").addEventListener("click", function(){
+      state[i].pieces.pop();
+      hideWarn(card);
+      render();
+    });
+    card.querySelector(".btn-deposit").addEventListener("click", function(){
+      var kid = state[i];
+      var total = sum(kid);
+      var warn = card.querySelector(".warn-box");
+      if(total < TARGET){
+        warn.textContent = "⚠️ Belum bisa masuk bumbung! Uangmu baru Rp" + fmt(total) + ", masih kurang Rp" + fmt(TARGET - total) + ". Tambah pecahan lagi sampai pas Rp10.000.";
+        warn.classList.add("show");
+        render();
+        return;
+      }
+      if(total > TARGET){
+        warn.textContent = "⚠️ Kelebihan uang! Uangmu Rp" + fmt(total) + ", lebih Rp" + fmt(total - TARGET) + " dari target. Kurangi satu pecahan dulu — donasi harus pas Rp10.000.";
+        warn.classList.add("show");
+        render();
+        return;
+      }
+      kid.done = true;
+      hideWarn(card);
+      render();
+      if(state.every(function(k){ return k.done; })){
+        try{ finishPanel.scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){}
+      }
+    });
+    return card;
+  }
+
+  for(var i=0;i<KIDS;i++){ grid.appendChild(buildKid(i)); }
+
+  function resetAll(){
+    freshState();
+    finishPanel.classList.remove("show");
+    grid.querySelectorAll(".warn-box").forEach(function(w){ w.classList.remove("show"); });
+    render();
+    try{ window.scrollTo({top:0, behavior:"smooth"}); }catch(e){}
+  }
+  document.getElementById("btn-reset").addEventListener("click", resetAll);
+  document.getElementById("btn-play-again").addEventListener("click", resetAll);
+
+  render();
+})();
+</script>
+</body>
+</html>
