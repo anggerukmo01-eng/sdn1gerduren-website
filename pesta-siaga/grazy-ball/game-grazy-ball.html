@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Pos Grazy Ball — Taman 6 Pesta Siaga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#eaf6ff; --bg2:#fff7e0; --surface:#ffffff; --surface2:#f2faff;
+  --ink:#17324f; --muted:#47617d; --line:#cfe6f5;
+  --blue:#1d7ed6; --blue-dark:#1663ab; --red:#e63946; --red-dark:#c22533;
+  --yellow:#ffc93c; --yellow-soft:#fff1bf; --green:#25a244; --green-soft:#d8f5df;
+  --orange:#f76707; --teal:#0ca678; --radius:20px;
+  --shadow:0 6px 0 rgba(23,50,79,.08), 0 14px 28px rgba(23,50,79,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0d2233; --bg2:#12293d; --surface:#17344a; --surface2:#1c3d55;
+    --ink:#f2f8fc; --muted:#b9d2e4; --line:#2c506e;
+    --blue:#4dabf7; --blue-dark:#339af0; --yellow-soft:#4d3f10; --green-soft:#14401f;
+    --shadow:0 6px 0 rgba(0,0,0,.25), 0 14px 28px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:18px; line-height:1.55;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,201,60,.35) 0 90px, transparent 91px),
+    radial-gradient(circle at 92% 22%, rgba(29,126,214,.18) 0 120px, transparent 121px),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+  background-attachment:fixed;
+}
+h1,h2,h3,.font-display{font-family:"Fredoka","Nunito",system-ui,sans-serif; letter-spacing:.2px}
+.wrap{max-width:1120px; margin:0 auto; padding:20px 16px 56px}
+button{font-family:inherit; cursor:pointer; touch-action:manipulation}
+:focus-visible{outline:4px solid var(--yellow); outline-offset:2px}
+
+/* ===== Header ===== */
+.hero{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before{content:""; position:absolute; inset:0 0 auto 0; height:10px;
+  background:repeating-linear-gradient(90deg,var(--red) 0 44px,var(--yellow) 44px 88px,var(--blue) 88px 132px,var(--green) 132px 176px)}
+.hero .pos-badge{
+  display:inline-block; margin-top:8px; background:var(--green); color:#fff; font-weight:900;
+  font-size:15px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 16px; border-radius:999px;
+}
+.hero h1{font-size:clamp(32px,6.5vw,54px); line-height:1.08; margin:12px 0 6px; font-weight:700}
+.hero h1 .ball-word{color:var(--green)}
+.hero p.sub{font-size:clamp(17px,3vw,21px); color:var(--muted); font-weight:700; margin:0 auto; max-width:640px}
+.score-pill{
+  display:inline-flex; align-items:center; gap:10px; margin-top:16px;
+  background:var(--yellow); color:#5c4300; border-radius:999px; padding:10px 22px;
+  font-size:clamp(19px,3.4vw,24px); font-weight:900; border:3px solid #e8ae00;
+}
+.rule-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:20px; text-align:left}
+.rule-card{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:14px}
+.rule-card .num{
+  width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;margin-bottom:8px}
+.rule-card:nth-child(2) .num{background:var(--orange)}
+.rule-card:nth-child(3) .num{background:var(--green)}
+.rule-card:nth-child(4) .num{background:var(--red)}
+.rule-card p{margin:0; font-size:16.5px; font-weight:700}
+.rule-card p b{font-size:19px}
+@media (max-width:760px){ .rule-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:430px){ .rule-grid{grid-template-columns:1fr} }
+
+/* ===== Sections ===== */
+section.block{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px; margin-top:26px;
+}
+.sec-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.sec-num{
+  flex:0 0 auto; width:52px;height:52px;border-radius:16px; color:#fff; background:var(--blue);
+  display:flex;align-items:center;justify-content:center; font-family:"Fredoka"; font-size:26px; font-weight:700}
+.sec-num.red{background:var(--red)} .sec-num.green{background:var(--green)} .sec-num.orange{background:var(--orange)}
+.sec-head h2{font-size:clamp(25px,4.5vw,34px); margin:0; font-weight:600}
+.sec-lead{color:var(--muted); font-weight:700; font-size:17.5px; margin:4px 0 18px}
+
+/* ===== Diagram lapangan ===== */
+.diagram{width:100%; height:auto; display:block}
+.diagram-wrap{background:var(--surface2); border:2.5px solid var(--line); border-radius:18px; padding:10px 6px 2px; overflow-x:auto}
+
+/* ===== Game ===== */
+.game-top{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+.progress-text{font-weight:900; font-size:18px}
+.score-badge{background:var(--blue); color:#fff; border-radius:999px; padding:9px 18px; font-weight:900; font-size:19px}
+.progress-bar{height:16px; background:var(--surface2); border:2px solid var(--line); border-radius:999px; overflow:hidden; margin-bottom:18px}
+.progress-fill{height:100%; width:0%; background:repeating-linear-gradient(45deg,var(--green) 0 16px,#2fbf5a 16px 32px); transition:width .4s}
+#stage{width:100%; height:auto; display:block; border:3px solid var(--line); border-radius:20px; background:linear-gradient(180deg,#bfe6ff 0%, #dff3ff 55%, #b7e4a8 55.2%, #8fd07a 100%); touch-action:none}
+.throw-slots{display:grid; grid-template-columns:repeat(8,1fr); gap:8px; margin-top:16px}
+@media (max-width:760px){ .throw-slots{grid-template-columns:repeat(4,1fr)} }
+.slot{border:2.5px solid var(--line); border-radius:14px; background:var(--surface2); padding:10px 4px; text-align:center; font-weight:900}
+.slot .s-num{font-size:14px; color:var(--muted); display:block}
+.slot .s-val{font-family:"Fredoka"; font-size:26px; line-height:1.1; display:block; min-height:30px}
+.slot.now{border-color:var(--orange); background:var(--yellow-soft)}
+.slot.hit10 .s-val{color:var(--green)}
+.slot.hit5 .s-val{color:var(--orange)}
+.slot.hit0 .s-val{color:var(--red)}
+.controls{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px}
+@media (max-width:700px){ .controls{grid-template-columns:1fr} }
+.slider-box{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:16px}
+.slider-box label{font-weight:900; font-size:18px; display:block; margin-bottom:8px}
+.slider-box .slider-val{color:var(--red); font-family:"Fredoka"; font-size:24px}
+input[type=range]{width:100%; height:16px; accent-color:var(--red); cursor:pointer}
+.slider-ticks{display:flex; justify-content:space-between; font-size:13.5px; font-weight:900; color:var(--muted); margin-top:4px}
+.btn{
+  border:none; border-radius:16px; padding:16px 22px; font-size:20px; font-weight:900;
+  min-height:62px; color:#fff; background:var(--blue); box-shadow:0 5px 0 var(--blue-dark);
+  transition:transform .08s, box-shadow .08s;
+}
+.btn:active{transform:translateY(4px); box-shadow:0 1px 0 var(--blue-dark)}
+.btn:disabled{opacity:.55; cursor:default; transform:none}
+.btn.red{background:var(--red); box-shadow:0 5px 0 var(--red-dark)}
+.btn.red:active{box-shadow:0 1px 0 var(--red-dark)}
+.btn.green{background:var(--green); box-shadow:0 5px 0 #1c7432}
+.btn.green:active{box-shadow:0 1px 0 #1c7432}
+.btn.ghost{background:var(--surface); color:var(--ink); border:3px solid var(--line); box-shadow:0 5px 0 var(--line)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--line)}
+.game-actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:16px}
+.game-actions .btn{flex:1 1 200px}
+.feedback{border-radius:16px; padding:16px 18px; margin-top:16px; font-size:19px; font-weight:800; display:none; text-align:left}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-soft); border:2.5px solid var(--green)}
+.feedback.no{background:#ffe3e6; border:2.5px solid var(--red); color:#5f1220}
+@media (prefers-color-scheme: dark){ .feedback.no{background:#4a1620; color:#ffd7db} }
+.feedback.mid{background:var(--yellow-soft); border:2.5px solid #e8ae00}
+.feedback .fb-title{font-family:"Fredoka"; font-size:23px; font-weight:600}
+.hint-line{margin:14px 0 0; font-weight:700; color:var(--muted); font-size:16.5px}
+.finish-box{text-align:center; padding:14px 6px}
+.finish-box .final-score{font-family:"Fredoka"; font-size:clamp(46px,9vw,68px); font-weight:700; color:var(--green); line-height:1}
+.finish-box .final-msg{font-size:21px; font-weight:900; margin:10px auto 4px; max-width:520px}
+.finish-box .stars{font-size:38px; letter-spacing:6px; color:#e8ae00}
+.hidden{display:none !important}
+
+/* ===== Materi ===== */
+.materi-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media (max-width:820px){ .materi-grid{grid-template-columns:1fr} }
+.materi-card{border:2.5px solid var(--line); border-radius:18px; padding:18px; background:var(--surface2)}
+.materi-card h3{margin:0 0 8px; font-size:21px; font-weight:600}
+.materi-card p,.materi-card li{font-size:17.5px; font-weight:600}
+.materi-card p{margin:0 0 8px}
+.materi-card ul,.materi-card ol{margin:6px 0 0; padding-left:22px}
+.materi-card li{margin-bottom:6px}
+.materi-card.wide{grid-column:1/-1}
+table.score-table{width:100%; border-collapse:separate; border-spacing:0; font-size:18px; overflow:hidden; border-radius:14px; border:2.5px solid var(--line)}
+table.score-table th{background:var(--green); color:#fff; font-family:"Fredoka"; font-weight:600; font-size:19px; padding:12px 10px; text-align:left}
+table.score-table td{padding:11px 10px; font-weight:800; border-top:2px solid var(--line); background:var(--surface)}
+table.score-table tr td.pts{font-family:"Fredoka"; font-size:24px; color:var(--green); white-space:nowrap; text-align:center}
+footer.site{margin-top:30px; text-align:center; color:var(--muted); font-weight:700; font-size:16px; padding:0 10px}
+footer.site .src{background:var(--surface); border:2.5px solid var(--line); border-radius:14px; padding:12px 18px; display:inline-block}
+</style>
+</head>
+<body>
+<div style="background:#17324f;color:#fff;font-family:system-ui,sans-serif;font-size:14px;padding:8px 16px"><a href="/" style="color:#ffe082">← Beranda SDN 1 Gerduren</a> &nbsp;·&nbsp; <a href="/pesta-siaga/grazy-ball/" style="color:#fff">Halaman Media Pos Grazy Ball</a></div>
+<div class="wrap">
+
+  <!-- ================= HEADER ================= -->
+  <header class="hero">
+    <span class="pos-badge">Taman 6 &bull; Pesta Siaga</span>
+    <h1>Pos <span class="ball-word">Grazy Ball</span> — Taman 6 Pesta Siaga</h1>
+    <p class="sub">Lempar bola tenis melewati holahop, lalu tangkap dengan keranjang sampah. Siap-siap jadi Barung Tergiat!</p>
+    <div><span class="score-pill">SKOR MAKSIMAL: 80</span></div>
+    <div class="rule-grid" aria-label="Aturan lomba Taman Grazy Ball">
+      <div class="rule-card"><div class="num">1</div><p><b>8 anak</b> dalam satu barung ikut bermain di pos ini, masing-masing memegang 1 bola.</p></div>
+      <div class="rule-card"><div class="num">2</div><p>Lempar <b>bola tenis melewati holahop</b>, lalu diterima memakai <b>keranjang sampah</b>.</p></div>
+      <div class="rule-card"><div class="num">3</div><p>Masuk holahop <b>dan</b> tertangkap keranjang = <b>10 poin</b>. Masuk holahop saja = <b>5 poin</b>.</p></div>
+      <div class="rule-card"><div class="num">4</div><p>Tidak masuk holahop = <b>0 poin</b>, walau bolanya masuk keranjang. Peran pelempar, pemegang holahop, dan penerima <b>bergiliran</b>.</p></div>
+    </div>
+  </header>
+
+  <!-- ================= 1. DIAGRAM LAPANGAN ================= -->
+  <section class="block" id="diagram">
+    <div class="sec-head"><div class="sec-num">1</div><h2>Diagram Lapangan Lomba</h2></div>
+    <p class="sec-lead">Jaraknya sudah diatur di juklak: dari pelempar ke holahop <b>2,5 meter</b>, dari holahop ke keranjang <b>2,5 meter</b>. Jadi total lemparanmu menempuh 5 meter!</p>
+    <div class="diagram-wrap">
+      <svg class="diagram" viewBox="0 0 960 190" role="img" aria-label="Diagram lapangan Grazy Ball: pelempar, jarak lempar 2,5 meter, holahop, jarak tangkap 2,5 meter, keranjang sampah">
+        <line x1="0" y1="150" x2="960" y2="150" stroke="#8fd07a" stroke-width="26" />
+        <line x1="0" y1="150" x2="960" y2="150" stroke="#5da244" stroke-width="2" stroke-dasharray="10 12" />
+        <!-- pelempar -->
+        <g text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700">
+          <circle cx="90" cy="78" r="20" fill="#ffd9a8" stroke="#17324f" stroke-width="3"/>
+          <path d="M70 100 Q90 92 110 100 L116 150 L64 150 Z" fill="#1d7ed6" stroke="#17324f" stroke-width="3"/>
+          <circle cx="122" cy="118" r="11" fill="#ffc93c" stroke="#e8ae00" stroke-width="3"/>
+          <text x="90" y="182" font-size="19" fill="#17324f">1. PELEMPAR</text>
+        </g>
+        <!-- jarak lempar -->
+        <g stroke="#1663ab" stroke-width="3" fill="#1663ab">
+          <line x1="140" y1="60" x2="400" y2="60" />
+          <path d="M140 60 L156 53 L156 67 Z" /><path d="M400 60 L384 53 L384 67 Z" />
+        </g>
+        <text x="270" y="44" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="21" fill="#1663ab">Jarak lempar 2,5 m</text>
+        <!-- holahop -->
+        <g text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700">
+          <ellipse cx="480" cy="86" rx="26" ry="52" fill="none" stroke="#f76707" stroke-width="9" />
+          <ellipse cx="480" cy="86" rx="26" ry="52" fill="none" stroke="#ffc93c" stroke-width="9" stroke-dasharray="20 14" />
+          <circle cx="480" cy="150" r="4" fill="#17324f"/>
+          <text x="480" y="182" font-size="19" fill="#17324f">2. HOLAHOP</text>
+        </g>
+        <!-- jarak tangkap -->
+        <g stroke="#1663ab" stroke-width="3" fill="#1663ab">
+          <line x1="560" y1="60" x2="820" y2="60" />
+          <path d="M560 60 L576 53 L576 67 Z" /><path d="M820 60 L804 53 L804 67 Z" />
+        </g>
+        <text x="690" y="44" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="21" fill="#1663ab">Jarak tangkap 2,5 m</text>
+        <!-- keranjang -->
+        <g text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700">
+          <path d="M842 96 L898 96 L890 150 L850 150 Z" fill="#e63946" stroke="#8f1d27" stroke-width="3" />
+          <line x1="852" y1="112" x2="888" y2="112" stroke="#8f1d27" stroke-width="3" />
+          <line x1="854" y1="130" x2="886" y2="130" stroke="#8f1d27" stroke-width="3" />
+          <text x="870" y="182" font-size="19" fill="#17324f">3. KERANJANG</text>
+        </g>
+        <text x="480" y="24" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="15" fill="#47617d">Pelempar → Holahop → Keranjang &nbsp;•&nbsp; Alat: holahop, bola tenis lapangan, keranjang sampah, garis pembatas</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ================= 2. PERMAINAN ================= -->
+  <section class="block" id="permainan">
+    <div class="sec-head"><div class="sec-num green">2</div><h2>Ayo Main Grazy Ball!</h2></div>
+    <p class="sec-lead">Atur <b>sudut</b> dan <b>kekuatan</b> lemparanmu, lalu tekan tombol <b>LEMPAR!</b>. Bola harus melewati holahop dan jatuh ke dalam keranjang. Satu ronde = 8 lemparan, seperti 8 anak dalam satu barung.</p>
+
+    <div class="game-top">
+      <span class="progress-text" id="throwProgress">Lemparan 1 dari 8</span>
+      <span class="score-badge" id="totalScore">Skor: 0 / 80</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="throwBar"></div></div>
+
+    <canvas id="stage" width="960" height="520" aria-label="Lapangan Grazy Ball: pelempar di kiri, holahop di tengah, keranjang di kanan"></canvas>
+
+    <div class="throw-slots" id="throwSlots" aria-label="Skor tiap lemparan"></div>
+
+    <div class="controls">
+      <div class="slider-box">
+        <label for="angleSlider">Sudut lemparan: <span class="slider-val" id="angleVal">20°</span></label>
+        <input type="range" id="angleSlider" min="10" max="70" step="1" value="20" aria-label="Sudut lemparan dari 10 sampai 70 derajat" />
+        <div class="slider-ticks"><span>10° rendah</span><span>40°</span><span>70° tinggi</span></div>
+      </div>
+      <div class="slider-box">
+        <label for="powerSlider">Kekuatan lemparan: <span class="slider-val" id="powerVal">6</span></label>
+        <input type="range" id="powerSlider" min="1" max="10" step="1" value="6" aria-label="Kekuatan lemparan dari 1 sampai 10" />
+        <div class="slider-ticks"><span>1 pelan</span><span>5</span><span>10 kencang</span></div>
+      </div>
+    </div>
+
+    <div class="game-actions">
+      <button class="btn green" id="btnThrow" type="button">🎾 LEMPAR!</button>
+      <button class="btn ghost" id="btnRandom" type="button">🎲 ACAK</button>
+      <button class="btn red" id="btnAgain" type="button">🔄 ULANGI RONDE</button>
+    </div>
+    <p class="hint-line">💡 Tips: lemparan <b>mendatar dengan kekuatan sedang sampai kencang</b> paling mudah masuk holahop dan keranjang. Lemparan yang terlalu tinggi biasanya melayang melewati keranjang. Kamu juga bisa <b>menyeret (drag)</b> di lapangan untuk mengarahkan lemparan!</p>
+
+    <div class="feedback" id="throwFeedback" aria-live="polite"></div>
+
+    <div class="q-card hidden" id="finishBox" style="border:3px solid var(--line); border-radius:20px; padding:22px; background:var(--surface2); text-align:center; margin-top:16px">
+      <div class="finish-box">
+        <div class="q-label" style="font-weight:900; color:var(--muted); font-size:16px; letter-spacing:1px; text-transform:uppercase">Skor akhir barungmu</div>
+        <div class="final-score" id="finalScore">0 / 80</div>
+        <div class="stars" id="finalStars" aria-hidden="true"></div>
+        <p class="final-msg" id="finalMsg"></p>
+        <p style="font-weight:800; color:var(--muted)" id="finalDetail"></p>
+        <div class="game-actions" style="justify-content:center">
+          <button class="btn red" id="btnAgain2" type="button" style="flex:0 1 320px">MAIN LAGI</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. ATURAN & CARA BERMAIN ================= -->
+  <section class="block" id="aturan">
+    <div class="sec-head"><div class="sec-num orange">3</div><h2>Aturan Lomba &amp; Cara Bermain</h2></div>
+    <p class="sec-lead">Aturan di bawah ini persis seperti Juklak Pesta Siaga Cabang Banyumas 2026, Taman Grazy Ball.</p>
+    <div class="materi-grid">
+      <div class="materi-card wide">
+        <h3>📋 Tabel Skor (Juklak)</h3>
+        <div style="overflow-x:auto">
+        <table class="score-table" aria-label="Tabel skor Taman Grazy Ball menurut juklak">
+          <thead><tr><th>Hasil Lemparan</th><th style="width:110px; text-align:center">Nilai</th></tr></thead>
+          <tbody>
+            <tr><td>Bola masuk lewat holahop <b>dan</b> dapat diterima masuk keranjang sampah</td><td class="pts">10</td></tr>
+            <tr><td>Bola masuk holahop, tetapi <b>tidak</b> dapat diterima / tidak masuk keranjang sampah</td><td class="pts">5</td></tr>
+            <tr><td>Bola tidak masuk holahop, tetapi masuk keranjang sampah</td><td class="pts">0</td></tr>
+            <tr><td>Bola tidak masuk holahop dan tidak masuk keranjang sampah</td><td class="pts">0</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="margin-top:10px">Skor maksimal barung: <b>8 anak × 10 = 80</b>.</p>
+      </div>
+      <div class="materi-card">
+        <h3>🎯 Cara Bermain di Game Ini</h3>
+        <ol>
+          <li>Geser <b>sudut</b> (10°–70°) dan <b>kekuatan</b> (1–10), atau seret langsung di lapangan.</li>
+          <li>Titik-titik putus-putus menunjukkan <b>perkiraan lintasan bola</b> sebelum dilempar.</li>
+          <li>Tekan <b>LEMPAR!</b> dan perhatikan bolanya terbang.</li>
+          <li>Ulangi sampai 8 lemparan selesai, lalu lihat skor barungmu dari 80!</li>
+        </ol>
+      </div>
+      <div class="materi-card">
+        <h3>👥 Tiga Peran yang Bergiliran</h3>
+        <p>Di lomba sungguhan, tiga peran ini <b>bergiliran / bergantian tugas</b>:</p>
+        <ul>
+          <li><b>Pelempar</b> — melempar bola tenis dari garis lempar.</li>
+          <li><b>Pembawa holahop</b> — memegang holahop di tengah lapangan.</li>
+          <li><b>Penerima bola</b> — memegang keranjang sampah untuk menangkap bola.</li>
+        </ul>
+        <p>Masing-masing anak memegang bola. Alat lomba: holahop, bola tenis lapangan, keranjang sampah, dan garis pembatas / garis persiapan / garis lempar.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    <span class="src">Disusun dari Juklak Pesta Siaga Cabang Banyumas 2026, Taman Grazy Ball (Taman 6) &bull; Untuk latihan Barung Kwarran Purwojati &bull; Skor hanya dihitung pada sesi ini, tidak ada data yang disimpan</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ================= FISIKA (satuan meter, sesuai juklak) ================= */
+var G = 9.8;          // gravitasi m/s^2
+var Y0 = 1.2;         // tinggi lepas bola (m)
+var HOOP_X = 2.5;     // jarak lempar (m) — juklak
+var HOOP_Y = 1.30;    // tinggi tengah holahop (m)
+var HOOP_HALF = 0.45; // setengah tinggi bukaan holahop (m)
+var BASKET_X = 5.0;   // 2,5 m + 2,5 m jarak tangkap (m) — juklak
+var BASKET_Y = 1.00;  // tinggi bibir keranjang (m)
+var BASKET_HALF = 0.40; // setengah lebar bibir keranjang (m)
+
+function speedFromPower(p){ return 3.5 + 0.8 * p; } // kekuatan 1..10 -> 4,3..11,5 m/s
+function posAt(angleDeg, v0, t){
+  var th = angleDeg * Math.PI / 180;
+  return { x: v0 * Math.cos(th) * t, y: Y0 + v0 * Math.sin(th) * t - 0.5 * G * t * t };
+}
+/* Simulasi murni (tanpa animasi) — dipakai untuk menentukan skor & lintasan. */
+function simulate(angleDeg, v0){
+  var dt = 0.001, t = 0, hoop = false, caught = false;
+  var prev = { x: 0, y: Y0 };
+  while (t < 6){
+    t += dt;
+    var p = posAt(angleDeg, v0, t);
+    if (prev.x < HOOP_X && p.x >= HOOP_X){
+      var yy = prev.y + (p.y - prev.y) * ((HOOP_X - prev.x) / (p.x - prev.x));
+      if (Math.abs(yy - HOOP_Y) <= HOOP_HALF) hoop = true;
+    }
+    if (prev.y > BASKET_Y && p.y <= BASKET_Y){
+      var xx = prev.x + (p.x - prev.x) * ((BASKET_Y - prev.y) / (p.y - prev.y));
+      if (Math.abs(xx - BASKET_X) <= BASKET_HALF) caught = true;
+      break;
+    }
+    if (p.y <= 0) break;
+    prev = p;
+  }
+  var score = hoop ? (caught ? 10 : 5) : 0;
+  return { score: score, hoop: hoop, caught: caught };
+}
+
+/* ================= STATE ================= */
+var state = { idx: 0, scores: [], total: 0, flying: false, finished: false };
+var angleSlider = document.getElementById("angleSlider");
+var powerSlider = document.getElementById("powerSlider");
+var angleVal = document.getElementById("angleVal");
+var powerVal = document.getElementById("powerVal");
+var btnThrow = document.getElementById("btnThrow");
+var btnRandom = document.getElementById("btnRandom");
+var btnAgain = document.getElementById("btnAgain");
+var btnAgain2 = document.getElementById("btnAgain2");
+var throwProgress = document.getElementById("throwProgress");
+var totalScoreEl = document.getElementById("totalScore");
+var throwBar = document.getElementById("throwBar");
+var throwFeedback = document.getElementById("throwFeedback");
+var finishBox = document.getElementById("finishBox");
+var slotsBox = document.getElementById("throwSlots");
+
+var slots = [];
+for (var s = 0; s < 8; s++){
+  var d = document.createElement("div");
+  d.className = "slot";
+  d.innerHTML = '<span class="s-num">Anak ' + (s + 1) + '</span><span class="s-val">&ndash;</span>';
+  slotsBox.appendChild(d);
+  slots.push(d);
+}
+function refreshSlots(){
+  for (var i = 0; i < 8; i++){
+    var el = slots[i];
+    el.classList.toggle("now", !state.finished && i === state.idx);
+    el.classList.remove("hit10", "hit5", "hit0");
+    var v = el.querySelector(".s-val");
+    if (i < state.scores.length){
+      v.textContent = state.scores[i];
+      el.classList.add(state.scores[i] === 10 ? "hit10" : state.scores[i] === 5 ? "hit5" : "hit0");
+    } else {
+      v.textContent = "–";
+    }
+  }
+  throwProgress.textContent = state.finished ? "Ronde selesai — 8 lemparan" : "Lemparan " + (state.idx + 1) + " dari 8";
+  totalScoreEl.textContent = "Skor: " + state.total + " / 80";
+  throwBar.style.width = (state.scores.length / 8 * 100) + "%";
+}
+function syncLabels(){
+  angleVal.textContent = angleSlider.value + "°";
+  powerVal.textContent = powerSlider.value;
+}
+angleSlider.addEventListener("input", syncLabels);
+powerSlider.addEventListener("input", syncLabels);
+syncLabels();
+
+/* ================= CANVAS ================= */
+var canvas = document.getElementById("stage");
+var ctx = canvas.getContext("2d");
+var W = 960, H = 520, GROUND = 452; // px
+var X0 = 70;                        // px untuk x = 0 m
+var SCALE = 128;                    // px per meter (0..6,5 m muat di 960 px)
+function px(x){ return X0 + x * SCALE; }
+function py(y){ return GROUND - y * SCALE; }
+
+var flight = null;   // {angle, v0, t0, result, ball:{x,y}, hoopFlash, caughtFlash}
+var dragAim = null;  // {angle, power} saat drag di canvas
+
+function drawKid(cx, groundY, shirt, skin){
+  ctx.lineWidth = 4; ctx.strokeStyle = "#17324f";
+  // badan
+  ctx.fillStyle = shirt;
+  ctx.beginPath(); ctx.moveTo(cx - 16, groundY); ctx.lineTo(cx - 13, groundY - 52);
+  ctx.quadraticCurveTo(cx, groundY - 62, cx + 13, groundY - 52); ctx.lineTo(cx + 16, groundY);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  // kepala
+  ctx.fillStyle = skin;
+  ctx.beginPath(); ctx.arc(cx, groundY - 76, 15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  // topi pramuka
+  ctx.fillStyle = "#7a4a21";
+  ctx.beginPath(); ctx.arc(cx, groundY - 80, 15, Math.PI, 0); ctx.fill();
+  ctx.fillRect(cx - 18, groundY - 82, 36, 4);
+  // kaki
+  ctx.strokeStyle = "#17324f"; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(cx - 6, groundY - 2); ctx.lineTo(cx - 10, groundY + 0); ctx.moveTo(cx + 6, groundY - 2); ctx.lineTo(cx + 10, groundY + 0); ctx.stroke();
+}
+function drawScene(){
+  ctx.clearRect(0, 0, W, H);
+  // langit
+  var sky = ctx.createLinearGradient(0, 0, 0, GROUND);
+  sky.addColorStop(0, "#bfe6ff"); sky.addColorStop(1, "#e8f7ff");
+  ctx.fillStyle = sky; ctx.fillRect(0, 0, W, GROUND);
+  // matahari & awan
+  ctx.fillStyle = "#ffc93c";
+  ctx.beginPath(); ctx.arc(880, 62, 34, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = "#e8ae00"; ctx.lineWidth = 3;
+  for (var r = 0; r < 8; r++){ var a = r * Math.PI / 4; ctx.beginPath(); ctx.moveTo(880 + Math.cos(a) * 44, 62 + Math.sin(a) * 44); ctx.lineTo(880 + Math.cos(a) * 56, 62 + Math.sin(a) * 56); ctx.stroke(); }
+  ctx.fillStyle = "rgba(255,255,255,.9)";
+  [[120, 70], [300, 46], [640, 80]].forEach(function(c){
+    ctx.beginPath(); ctx.arc(c[0], c[1], 22, 0, Math.PI * 2); ctx.arc(c[0] + 24, c[1] + 4, 18, 0, Math.PI * 2); ctx.arc(c[0] - 24, c[1] + 5, 16, 0, Math.PI * 2); ctx.fill();
+  });
+  // tanah
+  ctx.fillStyle = "#8fd07a"; ctx.fillRect(0, GROUND, W, H - GROUND);
+  ctx.fillStyle = "#7cc168"; ctx.fillRect(0, GROUND, W, 10);
+  // garis pembatas / garis lempar
+  ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 4; ctx.setLineDash([12, 8]);
+  ctx.beginPath(); ctx.moveTo(px(0), GROUND + 4); ctx.lineTo(px(0), H - 6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(px(5.0), GROUND + 4); ctx.lineTo(px(5.0), H - 6); ctx.stroke();
+  ctx.setLineDash([]);
+  // label jarak di tanah
+  ctx.font = "700 17px Fredoka, Nunito, sans-serif"; ctx.textAlign = "center";
+  function distLabel(x1, x2, label){
+    var y = H - 22;
+    ctx.strokeStyle = "#1663ab"; ctx.lineWidth = 3; ctx.fillStyle = "#1663ab";
+    ctx.beginPath(); ctx.moveTo(px(x1), y); ctx.lineTo(px(x2), y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(x1), y); ctx.lineTo(px(x1) + 10, y - 5); ctx.lineTo(px(x1) + 10, y + 5); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(px(x2), y); ctx.lineTo(px(x2) - 10, y - 5); ctx.lineTo(px(x2) - 10, y + 5); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#17324f";
+    ctx.fillText(label, (px(x1) + px(x2)) / 2, y - 10);
+  }
+  distLabel(0, 2.5, "2,5 m");
+  distLabel(2.5, 5.0, "2,5 m");
+  ctx.fillStyle = "#47617d"; ctx.font = "800 15px Nunito, sans-serif";
+  ctx.fillText("GARIS LEMPAR", px(0), GROUND + 34);
+  ctx.fillText("KERANJANG", px(5.0), GROUND + 34);
+
+  // pemegang holahop (di belakang ring)
+  drawKid(px(HOOP_X) - 4, GROUND, "#f76707", "#ffd9a8");
+  // pelempar
+  drawKid(px(0), GROUND, "#1d7ed6", "#ffd9a8");
+  // lengan pelempar mengarah ke sudut lemparan
+  var aimDeg = dragAim ? dragAim.angle : (+angleSlider.value);
+  var th = aimDeg * Math.PI / 180;
+  ctx.strokeStyle = "#17324f"; ctx.lineWidth = 6; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(px(0) + 4, GROUND - 46);
+  ctx.lineTo(px(0) + 4 + Math.cos(th) * 30, GROUND - 46 - Math.sin(th) * 30); ctx.stroke();
+
+  // holahop (ring vertikal)
+  var hoopCx = px(HOOP_X), hoopCy = py(HOOP_Y), hoopRy = HOOP_HALF * SCALE, hoopRx = 10;
+  ctx.lineWidth = 9;
+  ctx.strokeStyle = "#f76707";
+  ctx.beginPath(); ctx.ellipse(hoopCx, hoopCy, hoopRx, hoopRy, 0, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = "#ffc93c"; ctx.lineWidth = 9; ctx.setLineDash([16, 12]);
+  ctx.beginPath(); ctx.ellipse(hoopCx, hoopCy, hoopRx, hoopRy, 0, 0, Math.PI * 2); ctx.stroke();
+  ctx.setLineDash([]);
+  if (flight && flight.hoopFlash){
+    ctx.strokeStyle = "#25a244"; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.ellipse(hoopCx, hoopCy, hoopRx + 8, hoopRy + 8, 0, 0, Math.PI * 2); ctx.stroke();
+  }
+
+  // penerima + keranjang (penerima berdiri di kanan keranjang agar tidak tertutup)
+  drawKid(px(BASKET_X) + 56, GROUND, "#e63946", "#ffd9a8");
+  var bx = px(BASKET_X), by = py(BASKET_Y), bw = BASKET_HALF * SCALE;
+  ctx.fillStyle = "#e63946"; ctx.strokeStyle = "#8f1d27"; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(bx - bw, by); ctx.lineTo(bx + bw, by);
+  ctx.lineTo(bx + bw - 12, by + 52); ctx.lineTo(bx - bw + 12, by + 52); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  ctx.strokeStyle = "#8f1d27"; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(bx - bw + 6, by + 20); ctx.lineTo(bx + bw - 6, by + 20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx - bw + 9, by + 36); ctx.lineTo(bx + bw - 9, by + 36); ctx.stroke();
+  if (flight && flight.caughtFlash){
+    ctx.strokeStyle = "#25a244"; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.ellipse(bx, by, bw + 8, 14, 0, 0, Math.PI * 2); ctx.stroke();
+  }
+
+  // lintasan perkiraan (titik-titik) saat bola belum dilempar
+  if (!flight){
+    var v0 = speedFromPower(dragAim ? dragAim.power : (+powerSlider.value));
+    var ang = dragAim ? dragAim.angle : (+angleSlider.value);
+    ctx.fillStyle = "rgba(23,50,79,.55)";
+    for (var tt = 0.08; tt < 3; tt += 0.08){
+      var p = posAt(ang, v0, tt);
+      if (p.y < 0 || p.x > 6.4) break;
+      ctx.beginPath(); ctx.arc(px(p.x), py(p.y), 4, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  // bola
+  var ball = null;
+  if (flight){
+    ball = flight.ball;
+  } else {
+    ball = { x: 0.18, y: Y0 };
+  }
+  if (ball){
+    var bx2 = px(ball.x), by2 = py(ball.y);
+    ctx.fillStyle = "#d8f34e"; ctx.strokeStyle = "#7aa300"; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(bx2, by2, 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(bx2 - 4, by2, 8, -1.1, 1.1); ctx.stroke();
+    ctx.beginPath(); ctx.arc(bx2 + 4, by2, 8, Math.PI - 1.1, Math.PI + 1.1); ctx.stroke();
+  }
+}
+
+/* ================= ANIMASI LEMPARAN ================= */
+function throwBall(){
+  if (state.flying || state.finished) return;
+  var angle = +angleSlider.value;
+  var power = +powerSlider.value;
+  var v0 = speedFromPower(power);
+  var result = simulate(angle, v0);
+  state.flying = true;
+  btnThrow.disabled = true;
+  throwFeedback.className = "feedback"; throwFeedback.innerHTML = "";
+  var start = performance.now();
+  var prev = { x: 0, y: Y0 };
+  var hoopDone = false, caughtDone = false;
+  flight = { angle: angle, v0: v0, result: result, ball: { x: 0, y: Y0 }, hoopFlash: false, caughtFlash: false };
+  function frame(now){
+    var t = (now - start) / 1000;
+    var p = posAt(angle, v0, t);
+    // deteksi melewati holahop (interpolasi, sama seperti simulate)
+    if (!hoopDone && prev.x < HOOP_X && p.x >= HOOP_X){
+      var yy = prev.y + (p.y - prev.y) * ((HOOP_X - prev.x) / (p.x - prev.x));
+      if (Math.abs(yy - HOOP_Y) <= HOOP_HALF){ flight.hoopFlash = true; hoopDone = true; }
+    }
+    // deteksi masuk keranjang
+    if (!caughtDone && prev.y > BASKET_Y && p.y <= BASKET_Y){
+      var xx = prev.x + (p.x - prev.x) * ((BASKET_Y - prev.y) / (p.y - prev.y));
+      if (Math.abs(xx - BASKET_X) <= BASKET_HALF){ flight.caughtFlash = true; caughtDone = true; }
+      flight.ball = { x: xx, y: BASKET_Y };
+      drawScene();
+      setTimeout(function(){ finishThrow(result); }, 450);
+      return;
+    }
+    if (p.y <= 0){
+      flight.ball = { x: p.x, y: 0 };
+      drawScene();
+      setTimeout(function(){ finishThrow(result); }, 350);
+      return;
+    }
+    flight.ball = p;
+    prev = p;
+    drawScene();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+function finishThrow(result){
+  flight = null;
+  state.flying = false;
+  btnThrow.disabled = false;
+  state.scores.push(result.score);
+  state.total += result.score;
+  state.idx++;
+  refreshSlots();
+  var msg;
+  if (result.score === 10){
+    msg = { cls: "ok", title: "🎉 MASUK! +10 POIN!", body: "Hebat sekali! Bola lewat holahop dan tertangkap masuk keranjang sampah!" };
+  } else if (result.score === 5){
+    msg = { cls: "mid", title: "👍 LEWAT HOLAHOP! +5 POIN", body: "Bolanya masuk lewat holahop, tapi tidak tertangkap keranjang. Coba atur kekuatannya sedikit lagi!" };
+  } else if (result.caught){
+    msg = { cls: "no", title: "😮 MASUK KERANJANG, TAPI 0 POIN", body: "Bolanya masuk keranjang, tapi tidak lewat holahop dulu — menurut juklak nilainya 0. Arahkan lewat holahop, ya!" };
+  } else {
+    msg = { cls: "no", title: "🙂 BELUM MASUK — 0 POIN", body: "Bolanya belum lewat holahop. Coba ubah sudut atau kekuatannya, lalu lempar lagi!" };
+  }
+  throwFeedback.className = "feedback show " + msg.cls;
+  throwFeedback.innerHTML = "<span class='fb-title'>" + msg.title + "</span><br>" + msg.body;
+  drawScene();
+  if (state.scores.length >= 8){
+    state.finished = true;
+    refreshSlots();
+    showFinish();
+  }
+}
+function starStr(score){ var n = Math.round(score / 80 * 5), s = ""; for (var i = 0; i < 5; i++) s += (i < n ? "★" : "☆"); return s; }
+function cheer(score){
+  if (score >= 80) return "SEMPURNA! 8 dari 8 lemparan masuk! Barungmu pasti jadi Barung Tergiat!";
+  if (score >= 60) return "Hebat sekali! Sedikit lagi menuju sempurna. Coba sekali lagi untuk dapat 80!";
+  if (score >= 40) return "Bagus! Sudah setengah jalan. Ingat tipsnya: lemparan mendatar dengan kekuatan sedang sampai kencang.";
+  if (score > 0) return "Tidak apa-apa, namanya juga belajar! Perhatikan titik-titik lintasannya, lalu coba lagi. Kamu pasti bisa!";
+  return "Belum ada yang masuk — jangan menyerah! Coba sudut kecil (10°–25°) dengan kekuatan 6–9.";
+}
+function showFinish(){
+  var n10 = state.scores.filter(function(v){ return v === 10; }).length;
+  var n5 = state.scores.filter(function(v){ return v === 5; }).length;
+  finishBox.classList.remove("hidden");
+  document.getElementById("finalScore").textContent = state.total + " / 80";
+  document.getElementById("finalStars").textContent = starStr(state.total);
+  document.getElementById("finalMsg").textContent = cheer(state.total);
+  document.getElementById("finalDetail").textContent = "Rincian: " + n10 + "× masuk sempurna (10), " + n5 + "× lewat holahop saja (5), " + (8 - n10 - n5) + "× belum masuk (0).";
+  btnThrow.disabled = true;
+  finishBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+function resetRound(){
+  /* Mutasi di tempat (bukan ganti objek) supaya window.__grazy.state tetap valid. */
+  state.idx = 0;
+  state.scores.length = 0;
+  state.total = 0;
+  state.flying = false;
+  state.finished = false;
+  flight = null;
+  finishBox.classList.add("hidden");
+  throwFeedback.className = "feedback"; throwFeedback.innerHTML = "";
+  btnThrow.disabled = false;
+  refreshSlots();
+  drawScene();
+}
+btnThrow.addEventListener("click", throwBall);
+btnRandom.addEventListener("click", function(){
+  if (state.flying) return;
+  angleSlider.value = 10 + Math.floor(Math.random() * 61);
+  powerSlider.value = 1 + Math.floor(Math.random() * 10);
+  syncLabels();
+  drawScene();
+});
+btnAgain.addEventListener("click", resetRound);
+btnAgain2.addEventListener("click", resetRound);
+
+/* ================= DRAG DI LAPANGAN ================= */
+function aimFromEvent(ev){
+  var rect = canvas.getBoundingClientRect();
+  var cx = (ev.clientX - rect.left) * (W / rect.width);
+  var cy = (ev.clientY - rect.top) * (H / rect.height);
+  var dx = (cx - px(0.18)) / SCALE;
+  var dy = (py(Y0) - cy) / SCALE;
+  var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+  ang = Math.max(10, Math.min(70, Math.round(ang)));
+  var dist = Math.sqrt(dx * dx + dy * dy);
+  var pow = Math.max(1, Math.min(10, Math.round(dist * 2.2)));
+  return { angle: ang, power: pow };
+}
+var dragging = false;
+canvas.addEventListener("pointerdown", function(ev){
+  if (state.flying || state.finished) return;
+  dragging = true;
+  canvas.setPointerCapture(ev.pointerId);
+  dragAim = aimFromEvent(ev);
+  angleSlider.value = dragAim.angle;
+  powerSlider.value = dragAim.power;
+  syncLabels();
+  drawScene();
+});
+canvas.addEventListener("pointermove", function(ev){
+  if (!dragging) return;
+  dragAim = aimFromEvent(ev);
+  angleSlider.value = dragAim.angle;
+  powerSlider.value = dragAim.power;
+  syncLabels();
+  drawScene();
+});
+function endDrag(){
+  dragging = false;
+  dragAim = null;
+  drawScene();
+}
+canvas.addEventListener("pointerup", endDrag);
+canvas.addEventListener("pointercancel", endDrag);
+
+/* Hook untuk pengujian otomatis (tidak terlihat pengguna). */
+window.__grazy = {
+  state: state,
+  simulate: simulate,
+  speedFromPower: speedFromPower,
+  setAim: function(a, p){ angleSlider.value = a; powerSlider.value = p; syncLabels(); drawScene(); },
+  throwBall: throwBall,
+  reset: resetRound
+};
+
+refreshSlots();
+drawScene();
+})();
+</script>
+</body>
+</html>
