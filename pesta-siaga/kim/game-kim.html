@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Pos KIM — Taman Pengamatan dan Daya Ingat | Pesta Siaga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#eaf6ff; --bg2:#fff7e0; --surface:#ffffff; --surface2:#f2faff;
+  --ink:#17324f; --muted:#47617d; --line:#cfe6f5;
+  --blue:#1d7ed6; --blue-dark:#1663ab; --red:#e63946; --red-dark:#c22533;
+  --yellow:#ffc93c; --yellow-soft:#fff1bf; --green:#25a244; --green-soft:#d8f5df;
+  --orange:#f76707; --teal:#0ca678; --purple:#7048e8; --radius:20px;
+  --shadow:0 6px 0 rgba(23,50,79,.08), 0 14px 28px rgba(23,50,79,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0d2233; --bg2:#12293d; --surface:#17344a; --surface2:#1c3d55;
+    --ink:#f2f8fc; --muted:#b9d2e4; --line:#2c506e;
+    --blue:#4dabf7; --blue-dark:#339af0; --yellow-soft:#4d3f10; --green-soft:#14401f;
+    --shadow:0 6px 0 rgba(0,0,0,.25), 0 14px 28px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:18px; line-height:1.55;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,201,60,.35) 0 90px, transparent 91px),
+    radial-gradient(circle at 92% 22%, rgba(29,126,214,.18) 0 120px, transparent 121px),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+  background-attachment:fixed;
+}
+h1,h2,h3,.font-display{font-family:"Fredoka","Nunito",system-ui,sans-serif; letter-spacing:.2px}
+.wrap{max-width:1120px; margin:0 auto; padding:20px 16px 56px}
+button{font-family:inherit; cursor:pointer; touch-action:manipulation}
+:focus-visible{outline:4px solid var(--yellow); outline-offset:2px}
+[hidden]{display:none !important}
+
+/* ===== Header ===== */
+.hero{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before{content:""; position:absolute; inset:0 0 auto 0; height:10px;
+  background:repeating-linear-gradient(90deg,var(--red) 0 44px,var(--yellow) 44px 88px,var(--blue) 88px 132px,var(--green) 132px 176px)}
+.hero .pos-badge{
+  display:inline-block; margin-top:8px; background:var(--purple); color:#fff; font-weight:900;
+  font-size:15px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 16px; border-radius:999px;
+}
+.hero h1{font-size:clamp(32px,6.5vw,54px); line-height:1.08; margin:12px 0 6px; font-weight:700}
+.hero h1 .kim-word{color:var(--purple)}
+.hero p.sub{font-size:clamp(17px,3vw,21px); color:var(--muted); font-weight:700; margin:0 auto; max-width:640px}
+.score-pill{
+  display:inline-flex; align-items:center; gap:10px; margin-top:16px;
+  background:var(--yellow); color:#5c4300; border-radius:999px; padding:10px 22px;
+  font-size:clamp(19px,3.4vw,24px); font-weight:900; border:3px solid #e8ae00;
+}
+.rule-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:20px; text-align:left}
+.rule-card{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:14px}
+.rule-card .num{
+  width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;margin-bottom:8px}
+.rule-card:nth-child(2) .num{background:var(--orange)}
+.rule-card:nth-child(3) .num{background:var(--green)}
+.rule-card:nth-child(4) .num{background:var(--red)}
+.rule-card p{margin:0; font-size:16.5px; font-weight:700}
+.rule-card p b{font-size:19px}
+@media (max-width:760px){ .rule-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:430px){ .rule-grid{grid-template-columns:1fr} }
+
+/* ===== Tombol besar ===== */
+.btn{
+  display:inline-block; border:0; border-radius:999px; padding:16px 30px;
+  font-size:clamp(19px,3.4vw,23px); font-weight:900; color:#fff;
+  background:var(--blue); box-shadow:0 5px 0 var(--blue-dark);
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.btn:active{transform:translateY(4px); box-shadow:0 1px 0 var(--blue-dark)}
+.btn-green{background:var(--green); box-shadow:0 5px 0 #1b7a33}
+.btn-green:active{box-shadow:0 1px 0 #1b7a33}
+.btn-red{background:var(--red); box-shadow:0 5px 0 var(--red-dark)}
+.btn-red:active{box-shadow:0 1px 0 var(--red-dark)}
+.btn-purple{background:var(--purple); box-shadow:0 5px 0 #4c2bb3}
+.btn-purple:active{box-shadow:0 1px 0 #4c2bb3}
+.btn-ghost{background:var(--surface2); color:var(--ink); box-shadow:0 5px 0 var(--line); border:2.5px solid var(--line)}
+.btn-ghost:active{box-shadow:0 1px 0 var(--line)}
+.btn:disabled{opacity:.45; cursor:not-allowed}
+.mode-row{display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin:26px 0 8px}
+.mode-row .btn{min-width:min(320px,90vw)}
+
+/* ===== Panel & timer ===== */
+.panel{
+  background:var(--surface); border:3px solid var(--line); border-radius:24px;
+  box-shadow:var(--shadow); padding:22px; margin-top:22px;
+}
+.panel h2{margin:0 0 6px; font-size:clamp(24px,4.5vw,32px)}
+.panel .hint{color:var(--muted); font-weight:700; margin:0 0 16px}
+.timer-wrap{text-align:center; margin:6px 0 18px}
+.timer-label{font-weight:900; letter-spacing:1px; text-transform:uppercase; color:var(--muted); font-size:15px}
+.timer-big{
+  font-family:"Fredoka",system-ui,sans-serif; font-weight:700;
+  font-size:clamp(56px,12vw,84px); line-height:1; color:var(--blue);
+}
+.timer-big.danger{color:var(--red)}
+.timer-bar{height:14px; background:var(--surface2); border:2px solid var(--line); border-radius:999px; overflow:hidden; margin-top:10px}
+.timer-bar > div{height:100%; background:var(--blue); width:100%; transition:width 1s linear}
+.timer-bar.danger > div{background:var(--red)}
+.progress-text{text-align:center; font-weight:900; font-size:18px; margin:10px 0 0}
+
+/* ===== Grid kartu gambar ===== */
+.card-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+@media (max-width:760px){ .card-grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:380px){ .card-grid{grid-template-columns:repeat(2,1fr); gap:10px} }
+.mem-card{
+  background:var(--surface2); border:3px solid var(--line); border-radius:18px;
+  padding:14px 8px 12px; text-align:center; min-height:150px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+}
+.mem-card .emoji{font-size:clamp(52px,9vw,76px); line-height:1}
+.mem-card .nama{font-family:"Fredoka",system-ui,sans-serif; font-weight:700; font-size:clamp(18px,3vw,22px); text-transform:capitalize}
+.mem-card .jenis{font-size:13px; font-weight:900; letter-spacing:1px; text-transform:uppercase; color:var(--muted)}
+.mem-card.buah{border-color:#ffb703}
+.mem-card.bunga{border-color:#ff70a6}
+
+/* Kartu jawaban (bisa diklik) */
+.ans-card{
+  background:var(--surface2); border:3px solid var(--line); border-radius:18px;
+  padding:14px 8px 10px; text-align:center; min-height:150px; width:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+  transition:transform .08s ease, border-color .15s ease, background .15s ease;
+}
+.ans-card .emoji{font-size:clamp(52px,9vw,76px); line-height:1}
+.ans-card .jawaban{font-family:"Fredoka",system-ui,sans-serif; font-weight:700; font-size:clamp(17px,3vw,21px); text-transform:capitalize; min-height:26px; color:var(--blue-dark)}
+.ans-card .jawaban.kosong{color:var(--muted); font-weight:800; font-size:15px}
+.ans-card.selected{border-color:var(--blue); background:var(--yellow-soft); transform:scale(1.04); box-shadow:0 0 0 4px rgba(29,126,214,.25)}
+.ans-card.answered{border-color:var(--green)}
+.ans-card.answered .jawaban{color:var(--green)}
+.ans-card .nomor{font-size:13px; font-weight:900; color:var(--muted)}
+
+/* Bank kata */
+.bank{margin-top:22px}
+.bank h3{margin:0 0 10px; font-size:clamp(20px,3.6vw,26px)}
+.bank-group{margin-bottom:14px}
+.bank-group .bank-title{font-weight:900; letter-spacing:1px; text-transform:uppercase; font-size:15px; color:var(--muted); margin-bottom:8px}
+.word-row{display:flex; flex-wrap:wrap; gap:10px}
+.word-btn{
+  border:2.5px solid var(--blue); background:var(--surface); color:var(--ink);
+  border-radius:999px; padding:11px 18px; font-size:clamp(17px,3vw,20px); font-weight:800; text-transform:capitalize;
+  transition:transform .08s ease, opacity .15s ease;
+}
+.word-btn:active{transform:scale(.95)}
+.word-btn.used{opacity:.35; text-decoration:line-through; cursor:not-allowed}
+.word-btn.buah{border-color:#e8a100}
+.word-btn.bunga{border-color:#ff70a6}
+.center{text-align:center; margin-top:22px}
+.center .btn{margin:4px}
+
+/* ===== Hasil ===== */
+.result-score{
+  font-family:"Fredoka",system-ui,sans-serif; font-weight:700;
+  font-size:clamp(64px,14vw,110px); line-height:1; text-align:center; color:var(--purple);
+}
+.result-score small{font-size:.45em; color:var(--muted)}
+.result-msg{text-align:center; font-size:clamp(19px,3.6vw,24px); font-weight:900; margin:8px 0 4px}
+.result-sub{text-align:center; color:var(--muted); font-weight:700; margin:0 0 18px}
+.review-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+@media (max-width:760px){ .review-grid{grid-template-columns:repeat(2,1fr)} }
+.review-card{
+  border:3px solid var(--line); border-radius:16px; padding:12px 8px; text-align:center;
+  background:var(--surface2);
+}
+.review-card.benar{border-color:var(--green); background:var(--green-soft)}
+.review-card.salah{border-color:var(--red)}
+.review-card .emoji{font-size:52px; line-height:1}
+.review-card .nama-benar{font-weight:900; text-transform:capitalize; font-size:18px}
+.review-card .nama-jawab{font-size:16px; font-weight:700; color:var(--muted); text-transform:capitalize}
+.review-card .tanda{font-size:26px; font-weight:900}
+.review-card.benar .tanda{color:var(--green)}
+.review-card.salah .tanda{color:var(--red)}
+.footnote{color:var(--muted); font-size:15px; font-weight:700; text-align:center; margin-top:26px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <span class="pos-badge">Taman 5 &bull; Pesta Siaga</span>
+    <h1>Pos <span class="kim-word">KIM</span> &mdash; Pengamatan &amp; Daya Ingat</h1>
+    <p class="sub">Hafalkan 16 gambar buah dan bunga, lalu sebutkan namanya dari ingatanmu. Seperti lomba aslinya!</p>
+    <div class="score-pill">⭐ Skor Maksimal: 80 &nbsp;•&nbsp; Benar = 5</div>
+    <div class="rule-grid">
+      <div class="rule-card"><div class="num">1</div><p><b>16 gambar</b><br>8 buah + 8 bunga, diacak</p></div>
+      <div class="rule-card"><div class="num">2</div><p><b>10 detik</b><br>mengamati semua gambar</p></div>
+      <div class="rule-card"><div class="num">3</div><p><b>60 detik</b><br>menjawab dari bank kata</p></div>
+      <div class="rule-card"><div class="num">4</div><p><b>Skor 80</b><br>tiap jawaban benar = 5</p></div>
+    </div>
+  </div>
+
+  <!-- ===== LAYAR MULAI ===== -->
+  <section class="panel" id="screen-start">
+    <h2>🎮 Pilih Mode Bermain</h2>
+    <p class="hint">Mode Lomba meniru persis aturan Juklak Pesta Siaga Cabang Banyumas 2026. Mode Latihan tanpa timer, santai untuk belajar.</p>
+    <div class="mode-row">
+      <button class="btn btn-purple" type="button" id="btn-lomba">🏆 Mode Lomba</button>
+      <button class="btn btn-green" type="button" id="btn-latihan">🌱 Mode Latihan</button>
+    </div>
+    <p class="hint" style="text-align:center">Cara menjawab: ketuk satu kartu gambar, lalu ketuk namanya di bank kata. Ketuk lagi kartu yang sudah terisi untuk menghapus jawabannya.</p>
+  </section>
+
+  <!-- ===== LAYAR HAFALAN ===== -->
+  <section class="panel" id="screen-memorize" hidden>
+    <h2>👀 Amati Gambarnya!</h2>
+    <p class="hint" id="memorize-hint">Hafalkan nama semua buah dan bunga di bawah ini. Gambar akan hilang saat waktu habis!</p>
+    <div class="timer-wrap" id="memorize-timer-wrap">
+      <div class="timer-label">Waktu Mengamati</div>
+      <div class="timer-big" id="memorize-timer">10</div>
+      <div class="timer-bar" id="memorize-bar"><div id="memorize-bar-fill"></div></div>
+    </div>
+    <div class="card-grid" id="memorize-grid"></div>
+    <div class="center" id="memorize-latihan-btn" hidden>
+      <button class="btn btn-green" type="button" id="btn-sudah-hafal">Saya Sudah Hafal →</button>
+    </div>
+  </section>
+
+  <!-- ===== LAYAR MENJAWAB ===== -->
+  <section class="panel" id="screen-answer" hidden>
+    <h2>✏️ Sebutkan Namanya!</h2>
+    <p class="hint">Gambarnya sudah disembunyikan namanya. Ketuk satu kartu gambar, lalu ketuk nama yang benar di bank kata.</p>
+    <div class="timer-wrap" id="answer-timer-wrap">
+      <div class="timer-label">Waktu Menjawab</div>
+      <div class="timer-big" id="answer-timer">60</div>
+      <div class="timer-bar" id="answer-bar"><div id="answer-bar-fill"></div></div>
+    </div>
+    <p class="progress-text" id="answer-progress">Sudah dijawab: 0 / 16</p>
+    <div class="card-grid" id="answer-grid" style="margin-top:14px"></div>
+    <div class="bank">
+      <h3>📚 Bank Kata — ketuk namanya</h3>
+      <div class="bank-group">
+        <div class="bank-title">🍎 Buah (16 nama)</div>
+        <div class="word-row" id="bank-buah"></div>
+      </div>
+      <div class="bank-group">
+        <div class="bank-title">🌸 Bunga (16 nama)</div>
+        <div class="word-row" id="bank-bunga"></div>
+      </div>
+    </div>
+    <div class="center">
+      <button class="btn btn-purple" type="button" id="btn-periksa">✅ Selesai &amp; Periksa Jawaban</button>
+      <button class="btn btn-ghost" type="button" id="btn-batal">↩️ Berhenti</button>
+    </div>
+  </section>
+
+  <!-- ===== LAYAR HASIL ===== -->
+  <section class="panel" id="screen-result" hidden>
+    <h2 style="text-align:center">🎉 Hasilmu!</h2>
+    <div class="result-score"><span id="result-score">0</span><small> / 80</small></div>
+    <p class="result-msg" id="result-msg"></p>
+    <p class="result-sub" id="result-sub"></p>
+    <div class="review-grid" id="result-grid"></div>
+    <div class="center">
+      <button class="btn btn-purple" type="button" id="btn-ulang-lomba">🏆 Main Lagi (Lomba)</button>
+      <button class="btn btn-green" type="button" id="btn-ulang-latihan">🌱 Main Lagi (Latihan)</button>
+      <button class="btn btn-ghost" type="button" id="btn-ke-awal">↩️ Kembali ke Awal</button>
+    </div>
+  </section>
+
+  <p class="footnote">Sesuai Juklak Pesta Siaga Cabang Banyumas 2026 — Taman Kemampuan Indera Manusia (KIM).<br>
+  Ejaan nama buah dan bunga mengikuti juklak. Skor hanya untuk sesi bermain ini dan tidak disimpan.</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ===== Data — ejaan persis Juklak Pesta Siaga Cabang 2026 ===== */
+var BUAH = [
+  {nama:"belimbing", emoji:"⭐"},
+  {nama:"carica", emoji:"🍐"},
+  {nama:"ciplukan", emoji:"🫐"},
+  {nama:"duku", emoji:"🍇"},
+  {nama:"durian", emoji:"🦔"},
+  {nama:"sawo", emoji:"🥝"},
+  {nama:"kedondong", emoji:"🍏"},
+  {nama:"mangga", emoji:"🥭"},
+  {nama:"manggis", emoji:"🟣"},
+  {nama:"matoa", emoji:"🥜"},
+  {nama:"mundu", emoji:"🍊"},
+  {nama:"nanas", emoji:"🍍"},
+  {nama:"nangka", emoji:"🍈"},
+  {nama:"pisang", emoji:"🍌"},
+  {nama:"rambutan", emoji:"🍓"},
+  {nama:"salak", emoji:"🌰"}
+];
+var BUNGA = [
+  {nama:"alamanda", emoji:"🌼"},
+  {nama:"amarilis", emoji:"🎺"},
+  {nama:"anggrek", emoji:"🌸"},
+  {nama:"kamboja", emoji:"💮"},
+  {nama:"kantil", emoji:"🤍"},
+  {nama:"kenanga", emoji:"💛"},
+  {nama:"krisan", emoji:"🏵️"},
+  {nama:"lili", emoji:"⚜️"},
+  {nama:"matahari", emoji:"🌻"},
+  {nama:"mawar", emoji:"🌹"},
+  {nama:"melati", emoji:"✿"},
+  {nama:"raflesia", emoji:"🥀"},
+  {nama:"telang", emoji:"💙"},
+  {nama:"sepatu", emoji:"🌺"},
+  {nama:"tulip", emoji:"🌷"},
+  {nama:"wijayakusuma", emoji:"🌕"}
+];
+var SEMUA = BUAH.concat(BUNGA);
+
+var MEMORIZE_SECONDS = 10;
+var ANSWER_SECONDS = 60;
+var POINTS_PER_CORRECT = 5;
+
+var mode = "lomba";           /* "lomba" | "latihan" */
+var roundItems = [];          /* 16 item ronde ini: {nama, emoji, jenis} */
+var answers = {};             /* indeks kartu -> nama yang dipilih */
+var selectedCard = null;      /* indeks kartu yang sedang dipilih */
+var memorizeTimerId = null;
+var answerTimerId = null;
+var memorizeLeft = MEMORIZE_SECONDS;
+var answerLeft = ANSWER_SECONDS;
+
+function $(id){ return document.getElementById(id); }
+
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function pickRandom(arr, n){
+  return shuffle(arr).slice(0, n);
+}
+
+function clearTimers(){
+  if(memorizeTimerId){ clearInterval(memorizeTimerId); memorizeTimerId = null; }
+  if(answerTimerId){ clearInterval(answerTimerId); answerTimerId = null; }
+}
+
+function showScreen(id){
+  ["screen-start","screen-memorize","screen-answer","screen-result"].forEach(function(s){
+    $(s).hidden = (s !== id);
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ===== Memulai ronde ===== */
+function startRound(newMode){
+  mode = newMode;
+  clearTimers();
+  answers = {};
+  selectedCard = null;
+  /* 8 buah + 8 bunga, diacak */
+  var buah = pickRandom(BUAH, 8).map(function(b){ return {nama:b.nama, emoji:b.emoji, jenis:"buah"}; });
+  var bunga = pickRandom(BUNGA, 8).map(function(b){ return {nama:b.nama, emoji:b.emoji, jenis:"bunga"}; });
+  roundItems = shuffle(buah.concat(bunga));
+  renderMemorize();
+  showScreen("screen-memorize");
+  if(mode === "lomba"){
+    $("memorize-timer-wrap").hidden = false;
+    $("memorize-latihan-btn").hidden = true;
+    startMemorizeTimer();
+  } else {
+    $("memorize-timer-wrap").hidden = true;
+    $("memorize-latihan-btn").hidden = false;
+  }
+}
+
+function renderMemorize(){
+  var grid = $("memorize-grid");
+  grid.innerHTML = "";
+  roundItems.forEach(function(item){
+    var card = document.createElement("div");
+    card.className = "mem-card " + item.jenis;
+    card.innerHTML =
+      '<div class="emoji" aria-hidden="true">' + item.emoji + '</div>' +
+      '<div class="nama">' + item.nama + '</div>' +
+      '<div class="jenis">' + (item.jenis === "buah" ? "🍎 Buah" : "🌸 Bunga") + '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function startMemorizeTimer(){
+  memorizeLeft = MEMORIZE_SECONDS;
+  updateMemorizeTimer();
+  memorizeTimerId = setInterval(function(){
+    memorizeLeft--;
+    updateMemorizeTimer();
+    if(memorizeLeft <= 0){
+      clearInterval(memorizeTimerId); memorizeTimerId = null;
+      startAnswerPhase();
+    }
+  }, 1000);
+}
+
+function updateMemorizeTimer(){
+  var t = $("memorize-timer");
+  t.textContent = Math.max(0, memorizeLeft);
+  t.classList.toggle("danger", memorizeLeft <= 3);
+  $("memorize-bar-fill").style.width = (Math.max(0, memorizeLeft) / MEMORIZE_SECONDS * 100) + "%";
+  $("memorize-bar").classList.toggle("danger", memorizeLeft <= 3);
+}
+
+/* ===== Fase menjawab ===== */
+function startAnswerPhase(){
+  clearTimers();
+  renderAnswer();
+  showScreen("screen-answer");
+  if(mode === "lomba"){
+    $("answer-timer-wrap").hidden = false;
+    startAnswerTimer();
+  } else {
+    $("answer-timer-wrap").hidden = true;
+  }
+  updateProgress();
+}
+
+function renderAnswer(){
+  var grid = $("answer-grid");
+  grid.innerHTML = "";
+  roundItems.forEach(function(item, idx){
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "ans-card";
+    btn.id = "ans-card-" + idx;
+    btn.setAttribute("aria-label", "Kartu gambar nomor " + (idx + 1));
+    btn.innerHTML =
+      '<div class="nomor">Kartu ' + (idx + 1) + '</div>' +
+      '<div class="emoji" aria-hidden="true">' + item.emoji + '</div>' +
+      '<div class="jawaban kosong" id="ans-jawaban-' + idx + '">? pilih nama</div>';
+    btn.addEventListener("click", function(){ onCardClick(idx); });
+    grid.appendChild(btn);
+  });
+
+  renderBank("bank-buah", BUAH, "buah");
+  renderBank("bank-bunga", BUNGA, "bunga");
+}
+
+function renderBank(containerId, list, jenis){
+  var box = $(containerId);
+  box.innerHTML = "";
+  list.forEach(function(item){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "word-btn " + jenis;
+    b.id = "word-" + item.nama;
+    b.textContent = item.nama;
+    b.addEventListener("click", function(){ onWordClick(item.nama); });
+    box.appendChild(b);
+  });
+}
+
+function onCardClick(idx){
+  /* Ketuk kartu yang sudah terisi = hapus jawabannya */
+  if(answers[idx]){
+    var oldName = answers[idx];
+    delete answers[idx];
+    var wb = $("word-" + oldName);
+    if(wb){ wb.classList.remove("used"); wb.disabled = false; }
+    refreshCard(idx);
+    selectedCard = null;
+    updateProgress();
+    return;
+  }
+  selectedCard = idx;
+  document.querySelectorAll(".ans-card").forEach(function(c){ c.classList.remove("selected"); });
+  var card = $("ans-card-" + idx);
+  if(card){ card.classList.add("selected"); }
+}
+
+function onWordClick(nama){
+  if(selectedCard === null || selectedCard === undefined){
+    /* Belum ada kartu dipilih: beri petunjuk lewat kartu pertama yang kosong */
+    var firstEmpty = null;
+    for(var i = 0; i < roundItems.length; i++){
+      if(!answers[i]){ firstEmpty = i; break; }
+    }
+    if(firstEmpty !== null){
+      onCardClick(firstEmpty);
+    } else {
+      return;
+    }
+  }
+  var idx = selectedCard;
+  if(answers[idx]){ return; }
+  var wb = $("word-" + nama);
+  if(!wb || wb.disabled){ return; }
+  answers[idx] = nama;
+  wb.classList.add("used");
+  wb.disabled = true;
+  refreshCard(idx);
+  selectedCard = null;
+  document.querySelectorAll(".ans-card").forEach(function(c){ c.classList.remove("selected"); });
+  updateProgress();
+  if(Object.keys(answers).length === roundItems.length){
+    finishRound();
+  }
+}
+
+function refreshCard(idx){
+  var card = $("ans-card-" + idx);
+  var label = $("ans-jawaban-" + idx);
+  if(!card || !label){ return; }
+  if(answers[idx]){
+    label.textContent = answers[idx];
+    label.classList.remove("kosong");
+    card.classList.add("answered");
+  } else {
+    label.textContent = "? pilih nama";
+    label.classList.add("kosong");
+    card.classList.remove("answered");
+  }
+}
+
+function updateProgress(){
+  $("answer-progress").textContent = "Sudah dijawab: " + Object.keys(answers).length + " / " + roundItems.length;
+}
+
+function startAnswerTimer(){
+  answerLeft = ANSWER_SECONDS;
+  updateAnswerTimer();
+  answerTimerId = setInterval(function(){
+    answerLeft--;
+    updateAnswerTimer();
+    if(answerLeft <= 0){
+      clearInterval(answerTimerId); answerTimerId = null;
+      finishRound();
+    }
+  }, 1000);
+}
+
+function updateAnswerTimer(){
+  var t = $("answer-timer");
+  t.textContent = Math.max(0, answerLeft);
+  t.classList.toggle("danger", answerLeft <= 10);
+  $("answer-bar-fill").style.width = (Math.max(0, answerLeft) / ANSWER_SECONDS * 100) + "%";
+  $("answer-bar").classList.toggle("danger", answerLeft <= 10);
+}
+
+/* ===== Penilaian & hasil ===== */
+function finishRound(){
+  clearTimers();
+  var correct = 0;
+  var grid = $("result-grid");
+  grid.innerHTML = "";
+  roundItems.forEach(function(item, idx){
+    var jawab = answers[idx] || "";
+    var ok = jawab === item.nama;
+    if(ok){ correct++; }
+    var card = document.createElement("div");
+    card.className = "review-card " + (ok ? "benar" : "salah");
+    card.innerHTML =
+      '<div class="emoji" aria-hidden="true">' + item.emoji + '</div>' +
+      '<div class="nama-benar">' + item.nama + '</div>' +
+      '<div class="nama-jawab">' + (jawab ? ("Jawabanmu: " + jawab) : "Tidak dijawab") + '</div>' +
+      '<div class="tanda">' + (ok ? "✓ Benar (+5)" : "✗") + '</div>';
+    grid.appendChild(card);
+  });
+  var score = correct * POINTS_PER_CORRECT;
+  $("result-score").textContent = score;
+  var msg, sub;
+  if(correct === 16){ msg = "🌟 SEMPURNA! Semua benar!"; sub = "Kamu penghafal hebat — 16 dari 16 gambar benar!"; }
+  else if(correct >= 12){ msg = "🎉 Hebat sekali!"; sub = correct + " dari 16 gambar benar. Sedikit lagi sempurna!"; }
+  else if(correct >= 8){ msg = "👍 Bagus! Terus berlatih ya!"; sub = correct + " dari 16 gambar benar. Coba lagi, pasti bisa lebih banyak!"; }
+  else if(correct >= 4){ msg = "🌱 Lumayan! Ayo latihan lagi!"; sub = correct + " dari 16 gambar benar. Tips: ucapkan nama gambar dalam hati saat menghafal."; }
+  else { msg = "💪 Jangan menyerah!"; sub = correct + " dari 16 gambar benar. Coba Mode Latihan dulu tanpa timer, lalu tantang dirimu di Mode Lomba!"; }
+  $("result-msg").textContent = msg;
+  $("result-sub").textContent = sub;
+  showScreen("screen-result");
+}
+
+/* ===== Tombol-tombol ===== */
+$("btn-lomba").addEventListener("click", function(){ startRound("lomba"); });
+$("btn-latihan").addEventListener("click", function(){ startRound("latihan"); });
+$("btn-sudah-hafal").addEventListener("click", function(){ startAnswerPhase(); });
+$("btn-periksa").addEventListener("click", function(){ finishRound(); });
+$("btn-batal").addEventListener("click", function(){
+  clearTimers();
+  showScreen("screen-start");
+});
+$("btn-ulang-lomba").addEventListener("click", function(){ startRound("lomba"); });
+$("btn-ulang-latihan").addEventListener("click", function(){ startRound("latihan"); });
+$("btn-ke-awal").addEventListener("click", function(){
+  clearTimers();
+  showScreen("screen-start");
+});
+
+/* Hook kecil untuk pengujian otomatis (tidak menyimpan apa pun). */
+window.__kim = {
+  get state(){ return {mode:mode, items:roundItems.slice(), answers:Object.assign({}, answers), selectedCard:selectedCard}; },
+  startRound:startRound, startAnswerPhase:startAnswerPhase, finishRound:finishRound
+};
+})();
+</script>
+</body>
+</html>
