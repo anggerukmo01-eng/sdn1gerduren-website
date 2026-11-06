@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Pos Ketaqwaan — Taman 1 Pesta Siaga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#fdf6e3; --bg2:#e8f7ee; --surface:#ffffff; --surface2:#f4fbf6;
+  --ink:#1f3a2d; --muted:#4d6b5c; --line:#cfe8d8;
+  --green:#1f9d55; --green-dark:#157347; --teal:#0ca678; --gold:#e8a100; --gold-soft:#fff3c4;
+  --red:#e63946; --red-dark:#c22533; --orange:#f76707; --blue:#1d7ed6;
+  --radius:20px;
+  --shadow:0 6px 0 rgba(31,58,45,.08), 0 14px 28px rgba(31,58,45,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0e241a; --bg2:#122e22; --surface:#173325; --surface2:#1c3d2c;
+    --ink:#f0f8f2; --muted:#b9d6c4; --line:#2c5a41;
+    --green:#51cf8b; --green-dark:#69db7c; --gold-soft:#4d3f10;
+    --shadow:0 6px 0 rgba(0,0,0,.25), 0 14px 28px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:18px; line-height:1.55;
+  background:
+    radial-gradient(circle at 10% 6%, rgba(232,161,0,.28) 0 90px, transparent 91px),
+    radial-gradient(circle at 92% 18%, rgba(31,157,85,.20) 0 120px, transparent 121px),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+  background-attachment:fixed;
+}
+h1,h2,h3,.font-display{font-family:"Fredoka","Nunito",system-ui,sans-serif; letter-spacing:.2px}
+.wrap{max-width:1120px; margin:0 auto; padding:20px 16px 56px}
+button{font-family:inherit; cursor:pointer; touch-action:manipulation}
+:focus-visible{outline:4px solid var(--gold); outline-offset:2px}
+.hidden{display:none !important}
+
+/* ===== Header ===== */
+.hero{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before{content:""; position:absolute; inset:0 0 auto 0; height:10px;
+  background:repeating-linear-gradient(90deg,var(--green) 0 44px,var(--gold) 44px 88px,var(--teal) 88px 132px,var(--orange) 132px 176px)}
+.hero .pos-badge{
+  display:inline-block; margin-top:8px; background:var(--green); color:#fff; font-weight:900;
+  font-size:15px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 16px; border-radius:999px;
+}
+.hero h1{font-size:clamp(32px,6.5vw,54px); line-height:1.08; margin:12px 0 6px; font-weight:700}
+.hero h1 .taqwa-word{color:var(--green-dark)}
+.hero p.sub{font-size:clamp(17px,3vw,21px); color:var(--muted); font-weight:700; margin:0 auto; max-width:680px}
+.score-pill{
+  display:inline-flex; align-items:center; gap:10px; margin-top:16px;
+  background:var(--gold); color:#5c4300; border-radius:999px; padding:10px 22px;
+  font-size:clamp(19px,3.4vw,24px); font-weight:900; border:3px solid #c98a00;
+}
+.rule-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:20px; text-align:left}
+.rule-card{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:14px}
+.rule-card .num{
+  width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;margin-bottom:8px}
+.rule-card:nth-child(2) .num{background:var(--orange)}
+.rule-card:nth-child(3) .num{background:var(--teal)}
+.rule-card:nth-child(4) .num{background:var(--red)}
+.rule-card p{margin:0; font-size:16.5px; font-weight:700}
+.rule-card p b{font-size:19px}
+@media (max-width:760px){ .rule-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:430px){ .rule-grid{grid-template-columns:1fr} }
+
+/* ===== Sections ===== */
+section.block{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px; margin-top:26px;
+}
+.sec-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.sec-num{
+  flex:0 0 auto; width:52px;height:52px;border-radius:16px; color:#fff; background:var(--green);
+  display:flex;align-items:center;justify-content:center; font-family:"Fredoka"; font-size:26px; font-weight:700}
+.sec-num.gold{background:var(--gold)} .sec-num.teal{background:var(--teal)} .sec-num.orange{background:var(--orange)}
+.sec-head h2{font-size:clamp(25px,4.5vw,34px); margin:0; font-weight:600}
+.sec-lead{color:var(--muted); font-weight:700; font-size:17.5px; margin:4px 0 18px}
+
+/* ===== Buttons ===== */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  border:3px solid transparent; border-radius:18px; padding:16px 22px;
+  font-size:clamp(19px,3.4vw,23px); font-weight:900; color:#fff; background:var(--green);
+  box-shadow:0 5px 0 rgba(31,58,45,.18); min-height:64px; text-align:center; line-height:1.25;
+}
+.btn:active{transform:translateY(3px); box-shadow:0 2px 0 rgba(31,58,45,.18)}
+.btn.green{background:var(--green)}
+.btn.gold{background:var(--gold); color:#4a3600}
+.btn.teal{background:var(--teal)}
+.btn.orange{background:var(--orange)}
+.btn.blue{background:var(--blue)}
+.btn.red{background:var(--red)}
+.btn.ghost{background:var(--surface); color:var(--ink); border-color:var(--line); box-shadow:none}
+.btn.big{width:100%; font-size:clamp(21px,4vw,26px); padding:20px 24px; min-height:76px}
+.btn:disabled{opacity:.45; cursor:not-allowed; transform:none}
+.btn-row{display:flex; flex-wrap:wrap; gap:14px}
+.btn-row .btn{flex:1 1 220px}
+
+/* ===== Agama picker ===== */
+.agama-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+@media (max-width:640px){ .agama-grid{grid-template-columns:repeat(2,1fr)} }
+.agama-btn{
+  border:3px solid var(--line); background:var(--surface2); color:var(--ink);
+  border-radius:18px; padding:16px 10px; font-size:clamp(18px,3.2vw,22px); font-weight:900;
+  min-height:72px; box-shadow:0 4px 0 rgba(31,58,45,.08);
+}
+.agama-btn small{display:block; font-size:14px; font-weight:800; color:var(--muted); margin-top:2px}
+.agama-btn.active{background:var(--green); border-color:var(--green-dark); color:#fff}
+.agama-btn.active small{color:#d8f5df}
+.agama-btn:disabled{opacity:.55; cursor:not-allowed}
+.note{
+  background:var(--gold-soft); border:3px dashed var(--gold); border-radius:16px;
+  padding:14px 18px; font-weight:800; font-size:17px; margin-top:16px;
+}
+.note.green{background:#d8f5df; border-color:var(--green)}
+@media (prefers-color-scheme: dark){ .note.green{background:#14401f} }
+
+/* ===== Undian card ===== */
+.progress{font-weight:900; font-size:clamp(19px,3.4vw,23px); text-align:center; margin:0 0 12px}
+.progress .pill{display:inline-block; background:var(--surface2); border:3px solid var(--line); border-radius:999px; padding:6px 18px}
+.draw-card{
+  background:linear-gradient(180deg,#fffdf4,var(--gold-soft));
+  border:4px solid var(--gold); border-radius:24px; padding:34px 20px; text-align:center;
+  box-shadow:var(--shadow); margin:0 auto; max-width:640px;
+}
+@media (prefers-color-scheme: dark){ .draw-card{background:linear-gradient(180deg,#2c3a12,#3a2f05)} }
+.draw-card .card-tag{font-weight:900; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-size:15px}
+.draw-card .card-title{font-family:"Fredoka"; font-size:clamp(30px,6vw,44px); font-weight:700; line-height:1.15; margin:10px 0 6px}
+.draw-card .card-hint{color:var(--muted); font-weight:800; font-size:17.5px; margin:0}
+.rubrik-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:22px}
+@media (max-width:640px){ .rubrik-grid{grid-template-columns:1fr} }
+.rubrik-btn{
+  border-radius:18px; padding:18px 16px; min-height:88px; color:#fff; border:3px solid transparent;
+  font-size:clamp(19px,3.4vw,23px); font-weight:900; line-height:1.25;
+  box-shadow:0 5px 0 rgba(31,58,45,.18); text-align:center;
+}
+.rubrik-btn:active{transform:translateY(3px); box-shadow:0 2px 0 rgba(31,58,45,.18)}
+.rubrik-btn small{display:block; font-size:16px; font-weight:800; opacity:.92; margin-top:4px}
+.rubrik-btn.r10{background:var(--green)}
+.rubrik-btn.r7{background:var(--teal)}
+.rubrik-btn.r4{background:var(--orange)}
+.rubrik-btn.r0{background:var(--red)}
+
+/* ===== Score log table ===== */
+.log-wrap{overflow-x:auto; margin-top:22px}
+table.log{width:100%; border-collapse:collapse; font-size:17.5px; font-weight:700}
+table.log th, table.log td{border:2px solid var(--line); padding:10px 12px; text-align:left}
+table.log th{background:var(--surface2)}
+table.log td.num, table.log th.num{text-align:center}
+table.log tr.total-row td{background:var(--gold-soft); font-weight:900; font-size:19px}
+
+/* ===== Result ===== */
+.result-box{text-align:center; padding:10px 4px 4px}
+.result-score{font-family:"Fredoka"; font-size:clamp(52px,11vw,84px); font-weight:700; line-height:1; color:var(--green-dark)}
+.result-score small{font-size:.45em; color:var(--muted)}
+.result-msg{font-size:clamp(19px,3.6vw,24px); font-weight:900; margin:8px 0 4px}
+.result-sub{color:var(--muted); font-weight:800; font-size:17.5px; margin:0 0 18px}
+
+/* ===== Quiz ===== */
+.quiz-q{font-family:"Fredoka"; font-size:clamp(26px,5vw,36px); font-weight:600; text-align:center; margin:6px 0 4px; line-height:1.2}
+.quiz-ask{text-align:center; color:var(--muted); font-weight:800; font-size:18.5px; margin:0 0 18px}
+.opt-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media (max-width:640px){ .opt-grid{grid-template-columns:1fr} }
+.opt-btn{
+  border:3px solid var(--blue); background:var(--surface); color:var(--ink);
+  border-radius:18px; padding:18px 16px; font-size:clamp(18px,3.4vw,22px); font-weight:900;
+  min-height:76px; box-shadow:0 4px 0 rgba(31,58,45,.10); text-align:center; line-height:1.3;
+}
+.opt-btn:active{transform:translateY(3px); box-shadow:0 2px 0 rgba(31,58,45,.10)}
+.opt-btn.correct{background:var(--green); border-color:var(--green-dark); color:#fff}
+.opt-btn.wrong{background:var(--red); border-color:var(--red-dark); color:#fff}
+.opt-btn:disabled{opacity:1; cursor:default}
+.opt-btn.dim{opacity:.55}
+.feedback{
+  margin-top:18px; border-radius:16px; padding:16px 18px; font-weight:900;
+  font-size:clamp(18px,3.4vw,22px); text-align:center;
+}
+.feedback.ok{background:#d8f5df; border:3px solid var(--green); color:#14532d}
+.feedback.no{background:#ffe0e3; border:3px solid var(--red); color:#7f1d1d}
+@media (prefers-color-scheme: dark){
+  .feedback.ok{background:#14401f; color:#b7f0c9}
+  .feedback.no{background:#4d1218; color:#ffc2c7}
+}
+.dots{display:flex; gap:8px; justify-content:center; margin:0 0 14px; flex-wrap:wrap}
+.dots span{width:16px; height:16px; border-radius:50%; background:var(--line); border:2px solid var(--muted)}
+.dots span.done-ok{background:var(--green); border-color:var(--green-dark)}
+.dots span.done-no{background:var(--red); border-color:var(--red-dark)}
+.dots span.now{background:var(--gold); border-color:var(--gold)}
+
+footer.note-end{text-align:center; color:var(--muted); font-weight:700; font-size:16px; margin-top:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <span class="pos-badge">🕌 Taman 1 dari 9 &bull; Pesta Siaga</span>
+    <h1>Pos <span class="taqwa-word">Ketaqwaan</span></h1>
+    <p class="sub">Ambil kartu undian, lafalkan doanya dengan hafal dan fasih — lalu uji ingatanmu di kuis "Kapan Doa Ini Dibaca?"</p>
+    <div><span class="score-pill" id="score-pill">⭐ Skor sesi ini: belum ada</span></div>
+    <div class="rule-grid" aria-label="Cara bermain singkat">
+      <div class="rule-card"><span class="num">1</span><p><b>Pilih agama</b><br>Islam, Katolik, Kristen, Buddha, Hindu, atau Konghucu.</p></div>
+      <div class="rule-card"><span class="num">2</span><p><b>Ambil kartu undian</b><br>Kartu hanya berisi <b>judul doa</b> — tanpa teks doa.</p></div>
+      <div class="rule-card"><span class="num">3</span><p><b>Lafalkan doanya</b><br>Anak mengucapkan doa sesuai judul kartu.</p></div>
+      <div class="rule-card"><span class="num">4</span><p><b>Pembina menilai</b><br>8 anak, skor maksimal <b>80</b>.</p></div>
+    </div>
+  </header>
+
+  <!-- ===== PILIH AGAMA ===== -->
+  <section class="block" id="sec-agama">
+    <div class="sec-head"><span class="sec-num">🕌</span><h2>Pilih Agama</h2></div>
+    <p class="sec-lead">Kartu undian dan kuis mengikuti agama yang dipilih. Sesuai juklak, kartu hanya memuat judul doa — teks doa lengkap tidak ditulis di media ini; latih dari buku doa harian anak.</p>
+    <div class="agama-grid" id="agama-grid" role="group" aria-label="Pilih agama"></div>
+    <div class="note" id="agama-note"></div>
+  </section>
+
+  <!-- ===== PILIH MODE ===== -->
+  <section class="block" id="sec-mode">
+    <div class="sec-head"><span class="sec-num gold">🎲</span><h2>Pilih Mode Permainan</h2></div>
+    <p class="sec-lead">Mode Undian meniru lomba di juklak (8 anak, rubrik juri). Mode Kuis untuk latihan: cocokkan judul doa dengan kapan dibaca.</p>
+    <div class="btn-row">
+      <button class="btn green big" type="button" id="btn-mode-undian">🎴 Mode Undian<br><span style="font-size:16px;font-weight:800">Simulasi lomba &bull; 8 giliran &bull; maks 80</span></button>
+      <button class="btn teal big" type="button" id="btn-mode-kuis">❓ Mode Kuis<br><span style="font-size:16px;font-weight:800">Kapan doa ini dibaca? &bull; 8 soal</span></button>
+    </div>
+  </section>
+
+  <!-- ===== MODE UNDIAN ===== -->
+  <section class="block hidden" id="sec-undian">
+    <div class="sec-head"><span class="sec-num">🎴</span><h2>Mode Undian — Simulasi Lomba</h2></div>
+    <p class="sec-lead">Kartu sudah dikocok oleh juri. Anak 1 sampai Anak 8 bergiliran mengambil kartu, lalu melafalkan doanya. Pembina menilai tiap giliran dengan tombol rubrik di bawah kartu.</p>
+
+    <div id="undian-play">
+      <p class="progress"><span class="pill" id="undian-progress">Giliran Anak 1 dari 8</span></p>
+      <div class="draw-card">
+        <div class="card-tag" id="draw-tag">Kartu Undian &bull; Islam</div>
+        <div class="card-title" id="draw-title">—</div>
+        <p class="card-hint">Anak melafalkan doa sesuai judul kartu ini.<br>Pembina menilai setelah anak selesai melafalkan.</p>
+      </div>
+      <div class="rubrik-grid" id="rubrik-grid">
+        <button class="rubrik-btn r10" type="button" data-nilai="10">😊 Hafal &amp; Fasih<small>10 poin</small></button>
+        <button class="rubrik-btn r7" type="button" data-nilai="7">🙂 Hafal tapi Tidak Fasih<small>7 poin</small></button>
+        <button class="rubrik-btn r4" type="button" data-nilai="4">🤔 Tidak Hafal<small>4 poin</small></button>
+        <button class="rubrik-btn r0" type="button" data-nilai="0">😕 Tidak Bisa / Salah<small>0 poin</small></button>
+      </div>
+      <div class="log-wrap">
+        <table class="log" id="undian-log">
+          <thead><tr><th>Anak</th><th>Judul Kartu</th><th>Penilaian</th><th class="num">Nilai</th></tr></thead>
+          <tbody id="undian-log-body"></tbody>
+        </table>
+      </div>
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn ghost" type="button" id="btn-undian-batal">↩️ Batalkan Ronde</button>
+      </div>
+    </div>
+
+    <div id="undian-result" class="hidden">
+      <div class="result-box">
+        <div class="result-score"><span id="undian-total">0</span><small> / 80</small></div>
+        <p class="result-msg" id="undian-msg"></p>
+        <p class="result-sub" id="undian-sub"></p>
+      </div>
+      <div class="log-wrap">
+        <table class="log">
+          <thead><tr><th>Anak</th><th>Judul Kartu</th><th>Penilaian</th><th class="num">Nilai</th></tr></thead>
+          <tbody id="undian-result-body"></tbody>
+        </table>
+      </div>
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn green" type="button" id="btn-undian-ulangi">🔄 Ulangi Mode Undian</button>
+        <button class="btn ghost" type="button" id="btn-undian-kembali">↩️ Kembali ke Menu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODE KUIS ===== -->
+  <section class="block hidden" id="sec-kuis">
+    <div class="sec-head"><span class="sec-num teal">❓</span><h2>Mode Kuis — Kapan Doa Ini Dibaca?</h2></div>
+    <p class="sec-lead">Baca judul doanya, lalu pilih kapan doa itu dibaca. Ada 8 soal — satu soal benar bernilai 1 poin.</p>
+
+    <div id="kuis-play">
+      <div class="dots" id="kuis-dots"></div>
+      <p class="progress"><span class="pill" id="kuis-progress">Soal 1 dari 8</span></p>
+      <p class="quiz-q" id="kuis-title">—</p>
+      <p class="quiz-ask">Kapan doa ini dibaca?</p>
+      <div class="opt-grid" id="kuis-opts"></div>
+      <div class="feedback hidden" id="kuis-feedback"></div>
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn teal hidden" type="button" id="btn-kuis-lanjut">Soal Berikutnya ➜</button>
+        <button class="btn ghost" type="button" id="btn-kuis-batal">↩️ Batalkan Kuis</button>
+      </div>
+    </div>
+
+    <div id="kuis-result" class="hidden">
+      <div class="result-box">
+        <div class="result-score"><span id="kuis-total">0</span><small> / 8</small></div>
+        <p class="result-msg" id="kuis-msg"></p>
+        <p class="result-sub" id="kuis-sub"></p>
+      </div>
+      <div class="btn-row" style="margin-top:20px">
+        <button class="btn teal" type="button" id="btn-kuis-ulangi">🔄 Ulangi Mode Kuis</button>
+        <button class="btn ghost" type="button" id="btn-kuis-kembali">↩️ Kembali ke Menu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RUBRIK JUKLAK ===== -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num orange">📋</span><h2>Rubrik Penilaian Juklak</h2></div>
+    <p class="sec-lead">Pedoman penilaian Taman Ketaqwaan menurut Juklak Pesta Siaga Cabang Banyumas 2026. Tombol di Mode Undian memakai nilai 10, 7, 4, dan 0 — nilai tengah dari tiap rentang juklak.</p>
+    <div class="log-wrap">
+      <table class="log">
+        <thead><tr><th>Penilaian</th><th class="num">Rentang Juklak</th><th class="num">Nilai di Game</th></tr></thead>
+        <tbody>
+          <tr><td>😊 Hafal dan Fasih</td><td class="num">8 – 10</td><td class="num">10</td></tr>
+          <tr><td>🙂 Hafal dan Tidak Fasih</td><td class="num">6 – 7</td><td class="num">7</td></tr>
+          <tr><td>🤔 Tidak Hafal</td><td class="num">3 – 5</td><td class="num">4</td></tr>
+          <tr><td>😕 Tidak Bisa / Salah Baca</td><td class="num">0</td><td class="num">0</td></tr>
+          <tr class="total-row"><td>Nilai maksimal barung (8 anak)</td><td class="num">80</td><td class="num">80</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note green">🔒 Privasi: game ini tidak menyimpan nama siswa, NISN, atau nilai apa pun. Semua skor hanya berlaku selama sesi ini dan hilang saat halaman ditutup atau dimuat ulang.</div>
+  </section>
+
+  <footer class="note-end">Media Interaktif Pos Ketaqwaan &bull; Pesta Siaga Cabang Banyumas 2026 &bull; SD Negeri 1 Gerduren</footer>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   POS KETAQWAAN — Pesta Siaga Cabang Banyumas 2026
+   Daftar judul doa PERSIS Juklak (Bab V, Taman Ketaqwaan).
+   HANYA judul doa — teks doa lengkap sengaja TIDAK ditulis.
+   Skor hanya sesi ini (variabel JS), tanpa penyimpanan apa pun.
+   ============================================================ */
+
+/* --- Data: judul doa per agama (persis juklak) + kapan dibaca --- */
+var AGAMA = {
+  islam: {
+    label: "Islam", emoji: "🕌", countNote: "8 judul doa",
+    doa: [
+      { t: "Doa Sebelum Makan", kapan: "Sebelum makan" },
+      { t: "Doa Sebelum Tidur", kapan: "Sebelum tidur" },
+      { t: "Doa Masuk Kamar Mandi (Toilet)", kapan: "Sebelum masuk kamar mandi" },
+      { t: "Doa Keluar Kamar Mandi", kapan: "Sesudah keluar dari kamar mandi" },
+      { t: "Doa untuk Orang Tua", kapan: "Saat mendoakan ayah dan ibu" },
+      { t: "Doa Bercermin", kapan: "Saat bercermin" },
+      { t: "Doa Memakai Pakaian", kapan: "Saat memakai pakaian" },
+      { t: "Doa Belajar", kapan: "Sebelum belajar" }
+    ]
+  },
+  katolik: {
+    label: "Katolik", emoji: "⛪", countNote: "6 judul doa",
+    doa: [
+      { t: "Doa Bapa Kami", kapan: "Saat berdoa setiap hari" },
+      { t: "Doa Salam Maria", kapan: "Saat berdoa kepada Bunda Maria" },
+      { t: "Doa Sebelum Makan", kapan: "Sebelum makan" },
+      { t: "Doa Sebelum Belajar", kapan: "Sebelum belajar" },
+      { t: "Doa Sebelum Tidur", kapan: "Sebelum tidur" },
+      { t: "Doa untuk Orang Tua", kapan: "Saat mendoakan orang tua" }
+    ]
+  },
+  kristen: {
+    label: "Kristen", emoji: "✝️", countNote: "6 judul doa",
+    doa: [
+      { t: "Doa Bapa Kami", kapan: "Saat berdoa setiap hari" },
+      { t: "Doa Sebelum Makan", kapan: "Sebelum makan" },
+      { t: "Doa Belajar", kapan: "Sebelum belajar" },
+      { t: "Doa Sebelum Tidur", kapan: "Sebelum tidur" },
+      { t: "Doa untuk Orang Tua", kapan: "Saat mendoakan orang tua" },
+      { t: "Doa Syafaat", kapan: "Saat mendoakan orang lain" }
+    ]
+  },
+  buddha: {
+    label: "Buddha", emoji: "🪷", countNote: "2 judul doa",
+    doa: [
+      { t: "Bacaan Doa Wajib", kapan: "Saat berdoa setiap hari" },
+      { t: "Cara Kebaktian", kapan: "Saat mengikuti kebaktian" }
+    ]
+  },
+  hindu: {
+    label: "Hindu", emoji: "🕉️", countNote: "3 judul doa",
+    doa: [
+      { t: "Doa Tri Sandya", kapan: "Tiga kali sehari: pagi, siang, dan sore" },
+      { t: "Doa Mantram Gayatri", kapan: "Saat berdoa memohon penerangan batin" },
+      { t: "Menyebutkan Tri Rana", kapan: "Saat belajar tiga kewajiban hidup" }
+    ]
+  },
+  konghucu: {
+    label: "Konghucu", emoji: "🏮", countNote: "3 judul doa",
+    doa: [
+      { t: "Doa Syukur kepada Tian", kapan: "Saat bersyukur kepada Tian" },
+      { t: "Doa Sebelum Belajar", kapan: "Sebelum belajar" },
+      { t: "Doa Saat Kesulitan", kapan: "Saat menghadapi kesulitan" }
+    ]
+  }
+};
+
+/* Pengecoh umum untuk kuis (semua berupa "kapan dibaca", tanpa teks doa). */
+var DISTRACTORS = [
+  "Sebelum makan", "Sebelum tidur", "Sebelum belajar", "Saat bercermin",
+  "Saat memakai pakaian", "Sebelum masuk kamar mandi",
+  "Sesudah keluar dari kamar mandi", "Saat mendoakan ayah dan ibu",
+  "Saat berdoa setiap hari", "Saat menghadapi kesulitan",
+  "Saat bersyukur kepada Tian", "Tiga kali sehari: pagi, siang, dan sore",
+  "Saat mengikuti kebaktian", "Saat mendoakan orang lain",
+  "Saat berdoa kepada Bunda Maria", "Saat berdoa memohon penerangan batin",
+  "Saat belajar tiga kewajiban hidup", "Saat mendoakan orang tua"
+];
+
+var RUBRIK = {
+  10: "Hafal & Fasih",
+  7: "Hafal tapi Tidak Fasih",
+  4: "Tidak Hafal",
+  0: "Tidak Bisa / Salah"
+};
+
+/* --- State sesi (hanya di memori, tidak disimpan) --- */
+var agamaKey = "islam";
+var undian = { deck: [], turn: 0, hasil: [] };
+var kuis = { soal: [], idx: 0, skor: 0, terjawab: false };
+
+/* --- Util --- */
+function $(id){ return document.getElementById(id); }
+function shuffle(arr){
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+function setScorePill(teks){ $("score-pill").textContent = teks; }
+
+/* --- Pilih agama --- */
+function renderAgama(){
+  var grid = $("agama-grid");
+  grid.innerHTML = "";
+  Object.keys(AGAMA).forEach(function(key){
+    var a = AGAMA[key];
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "agama-btn" + (key === agamaKey ? " active" : "");
+    b.setAttribute("data-agama", key);
+    b.setAttribute("aria-pressed", key === agamaKey ? "true" : "false");
+    b.innerHTML = a.emoji + " " + a.label + "<small>" + a.countNote + " &bull; sesuai juklak</small>";
+    b.addEventListener("click", function(){
+      if (key === agamaKey) return;
+      agamaKey = key;
+      renderAgama();
+      resetKeMenu();
+    });
+    grid.appendChild(b);
+  });
+  var n = AGAMA[agamaKey].doa.length;
+  var note = "Dipilih: <b>" + AGAMA[agamaKey].emoji + " " + AGAMA[agamaKey].label + "</b> — " + n + " judul doa sesuai juklak.";
+  if (n < 8){
+    note += " Karena judulnya kurang dari 8, kartu dikocok ulang bila habis sehingga judul bisa terulang dalam satu ronde 8 anak.";
+  }
+  $("agama-note").innerHTML = note;
+}
+
+function resetKeMenu(){
+  $("sec-undian").classList.add("hidden");
+  $("sec-kuis").classList.add("hidden");
+  $("sec-mode").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* --- MODE UNDIAN --- */
+function mulaiUndian(){
+  var judul = AGAMA[agamaKey].doa.map(function(d){ return d.t; });
+  /* Dek 8 kartu: kocok judul, ulangi pengocokan bila judul < 8. */
+  var deck = [];
+  while (deck.length < 8){ deck = deck.concat(shuffle(judul)); }
+  undian.deck = deck.slice(0, 8);
+  undian.turn = 0;
+  undian.hasil = [];
+  $("undian-log-body").innerHTML = "";
+  $("undian-play").classList.remove("hidden");
+  $("undian-result").classList.add("hidden");
+  $("sec-undian").classList.remove("hidden");
+  $("sec-kuis").classList.add("hidden");
+  tampilKartu();
+  $("sec-undian").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function tampilKartu(){
+  var i = undian.turn;
+  $("undian-progress").textContent = "Giliran Anak " + (i + 1) + " dari 8";
+  $("draw-tag").textContent = "Kartu Undian \u2022 " + AGAMA[agamaKey].label;
+  $("draw-title").textContent = undian.deck[i];
+  setScorePill("⭐ Undian " + AGAMA[agamaKey].label + ": Anak " + (i + 1) + " dari 8");
+}
+
+function nilaiGiliran(nilai){
+  var i = undian.turn;
+  var judul = undian.deck[i];
+  undian.hasil.push({ anak: i + 1, judul: judul, nilai: nilai, label: RUBRIK[nilai] });
+  var tr = document.createElement("tr");
+  tr.innerHTML = "<td>Anak " + (i + 1) + "</td><td>" + judul + "</td><td>" + RUBRIK[nilai] + "</td><td class=\"num\">" + nilai + "</td>";
+  $("undian-log-body").appendChild(tr);
+  undian.turn++;
+  if (undian.turn >= 8){ selesaiUndian(); }
+  else { tampilKartu(); }
+}
+
+function selesaiUndian(){
+  var total = undian.hasil.reduce(function(s, h){ return s + h.nilai; }, 0);
+  $("undian-play").classList.add("hidden");
+  $("undian-result").classList.remove("hidden");
+  $("undian-total").textContent = total;
+  var msg, sub;
+  if (total >= 72){ msg = "🎉 Luar biasa! Barung ini sangat hafal dan fasih!"; }
+  else if (total >= 56){ msg = "👏 Hebat! Barung ini hafal dengan baik!"; }
+  else if (total >= 40){ msg = "💪 Bagus! Terus berlatih supaya makin fasih!"; }
+  else { msg = "🌱 Terus berlatih ya! Hafalkan doa hariannya sedikit demi sedikit!"; }
+  sub = "Total nilai barung " + AGAMA[agamaKey].label + ": " + total + " dari 80. Rata-rata per anak: " + (total / 8).toFixed(1) + ".";
+  $("undian-msg").textContent = msg;
+  $("undian-sub").textContent = sub;
+  var body = $("undian-result-body");
+  body.innerHTML = "";
+  undian.hasil.forEach(function(h){
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>Anak " + h.anak + "</td><td>" + h.judul + "</td><td>" + h.label + "</td><td class=\"num\">" + h.nilai + "</td>";
+    body.appendChild(tr);
+  });
+  var trT = document.createElement("tr");
+  trT.className = "total-row";
+  trT.innerHTML = "<td colspan=\"3\">Total Barung</td><td class=\"num\">" + total + " / 80</td>";
+  body.appendChild(trT);
+  setScorePill("⭐ Undian " + AGAMA[agamaKey].label + ": " + total + " / 80");
+  $("sec-undian").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* --- MODE KUIS --- */
+function mulaiKuis(){
+  var pool = AGAMA[agamaKey].doa;
+  /* 8 soal: judul dikocok, diulang bila judul < 8; tiap soal 4 pilihan. */
+  var judulAcak = [];
+  while (judulAcak.length < 8){ judulAcak = judulAcak.concat(shuffle(pool)); }
+  judulAcak = judulAcak.slice(0, 8);
+  kuis.soal = judulAcak.map(function(d){
+    var salah = shuffle(DISTRACTORS.filter(function(x){ return x !== d.kapan; })).slice(0, 3);
+    var opsi = shuffle([d.kapan].concat(salah));
+    return { judul: d.t, benar: d.kapan, opsi: opsi };
+  });
+  kuis.idx = 0;
+  kuis.skor = 0;
+  kuis.terjawab = false;
+  $("kuis-play").classList.remove("hidden");
+  $("kuis-result").classList.add("hidden");
+  $("sec-kuis").classList.remove("hidden");
+  $("sec-undian").classList.add("hidden");
+  tampilSoal();
+  $("sec-kuis").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function tampilSoal(){
+  var i = kuis.idx;
+  var s = kuis.soal[i];
+  kuis.terjawab = false;
+  $("kuis-progress").textContent = "Soal " + (i + 1) + " dari 8";
+  $("kuis-title").textContent = s.judul;
+  var dots = $("kuis-dots");
+  dots.innerHTML = "";
+  for (var k = 0; k < 8; k++){
+    var d = document.createElement("span");
+    if (k < i){ d.className = kuis.soal[k].hasilBenar ? "done-ok" : "done-no"; }
+    else if (k === i){ d.className = "now"; }
+    dots.appendChild(d);
+  }
+  var wrap = $("kuis-opts");
+  wrap.innerHTML = "";
+  s.opsi.forEach(function(op){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt-btn";
+    b.textContent = op;
+    b.addEventListener("click", function(){ jawabKuis(b, op); });
+    wrap.appendChild(b);
+  });
+  $("kuis-feedback").classList.add("hidden");
+  $("kuis-feedback").textContent = "";
+  $("btn-kuis-lanjut").classList.add("hidden");
+  $("btn-kuis-lanjut").textContent = (i === 7) ? "Lihat Hasil 🏆" : "Soal Berikutnya ➜";
+  setScorePill("⭐ Kuis " + AGAMA[agamaKey].label + ": Soal " + (i + 1) + " dari 8");
+}
+
+function jawabKuis(btn, jawaban){
+  if (kuis.terjawab) return;
+  kuis.terjawab = true;
+  var s = kuis.soal[kuis.idx];
+  var benar = (jawaban === s.benar);
+  s.hasilBenar = benar;
+  if (benar){ kuis.skor++; }
+  var semua = $("kuis-opts").querySelectorAll(".opt-btn");
+  semua.forEach(function(b){
+    b.disabled = true;
+    if (b.textContent === s.benar){ b.classList.add("correct"); }
+    else if (b === btn){ b.classList.add("wrong"); }
+    else { b.classList.add("dim"); }
+  });
+  var fb = $("kuis-feedback");
+  fb.classList.remove("hidden");
+  if (benar){
+    fb.className = "feedback ok";
+    fb.textContent = "✅ Benar! " + s.judul + " dibaca " + s.benar.toLowerCase() + ".";
+  } else {
+    fb.className = "feedback no";
+    fb.textContent = "❌ Belum tepat. " + s.judul + " dibaca " + s.benar.toLowerCase() + ".";
+  }
+  $("btn-kuis-lanjut").classList.remove("hidden");
+}
+
+function lanjutKuis(){
+  kuis.idx++;
+  if (kuis.idx >= 8){ selesaiKuis(); }
+  else { tampilSoal(); }
+}
+
+function selesaiKuis(){
+  $("kuis-play").classList.add("hidden");
+  $("kuis-result").classList.remove("hidden");
+  $("kuis-total").textContent = kuis.skor;
+  var msg, sub;
+  if (kuis.skor === 8){ msg = "🎉 Sempurna! 8 dari 8 — kamu hafal kapan semua doa dibaca!"; }
+  else if (kuis.skor >= 6){ msg = "👏 Hebat! Hampir semua benar!"; }
+  else if (kuis.skor >= 4){ msg = "💪 Lumayan! Ayo latihan lagi supaya makin hafal!"; }
+  else { msg = "🌱 Terus belajar ya! Coba lagi setelah menghafal judul-judul doanya!"; }
+  sub = "Kamu menjawab benar " + kuis.skor + " dari 8 soal (" + AGAMA[agamaKey].label + ").";
+  $("kuis-msg").textContent = msg;
+  $("kuis-sub").textContent = sub;
+  setScorePill("⭐ Kuis " + AGAMA[agamaKey].label + ": " + kuis.skor + " / 8 benar");
+  $("sec-kuis").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* --- Wiring --- */
+$("btn-mode-undian").addEventListener("click", mulaiUndian);
+$("btn-mode-kuis").addEventListener("click", mulaiKuis);
+$("rubrik-grid").querySelectorAll(".rubrik-btn").forEach(function(b){
+  b.addEventListener("click", function(){ nilaiGiliran(parseInt(b.getAttribute("data-nilai"), 10)); });
+});
+$("btn-undian-batal").addEventListener("click", resetKeMenu);
+$("btn-undian-ulangi").addEventListener("click", mulaiUndian);
+$("btn-undian-kembali").addEventListener("click", resetKeMenu);
+$("btn-kuis-lanjut").addEventListener("click", lanjutKuis);
+$("btn-kuis-batal").addEventListener("click", resetKeMenu);
+$("btn-kuis-ulangi").addEventListener("click", mulaiKuis);
+$("btn-kuis-kembali").addEventListener("click", resetKeMenu);
+
+renderAgama();
+</script>
+</body>
+</html>
