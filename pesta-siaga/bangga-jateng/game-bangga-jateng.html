@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Pos Bangga Jawa Tengah — Taman 7 Pesta Siaga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#eaf6ff; --bg2:#fff7e0; --surface:#ffffff; --surface2:#f2faff;
+  --ink:#17324f; --muted:#47617d; --line:#cfe6f5;
+  --blue:#1d7ed6; --blue-dark:#1663ab; --red:#e63946; --red-dark:#c22533;
+  --yellow:#ffc93c; --yellow-soft:#fff1bf; --green:#25a244; --green-soft:#d8f5df;
+  --orange:#f76707; --teal:#0ca678; --radius:20px;
+  --shadow:0 6px 0 rgba(23,50,79,.08), 0 14px 28px rgba(23,50,79,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0d2233; --bg2:#12293d; --surface:#17344a; --surface2:#1c3d55;
+    --ink:#f2f8fc; --muted:#b9d2e4; --line:#2c506e;
+    --blue:#4dabf7; --blue-dark:#339af0; --yellow-soft:#4d3f10; --green-soft:#14401f;
+    --shadow:0 6px 0 rgba(0,0,0,.25), 0 14px 28px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:18px; line-height:1.55;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255,201,60,.35) 0 90px, transparent 91px),
+    radial-gradient(circle at 92% 22%, rgba(29,126,214,.18) 0 120px, transparent 121px),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+  background-attachment:fixed;
+}
+h1,h2,h3,.font-display{font-family:"Fredoka","Nunito",system-ui,sans-serif; letter-spacing:.2px}
+.wrap{max-width:1120px; margin:0 auto; padding:20px 16px 56px}
+button{font-family:inherit; cursor:pointer; touch-action:manipulation}
+:focus-visible{outline:4px solid var(--yellow); outline-offset:2px}
+
+/* ===== Header ===== */
+.hero{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::before{content:""; position:absolute; inset:0 0 auto 0; height:10px;
+  background:repeating-linear-gradient(90deg,var(--red) 0 44px,var(--yellow) 44px 88px,var(--blue) 88px 132px,var(--green) 132px 176px)}
+.hero .pos-badge{
+  display:inline-block; margin-top:8px; background:var(--red); color:#fff; font-weight:900;
+  font-size:15px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 16px; border-radius:999px;
+}
+.hero h1{font-size:clamp(32px,6.5vw,54px); line-height:1.08; margin:12px 0 6px; font-weight:700}
+.hero h1 .jt-word{color:var(--red)}
+.hero p.sub{font-size:clamp(17px,3vw,21px); color:var(--muted); font-weight:700; margin:0 auto; max-width:680px}
+.score-pill{
+  display:inline-flex; align-items:center; gap:10px; margin-top:16px;
+  background:var(--yellow); color:#5c4300; border-radius:999px; padding:10px 22px;
+  font-size:clamp(19px,3.4vw,24px); font-weight:900; border:3px solid #e8ae00;
+}
+.mode-tabs{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px}
+.mode-tab{
+  border:3px solid var(--blue); background:var(--surface); color:var(--ink);
+  border-radius:999px; padding:12px 22px; font-size:18px; font-weight:900; min-height:56px;
+}
+.mode-tab.active{background:var(--blue); color:#fff}
+.mode-tab.active small{color:#ffe08a}
+.mode-tab small{display:block; font-size:13px; font-weight:800; opacity:.85}
+
+/* ===== Sections ===== */
+section.block{
+  background:var(--surface); border:3px solid var(--line); border-radius:28px;
+  box-shadow:var(--shadow); padding:26px 22px; margin-top:26px;
+}
+.sec-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.sec-num{
+  flex:0 0 auto; width:52px;height:52px;border-radius:16px; color:#fff; background:var(--blue);
+  display:flex;align-items:center;justify-content:center; font-family:"Fredoka"; font-size:26px; font-weight:700}
+.sec-num.red{background:var(--red)} .sec-num.green{background:var(--green)} .sec-num.orange{background:var(--orange)}
+.sec-head h2{font-size:clamp(25px,4.5vw,34px); margin:0; font-weight:600}
+.sec-lead{color:var(--muted); font-weight:700; font-size:17.5px; margin:4px 0 18px}
+
+/* ===== Peta skematis ===== */
+.map-note{
+  background:var(--yellow-soft); border:3px dashed #e8ae00; border-radius:16px;
+  padding:12px 16px; font-weight:800; font-size:16.5px; text-align:center; margin-bottom:16px;
+}
+.compass-strip{display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; font-weight:900; flex-wrap:wrap}
+.compass-strip .sea{
+  background:#cfe8ff; color:#1663ab; border:2px solid #9ecfec; border-radius:999px;
+  padding:6px 16px; font-size:15px; letter-spacing:1px;
+}
+@media (prefers-color-scheme: dark){ .compass-strip .sea{background:#123a5c; color:#a8d8ff; border-color:#2c506e} }
+.compass-strip .ns{font-size:17px}
+.map-grid{
+  display:grid; grid-template-columns:repeat(8,1fr); gap:8px;
+}
+.map-cell{
+  min-width:0; overflow-wrap:break-word;
+  min-height:86px; border-radius:14px; border:3px solid var(--line);
+  background:var(--surface2); color:var(--ink);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; padding:8px 4px; font-size:15px; font-weight:900; text-align:center; line-height:1.2;
+  transition:transform .12s, background .12s, border-color .12s;
+}
+.map-cell .cell-num{
+  font-size:12px; font-weight:900; color:var(--muted);
+  background:rgba(23,50,79,.08); border-radius:999px; padding:1px 8px;
+}
+.map-cell.zone{border-color:var(--blue); background:#e3f1fd; cursor:pointer}
+@media (prefers-color-scheme: dark){ .map-cell.zone{background:#16344f} }
+.map-cell.zone:hover,.map-cell.zone:focus-visible{transform:scale(1.04); border-color:var(--orange)}
+.map-cell.zone.drop-ok{border-color:var(--green); background:var(--green-soft); transform:scale(1.05)}
+.map-cell.zone.drop-bad{border-color:var(--red); background:#ffe3e3; animation:shake .4s}
+@media (prefers-color-scheme: dark){ .map-cell.zone.drop-bad{background:#571c22} }
+.map-cell.filled{border-color:var(--green); background:var(--green-soft); cursor:default}
+.map-cell.filled .cell-name{color:var(--green); font-size:16px}
+.map-cell.filled::after{content:"✓"; font-size:20px; color:var(--green); line-height:1}
+.map-cell.empty{background:transparent; border-style:dashed; border-color:rgba(71,97,125,.25); cursor:default}
+.map-cell .q{font-family:"Fredoka"; font-size:30px; color:var(--blue); line-height:1}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (max-width:700px){
+  .wrap{padding:16px 10px 40px}
+  section.block{padding:18px 12px}
+  .map-grid{gap:4px}
+  .map-cell{min-height:64px; font-size:11px; border-width:2px; border-radius:10px; padding:5px 2px}
+  .map-cell .q{font-size:22px}
+  .map-cell.filled .cell-name{font-size:11px}
+  .map-cell .cell-num{font-size:10px; padding:0 5px}
+  .map-cell .pfx{display:none}
+}
+.sea-strip{
+  margin-top:8px; text-align:center; background:#cfe8ff; color:#1663ab;
+  border:2px solid #9ecfec; border-radius:999px; padding:6px 16px;
+  font-size:15px; font-weight:900; letter-spacing:1px;
+}
+@media (prefers-color-scheme: dark){ .sea-strip{background:#123a5c; color:#a8d8ff; border-color:#2c506e} }
+
+/* ===== Kartu nama daerah ===== */
+.tray{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:6px}
+.card-btn{
+  border:3px solid var(--blue); background:var(--surface); color:var(--ink);
+  border-radius:16px; padding:14px 18px; font-size:19px; font-weight:900; min-height:64px;
+  box-shadow:0 4px 0 rgba(23,50,79,.12); transition:transform .12s, background .12s;
+  user-select:none; -webkit-user-select:none; touch-action:none;
+}
+.card-btn:hover{transform:translateY(-2px)}
+.card-btn.selected{background:var(--yellow); border-color:#e8ae00; transform:scale(1.06); box-shadow:0 6px 0 rgba(23,50,79,.18)}
+.card-btn.dragging{opacity:.4}
+.card-btn:disabled{opacity:.35; cursor:default; transform:none; box-shadow:none}
+.feedback{
+  margin-top:18px; min-height:64px; display:flex; align-items:center; justify-content:center;
+  text-align:center; font-size:20px; font-weight:900; border-radius:16px; padding:12px 16px;
+  background:var(--surface2); border:3px dashed var(--line);
+}
+.feedback.good{background:var(--green-soft); border-color:var(--green); color:#0f6b2a}
+.feedback.bad{background:#ffe3e3; border-color:var(--red); color:#a61e26}
+@media (prefers-color-scheme: dark){
+  .feedback.good{color:#7be495}
+  .feedback.bad{background:#571c22; color:#ffb3b8}
+}
+.progress-row{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px}
+.progress-pill{background:var(--surface2); border:3px solid var(--line); border-radius:999px; padding:8px 18px; font-weight:900; font-size:17px}
+.controls{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:20px}
+.btn{
+  border:3px solid var(--blue); background:var(--blue); color:#fff; border-radius:999px;
+  padding:14px 26px; font-size:19px; font-weight:900; min-height:60px;
+  box-shadow:0 4px 0 rgba(23,50,79,.2);
+}
+.btn:hover{transform:translateY(-2px)}
+.btn.secondary{background:var(--surface); color:var(--blue); border-color:var(--blue)}
+.btn.green{background:var(--green); border-color:#1d7a35}
+.btn:disabled{opacity:.5; cursor:default; transform:none}
+
+/* ===== Hasil ===== */
+.result{
+  text-align:center; background:var(--yellow-soft); border:3px dashed #e8ae00;
+  border-radius:20px; padding:24px 18px; margin-top:20px;
+}
+.result .big-score{font-family:"Fredoka"; font-size:clamp(44px,9vw,68px); font-weight:700; color:var(--red-dark); line-height:1}
+@media (prefers-color-scheme: dark){ .result .big-score{color:#ff8f98} }
+.result .result-msg{font-size:clamp(20px,4vw,26px); font-weight:900; margin-top:6px}
+.result p{font-weight:700; color:var(--muted); margin:8px 0 0}
+
+/* ===== Daftar daerah (mode belajar) ===== */
+.region-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:10px; margin-top:16px}
+.region-item{
+  display:flex; align-items:center; gap:10px; background:var(--surface2);
+  border:2.5px solid var(--line); border-radius:14px; padding:10px 14px; font-weight:800; font-size:16.5px;
+}
+.region-item .n{
+  flex:0 0 auto; width:32px; height:32px; border-radius:50%; background:var(--blue); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:900; font-size:16px;
+}
+.region-item .pos{margin-left:auto; font-size:13.5px; color:var(--muted); font-weight:800; text-align:right}
+.hidden{display:none !important}
+.drag-ghost{
+  position:fixed; z-index:9999; pointer-events:none; opacity:.92;
+  border:3px solid #e8ae00; background:var(--yellow); color:#5c4300;
+  border-radius:16px; padding:12px 18px; font-size:19px; font-weight:900;
+  box-shadow:0 10px 24px rgba(0,0,0,.3); transform:translate(-50%,-50%);
+}
+.source-note{font-size:15px; color:var(--muted); font-weight:700; margin-top:18px; text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="pos-badge">Taman 7 &bull; Pesta Siaga Cabang Banyumas 2026</span>
+    <h1>Pos <span class="jt-word">Bangga Jawa Tengah</span></h1>
+    <p class="sub">Letakkan kartu nama kabupaten/kota pada peta buta Jawa Tengah — seperti di lomba sungguhan!</p>
+    <div class="score-pill" id="score-pill" aria-live="polite">⭐ Skor: 0 / 80</div>
+    <div class="mode-tabs" role="tablist" aria-label="Mode permainan">
+      <button class="mode-tab active" type="button" id="tab-belajar" role="tab" aria-selected="true">📖 Mode Belajar<small>Lihat peta lengkap berlabel</small></button>
+      <button class="mode-tab" type="button" id="tab-lomba" role="tab" aria-selected="false">🏆 Mode Lomba<small>8 kartu acak &bull; benar = 10</small></button>
+    </div>
+  </header>
+
+  <!-- ============ MODE BELAJAR ============ -->
+  <section class="block" id="panel-belajar" role="tabpanel" aria-labelledby="tab-belajar">
+    <div class="sec-head"><span class="sec-num green">1</span><h2>Peta Belajar: 16 Daerah</h2></div>
+    <p class="sec-lead">Hafalkan dulu posisi setiap daerah. Barat ada di kiri, timur di kanan, utara di atas, selatan di bawah.</p>
+    <div class="map-note">🗺️ Ini peta latihan skematis, bukan peta resmi — hanya menunjukkan posisi relatif barat–timur dan utara–selatan.</div>
+    <div id="map-belajar"></div>
+    <div class="region-list" id="region-list"></div>
+    <div class="controls">
+      <button class="btn green" type="button" id="btn-ke-lomba">Siap! Main Mode Lomba ▶</button>
+    </div>
+  </section>
+
+  <!-- ============ MODE LOMBA ============ -->
+  <section class="block hidden" id="panel-lomba" role="tabpanel" aria-labelledby="tab-lomba">
+    <div class="sec-head"><span class="sec-num red">2</span><h2>Mode Lomba: Letakkan 8 Kartu!</h2></div>
+    <p class="sec-lead">Di lomba, 8 anak satu barung masing-masing mengambil 1 kartu dan meletakkannya pada peta buta. Di sini kamu mainkan sendiri 8 kartu itu. Jawaban benar bernilai 10 — skor maksimal 80.</p>
+    <div class="progress-row">
+      <span class="progress-pill" id="progress-pill">Kartu 0 / 8</span>
+      <span class="progress-pill" id="score-pill-2">Skor: 0 / 80</span>
+    </div>
+    <div class="map-note">🗺️ Peta latihan skematis, bukan peta resmi. Ketuk kartu, lalu ketuk kotak “?” pada peta — atau seret kartu ke kotak yang benar.</div>
+    <div id="map-lomba"></div>
+    <h3 style="text-align:center; margin:22px 0 4px">🎴 Kartu Nama Daerah</h3>
+    <p style="text-align:center; color:var(--muted); font-weight:700; margin:0 0 10px" id="tray-hint">Ketuk satu kartu, lalu ketuk kotak “?” pada peta.</p>
+    <div class="tray" id="tray"></div>
+    <div class="feedback" id="feedback" aria-live="polite">👋 Pilih satu kartu di bawah, lalu letakkan pada kotak yang benar di peta!</div>
+    <div class="result hidden" id="result">
+      <div class="big-score" id="result-score">0 / 80</div>
+      <div class="result-msg" id="result-msg"></div>
+      <p id="result-sub"></p>
+      <div class="controls">
+        <button class="btn green" type="button" id="btn-main-lagi">🔄 Main Lagi (8 Kartu Baru)</button>
+        <button class="btn secondary" type="button" id="btn-lihat-peta">📖 Lihat Peta Belajar</button>
+      </div>
+    </div>
+    <div class="controls" id="lomba-controls">
+      <button class="btn" type="button" id="btn-acak-ulang">🎲 Acak Kartu Baru</button>
+      <button class="btn secondary" type="button" id="btn-ulangi">↩️ Ulangi Ronde Ini</button>
+    </div>
+  </section>
+
+  <p class="source-note">Sesuai Juklak Pesta Siaga Cabang Banyumas 2026, Taman Bangga Jawa Tengah: 8 peserta, tiap jawaban benar bernilai 10, nilai maksimal 80. Skor hanya untuk sesi bermain ini — tidak ada nama, nilai, atau data lain yang disimpan.</p>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ===== Data: 16 daerah — nama persis Juklak Pesta Siaga Cabang Banyumas 2026 =====
+   Posisi skematis (baris 1 = utara/pesisir, baris 3 = selatan) mengikuti kunci
+   jawaban peta buta latihan pada Media Belajar Pesta Siaga Per Taman. */
+var DAERAH = [
+  {id:"brebes",        nama:"Kab. Brebes",        r:1, c:1, pos:"Utara, paling barat"},
+  {id:"cilacap",       nama:"Kab. Cilacap",       r:2, c:1, pos:"Tengah, paling barat"},
+  {id:"banyumas",      nama:"Kab. Banyumas",      r:2, c:2, pos:"Tengah"},
+  {id:"purbalingga",   nama:"Kab. Purbalingga",   r:2, c:3, pos:"Tengah"},
+  {id:"banjarnegara",  nama:"Kab. Banjarnegara",  r:2, c:4, pos:"Tengah"},
+  {id:"tegal",         nama:"Kab. Tegal",         r:1, c:2, pos:"Utara"},
+  {id:"kotategal",     nama:"Kota Tegal",         r:1, c:3, pos:"Utara"},
+  {id:"pemalang",      nama:"Kab. Pemalang",      r:1, c:4, pos:"Utara"},
+  {id:"pekalongan",    nama:"Kab. Pekalongan",    r:1, c:5, pos:"Utara"},
+  {id:"kotapekalongan",nama:"Kota Pekalongan",    r:1, c:6, pos:"Utara"},
+  {id:"kebumen",       nama:"Kab. Kebumen",       r:3, c:2, pos:"Selatan"},
+  {id:"batang",        nama:"Kab. Batang",        r:1, c:7, pos:"Utara"},
+  {id:"kendal",        nama:"Kab. Kendal",        r:1, c:8, pos:"Utara, paling timur"},
+  {id:"temanggung",    nama:"Kab. Temanggung",    r:2, c:6, pos:"Tengah"},
+  {id:"wonosobo",      nama:"Kab. Wonosobo",      r:2, c:5, pos:"Tengah"},
+  {id:"purworejo",     nama:"Kab. Purworejo",     r:3, c:5, pos:"Selatan"}
+];
+var ROWS = 3, COLS = 8;
+var byKey = {};
+DAERAH.forEach(function(d){ byKey[d.r + "-" + d.c] = d; });
+
+var $ = function(id){ return document.getElementById(id); };
+
+/* ===== State (hanya sesi ini, tidak disimpan) ===== */
+var mode = "belajar";
+var roundCards = [];      // 8 id kartu ronde ini
+var placed = {};          // id daerah -> true bila sudah benar diletakkan
+var score = 0;
+var selected = null;      // id kartu yang sedang dipilih
+var roundOver = false;
+
+/* ===== Bangun peta ===== */
+function buildMap(container, labeled){
+  var html = "";
+  html += '<div class="compass-strip"><span class="ns">⬆ UTARA</span>' +
+          '<span class="sea">🌊 LAUT JAWA</span>' +
+          '<span class="ns">BARAT ⬅ &nbsp;|&nbsp; ➡ TIMUR</span></div>';
+  html += '<div class="map-grid" role="group" aria-label="Peta skematis Jawa Tengah">';
+  for(var r=1; r<=ROWS; r++){
+    for(var c=1; c<=COLS; c++){
+      var d = byKey[r + "-" + c];
+      if(!d){
+        html += '<div class="map-cell empty" aria-hidden="true"></div>';
+      } else if(labeled){
+        html += '<div class="map-cell zone filled" data-key="' + r + "-" + c + '" data-id="' + d.id + '">' +
+                '<span class="cell-num">' + d.r + "." + d.c + '</span>' +
+                '<span class="cell-name">' + d.nama.replace(/^(Kab\. |Kota )/, '<span class="pfx">$1</span>') + '</span></div>';
+      } else {
+        var isPlaced = placed[d.id];
+        if(isPlaced){
+          html += '<div class="map-cell zone filled" data-key="' + r + "-" + c + '" data-id="' + d.id + '">' +
+                  '<span class="cell-num">' + d.r + "." + d.c + '</span>' +
+                  '<span class="cell-name">' + d.nama.replace(/^(Kab\. |Kota )/, '<span class="pfx">$1</span>') + '</span></div>';
+        } else {
+          html += '<button type="button" class="map-cell zone" data-key="' + r + "-" + c + '" data-id="' + d.id + '" ' +
+                  'aria-label="Kotak peta baris ' + r + ' kolom ' + c + '">' +
+                  '<span class="cell-num">' + d.r + "." + d.c + '</span>' +
+                  '<span class="q">?</span></button>';
+        }
+      }
+    }
+  }
+  html += '</div>';
+  html += '<div class="sea-strip">🌊 SAMUDRA HINDIA &nbsp;·&nbsp; SELATAN ⬇</div>';
+  container.innerHTML = html;
+}
+
+function renderBelajar(){
+  buildMap($("map-belajar"), true);
+  var list = DAERAH.map(function(d, i){
+    return '<div class="region-item"><span class="n">' + (i+1) + '</span>' + d.nama +
+           '<span class="pos">' + d.pos + '</span></div>';
+  }).join("");
+  $("region-list").innerHTML = list;
+}
+
+function renderLombaMap(){
+  buildMap($("map-lomba"), false);
+  // pasang handler klik + drag pada zona
+  var zones = $("map-lomba").querySelectorAll(".map-cell.zone:not(.filled)");
+  zones.forEach(function(z){
+    z.addEventListener("click", function(){ onZoneClick(z); });
+    z.addEventListener("dragover", function(e){ e.preventDefault(); z.classList.add("drop-ok"); });
+    z.addEventListener("dragleave", function(){ z.classList.remove("drop-ok"); });
+    z.addEventListener("drop", function(e){
+      e.preventDefault(); z.classList.remove("drop-ok");
+      var id = e.dataTransfer.getData("text/plain");
+      if(id) placeCard(id, z);
+    });
+  });
+}
+
+function renderTray(){
+  var tray = $("tray");
+  tray.innerHTML = "";
+  roundCards.forEach(function(id){
+    if(placed[id]) return; // sudah benar -> tidak tampil lagi
+    var d = DAERAH.find(function(x){ return x.id === id; });
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "card-btn" + (selected === id ? " selected" : "");
+    b.textContent = "🎴 " + d.nama;
+    b.setAttribute("draggable", "true");
+    b.setAttribute("aria-pressed", selected === id ? "true" : "false");
+    b.dataset.id = id;
+    b.addEventListener("click", function(){ selectCard(id); });
+    b.addEventListener("dragstart", function(e){
+      e.dataTransfer.setData("text/plain", id);
+      e.dataTransfer.effectAllowed = "move";
+      b.classList.add("dragging");
+    });
+    b.addEventListener("dragend", function(){ b.classList.remove("dragging"); });
+    attachPointerDrag(b, id);
+    tray.appendChild(b);
+  });
+  $("tray-hint").textContent = roundCards.filter(function(id){ return !placed[id]; }).length === 0
+    ? "Semua kartu sudah terpasang — lihat hasilmu di bawah!"
+    : "Ketuk satu kartu, lalu ketuk kotak “?” pada peta — atau seret kartu ke kotak yang benar.";
+}
+
+function updateScore(){
+  $("score-pill").textContent = "⭐ Skor: " + score + " / 80";
+  $("score-pill-2").textContent = "Skor: " + score + " / 80";
+  var done = roundCards.filter(function(id){ return placed[id]; }).length;
+  $("progress-pill").textContent = "Kartu " + done + " / 8";
+}
+
+function setFeedback(msg, kind){
+  var f = $("feedback");
+  f.textContent = msg;
+  f.className = "feedback" + (kind ? " " + kind : "");
+}
+
+/* ===== Mode ===== */
+function setMode(m){
+  mode = m;
+  $("tab-belajar").classList.toggle("active", m === "belajar");
+  $("tab-lomba").classList.toggle("active", m === "lomba");
+  $("tab-belajar").setAttribute("aria-selected", m === "belajar" ? "true" : "false");
+  $("tab-lomba").setAttribute("aria-selected", m === "lomba" ? "true" : "false");
+  $("panel-belajar").classList.toggle("hidden", m !== "belajar");
+  $("panel-lomba").classList.toggle("hidden", m !== "lomba");
+  if(m === "lomba" && roundCards.length === 0) startRound();
+}
+
+/* ===== Ronde lomba ===== */
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i=a.length-1; i>0; i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function startRound(keepCards){
+  if(!keepCards){
+    roundCards = shuffle(DAERAH.map(function(d){ return d.id; })).slice(0, 8);
+  }
+  placed = {};
+  score = 0;
+  selected = null;
+  roundOver = false;
+  $("result").classList.add("hidden");
+  $("result-score").textContent = "0 / 80";
+  $("result-msg").textContent = "";
+  $("result-sub").textContent = "";
+  $("lomba-controls").classList.remove("hidden");
+  setFeedback("👋 Pilih satu kartu di bawah, lalu letakkan pada kotak yang benar di peta!", "");
+  renderLombaMap();
+  renderTray();
+  updateScore();
+}
+
+function selectCard(id){
+  if(roundOver || placed[id]) return;
+  selected = (selected === id) ? null : id;
+  renderTray();
+  if(selected){
+    var d = DAERAH.find(function(x){ return x.id === id; });
+    setFeedback("🖐️ Kartu “" + d.nama + "” dipilih — sekarang ketuk kotak yang benar di peta!", "");
+  } else {
+    setFeedback("Pilih satu kartu di bawah, lalu letakkan pada kotak yang benar di peta!", "");
+  }
+}
+
+function onZoneClick(zone){
+  if(roundOver) return;
+  if(!selected){
+    setFeedback("👆 Pilih dulu satu kartu nama di bawah peta, baru ketuk kotaknya!", "bad");
+    return;
+  }
+  placeCard(selected, zone);
+}
+
+function placeCard(cardId, zone){
+  if(roundOver || placed[cardId]) return;
+  var d = DAERAH.find(function(x){ return x.id === cardId; });
+  var zoneId = zone.getAttribute("data-id");
+  if(zoneId === cardId){
+    placed[cardId] = true;
+    score += 10;
+    selected = null;
+    setFeedback("✅ Benar! “" + d.nama + "” memang di situ. +10 poin!", "good");
+    renderLombaMap();
+    renderTray();
+    updateScore();
+    checkRoundEnd();
+  } else {
+    zone.classList.add("drop-bad");
+    setTimeout(function(){ zone.classList.remove("drop-bad"); }, 450);
+    setFeedback("❌ Belum tepat — “" + d.nama + "” bukan di kotak itu. Coba lagi, kamu pasti bisa!", "bad");
+    renderTray(); // jaga agar kartu tetap terpilih
+  }
+}
+
+function checkRoundEnd(){
+  var done = roundCards.filter(function(id){ return placed[id]; }).length;
+  if(done < 8) return;
+  roundOver = true;
+  var msg, sub;
+  if(score === 80){ msg = "🎉 SEMPURNA! 80 / 80 — Kamu hafal semua daerah!"; sub = "Hebat sekali! Kamu siap tampil di Taman Bangga Jawa Tengah."; }
+  else if(score >= 60){ msg = "🌟 Hebat! Skor " + score + " / 80"; sub = "Sedikit lagi sempurna — lihat lagi peta belajar, lalu main sekali lagi!"; }
+  else if(score >= 40){ msg = "👍 Bagus! Skor " + score + " / 80"; sub = "Terus berlatih — hafalkan peta di Mode Belajar, lalu coba lagi!"; }
+  else { msg = "💪 Terus Semangat! Skor " + score + " / 80"; sub = "Tidak apa-apa, semua bisa dipelajari. Pelajari petanya dulu, lalu main lagi!"; }
+  $("result-score").textContent = score + " / 80";
+  $("result-msg").textContent = msg;
+  $("result-sub").textContent = sub;
+  $("result").classList.remove("hidden");
+  $("lomba-controls").classList.add("hidden");
+  setFeedback("🏁 Ronde selesai! Skor akhirmu " + score + " dari 80.", score === 80 ? "good" : "");
+  $("result").scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+/* ===== Seret dengan jari (Pointer Events, untuk HP / layar sentuh) ===== */
+function attachPointerDrag(btn, id){
+  var startX = 0, startY = 0, dragging = false, ghost = null;
+  btn.addEventListener("pointerdown", function(e){
+    if(e.pointerType === "mouse") return; // mouse memakai HTML5 drag-and-drop
+    startX = e.clientX; startY = e.clientY; dragging = false;
+    var move = function(ev){
+      var dx = ev.clientX - startX, dy = ev.clientY - startY;
+      if(!dragging && Math.sqrt(dx*dx + dy*dy) > 10){
+        dragging = true;
+        ghost = document.createElement("div");
+        ghost.className = "drag-ghost";
+        ghost.textContent = btn.textContent;
+        document.body.appendChild(ghost);
+        btn.classList.add("dragging");
+      }
+      if(dragging){
+        ghost.style.left = ev.clientX + "px";
+        ghost.style.top = ev.clientY + "px";
+        var el = document.elementFromPoint(ev.clientX, ev.clientY);
+        var zone = el && el.closest ? el.closest(".map-cell.zone:not(.filled)") : null;
+        document.querySelectorAll(".map-cell.zone.drop-ok").forEach(function(z){ z.classList.remove("drop-ok"); });
+        if(zone) zone.classList.add("drop-ok");
+        ev.preventDefault();
+      }
+    };
+    var up = function(ev){
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+      if(!dragging) return; // itu tadi ketukan biasa -> biarkan event click jalan
+      var wasDragging = dragging;
+      dragging = false;
+      btn.classList.remove("dragging");
+      if(ghost){ ghost.remove(); ghost = null; }
+      document.querySelectorAll(".map-cell.zone.drop-ok").forEach(function(z){ z.classList.remove("drop-ok"); });
+      var el = document.elementFromPoint(ev.clientX, ev.clientY);
+      var zone = el && el.closest ? el.closest(".map-cell.zone:not(.filled)") : null;
+      if(zone && wasDragging) placeCard(id, zone);
+    };
+    window.addEventListener("pointermove", move, {passive:false});
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+  });
+}
+
+/* ===== Tombol-tombol ===== */
+$("tab-belajar").addEventListener("click", function(){ setMode("belajar"); });
+$("tab-lomba").addEventListener("click", function(){ setMode("lomba"); });
+$("btn-ke-lomba").addEventListener("click", function(){ setMode("lomba"); });
+$("btn-acak-ulang").addEventListener("click", function(){ startRound(false); });
+$("btn-ulangi").addEventListener("click", function(){ startRound(true); });
+$("btn-main-lagi").addEventListener("click", function(){ startRound(false); });
+$("btn-lihat-peta").addEventListener("click", function(){ setMode("belajar"); });
+
+/* ===== Mulai ===== */
+renderBelajar();
+updateScore();
+})();
+</script>
+</body>
+</html>
