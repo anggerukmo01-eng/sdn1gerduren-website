@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pos Pionering: Tiang Bendera — Latihan Interaktif Pramuka Siaga</title>
+<meta name="description" content="Latihan interaktif Pos Pionering Tiang Bendera: susun langkah merakit, pilih ikatan yang tepat, dan simulasi rakit tiang dari 10 tongkat. Skor maksimal 100 sesuai Juklak Pesta Siaga Cabang Banyumas 2026.">
+<style>
+  :root{
+    --bg:#eaf6ff; --bg2:#fff7e0; --surface:#ffffff; --surface2:#f2faff;
+    --ink:#17324f; --muted:#47617d; --line:#cfe6f5;
+    --blue:#1d7ed6; --blue-dark:#1663ab; --red:#e63946; --red-dark:#c22533;
+    --yellow:#ffc93c; --yellow-soft:#fff1bf; --green:#25a244; --green-soft:#d8f5df;
+    --orange:#f76707; --teal:#0ca678; --radius:20px;
+    --shadow:0 6px 0 rgba(23,50,79,.08), 0 14px 28px rgba(23,50,79,.10);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0d2233; --bg2:#12293d; --surface:#17344a; --surface2:#1c3d55;
+      --ink:#f2f8fc; --muted:#b9d2e4; --line:#2c506e;
+      --blue:#4dabf7; --blue-dark:#339af0; --yellow-soft:#4d3f10; --green-soft:#14401f;
+      --shadow:0 6px 0 rgba(0,0,0,.25), 0 14px 28px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; color:var(--ink);
+    font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+    background-attachment:fixed;
+  }
+  h1,h2,h3,.font-display{font-family:"Fredoka","Nunito",system-ui,sans-serif; letter-spacing:.2px}
+  button{font-family:inherit; cursor:pointer; touch-action:manipulation}
+  :focus-visible{outline:4px solid var(--yellow); outline-offset:2px}
+  .wrap{max-width:860px; margin:0 auto; padding:18px 16px 40px}
+  .hero{
+    background:var(--surface); border:3px solid var(--line); border-radius:28px;
+    box-shadow:var(--shadow); padding:26px 22px 22px; text-align:center; position:relative; overflow:hidden;
+  }
+  .hero::before{content:""; position:absolute; left:0; right:0; top:0; height:10px;
+    background:repeating-linear-gradient(90deg,var(--red) 0 44px,var(--yellow) 44px 88px,var(--blue) 88px 132px,var(--green) 132px 176px)}
+  .badge{display:inline-block; margin-top:8px; background:var(--red); color:#fff; font-weight:900;
+    font-size:15px; letter-spacing:1.5px; text-transform:uppercase; padding:7px 16px; border-radius:999px}
+  .hero h1{font-size:clamp(28px,6vw,44px); margin:12px 0 6px; line-height:1.1}
+  .hero h1 .flag-word{color:var(--red)}
+  .hero p.sub{font-size:clamp(17px,3vw,21px); color:var(--muted); font-weight:700; margin:0 auto; max-width:640px}
+  .section{
+    background:var(--surface); border:3px solid var(--line); border-radius:28px;
+    box-shadow:var(--shadow); padding:26px 22px; margin-top:26px;
+  }
+  .sec-head{display:flex; gap:14px; align-items:flex-start}
+  .sec-num{
+    flex:0 0 auto; width:52px;height:52px;border-radius:16px; color:#fff; background:var(--blue);
+    display:flex;align-items:center;justify-content:center; font-family:"Fredoka"; font-size:26px; font-weight:700}
+  .sec-num.red{background:var(--red)} .sec-num.green{background:var(--green)} .sec-num.orange{background:var(--orange)}
+  .sec-head h2{margin:2px 0 0; font-size:clamp(22px,4.5vw,28px)}
+  .sec-lead{color:var(--muted); font-weight:700; font-size:17.5px; margin:4px 0 18px}
+  /* Mode tabs */
+  .mode-tabs{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:4px}
+  @media (max-width:640px){.mode-tabs{grid-template-columns:1fr}}
+  .mode-tab{
+    border:3px solid var(--line); background:var(--surface2); border-radius:18px; padding:16px 12px;
+    font-size:19px; font-weight:800; color:var(--ink); min-height:84px; line-height:1.25;
+  }
+  .mode-tab small{display:block; font-size:14px; font-weight:700; color:var(--muted); margin-top:4px}
+  .mode-tab.active{background:var(--blue); border-color:var(--blue-dark); color:#fff}
+  .mode-tab.active small{color:#d6e9ff}
+  .mode-tab.done{border-color:var(--green)}
+  .mode-tab.done::after{content:" ✓ selesai"; color:var(--green); font-size:15px}
+  .mode-tab.active.done::after{color:#fff}
+  .mode-panel{display:none}
+  .mode-panel.show{display:block}
+  /* Big buttons */
+  .btn{
+    display:inline-block; border:0; border-radius:999px; padding:15px 30px;
+    font-size:19px; font-weight:800; color:#fff; background:var(--blue);
+    box-shadow:0 4px 0 var(--blue-dark); min-height:56px; margin:6px 6px 6px 0;
+  }
+  .btn:active{transform:translateY(3px); box-shadow:0 1px 0 var(--blue-dark)}
+  .btn.green{background:var(--green); box-shadow:0 4px 0 #177a32}
+  .btn.green:active{box-shadow:0 1px 0 #177a32}
+  .btn.red{background:var(--red); box-shadow:0 4px 0 var(--red-dark)}
+  .btn.red:active{box-shadow:0 1px 0 var(--red-dark)}
+  .btn.orange{background:var(--orange); box-shadow:0 4px 0 #c24e04}
+  .btn.orange:active{box-shadow:0 1px 0 #c24e04}
+  .btn.ghost{background:var(--surface2); color:var(--ink); border:3px solid var(--line); box-shadow:none}
+  .btn:disabled{opacity:.5; cursor:not-allowed; transform:none}
+  /* Scoreboard */
+  .score-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  @media (max-width:640px){.score-grid{grid-template-columns:1fr}}
+  .rubrik{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:14px; text-align:center}
+  .rubrik .r-label{font-weight:800; font-size:16px}
+  .rubrik .r-score{font-family:"Fredoka"; font-size:38px; font-weight:700; line-height:1.1}
+  .rubrik .r-max{color:var(--muted); font-weight:700}
+  .r-bar{height:12px; border-radius:999px; background:var(--line); margin-top:8px; overflow:hidden}
+  .r-bar i{display:block; height:100%; background:var(--green); width:0%; transition:width .4s}
+  .total-box{
+    margin-top:16px; text-align:center; background:var(--yellow-soft);
+    border:3px dashed var(--yellow); border-radius:16px; padding:14px;
+  }
+  .total-box .t-score{font-family:"Fredoka"; font-size:52px; font-weight:700; line-height:1}
+  .total-box .t-note{font-weight:700; color:var(--muted); margin-top:4px}
+  /* Mode A: steps */
+  .step-list{display:grid; gap:10px}
+  .step-card{
+    text-align:left; width:100%; background:var(--surface2); border:3px solid var(--line);
+    border-radius:16px; padding:14px 16px; font-size:18px; font-weight:700; color:var(--ink);
+    display:flex; gap:12px; align-items:flex-start; line-height:1.4;
+  }
+  .step-card .step-no{
+    flex:0 0 auto; width:36px; height:36px; border-radius:50%; background:var(--blue); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-family:"Fredoka"; font-size:19px;
+  }
+  .step-card:hover{border-color:var(--blue)}
+  .step-card.used{opacity:.45}
+  .seq-box{
+    border:3px dashed var(--blue); border-radius:16px; padding:14px; min-height:90px;
+    background:var(--surface2); margin:14px 0;
+  }
+  .seq-box h3{margin:0 0 10px; font-size:18px}
+  .seq-item{
+    display:flex; gap:10px; align-items:flex-start; background:var(--surface);
+    border:2.5px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:8px;
+    font-size:17px; font-weight:700; cursor:pointer; line-height:1.4; text-align:left; width:100%;
+  }
+  .seq-item .seq-no{
+    flex:0 0 auto; width:30px; height:30px; border-radius:50%; background:var(--orange); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-family:"Fredoka";
+  }
+  .seq-item.ok{border-color:var(--green); background:var(--green-soft)}
+  .seq-item.ok .seq-no{background:var(--green)}
+  .seq-item.bad{border-color:var(--red); background:#fdecec}
+  .seq-item.bad .seq-no{background:var(--red)}
+  .hint{color:var(--muted); font-weight:700; font-size:16px}
+  .feedback{border-radius:16px; padding:16px; font-size:18px; font-weight:700; margin-top:14px; line-height:1.5}
+  .feedback.good{background:var(--green-soft); border:3px solid var(--green)}
+  .feedback.warn{background:var(--yellow-soft); border:3px solid var(--yellow)}
+  .feedback.bad{background:#fdecec; border:3px solid var(--red)}
+  /* Mode B: quiz */
+  .q-progress{font-weight:800; color:var(--muted); font-size:16px}
+  .q-text{font-size:clamp(20px,4vw,24px); font-weight:800; line-height:1.4; margin:10px 0 16px}
+  .choice-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  @media (max-width:560px){.choice-grid{grid-template-columns:1fr}}
+  .choice{
+    border:3px solid var(--line); background:var(--surface2); border-radius:18px; padding:18px 14px;
+    font-size:20px; font-weight:800; color:var(--ink); min-height:76px; line-height:1.3;
+  }
+  .choice small{display:block; font-size:14.5px; font-weight:700; color:var(--muted); margin-top:4px}
+  .choice:hover{border-color:var(--blue)}
+  .choice.correct{background:var(--green-soft); border-color:var(--green)}
+  .choice.wrong{background:#fdecec; border-color:var(--red)}
+  .choice:disabled{cursor:default; opacity:.85}
+  /* Mode C: simulation */
+  .sim-wrap{display:flex; flex-direction:column; align-items:center; gap:12px}
+  .timer-box{
+    font-family:"Fredoka"; font-size:30px; font-weight:700; background:var(--surface2);
+    border:3px solid var(--line); border-radius:16px; padding:8px 22px;
+  }
+  .timer-box.low{color:var(--red); border-color:var(--red)}
+  .sim-note{
+    background:var(--yellow-soft); border:3px solid var(--yellow); border-radius:14px;
+    padding:12px 16px; font-weight:700; font-size:16.5px; line-height:1.5; text-align:center;
+  }
+  .sim-stage{position:relative; width:100%; max-width:420px}
+  .sim-stage svg{width:100%; height:auto; display:block}
+  .joint{cursor:pointer}
+  .joint circle{fill:var(--blue); stroke:#fff; stroke-width:3; transition:fill .2s}
+  .joint text{fill:#fff; font-family:"Fredoka"; font-size:20px; font-weight:700; text-anchor:middle; pointer-events:none}
+  .joint:hover circle{fill:var(--blue-dark)}
+  .joint.done circle{fill:var(--green)}
+  .joint.next circle{fill:var(--orange)}
+  .joint.shake circle{fill:var(--red)}
+  .sim-status{font-size:18px; font-weight:800; text-align:center; min-height:28px}
+  /* Materi */
+  .knot-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  @media (max-width:640px){.knot-grid{grid-template-columns:1fr}}
+  .knot-card{background:var(--surface2); border:2.5px solid var(--line); border-radius:16px; padding:16px}
+  .knot-card h3{margin:0 0 6px; font-size:20px}
+  .knot-card p{margin:0; font-size:16.5px; font-weight:600; color:var(--muted); line-height:1.5}
+  .rule-list{margin:0; padding-left:22px; font-size:17.5px; font-weight:700; line-height:1.7}
+  .rule-list li{margin-bottom:6px}
+  .foot-note{text-align:center; color:var(--muted); font-weight:700; margin-top:26px; font-size:15px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="badge">🏕️ Taman Pionering &bull; Pesta Siaga 2026</span>
+    <h1>Pos Pionering: <span class="flag-word">Tiang Bendera</span></h1>
+    <p class="sub">Satu barung (8 anak) merakit tiang bendera dari 10 tongkat dan tali pramuka. Latihan di sini, lalu rakit sungguhan di lapangan!</p>
+  </div>
+
+  <!-- PAPAN SKOR -->
+  <section class="section" id="papan-skor" aria-label="Papan skor">
+    <div class="sec-head"><span class="sec-num red">★</span><div><h2>Papan Skor — Rubrik Juklak</h2>
+    <p class="sec-lead">Skor hanya untuk sesi latihan ini, tidak disimpan. Selesaikan ketiga mode untuk melihat nilai totalmu!</p></div></div>
+    <div class="score-grid">
+      <div class="rubrik"><div class="r-label">🎯 Ketepatan Ikatan</div><div class="r-score"><span id="skor-ketepatan">–</span><span class="r-max"> / 40</span></div><div class="r-bar"><i id="bar-ketepatan"></i></div></div>
+      <div class="rubrik"><div class="r-label">💪 Kekuatan</div><div class="r-score"><span id="skor-kekuatan">–</span><span class="r-max"> / 30</span></div><div class="r-bar"><i id="bar-kekuatan"></i></div></div>
+      <div class="rubrik"><div class="r-label">✨ Kerapihan &amp; Kreativitas</div><div class="r-score"><span id="skor-kerapihan">–</span><span class="r-max"> / 30</span></div><div class="r-bar"><i id="bar-kerapihan"></i></div></div>
+    </div>
+    <div class="total-box">
+      <div style="font-weight:800; font-size:17px">NILAI TOTAL</div>
+      <div class="t-score"><span id="skor-total">–</span><span style="font-size:26px"> / 100</span></div>
+      <div class="t-note" id="total-note">Mainkan ketiga mode di bawah ini.</div>
+    </div>
+    <div style="text-align:center; margin-top:14px">
+      <button class="btn red" type="button" id="btn-ulangi-semua">🔄 Ulangi Semua Mode</button>
+    </div>
+  </section>
+
+  <!-- PILIH MODE -->
+  <section class="section" aria-label="Pilih mode latihan">
+    <div class="sec-head"><span class="sec-num">1</span><div><h2>Pilih Mode Latihan</h2>
+    <p class="sec-lead">Tiga mode, tiga rubrik penilaian — sama seperti di lomba sungguhan.</p></div></div>
+    <div class="mode-tabs" role="tablist" aria-label="Mode latihan">
+      <button class="mode-tab active" type="button" data-mode="susun" role="tab" aria-selected="true">🧩 Susun Langkah<small>Urutkan 8 langkah merakit &bull; Ketepatan Ikatan /40</small></button>
+      <button class="mode-tab" type="button" data-mode="ikatan" role="tab" aria-selected="false">🪢 Pilih Ikatan<small>6 sambungan, pilih ikatan tepat &bull; Kekuatan /30</small></button>
+      <button class="mode-tab" type="button" data-mode="rakit" role="tab" aria-selected="false">🚩 Simulasi Rakit<small>Klik sambungan berurutan + timer &bull; Kerapihan /30</small></button>
+    </div>
+  </section>
+
+  <!-- MODE A: SUSUN LANGKAH -->
+  <section class="section mode-panel show" id="panel-susun" aria-label="Mode Susun Langkah">
+    <div class="sec-head"><span class="sec-num">2</span><div><h2>Mode A — Susun Langkah</h2>
+    <p class="sec-lead">Klik kartu langkah di bawah ini sesuai urutan yang benar, dari langkah 1 sampai 8. Salah urutan? Klik lagi kartunya di kotak urutan untuk mengembalikannya.</p></div></div>
+    <div class="step-list" id="daftar-langkah"></div>
+    <div class="seq-box">
+      <h3>📋 Urutanmu <span class="hint">(klik kartu untuk menghapus dari urutan)</span></h3>
+      <div id="urutan-list"><p class="hint">Belum ada langkah dipilih. Klik kartu di atas untuk mulai mengurutkan.</p></div>
+    </div>
+    <button class="btn green" type="button" id="btn-periksa-urutan">✅ Periksa Urutan</button>
+    <button class="btn ghost" type="button" id="btn-acak-langkah">🔀 Acak Lagi</button>
+    <button class="btn ghost" type="button" id="btn-ulangi-susun">↩️ Ulangi Mode A</button>
+    <div id="feedback-susun"></div>
+  </section>
+
+  <!-- MODE B: PILIH IKATAN -->
+  <section class="section mode-panel" id="panel-ikatan" aria-label="Mode Pilih Ikatan">
+    <div class="sec-head"><span class="sec-num green">3</span><div><h2>Mode B — Pilih Ikatan</h2>
+    <p class="sec-lead">Untuk setiap sambungan, pilih ikatan yang paling tepat. Ada 6 soal — setiap jawaban benar bernilai 5.</p></div></div>
+    <p class="q-progress" id="ikatan-progress">Soal 1 dari 6</p>
+    <p class="q-text" id="ikatan-soal"></p>
+    <div class="choice-grid" id="ikatan-pilihan"></div>
+    <div id="feedback-ikatan"></div>
+    <div style="margin-top:14px">
+      <button class="btn green" type="button" id="btn-ikatan-lanjut" disabled>Lanjut ➜</button>
+      <button class="btn ghost" type="button" id="btn-ulangi-ikatan">↩️ Ulangi Mode B</button>
+    </div>
+  </section>
+
+  <!-- MODE C: SIMULASI RAKIT -->
+  <section class="section mode-panel" id="panel-rakit" aria-label="Mode Simulasi Rakit">
+    <div class="sec-head"><span class="sec-num orange">4</span><div><h2>Mode C — Simulasi Rakit</h2>
+    <p class="sec-lead">Klik bulatan sambungan pada gambar tiang secara berurutan, dari nomor 1 sampai 7. Bulatan oranye = giliran berikutnya.</p></div></div>
+    <div class="sim-wrap">
+      <div class="sim-note">⏱️ <strong>Timer latihan dipercepat</strong> — di sini waktunya 90 detik. Di lomba sungguhan waktunya <strong>60 menit</strong>, <strong>tanpa pancang</strong>, dan <strong>tanpa gunting/cutter</strong>.</div>
+      <div class="timer-box" id="timer-rakit">⏱ 01:30</div>
+      <div class="sim-status" id="status-rakit">Tekan “Mulai Merakit” untuk memulai timer.</div>
+      <div class="sim-stage">
+        <svg viewBox="0 0 420 440" role="img" aria-label="Gambar tiang bendera dengan 7 sambungan yang bisa diklik">
+          <!-- bendera -->
+          <polygon points="196,18 268,32 196,48" fill="#e63946"/>
+          <polygon points="196,48 268,48 268,32 196,18" fill="#e63946" opacity="0"/>
+          <rect x="196" y="18" width="72" height="15" fill="#e63946"/>
+          <rect x="196" y="33" width="72" height="15" fill="#ffffff" stroke="#cfe6f5"/>
+          <!-- tiang: 3 segmen tongkat -->
+          <rect x="188" y="48" width="24" height="84" rx="6" fill="#b08954" stroke="#8a6a3b" stroke-width="2"/>
+          <rect x="188" y="132" width="24" height="84" rx="6" fill="#a67c46" stroke="#8a6a3b" stroke-width="2"/>
+          <rect x="188" y="216" width="24" height="84" rx="6" fill="#b08954" stroke="#8a6a3b" stroke-width="2"/>
+          <!-- kaki tiga (tripod) -->
+          <line x1="200" y1="300" x2="80" y2="412" stroke="#8a6a3b" stroke-width="16" stroke-linecap="round"/>
+          <line x1="200" y1="300" x2="320" y2="412" stroke="#8a6a3b" stroke-width="16" stroke-linecap="round"/>
+          <line x1="200" y1="300" x2="200" y2="420" stroke="#a67c46" stroke-width="16" stroke-linecap="round"/>
+          <!-- tanah -->
+          <line x1="30" y1="424" x2="390" y2="424" stroke="#25a244" stroke-width="6" stroke-linecap="round"/>
+          <!-- sambungan (joint) -->
+          <g class="joint" data-n="1" transform="translate(200,132)"><circle r="22"/><text y="7">1</text></g>
+          <g class="joint" data-n="2" transform="translate(200,216)"><circle r="22"/><text y="7">2</text></g>
+          <g class="joint" data-n="3" transform="translate(200,48)"><circle r="22"/><text y="7">3</text></g>
+          <g class="joint" data-n="4" transform="translate(140,356)"><circle r="22"/><text y="7">4</text></g>
+          <g class="joint" data-n="5" transform="translate(260,356)"><circle r="22"/><text y="7">5</text></g>
+          <g class="joint" data-n="6" transform="translate(200,392)"><circle r="22"/><text y="7">6</text></g>
+          <g class="joint" data-n="7" transform="translate(200,300)"><circle r="22"/><text y="7">7</text></g>
+        </svg>
+      </div>
+      <div>
+        <button class="btn green" type="button" id="btn-mulai-rakit">🚩 Mulai Merakit</button>
+        <button class="btn ghost" type="button" id="btn-ulangi-rakit">↩️ Ulangi Mode C</button>
+      </div>
+      <div id="feedback-rakit" style="width:100%"></div>
+    </div>
+  </section>
+
+  <!-- MATERI -->
+  <section class="section" aria-label="Materi empat ikatan">
+    <div class="sec-head"><span class="sec-num green">📖</span><div><h2>Empat Ikatan yang Dilatih</h2>
+    <p class="sec-lead">Hafalkan empat ikatan ini sebelum lomba — semuanya dipakai untuk merakit tiang bendera.</p></div></div>
+    <div class="knot-grid">
+      <div class="knot-card"><h3>🪢 Ikatan Pangkal</h3><p>Mengawali dan mengakhiri ikatan pada tongkat. Latih sampai cepat dan tidak lepas.</p></div>
+      <div class="knot-card"><h3>🪢 Ikatan Palang</h3><p>Mengikat dua tongkat sejajar / menyambung tongkat. Lilitan rapi dan kencang.</p></div>
+      <div class="knot-card"><h3>🪢 Ikatan Silang</h3><p>Mengikat dua tongkat bersilangan; lilitan membentuk huruf X, lalu dikunci.</p></div>
+      <div class="knot-card"><h3>🪢 Ikatan Kaki Tiga</h3><p>Mengikat tiga tongkat menjadi kaki (tripod) penopang tiang.</p></div>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Aturan lomba">
+    <div class="sec-head"><span class="sec-num red">📜</span><div><h2>Aturan Lomba (Juklak)</h2>
+    <p class="sec-lead">Sesuai Juklak Pesta Siaga Cabang Banyumas 2026 — Taman Pionering Tiang Bendera.</p></div></div>
+    <ul class="rule-list">
+      <li>Setiap barung terdiri dari <strong>8 anak</strong>.</li>
+      <li>Membuat tiang bendera dari <strong>10 tongkat kayu</strong> dan <strong>tali pramuka secukupnya</strong>.</li>
+      <li>Waktu pengerjaan <strong>60 menit</strong> secara massal.</li>
+      <li>Tiang dibuat <strong>tanpa pancang</strong> dan tanpa aksesoris lainnya.</li>
+      <li><strong>Tidak diperkenankan</strong> membawa alat bantu apa pun (<strong>gunting, cutter</strong>).</li>
+      <li>Penilaian: ketepatan ikatan 30–40, kekuatan 15–30, kerapihan &amp; kreativitas 15–30 — nilai maksimal <strong>100</strong>.</li>
+    </ul>
+  </section>
+
+  <p class="foot-note">Media latihan Pramuka Siaga — SD Negeri 1 Gerduren &bull; Sesuai Juklak Pesta Siaga Cabang Banyumas 2026</p>
+</div>
+
+<script>
+"use strict";
+/* ============ DATA (sesuai materi belajar & juklak) ============ */
+var LANGKAH = [
+  {id:1, teks:"Siapkan bahan: hitung 10 tongkat dan tali secukupnya; periksa tongkat tidak retak."},
+  {id:2, teks:"Bagi tugas 8 anak: 2 memegang tongkat utama, 2 mengikat, 2 menyiapkan tali, 1 memeriksa kerapihan, Pinrung mengatur giliran dan waktu."},
+  {id:3, teks:"Susun tongkat utama: sambung tongkat-tongkat menjadi tiang yang panjang dengan ikatan palang, lurus sejajar."},
+  {id:4, teks:"Buat kaki tiang: susun sisa tongkat menjadi kaki tiga (tripod) di bagian bawah tiang agar tiang dapat berdiri tanpa pancang."},
+  {id:5, teks:"Satukan tiang dan kaki: ikat pertemuan tiang dengan kaki memakai ikatan silang, lalu kencangkan."},
+  {id:6, teks:"Awali dan akhiri tiap ikatan dengan ikatan pangkal, dan kunci ujung tali dengan rapi."},
+  {id:7, teks:"Berdirikan tiang bersama-sama: angkat perlahan, atur kaki tiga sampai tiang tegak dan tidak goyang."},
+  {id:8, teks:"Periksa akhir: goyangkan pelan untuk menguji kekuatan, rapikan lilitan yang kendur."}
+];
+var IKATAN_PILIHAN = [
+  {nama:"Ikatan Pangkal", desc:"Mengawali & mengakhiri ikatan"},
+  {nama:"Ikatan Palang", desc:"Dua tongkat sejajar / disambung"},
+  {nama:"Ikatan Silang", desc:"Dua tongkat bersilangan (X)"},
+  {nama:"Ikatan Kaki Tiga", desc:"Tiga tongkat jadi kaki tripod"}
+];
+var SOAL_IKATAN = [
+  {soal:"Sambungan 1 — Mengawali dan mengakhiri ikatan pada tongkat. Ikatan apa yang dipakai?", kunci:"Ikatan Pangkal", alasan:"Ikatan pangkal dipakai untuk mengawali dan mengakhiri setiap ikatan supaya tali tidak lepas."},
+  {soal:"Sambungan 2 — Menyambung dua tongkat sejajar menjadi tiang yang panjang. Ikatan apa yang dipakai?", kunci:"Ikatan Palang", alasan:"Ikatan palang mengikat dua tongkat sejajar — cocok untuk menyambung tongkat menjadi tiang panjang."},
+  {soal:"Sambungan 3 — Mengikat dua tongkat yang bersilangan membentuk huruf X. Ikatan apa yang dipakai?", kunci:"Ikatan Silang", alasan:"Ikatan silang dipakai untuk dua tongkat yang bersilangan; lilitannya membentuk huruf X lalu dikunci."},
+  {soal:"Sambungan 4 — Mengikat tiga tongkat menjadi kaki tripod penopang tiang. Ikatan apa yang dipakai?", kunci:"Ikatan Kaki Tiga", alasan:"Ikatan kaki tiga mengikat tiga tongkat menjadi kaki (tripod) penopang tiang."},
+  {soal:"Sambungan 5 — Mengikat pertemuan tiang dengan kaki tripod, lalu dikencangkan. Ikatan apa yang dipakai?", kunci:"Ikatan Silang", alasan:"Pertemuan tiang dan kaki diikat dengan ikatan silang supaya kuat dan tidak bergeser."},
+  {soal:"Sambungan 6 — Mengunci ujung tali supaya tidak terurai dan ikatan tetap rapi. Ikatan apa yang dipakai?", kunci:"Ikatan Pangkal", alasan:"Ujung tali dikunci dengan ikatan pangkal supaya rapi dan tidak lepas."}
+];
+var URUTAN_RAKIT = [
+  "Sambungan tongkat bawah tiang",
+  "Sambungan tongkat tengah tiang",
+  "Sambungan tongkat puncak tiang",
+  "Kaki tripod kiri",
+  "Kaki tripod kanan",
+  "Kaki tripod belakang",
+  "Pertemuan tiang dengan kaki (ikatan silang)"
+];
+var WAKTU_LATIHAN_DETIK = 90;
+
+/* ============ SKOR (hanya sesi ini, tidak disimpan) ============ */
+var skor = {ketepatan:null, kekuatan:null, kerapihan:null};
+function tampilSkor(){
+  var el = function(id){ return document.getElementById(id); };
+  el("skor-ketepatan").textContent = skor.ketepatan===null ? "–" : skor.ketepatan;
+  el("skor-kekuatan").textContent  = skor.kekuatan===null  ? "–" : skor.kekuatan;
+  el("skor-kerapihan").textContent = skor.kerapihan===null ? "–" : skor.kerapihan;
+  el("bar-ketepatan").style.width = skor.ketepatan===null ? "0%" : (skor.ketepatan/40*100)+"%";
+  el("bar-kekuatan").style.width  = skor.kekuatan===null  ? "0%" : (skor.kekuatan/30*100)+"%";
+  el("bar-kerapihan").style.width = skor.kerapihan===null ? "0%" : (skor.kerapihan/30*100)+"%";
+  var semua = skor.ketepatan!==null && skor.kekuatan!==null && skor.kerapihan!==null;
+  var total = semua ? skor.ketepatan + skor.kekuatan + skor.kerapihan : null;
+  el("skor-total").textContent = total===null ? "–" : total;
+  var note = el("total-note");
+  if(!semua){
+    var sisa = [];
+    if(skor.ketepatan===null) sisa.push("Mode A");
+    if(skor.kekuatan===null) sisa.push("Mode B");
+    if(skor.kerapihan===null) sisa.push("Mode C");
+    note.textContent = "Belum lengkap — selesaikan: " + sisa.join(", ") + ".";
+  } else if(total>=85){ note.textContent = "🏆 Hebat sekali! Tiangmu siap untuk lomba!"; }
+  else if(total>=70){ note.textContent = "👍 Bagus! Latihan sedikit lagi supaya makin kokoh."; }
+  else if(total>=50){ note.textContent = "💪 Lumayan! Ulangi mode yang skornya masih rendah."; }
+  else { note.textContent = "🌱 Terus berlatih ya — baca lagi materi empat ikatan di bawah!"; }
+  document.querySelectorAll(".mode-tab").forEach(function(t){
+    var m = t.getAttribute("data-mode");
+    var selesai = (m==="susun" && skor.ketepatan!==null) || (m==="ikatan" && skor.kekuatan!==null) || (m==="rakit" && skor.kerapihan!==null);
+    t.classList.toggle("done", selesai);
+  });
+}
+
+/* ============ GANTI MODE ============ */
+document.querySelectorAll(".mode-tab").forEach(function(tab){
+  tab.addEventListener("click", function(){
+    document.querySelectorAll(".mode-tab").forEach(function(t){ t.classList.remove("active"); t.setAttribute("aria-selected","false"); });
+    tab.classList.add("active"); tab.setAttribute("aria-selected","true");
+    document.querySelectorAll(".mode-panel").forEach(function(p){ p.classList.remove("show"); });
+    document.getElementById("panel-"+tab.getAttribute("data-mode")).classList.add("show");
+  });
+});
+
+/* ============ MODE A: SUSUN LANGKAH ============ */
+var urutan = []; // array id langkah sesuai pilihan
+function acak(arr){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+var acakLangkah = acak(LANGKAH);
+function renderLangkah(){
+  var wadah = document.getElementById("daftar-langkah");
+  wadah.innerHTML = "";
+  acakLangkah.forEach(function(l){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "step-card" + (urutan.indexOf(l.id)>=0 ? " used" : "");
+    b.setAttribute("data-id", l.id);
+    b.innerHTML = '<span class="step-no">?</span><span></span>';
+    b.querySelector("span:last-child").textContent = l.teks;
+    b.addEventListener("click", function(){
+      if(urutan.indexOf(l.id)>=0) return;
+      if(urutan.length>=8) return;
+      urutan.push(l.id);
+      renderLangkah(); renderUrutan();
+    });
+    wadah.appendChild(b);
+  });
+}
+function renderUrutan(){
+  var wadah = document.getElementById("urutan-list");
+  wadah.innerHTML = "";
+  if(urutan.length===0){
+    wadah.innerHTML = '<p class="hint">Belum ada langkah dipilih. Klik kartu di atas untuk mulai mengurutkan.</p>';
+    return;
+  }
+  urutan.forEach(function(id, idx){
+    var l = LANGKAH.filter(function(x){ return x.id===id; })[0];
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "seq-item"; b.setAttribute("data-id", id);
+    b.innerHTML = '<span class="seq-no"></span><span></span>';
+    b.querySelector(".seq-no").textContent = idx+1;
+    b.querySelector("span:last-child").textContent = l.teks;
+    b.addEventListener("click", function(){
+      urutan.splice(urutan.indexOf(id),1);
+      renderLangkah(); renderUrutan();
+      document.getElementById("feedback-susun").innerHTML = "";
+    });
+    wadah.appendChild(b);
+  });
+}
+function resetSusun(acakUlang){
+  urutan = [];
+  if(acakUlang) acakLangkah = acak(LANGKAH);
+  document.getElementById("feedback-susun").innerHTML = "";
+  renderLangkah(); renderUrutan();
+}
+document.getElementById("btn-periksa-urutan").addEventListener("click", function(){
+  var fb = document.getElementById("feedback-susun");
+  if(urutan.length<8){
+    fb.innerHTML = '<div class="feedback warn">⚠️ Urutanmu baru ' + urutan.length + ' dari 8 langkah. Lengkapi dulu semua langkah, baru tekan “Periksa Urutan”.</div>';
+    return;
+  }
+  var benar = 0;
+  var item = document.querySelectorAll("#urutan-list .seq-item");
+  urutan.forEach(function(id, idx){
+    var ok = (id === idx+1);
+    if(ok) benar++;
+    item[idx].classList.add(ok ? "ok" : "bad");
+  });
+  skor.ketepatan = benar * 5; // maks 8 x 5 = 40
+  tampilSkor();
+  if(benar===8){
+    fb.innerHTML = '<div class="feedback good">🎉 Sempurna! Semua 8 langkah urut dengan benar. Ketepatan Ikatan: <strong>40 / 40</strong>.</div>';
+  } else {
+    fb.innerHTML = '<div class="feedback warn">📋 ' + benar + ' dari 8 langkah sudah di posisi yang benar (kotak hijau). Yang merah masih salah posisi — coba susun lagi! Ketepatan Ikatan: <strong>' + skor.ketepatan + ' / 40</strong>. Urutan benar: 1 Siapkan bahan → 2 Bagi tugas → 3 Susun tongkat utama → 4 Buat kaki tiga → 5 Satukan tiang &amp; kaki → 6 Ikatan pangkal → 7 Berdirikan tiang → 8 Periksa akhir.</div>';
+  }
+});
+document.getElementById("btn-acak-langkah").addEventListener("click", function(){ resetSusun(true); });
+document.getElementById("btn-ulangi-susun").addEventListener("click", function(){ resetSusun(true); skor.ketepatan = null; tampilSkor(); });
+
+/* ============ MODE B: PILIH IKATAN ============ */
+var ikatanIdx = 0, ikatanBenar = 0, ikatanSelesai = false;
+function renderSoalIkatan(){
+  var s = SOAL_IKATAN[ikatanIdx];
+  document.getElementById("ikatan-progress").textContent = "Soal " + (ikatanIdx+1) + " dari " + SOAL_IKATAN.length;
+  document.getElementById("ikatan-soal").textContent = s.soal;
+  var wadah = document.getElementById("ikatan-pilihan");
+  wadah.innerHTML = "";
+  document.getElementById("feedback-ikatan").innerHTML = "";
+  document.getElementById("btn-ikatan-lanjut").disabled = true;
+  IKATAN_PILIHAN.forEach(function(p){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "choice";
+    b.innerHTML = "<span></span><small></small>";
+    b.querySelector("span").textContent = p.nama;
+    b.querySelector("small").textContent = p.desc;
+    b.addEventListener("click", function(){
+      if(ikatanSelesai) return;
+      ikatanSelesai = true;
+      var benar = (p.nama === s.kunci);
+      if(benar) ikatanBenar++;
+      wadah.querySelectorAll(".choice").forEach(function(c){
+        c.disabled = true;
+        if(c.querySelector("span").textContent === s.kunci) c.classList.add("correct");
+      });
+      if(!benar) b.classList.add("wrong");
+      document.getElementById("feedback-ikatan").innerHTML =
+        '<div class="feedback ' + (benar ? "good" : "bad") + '">' + (benar ? "✅ Benar! " : "❌ Belum tepat. Jawaban yang benar: <strong>" + s.kunci + "</strong>. ") + s.alasan + "</div>";
+      var lanjut = document.getElementById("btn-ikatan-lanjut");
+      lanjut.disabled = false;
+      lanjut.textContent = (ikatanIdx === SOAL_IKATAN.length-1) ? "🏁 Lihat Skor" : "Lanjut ➜";
+    });
+    wadah.appendChild(b);
+  });
+}
+document.getElementById("btn-ikatan-lanjut").addEventListener("click", function(){
+  if(ikatanIdx < SOAL_IKATAN.length-1){
+    ikatanIdx++; ikatanSelesai = false; renderSoalIkatan();
+  } else {
+    skor.kekuatan = ikatanBenar * 5; // maks 6 x 5 = 30
+    tampilSkor();
+    document.getElementById("feedback-ikatan").innerHTML =
+      '<div class="feedback ' + (ikatanBenar===6 ? "good" : "warn") + '">🏁 Mode B selesai! Jawaban benar: <strong>' + ikatanBenar + ' dari 6</strong>. Kekuatan: <strong>' + skor.kekuatan + ' / 30</strong>.' + (ikatanBenar<6 ? " Ulangi Mode B untuk memperbaiki skor." : " Semua ikatan tepat — tiangmu pasti kuat!") + "</div>";
+    document.getElementById("btn-ikatan-lanjut").disabled = true;
+  }
+});
+document.getElementById("btn-ulangi-ikatan").addEventListener("click", function(){
+  ikatanIdx = 0; ikatanBenar = 0; ikatanSelesai = false;
+  skor.kekuatan = null; tampilSkor();
+  document.getElementById("btn-ikatan-lanjut").textContent = "Lanjut ➜";
+  renderSoalIkatan();
+});
+
+/* ============ MODE C: SIMULASI RAKIT ============ */
+var rakit = {jalan:false, berikutnya:1, salah:0, sisa:WAKTU_LATIHAN_DETIK, timerId:null, selesai:false};
+function fmtWaktu(d){
+  var m = Math.floor(d/60), s = d%60;
+  return "⏱ " + (m<10?"0":"") + m + ":" + (s<10?"0":"") + s;
+}
+function tampilTimer(){
+  var t = document.getElementById("timer-rakit");
+  t.textContent = fmtWaktu(rakit.sisa);
+  t.classList.toggle("low", rakit.sisa<=15 && rakit.jalan);
+}
+function tandaiBerikutnya(){
+  document.querySelectorAll(".joint").forEach(function(j){
+    var n = parseInt(j.getAttribute("data-n"),10);
+    j.classList.toggle("next", rakit.jalan && !rakit.selesai && n===rakit.berikutnya);
+  });
+}
+function setStatusRakit(teks){ document.getElementById("status-rakit").textContent = teks; }
+function hentikanTimer(){ if(rakit.timerId){ clearInterval(rakit.timerId); rakit.timerId = null; } }
+function selesaiRakit(waktuHabis){
+  hentikanTimer();
+  rakit.jalan = false; rakit.selesai = true;
+  tandaiBerikutnya();
+  document.getElementById("btn-mulai-rakit").disabled = false;
+  var dikerjakan = rakit.berikutnya - 1;
+  var poinSambungan = dikerjakan * 3; // maks 7 x 3 = 21
+  var bonus = 0;
+  if(!waktuHabis && dikerjakan===7){
+    bonus = rakit.salah===0 ? 9 : rakit.salah===1 ? 6 : rakit.salah===2 ? 3 : 0;
+  }
+  skor.kerapihan = Math.max(0, poinSambungan + bonus); // maks 30
+  tampilSkor();
+  var fb = document.getElementById("feedback-rakit");
+  if(waktuHabis){
+    fb.innerHTML = '<div class="feedback warn">⏰ Waktu latihan habis! Kamu menyelesaikan <strong>' + dikerjakan + ' dari 7 sambungan</strong>. Di lomba waktunya 60 menit, jadi masih banyak waktu untuk memeriksa. Kerapihan &amp; Kreativitas: <strong>' + skor.kerapihan + ' / 30</strong>. Coba lagi!</div>';
+    setStatusRakit("Waktu habis — tekan “Ulangi Mode C” untuk mencoba lagi.");
+  } else {
+    fb.innerHTML = '<div class="feedback ' + (rakit.salah===0 ? "good" : "warn") + '">🚩 Tiang bendera berdiri tegak! Sambungan benar: <strong>7 dari 7</strong>, kesalahan klik: <strong>' + rakit.salah + '</strong>. Poin sambungan ' + poinSambungan + ' + bonus kerapihan ' + bonus + '. Kerapihan &amp; Kreativitas: <strong>' + skor.kerapihan + ' / 30</strong>.' + (rakit.salah>0 ? " Coba lagi tanpa kesalahan untuk bonus penuh!" : " Sempurna tanpa kesalahan!") + "</div>";
+    setStatusRakit("🎉 Tiang bendera selesai dirakit dan berdiri tegak!");
+  }
+}
+document.getElementById("btn-mulai-rakit").addEventListener("click", function(){
+  if(rakit.jalan) return;
+  if(rakit.selesai) resetRakit();
+  rakit.jalan = true; rakit.sisa = WAKTU_LATIHAN_DETIK;
+  tampilTimer(); tandaiBerikutnya();
+  setStatusRakit("Mulai! Klik sambungan nomor 1: " + URUTAN_RAKIT[0] + ".");
+  document.getElementById("btn-mulai-rakit").disabled = true;
+  document.getElementById("feedback-rakit").innerHTML = "";
+  rakit.timerId = setInterval(function(){
+    rakit.sisa--;
+    tampilTimer();
+    if(rakit.sisa<=0){ selesaiRakit(true); }
+  }, 1000);
+});
+document.querySelectorAll(".joint").forEach(function(j){
+  j.addEventListener("click", function(){
+    if(!rakit.jalan || rakit.selesai) return;
+    var n = parseInt(j.getAttribute("data-n"),10);
+    if(n === rakit.berikutnya){
+      j.classList.add("done");
+      rakit.berikutnya++;
+      tandaiBerikutnya();
+      if(rakit.berikutnya>7){
+        selesaiRakit(false);
+      } else {
+        setStatusRakit("✅ Benar! Berikutnya sambungan nomor " + rakit.berikutnya + ": " + URUTAN_RAKIT[rakit.berikutnya-1] + ".");
+      }
+    } else if(!j.classList.contains("done")){
+      rakit.salah++;
+      j.classList.add("shake");
+      setTimeout(function(){ j.classList.remove("shake"); }, 500);
+      setStatusRakit("❌ Bukan sambungan itu! Kesalahan: " + rakit.salah + ". Cari bulatan oranye — sambungan nomor " + rakit.berikutnya + ": " + URUTAN_RAKIT[rakit.berikutnya-1] + ".");
+    }
+  });
+});
+function resetRakit(){
+  hentikanTimer();
+  rakit = {jalan:false, berikutnya:1, salah:0, sisa:WAKTU_LATIHAN_DETIK, timerId:null, selesai:false};
+  document.querySelectorAll(".joint").forEach(function(j){ j.classList.remove("done","next","shake"); });
+  document.getElementById("btn-mulai-rakit").disabled = false;
+  document.getElementById("feedback-rakit").innerHTML = "";
+  tampilTimer();
+  setStatusRakit("Tekan “Mulai Merakit” untuk memulai timer.");
+}
+document.getElementById("btn-ulangi-rakit").addEventListener("click", function(){
+  resetRakit(); skor.kerapihan = null; tampilSkor();
+});
+
+/* ============ ULANGI SEMUA ============ */
+document.getElementById("btn-ulangi-semua").addEventListener("click", function(){
+  skor = {ketepatan:null, kekuatan:null, kerapihan:null};
+  resetSusun(true);
+  ikatanIdx = 0; ikatanBenar = 0; ikatanSelesai = false;
+  document.getElementById("btn-ikatan-lanjut").textContent = "Lanjut ➜";
+  renderSoalIkatan();
+  resetRakit();
+  tampilSkor();
+  document.getElementById("papan-skor").scrollIntoView({behavior:"smooth"});
+});
+
+/* ============ MULAI ============ */
+renderLangkah(); renderUrutan();
+renderSoalIkatan();
+tampilTimer(); tampilSkor();
+</script>
+</body>
+</html>
