@@ -299,8 +299,9 @@
     <div class="sec-head"><span class="sec-num green">📖</span><div><h2>Empat Ikatan yang Dilatih</h2>
     <p class="sec-lead">Hafalkan empat ikatan ini sebelum lomba — semuanya dipakai untuk merakit tiang bendera.</p></div></div>
     <div class="knot-grid">
-      <div class="knot-card"><h3>🪢 Ikatan Pangkal</h3><p>Mengawali dan mengakhiri ikatan pada tongkat. Latih sampai cepat dan tidak lepas.</p></div>
-      <div class="knot-card"><h3>🪢 Ikatan Palang</h3><p>Mengikat dua tongkat sejajar / menyambung tongkat. Lilitan rapi dan kencang.</p></div>
+      <div class="knot-card"><h3>🪢 Simpul Pangkal</h3><p>Mengawali dan mengakhiri ikatan pada tongkat. Ingat: <b>simpul</b> = tali dengan tali; <b>ikatan</b> = tali dengan benda (tongkat).</p></div>
+      <div class="knot-card"><h3>🪢 Ikatan Canggah</h3><p>Menyambung dua tongkat sejajar memanjang menjadi tiang yang panjang (sheer lashing).</p></div>
+      <div class="knot-card"><h3>🪢 Ikatan Palang</h3><p>Mengikat dua tongkat yang berpotongan tegak lurus (90°), seperti palang penopang kaki tiang.</p></div>
       <div class="knot-card"><h3>🪢 Ikatan Silang</h3><p>Mengikat dua tongkat bersilangan; lilitan membentuk huruf X, lalu dikunci.</p></div>
       <div class="knot-card"><h3>🪢 Ikatan Kaki Tiga</h3><p>Mengikat tiga tongkat menjadi kaki (tripod) penopang tiang.</p></div>
     </div>
@@ -328,26 +329,27 @@
 var LANGKAH = [
   {id:1, teks:"Siapkan bahan: hitung 10 tongkat dan tali secukupnya; periksa tongkat tidak retak."},
   {id:2, teks:"Bagi tugas 8 anak: 2 memegang tongkat utama, 2 mengikat, 2 menyiapkan tali, 1 memeriksa kerapihan, Pinrung mengatur giliran dan waktu."},
-  {id:3, teks:"Susun tongkat utama: sambung tongkat-tongkat menjadi tiang yang panjang dengan ikatan palang, lurus sejajar."},
+  {id:3, teks:"Susun tongkat utama: sambung tongkat-tongkat menjadi tiang yang panjang dengan ikatan canggah (ikatan sambung tongkat), lurus sejajar."},
   {id:4, teks:"Buat kaki tiang: susun sisa tongkat menjadi kaki tiga (tripod) di bagian bawah tiang agar tiang dapat berdiri tanpa pancang."},
   {id:5, teks:"Satukan tiang dan kaki: ikat pertemuan tiang dengan kaki memakai ikatan silang, lalu kencangkan."},
-  {id:6, teks:"Awali dan akhiri tiap ikatan dengan ikatan pangkal, dan kunci ujung tali dengan rapi."},
+  {id:6, teks:"Awali dan akhiri tiap ikatan dengan simpul pangkal, dan kunci ujung tali dengan rapi."},
   {id:7, teks:"Berdirikan tiang bersama-sama: angkat perlahan, atur kaki tiga sampai tiang tegak dan tidak goyang."},
   {id:8, teks:"Periksa akhir: goyangkan pelan untuk menguji kekuatan, rapikan lilitan yang kendur."}
 ];
 var IKATAN_PILIHAN = [
-  {nama:"Ikatan Pangkal", desc:"Mengawali & mengakhiri ikatan"},
-  {nama:"Ikatan Palang", desc:"Dua tongkat sejajar / disambung"},
+  {nama:"Simpul Pangkal", desc:"Mengawali & mengakhiri ikatan"},
+  {nama:"Ikatan Canggah", desc:"Dua tongkat sejajar disambung memanjang"},
+  {nama:"Ikatan Palang", desc:"Dua tongkat berpotongan tegak lurus (90°)"},
   {nama:"Ikatan Silang", desc:"Dua tongkat bersilangan (X)"},
   {nama:"Ikatan Kaki Tiga", desc:"Tiga tongkat jadi kaki tripod"}
 ];
 var SOAL_IKATAN = [
-  {soal:"Sambungan 1 — Mengawali dan mengakhiri ikatan pada tongkat. Ikatan apa yang dipakai?", kunci:"Ikatan Pangkal", alasan:"Ikatan pangkal dipakai untuk mengawali dan mengakhiri setiap ikatan supaya tali tidak lepas."},
-  {soal:"Sambungan 2 — Menyambung dua tongkat sejajar menjadi tiang yang panjang. Ikatan apa yang dipakai?", kunci:"Ikatan Palang", alasan:"Ikatan palang mengikat dua tongkat sejajar — cocok untuk menyambung tongkat menjadi tiang panjang."},
+  {soal:"Sambungan 1 — Mengawali dan mengakhiri ikatan pada tongkat. Ikatan apa yang dipakai?", kunci:"Simpul Pangkal", alasan:"Simpul pangkal dipakai untuk mengawali dan mengakhiri setiap ikatan supaya tali tidak lepas. Simpul = tali dengan tali; ikatan = tali dengan tongkat."},
+  {soal:"Sambungan 2 — Menyambung dua tongkat sejajar menjadi tiang yang panjang. Ikatan apa yang dipakai?", kunci:"Ikatan Canggah", alasan:"Ikatan canggah (sheer lashing) menyambung dua tongkat sejajar memanjang menjadi tiang panjang. Ikatan palang hanya untuk dua tongkat yang berpotongan tegak lurus (90°)."},
   {soal:"Sambungan 3 — Mengikat dua tongkat yang bersilangan membentuk huruf X. Ikatan apa yang dipakai?", kunci:"Ikatan Silang", alasan:"Ikatan silang dipakai untuk dua tongkat yang bersilangan; lilitannya membentuk huruf X lalu dikunci."},
   {soal:"Sambungan 4 — Mengikat tiga tongkat menjadi kaki tripod penopang tiang. Ikatan apa yang dipakai?", kunci:"Ikatan Kaki Tiga", alasan:"Ikatan kaki tiga mengikat tiga tongkat menjadi kaki (tripod) penopang tiang."},
   {soal:"Sambungan 5 — Mengikat pertemuan tiang dengan kaki tripod, lalu dikencangkan. Ikatan apa yang dipakai?", kunci:"Ikatan Silang", alasan:"Pertemuan tiang dan kaki diikat dengan ikatan silang supaya kuat dan tidak bergeser."},
-  {soal:"Sambungan 6 — Mengunci ujung tali supaya tidak terurai dan ikatan tetap rapi. Ikatan apa yang dipakai?", kunci:"Ikatan Pangkal", alasan:"Ujung tali dikunci dengan ikatan pangkal supaya rapi dan tidak lepas."}
+  {soal:"Sambungan 6 — Mengunci ujung tali supaya tidak terurai dan ikatan tetap rapi. Ikatan apa yang dipakai?", kunci:"Simpul Pangkal", alasan:"Ujung tali dikunci dengan simpul pangkal supaya rapi dan tidak lepas."}
 ];
 var URUTAN_RAKIT = [
   "Sambungan tongkat bawah tiang",
@@ -473,7 +475,7 @@ document.getElementById("btn-periksa-urutan").addEventListener("click", function
   if(benar===8){
     fb.innerHTML = '<div class="feedback good">🎉 Sempurna! Semua 8 langkah urut dengan benar. Ketepatan Ikatan: <strong>40 / 40</strong>.</div>';
   } else {
-    fb.innerHTML = '<div class="feedback warn">📋 ' + benar + ' dari 8 langkah sudah di posisi yang benar (kotak hijau). Yang merah masih salah posisi — coba susun lagi! Ketepatan Ikatan: <strong>' + skor.ketepatan + ' / 40</strong>. Urutan benar: 1 Siapkan bahan → 2 Bagi tugas → 3 Susun tongkat utama → 4 Buat kaki tiga → 5 Satukan tiang &amp; kaki → 6 Ikatan pangkal → 7 Berdirikan tiang → 8 Periksa akhir.</div>';
+    fb.innerHTML = '<div class="feedback warn">📋 ' + benar + ' dari 8 langkah sudah di posisi yang benar (kotak hijau). Yang merah masih salah posisi — coba susun lagi! Ketepatan Ikatan: <strong>' + skor.ketepatan + ' / 40</strong>. Urutan benar: 1 Siapkan bahan → 2 Bagi tugas → 3 Susun tongkat utama → 4 Buat kaki tiga → 5 Satukan tiang &amp; kaki → 6 Simpul pangkal → 7 Berdirikan tiang → 8 Periksa akhir.</div>';
   }
 });
 document.getElementById("btn-acak-langkah").addEventListener("click", function(){ resetSusun(true); });
