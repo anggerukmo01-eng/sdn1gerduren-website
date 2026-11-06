@@ -234,7 +234,7 @@ footer.note-end{text-align:center; color:var(--muted); font-weight:700; font-siz
     <p class="sec-lead">Mode Undian meniru lomba di juklak (8 anak, rubrik juri). Mode Kuis untuk latihan: cocokkan judul doa dengan kapan dibaca.</p>
     <div class="btn-row">
       <button class="btn green big" type="button" id="btn-mode-undian">🎴 Mode Undian<br><span style="font-size:16px;font-weight:800">Simulasi lomba &bull; 8 giliran &bull; maks 80</span></button>
-      <button class="btn teal big" type="button" id="btn-mode-kuis">❓ Mode Kuis<br><span style="font-size:16px;font-weight:800">Kapan doa ini dibaca? &bull; 8 soal</span></button>
+      <button class="btn teal big" type="button" id="btn-mode-kuis">❓ Mode Kuis<br><span style="font-size:16px;font-weight:800">Kuis bolak-balik &bull; 8 soal</span></button>
     </div>
   </section>
 
@@ -288,14 +288,14 @@ footer.note-end{text-align:center; color:var(--muted); font-weight:700; font-siz
 
   <!-- ===== MODE KUIS ===== -->
   <section class="block hidden" id="sec-kuis">
-    <div class="sec-head"><span class="sec-num teal">❓</span><h2>Mode Kuis — Kapan Doa Ini Dibaca?</h2></div>
-    <p class="sec-lead">Baca judul doanya, lalu pilih kapan doa itu dibaca. Ada 8 soal — satu soal benar bernilai 1 poin.</p>
+    <div class="sec-head"><span class="sec-num teal">❓</span><h2>Mode Kuis — Kapan &amp; Doa Apa?</h2></div>
+    <p class="sec-lead">8 soal bolak-balik: kadang ditanya <b>kapan</b> sebuah doa dibaca, kadang ditanya <b>doa apa</b> yang dibaca pada suatu saat. Satu soal benar bernilai 1 poin.</p>
 
     <div id="kuis-play">
       <div class="dots" id="kuis-dots"></div>
       <p class="progress"><span class="pill" id="kuis-progress">Soal 1 dari 8</span></p>
       <p class="quiz-q" id="kuis-title">—</p>
-      <p class="quiz-ask">Kapan doa ini dibaca?</p>
+      <p class="quiz-ask" id="kuis-ask">Kapan doa ini dibaca?</p>
       <div class="opt-grid" id="kuis-opts"></div>
       <div class="feedback hidden" id="kuis-feedback"></div>
       <div class="btn-row" style="margin-top:20px">
@@ -547,16 +547,32 @@ function selesaiUndian(){
 }
 
 /* --- MODE KUIS --- */
+var SEMUA_JUDUL = (function(){
+  var out = [];
+  Object.keys(AGAMA).forEach(function(k){
+    AGAMA[k].doa.forEach(function(d){ if(out.indexOf(d.t) < 0) out.push(d.t); });
+  });
+  return out;
+})();
+
 function mulaiKuis(){
   var pool = AGAMA[agamaKey].doa;
   /* 8 soal: judul dikocok, diulang bila judul < 8; tiap soal 4 pilihan. */
   var judulAcak = [];
   while (judulAcak.length < 8){ judulAcak = judulAcak.concat(shuffle(pool)); }
   judulAcak = judulAcak.slice(0, 8);
-  kuis.soal = judulAcak.map(function(d){
-    var salah = shuffle(DISTRACTORS.filter(function(x){ return x !== d.kapan; })).slice(0, 3);
-    var opsi = shuffle([d.kapan].concat(salah));
-    return { judul: d.t, benar: d.kapan, opsi: opsi };
+  /* Soal bolak-balik: soal genap menanyakan "kapan doa ini dibaca?",
+     soal ganjil menanyakan "doa apa yang dibaca pada saat ini?" — tetap
+     memakai judul-judul juklak saja, tanpa teks doa. */
+  kuis.soal = judulAcak.map(function(d, idx){
+    if(idx % 2 === 0){
+      var salah = shuffle(DISTRACTORS.filter(function(x){ return x !== d.kapan; })).slice(0, 3);
+      var opsi = shuffle([d.kapan].concat(salah));
+      return { tipe:"kapan", judul: d.t, kapan: d.kapan, tanya: d.t, benar: d.kapan, opsi: opsi };
+    }
+    var salahJ = shuffle(SEMUA_JUDUL.filter(function(x){ return x !== d.t; })).slice(0, 3);
+    var opsiJ = shuffle([d.t].concat(salahJ));
+    return { tipe:"judul", judul: d.t, kapan: d.kapan, tanya: "Doa apa yang dibaca " + d.kapan.toLowerCase() + "?", benar: d.t, opsi: opsiJ };
   });
   kuis.idx = 0;
   kuis.skor = 0;
@@ -574,7 +590,8 @@ function tampilSoal(){
   var s = kuis.soal[i];
   kuis.terjawab = false;
   $("kuis-progress").textContent = "Soal " + (i + 1) + " dari 8";
-  $("kuis-title").textContent = s.judul;
+  $("kuis-title").textContent = s.tanya;
+  $("kuis-ask").textContent = (s.tipe === "judul") ? "Pilih judul doa yang tepat:" : "Kapan doa ini dibaca?";
   var dots = $("kuis-dots");
   dots.innerHTML = "";
   for (var k = 0; k < 8; k++){
@@ -618,10 +635,14 @@ function jawabKuis(btn, jawaban){
   fb.classList.remove("hidden");
   if (benar){
     fb.className = "feedback ok";
-    fb.textContent = "✅ Benar! " + s.judul + " dibaca " + s.benar.toLowerCase() + ".";
+    fb.textContent = (s.tipe === "judul")
+      ? "✅ Benar! " + s.kapan + " dibaca doa " + s.judul + "."
+      : "✅ Benar! " + s.judul + " dibaca " + s.benar.toLowerCase() + ".";
   } else {
     fb.className = "feedback no";
-    fb.textContent = "❌ Belum tepat. " + s.judul + " dibaca " + s.benar.toLowerCase() + ".";
+    fb.textContent = (s.tipe === "judul")
+      ? "❌ Belum tepat. " + s.kapan + " dibaca doa " + s.judul + "."
+      : "❌ Belum tepat. " + s.judul + " dibaca " + s.benar.toLowerCase() + ".";
   }
   $("btn-kuis-lanjut").classList.remove("hidden");
 }
