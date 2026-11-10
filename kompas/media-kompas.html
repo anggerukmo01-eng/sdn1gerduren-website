@@ -241,34 +241,8 @@ tr[data-deg]:hover td{background:var(--yellow-soft)}
 .sim-score{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
 .sim-score span{background:var(--surface); border:2.5px solid var(--line); border-radius:999px; padding:7px 14px; font-weight:900; font-size:16.5px}
 
-/* ===== Cetak ===== */
-.print-sheet{
-  background:#fff; color:#17324f; border:3px solid var(--line); border-radius:20px; padding:22px;
-}
-.print-sheet h3{margin:0 0 4px; font-size:24px}
-.print-sheet h4{margin:20px 0 8px; font-size:19px; font-family:"Fredoka"; font-weight:600}
-.print-sheet p{font-weight:700; margin:0 0 8px}
-.print-sheet table{width:100%; border-collapse:collapse; font-size:16px; margin-bottom:6px}
-.print-sheet th,.print-sheet td{border:2px solid #9db8cc; padding:8px 9px; text-align:left}
-.print-sheet th{background:#dceefb; font-family:"Fredoka"; font-weight:600}
-.cut-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
-@media (max-width:700px){ .cut-grid{grid-template-columns:repeat(2,1fr)} }
-.cut-card{border:2.5px dashed #7ba7c7; border-radius:12px; padding:14px 8px; text-align:center}
-.cut-card .c-deg{font-family:"Fredoka"; font-size:30px; font-weight:700; color:#c22533}
-.cut-card .c-q{font-size:13.5px; font-weight:800; color:#47617d}
-.name-line{display:flex; gap:18px; flex-wrap:wrap; font-weight:800; margin:8px 0 4px}
-.name-line span{border-bottom:2px dotted #7ba7c7; padding:0 30px 2px 4px}
 footer.site{margin-top:30px; text-align:center; color:var(--muted); font-weight:700; font-size:16px; padding:0 10px}
 footer.site .src{background:var(--surface); border:2.5px solid var(--line); border-radius:14px; padding:12px 18px; display:inline-block}
-
-/* ===== Print ===== */
-@media print{
-  body{background:#fff !important}
-  .screen-only{display:none !important}
-  .wrap{max-width:none; padding:0}
-  .print-sheet{border:none; border-radius:0; padding:6px}
-  .cut-card,.print-sheet table{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -522,50 +496,11 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
     </div>
   </section>
 
-  <!-- ================= 4. CETAK ================= -->
-  <section class="block" id="cetak">
-    <div class="sec-head screen-only"><div class="sec-num orange">4</div><h2>Kartu Latihan Siap Cetak</h2></div>
-    <p class="sec-lead screen-only">Cetak halaman ini untuk latihan di sanggar: ada tabel hafalan, 8 kartu kuis derajat untuk digunting, dan lembar skor per anak seperti di lomba sungguhan.</p>
-    <div class="screen-only" style="margin-bottom:18px">
-      <button class="btn red" id="btnPrint" type="button" style="width:100%">CETAK KARTU LATIHAN</button>
-      <div class="feedback ok" id="printNotice" role="status">
-        <span class="fb-title">Cara mencetak lembar ini</span><br>
-        Gunakan menu peramban kamu: ketuk tombol <b>Menu (&#8942;)</b> atau <b>Bagikan</b>, lalu pilih <b>Cetak / Print</b>. Di komputer, tekan <b>Ctrl + P</b>. Tenang — yang tercetak hanya lembar Kartu Latihan di bawah ini; bagian lain halaman otomatis disembunyikan.
-      </div>
-    </div>
-
-    <div class="print-sheet" id="printSheet">
-      <h3>Pos Kompas — Taman 4 Pesta Siaga</h3>
-      <p>Lembar latihan 8 arah mata angin &bull; Skor maksimal 80 (benar menyebut 5 + benar menempel 5, untuk 8 soal)</p>
-      <div class="name-line"><span>Nama Anak: </span><span>Barung: </span><span>Tanggal: </span></div>
-
-      <h4>Tabel Hafalan 8 Arah Mata Angin</h4>
-      <div style="overflow-x:auto">
-      <table aria-label="Tabel hafalan 8 arah untuk dicetak">
-        <thead><tr><th>Derajat</th><th>Arah</th><th>Derajat</th><th>Arah</th></tr></thead>
-        <tbody>
-          <tr><td>0&deg;</td><td>Utara</td><td>180&deg;</td><td>Selatan</td></tr>
-          <tr><td>45&deg;</td><td>Timur Laut</td><td>225&deg;</td><td>Barat Daya</td></tr>
-          <tr><td>90&deg;</td><td>Timur</td><td>270&deg;</td><td>Barat</td></tr>
-          <tr><td>135&deg;</td><td>Tenggara</td><td>315&deg;</td><td>Barat Laut</td></tr>
-        </tbody>
-      </table>
-      </div>
-      <p>Pola hafalan: tiap langkah 45&deg; &bull; Utara 0&deg; &bull; Timur 90&deg; &bull; Selatan 180&deg; &bull; Barat 270&deg; &bull; arah berlawanan selisih 180&deg; &bull; satu putaran penuh 360&deg;.</p>
-
-      <h4>Kartu Kuis Derajat — Gunting di Garis Putus-Putus</h4>
-      <div class="cut-grid" id="cutGrid"></div>
-
-      <h4>Lembar Skor Latihan Per Anak (seperti format lomba)</h4>
-      <div style="overflow-x:auto">
-      <table aria-label="Lembar skor latihan per anak">
-        <thead><tr><th style="width:44px">No</th><th>Kartu Derajat</th><th>Arah yang Benar</th><th style="width:130px">Benar Menyebut (5)</th><th style="width:130px">Benar Menempel (5)</th><th style="width:90px">Jumlah</th></tr></thead>
-        <tbody id="scoreRows"></tbody>
-        <tfoot><tr><th colspan="5" style="text-align:right">TOTAL SKOR (maksimal 80)</th><th></th></tr></tfoot>
-      </table>
-      </div>
-      <p style="font-size:14px">Cara memakai: anak mengambil satu kartu derajat, menyebutkan arahnya (beri tanda centang bila benar = 5), lalu menempelkan kartu pada gambar arah mata angin (beri tanda centang bila tepat = 5). Ulangi sampai 8 kartu.</p>
-    </div>
+  <!-- ================= 4. CETAK (pindah ke menu Unduhan) ================= -->
+  <section class="block screen-only" id="cetak">
+    <div class="sec-head"><div class="sec-num orange">4</div><h2>Kartu Latihan Siap Cetak</h2></div>
+    <p class="sec-lead">Kartu latihan sudah pindah ke menu <b>Unduhan</b> — di sana ada tabel hafalan, 8 kartu kuis derajat untuk digunting, lembar skor per anak, dan media cetak PDF 12 halaman.</p>
+    <a class="btn red" href="/unduhan/" style="display:flex; align-items:center; justify-content:center; text-decoration:none">BUKA HALAMAN UNDUHAN &rarr;</a>
   </section>
 
   <footer class="site screen-only">
@@ -1131,25 +1066,6 @@ tabB.addEventListener("click",function(){ setTab("B"); });
 tabC.addEventListener("click",function(){ setTab("C"); });
 document.getElementById("tabD").addEventListener("click",function(){ setTab("D"); });
 startQuiz("A");
-
-/* ============ PRINT SHEET ============ */
-var cutGrid=document.getElementById("cutGrid");
-DIRS.forEach(function(d){
-  var c=document.createElement("div"); c.className="cut-card";
-  c.innerHTML="<div class='c-deg'>"+d.deg+"&deg;</div><div class='c-q'>Arah apa ini?<br>Tulis: ____________</div>";
-  cutGrid.appendChild(c);
-});
-var scoreRows=document.getElementById("scoreRows");
-DIRS.forEach(function(d,i){
-  var tr=document.createElement("tr");
-  tr.innerHTML="<td>"+(i+1)+"</td><td>"+d.deg+"&deg;</td><td>"+d.name+"</td><td></td><td></td><td></td>";
-  scoreRows.appendChild(tr);
-});
-document.getElementById("btnPrint").addEventListener("click",function(){
-  var n=document.getElementById("printNotice");
-  n.classList.add("show");
-  n.scrollIntoView({behavior:"smooth",block:"center"});
-});
 })();
 </script>
 </body>
