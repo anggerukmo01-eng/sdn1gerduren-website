@@ -97,9 +97,8 @@ section.block{
 .dir-sector .wedge{fill:transparent; transition:fill .15s}
 .dir-sector:hover .wedge,.dir-sector:focus .wedge{fill:rgba(255,201,60,.35)}
 .dir-sector.active .wedge{fill:rgba(255,201,60,.55)}
-.dir-label{font-family:"Fredoka"; font-weight:600; pointer-events:none}
-#needleGroup{transition:transform .8s cubic-bezier(.34,1.3,.5,1); transform-origin:240px 240px; transform-box:view-box}
-#miniNeedle{transition:transform .6s cubic-bezier(.34,1.3,.5,1); transform-origin:130px 130px; transform-box:view-box}
+.star-half.sel{fill:#ffd43b}
+.rim-dot.active{fill:#e63946}
 .dir-chips{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:14px}
 .chip{
   border:3px solid var(--blue); background:var(--surface); color:var(--ink);
@@ -215,9 +214,8 @@ tr[data-deg]:hover td{background:var(--yellow-soft)}
 .mini-stage{position:relative; width:100%; max-width:300px; margin:0 auto}
 .mini-stage svg{width:100%; height:auto; display:block}
 .mini-pos{cursor:pointer}
-.mini-pos circle{fill:var(--surface); stroke:var(--blue); stroke-width:3; transition:fill .15s}
-.mini-pos text{font-family:"Fredoka"; font-weight:600; fill:var(--ink); pointer-events:none}
-.mini-pos:hover circle,.mini-pos:focus circle{fill:var(--yellow)}
+.mini-pos circle{fill:#ffe66d; stroke:#e63946; stroke-width:3; transition:fill .15s}
+.mini-pos:hover circle,.mini-pos:focus circle{fill:#ffd43b}
 .mini-pos.placed-right circle{fill:var(--green); stroke:#1c7432}
 .mini-pos.placed-right text{fill:#fff}
 .mini-pos.placed-wrong circle{fill:var(--red); stroke:var(--red-dark)}
@@ -279,7 +277,7 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
   <!-- ================= 1. GAMBAR INTERAKTIF ================= -->
   <section class="block screen-only" id="jelajah">
     <div class="sec-head"><div class="sec-num">1</div><h2>Jelajahi Roda Kompas</h2></div>
-    <p class="sec-lead">Sentuh salah satu arah pada roda kompas. Jarum merah-putih akan berputar menunjuk arah itu!</p>
+    <p class="sec-lead">Sentuh salah satu arah pada roda kompas — arah yang dipilih akan menyala dan suara akan menyebutkan derajatnya!</p>
     <div class="explorer">
       <div>
         <div class="compass-stage">
@@ -289,13 +287,14 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
       </div>
       <div>
         <div class="answer-panel" aria-live="polite">
-          <div class="q-label">Arah yang ditunjuk jarum</div>
+          <div class="q-label">Arah yang dipilih</div>
           <div class="big-deg" id="panelDeg">0&deg;</div>
           <div class="big-name" id="panelName">UTARA</div>
-          <p class="hint" id="panelHint">Jarum merah selalu menunjuk ke Utara. Utara adalah awal hitungan: 0&deg;!</p>
+          <p class="hint" id="panelHint">Utara adalah awal hitungan: 0&deg;!</p>
         </div>
         <div class="controls">
-          <button class="btn red" id="btnRandom" type="button">PUTAR JARUM ACAK</button>
+          <button class="btn red" id="btnRandom" type="button">PILIH ARAH ACAK</button>
+          <button class="btn ghost" id="btnSound" type="button" aria-pressed="true">🔊 Suara: Nyala</button>
           <div class="slider-box">
             <label for="degSlider">Geser derajatnya: <span class="slider-val" id="sliderVal">0&deg; — Utara</span></label>
             <input type="range" id="degSlider" min="0" max="315" step="45" value="0" aria-label="Pilih derajat kompas dari 0 sampai 315, kelipatan 45" />
@@ -326,7 +325,7 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
           <li><b>Lingkaran derajat</b> — garis-garis angka derajat di sekeliling kompas, dari 0&deg; sampai 360&deg;.</li>
           <li><b>8 arah mata angin</b> — gambar bintang arah: Utara, Timur Laut, Timur, Tenggara, Selatan, Barat Daya, Barat, Barat Laut.</li>
         </ul>
-        <p class="lomba-note">🧭 <b>Di lomba sungguhan</b>, kompas disajikan <b>TANPA ANGKA</b> (buta) — anak mengambil kartu bertuliskan angka derajat, menyebutkan arahnya, lalu menempelkan kartu soal pada gambar arah mata angin. Roda kompas di media ini juga tanpa angka, sama seperti di lomba — angkanya hanya ada di kartu derajat dan panel jawaban. Hafalkan pasangan arah dan derajatnya!</p>
+        <p class="lomba-note">🧭 <b>Di lomba sungguhan</b>, kompas disajikan <b>TANPA ANGKA</b> (buta) — anak mengambil kartu bertuliskan angka derajat, menyebutkan arahnya, lalu menempelkan kartu soal pada gambar arah mata angin. Roda kompas di media ini mengikuti desain kompas Pesta Siaga Ranting Kwarran Purwojati 2026 — lingkaran kuning di pinggirnya adalah tempat menempel kartu. Angkanya hanya ada di kartu derajat dan panel jawaban. Hafalkan pasangan arah dan derajatnya!</p>
       </div>
 
       <div class="materi-card">
@@ -357,7 +356,7 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
 
       <div class="materi-card wide">
         <h3><span class="ic" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V9M4 9c3-2 5 1 8 0s5 1 8 0v8c-3 1-5-2-8 0s-5-2-8 0"/></svg></span>Tabel 8 Arah Mata Angin — Wajib Hafal!</h3>
-        <p>Pola gampangnya: <b>tiap langkah = 45&deg;</b>. Mulai dari <b>Utara 0&deg;</b>, lalu berputar searah jarum jam: <b>Timur 90&deg;, Selatan 180&deg;, Barat 270&deg;</b>. Sentuh baris tabel untuk melihat jarumnya bergerak di roda kompas di atas!</p>
+        <p>Pola gampangnya: <b>tiap langkah = 45&deg;</b>. Mulai dari <b>Utara 0&deg;</b>, lalu berputar searah jarum jam: <b>Timur 90&deg;, Selatan 180&deg;, Barat 270&deg;</b>. Sentuh baris tabel untuk melihat arahnya menyala di roda kompas di atas!</p>
         <div style="overflow-x:auto">
         <table class="dir-table" aria-label="Tabel 8 arah mata angin dan derajatnya">
           <thead><tr><th>Derajat</th><th>Arah Mata Angin</th><th>Cara Mengingat</th></tr></thead>
@@ -510,7 +509,7 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
 (function(){
 "use strict";
 var DIRS=[
- {deg:0,  name:"Utara",      short:"U",  hint:"Jarum merah selalu menunjuk ke Utara. Utara adalah awal hitungan: 0°!", memory:"Awal hitungan — ujung jarum merah menunjuk ke sini"},
+ {deg:0,  name:"Utara",      short:"U",  hint:"Utara adalah awal hitungan: 0°!", memory:"Awal hitungan — arah pertama (0°)"},
  {deg:45, name:"Timur Laut", short:"TL", hint:"Timur Laut ada di tengah-tengah antara Utara (0°) dan Timur (90°).", memory:"Di antara Utara dan Timur"},
  {deg:90, name:"Timur",      short:"T",  hint:"Timur adalah tempat matahari terbit di pagi hari: 90°.", memory:"Tempat matahari terbit"},
  {deg:135,name:"Tenggara",   short:"TG", hint:"Tenggara ada di tengah-tengah antara Timur (90°) dan Selatan (180°).", memory:"Di antara Timur dan Selatan"},
@@ -526,37 +525,62 @@ var SVGNS="http://www.w3.org/2000/svg";
 function el(tag,attrs,parent){ var n=document.createElementNS(SVGNS,tag); for(var k in attrs) n.setAttribute(k,attrs[k]); if(parent) parent.appendChild(n); return n; }
 function txt(parent,x,y,str,cls,size,fill,anchor){ var t=el("text",{x:x,y:y,"class":cls,"font-size":size,fill:fill,"text-anchor":anchor||"middle","dominant-baseline":"middle"},parent); t.textContent=str; return t; }
 
-/* ============ BIG COMPASS ============ */
-var big=document.getElementById("bigCompass");
-(function buildBig(){
-  el("circle",{cx:240,cy:240,r:232,fill:"#fff8e1",stroke:"#e8ae00","stroke-width":4},big);
-  el("circle",{cx:240,cy:240,r:196,fill:"#ffffff",stroke:"#bcd9ee","stroke-width":3},big);
-  // star points
+/* ============ ROSE BUILDER (desain kompas Pesta Siaga) ============ */
+/* Menggambar roda kompas sesuai gambar yang diunggah Anggi: bingkai kuning
+   tepi hijau, cincin biru, lapangan hijau muda, bintang 8 arah dua warna,
+   8 lingkaran kuning di pinggir, dan lencana Pesta Siaga di tengah.
+   S = ukuran viewBox; kind "big" = roda jelajah (klik sektor),
+   kind "mini" = roda simulasi (klik lingkaran kuning untuk menempel). */
+function buildRose(svg, S, kind){
+  var c=S/2, k=S/480;
+  el("rect",{x:6*k,y:6*k,width:S-12*k,height:S-12*k,rx:6*k,fill:"#f7f3a1",stroke:"#0e7c7b","stroke-width":10*k,"pointer-events":"none"},svg);
+  el("circle",{cx:c,cy:c,r:210*k,fill:"#29a3d8",stroke:"#6a3fb5","stroke-width":4*k,"pointer-events":"none"},svg);
+  el("circle",{cx:c,cy:c,r:174*k,fill:"#cdeaa0",stroke:"#6a3fb5","stroke-width":3*k,"pointer-events":"none"},svg);
+  var halves={}, dots={};
   for(var i=0;i<8;i++){
     var d=DIRS[i], cardinal=(d.deg%90===0);
-    var len=cardinal?168:128, w=cardinal?26:20;
-    var p1=polar(240,240,len,d.deg), pl=polar(240,240,34,d.deg-90+ (0)), pr=polar(240,240,34,d.deg+90);
-    var baseL=polar(240,240,w,d.deg-90), baseR=polar(240,240,w,d.deg+90);
-    el("polygon",{points:baseL[0]+","+baseL[1]+" "+p1[0]+","+p1[1]+" "+baseR[0]+","+baseR[1], fill:cardinal?"#ffd43b":"#a5d8ff", stroke:"#17324f","stroke-width":2.5,"stroke-linejoin":"round"},big);
+    var T=(cardinal?164:126)*k, w=26*k;
+    var tip=polar(c,c,T,d.deg), bL=polar(c,c,w,d.deg-90), bR=polar(c,c,w,d.deg+90);
+    var leftFill=(i%2===0)?"#d6ecff":"#14919b", rightFill=(i%2===0)?"#14919b":"#d6ecff";
+    var h1=el("polygon",{points:c+","+c+" "+tip[0]+","+tip[1]+" "+bL[0]+","+bL[1],fill:leftFill,stroke:"#6a3fb5","stroke-width":2*k,"stroke-linejoin":"round","pointer-events":"none","class":"star-half"},svg);
+    var h2=el("polygon",{points:c+","+c+" "+tip[0]+","+tip[1]+" "+bR[0]+","+bR[1],fill:rightFill,stroke:"#6a3fb5","stroke-width":2*k,"stroke-linejoin":"round","pointer-events":"none","class":"star-half"},svg);
+    halves[d.deg]=[h1,h2];
   }
-  el("circle",{cx:240,cy:240,r:150,fill:"none",stroke:"#d7ecfa","stroke-width":2,"stroke-dasharray":"4 7"},big);
-  // clickable sectors + labels
   DIRS.forEach(function(d){
-    var g=el("g",{"class":"dir-sector","data-deg":d.deg,tabindex:"0",role:"button","aria-label":d.name+" "+d.deg+" derajat"},big);
-    var a1=polar(240,240,232,d.deg-22.5), a2=polar(240,240,232,d.deg+22.5);
-    el("path",{d:"M240,240 L"+a1[0]+","+a1[1]+" A232,232 0 0 1 "+a2[0]+","+a2[1]+" Z","class":"wedge"},g);
-    var lp=polar(240,240,206,d.deg);
-    txt(g,lp[0],lp[1],d.short,"dir-label",d.deg%90===0?27:21,d.deg%90===0?"#c22533":"#1663ab");
-    g.addEventListener("click",function(){ setDirection(d.deg); });
-    g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); setDirection(d.deg); } });
+    var p=polar(c,c,192*k,d.deg);
+    if(kind==="mini"){
+      var g=el("g",{"class":"mini-pos","data-deg":d.deg,tabindex:"0",role:"button","aria-label":"Tempel di posisi "+d.name},svg);
+      el("circle",{cx:p[0],cy:p[1],r:24*k},g);
+      dots[d.deg]=g;
+      g.addEventListener("click",function(){ stickAnswer(d.deg); });
+      g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); stickAnswer(d.deg); } });
+    }else{
+      var dot=el("circle",{cx:p[0],cy:p[1],r:24*k,fill:"#ffe66d",stroke:"#e63946","stroke-width":3*k,"pointer-events":"none","class":"rim-dot","data-deg":d.deg},svg);
+      dots[d.deg]=dot;
+    }
   });
-  // needle (drawn last, on top of sectors but sectors remain clickable around rim)
-  var needle=el("g",{id:"needleGroup"},big);
-  el("polygon",{points:"240,96 258,240 222,240",fill:"#e63946",stroke:"#8f1d27","stroke-width":2.5,"stroke-linejoin":"round"},needle);
-  el("polygon",{points:"240,384 258,240 222,240",fill:"#f1f3f5",stroke:"#868e96","stroke-width":2.5,"stroke-linejoin":"round"},needle);
-  el("circle",{cx:240,cy:240,r:17,fill:"#ffc93c",stroke:"#17324f","stroke-width":3.5},needle);
-  big._needle=needle;
-})();
+  var clipId=(kind==="mini")?"badgeClipMini":"badgeClipBig";
+  var defs=el("defs",{},svg);
+  var cp=el("clipPath",{id:clipId},defs);
+  el("circle",{cx:c,cy:c,r:61*k},cp);
+  var bs=130*k;
+  el("image",{href:"badge-pesta-siaga.png",x:c-bs/2,y:c-bs/2,width:bs,height:bs,"clip-path":"url(#"+clipId+")","pointer-events":"none"},svg);
+  el("circle",{cx:c,cy:c,r:61*k,fill:"none",stroke:"#6a3fb5","stroke-width":2*k,"pointer-events":"none"},svg);
+  if(kind==="big"){
+    DIRS.forEach(function(d){
+      var g=el("g",{"class":"dir-sector","data-deg":d.deg,tabindex:"0",role:"button","aria-label":d.name+" "+d.deg+" derajat"},svg);
+      var a1=polar(c,c,208*k,d.deg-22.5), a2=polar(c,c,208*k,d.deg+22.5);
+      el("path",{d:"M"+c+","+c+" L"+a1[0]+","+a1[1]+" A"+(208*k)+","+(208*k)+" 0 0 1 "+a2[0]+","+a2[1]+" Z","class":"wedge"},g);
+      g.addEventListener("click",function(){ setDirection(d.deg); });
+      g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); setDirection(d.deg); } });
+    });
+  }
+  return {halves:halves, dots:dots};
+}
+
+/* ============ BIG COMPASS ============ */
+var big=document.getElementById("bigCompass");
+var bigRose=buildRose(big,480,"big");
 
 /* chips */
 var chipsBox=document.getElementById("dirChips");
@@ -581,15 +605,27 @@ DIRS.forEach(function(d){
   tbody.appendChild(tr);
 });
 
-var currentDeg=0, needleRot=0;
+var currentDeg=0;
 var panelDeg=document.getElementById("panelDeg"), panelName=document.getElementById("panelName"),
     panelHint=document.getElementById("panelHint"), slider=document.getElementById("degSlider"),
     sliderVal=document.getElementById("sliderVal");
-function setDirection(deg){
+var soundOn=true;
+function speakDeg(deg){
+  if(!soundOn) return;
+  try{
+    if(!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    var d=byDeg(deg);
+    var u=new SpeechSynthesisUtterance(d.deg+" derajat, "+d.name);
+    u.lang="id-ID"; u.rate=0.9;
+    var vs=window.speechSynthesis.getVoices()||[];
+    for(var i=0;i<vs.length;i++){ if(vs[i].lang && vs[i].lang.toLowerCase().indexOf("id")===0){ u.voice=vs[i]; break; } }
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function setDirection(deg, speak){
   var d=byDeg(deg);
-  var delta=((deg-needleRot)%360+540)%360-180;
-  needleRot+=delta; currentDeg=deg;
-  big._needle.style.transform="rotate("+needleRot+"deg)";
+  currentDeg=deg;
   panelDeg.textContent=deg+"°";
   panelName.textContent=d.name.toUpperCase();
   panelHint.textContent=d.hint;
@@ -599,23 +635,33 @@ function setDirection(deg){
   for(var i=0;i<chips.length;i++) chips[i].classList.toggle("active", +chips[i].getAttribute("data-deg")===deg);
   var secs=big.querySelectorAll(".dir-sector");
   for(var j=0;j<secs.length;j++) secs[j].classList.toggle("active", +secs[j].getAttribute("data-deg")===deg);
+  for(var k in bigRose.halves){
+    var on=+k===deg;
+    bigRose.halves[k][0].classList.toggle("sel",on);
+    bigRose.halves[k][1].classList.toggle("sel",on);
+    bigRose.dots[k].classList.toggle("active",on);
+  }
+  if(speak!==false) speakDeg(deg);
 }
-slider.addEventListener("input",function(){ setDirection(parseInt(slider.value,10)); });
+var speakTimer=null;
+slider.addEventListener("input",function(){
+  var v=parseInt(slider.value,10);
+  setDirection(v,false);
+  if(speakTimer) clearTimeout(speakTimer);
+  speakTimer=setTimeout(function(){ speakDeg(v); },350);
+});
 document.getElementById("btnRandom").addEventListener("click",function(){
   var pool=DIRS.filter(function(d){ return d.deg!==currentDeg; });
   var pick=pool[Math.floor(Math.random()*pool.length)];
-  // extra spin for fun: add 360 before settling
-  var d=pick, delta=((d.deg-needleRot)%360+540)%360-180;
-  needleRot+=delta+360; currentDeg=d.deg;
-  big._needle.style.transform="rotate("+needleRot+"deg)";
-  panelDeg.textContent=d.deg+"°"; panelName.textContent=d.name.toUpperCase(); panelHint.textContent=d.hint;
-  slider.value=d.deg; sliderVal.textContent=d.deg+"° — "+d.name;
-  var chips=chipsBox.querySelectorAll(".chip");
-  for(var i=0;i<chips.length;i++) chips[i].classList.toggle("active", +chips[i].getAttribute("data-deg")===d.deg);
-  var secs=big.querySelectorAll(".dir-sector");
-  for(var j=0;j<secs.length;j++) secs[j].classList.toggle("active", +secs[j].getAttribute("data-deg")===d.deg);
+  setDirection(pick.deg);
 });
-setDirection(0);
+document.getElementById("btnSound").addEventListener("click",function(){
+  soundOn=!soundOn;
+  if(!soundOn){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  this.textContent=soundOn?"🔊 Suara: Nyala":"🔇 Suara: Mati";
+  this.setAttribute("aria-pressed",soundOn?"true":"false");
+});
+setDirection(0,false);
 
 /* ============ QUIZ A / B ============ */
 var quiz={mode:"A", order:[], idx:0, score:0, locked:false};
@@ -707,41 +753,14 @@ document.getElementById("btnAgain").addEventListener("click",function(){ startQu
 
 /* ============ MODE C: SIMULASI ============ */
 var mini=document.getElementById("miniCompass");
-var miniPos={};
-(function buildMini(){
-  el("circle",{cx:130,cy:130,r:124,fill:"#fff8e1",stroke:"#e8ae00","stroke-width":3.5},mini);
-  el("circle",{cx:130,cy:130,r:88,fill:"#ffffff",stroke:"#bcd9ee","stroke-width":2.5},mini);
-  for(var i=0;i<8;i++){
-    var d=DIRS[i];
-    var p1=polar(130,130,d.deg%90===0?76:60,d.deg);
-    var bL=polar(130,130,13,d.deg-90), bR=polar(130,130,13,d.deg+90);
-    el("polygon",{points:bL[0]+","+bL[1]+" "+p1[0]+","+p1[1]+" "+bR[0]+","+bR[1], fill:d.deg%90===0?"#ffd43b":"#a5d8ff", stroke:"#17324f","stroke-width":1.8,"stroke-linejoin":"round"},mini);
-  }
-  var needle=el("g",{id:"miniNeedle"},mini);
-  el("polygon",{points:"130,58 140,130 120,130",fill:"#e63946",stroke:"#8f1d27","stroke-width":2,"stroke-linejoin":"round"},needle);
-  el("polygon",{points:"130,202 140,130 120,130",fill:"#f1f3f5",stroke:"#868e96","stroke-width":2,"stroke-linejoin":"round"},needle);
-  el("circle",{cx:130,cy:130,r:10,fill:"#ffc93c",stroke:"#17324f","stroke-width":2.5},needle);
-  mini._needle=needle; mini._rot=0;
-  DIRS.forEach(function(d){
-    var p=polar(130,130,102,d.deg);
-    var g=el("g",{"class":"mini-pos","data-deg":d.deg,tabindex:"0",role:"button","aria-label":"Tempel di posisi "+d.name},mini);
-    el("circle",{cx:p[0],cy:p[1],r:24},g);
-    txt(g,p[0],p[1],d.short,"",d.deg%90===0?17:14.5,"");
-    miniPos[d.deg]=g;
-    g.addEventListener("click",function(){ stickAnswer(d.deg); });
-    g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); stickAnswer(d.deg); } });
-  });
-})();
+var miniRose=buildRose(mini,260,"mini");
+var miniPos=miniRose.dots;
 var sim={order:[], idx:0, score:0, say:0, stick:0, phase:0, locked:false};
 var cProgress=document.getElementById("cProgress"), cScore=document.getElementById("cScore"),
     cBar=document.getElementById("cBar"), cBig=document.getElementById("cBig"),
     cSub=document.getElementById("cSub"), cChoices=document.getElementById("cChoices"),
     cFeedback=document.getElementById("cFeedback"), cStepTag=document.getElementById("cStepTag"),
     btnCNext=document.getElementById("btnCNext"), cFinish=document.getElementById("cFinish");
-function miniRotate(deg){
-  var delta=((deg-mini._rot)%360+540)%360-180; mini._rot+=delta;
-  mini._needle.style.transform="rotate("+mini._rot+"deg)";
-}
 function startSim(){
   sim.order=shuffle(DIRS); sim.idx=0; sim.score=0; sim.say=0; sim.stick=0;
   cFinish.classList.add("hidden");
@@ -760,7 +779,6 @@ function renderSimCard(){
   cSub.textContent="Sebutkan dengan keras, lalu sentuh jawabanmu!";
   cFeedback.className="feedback"; cFeedback.innerHTML="";
   btnCNext.classList.add("hidden");
-  miniRotate(0);
   for(var k in miniPos) miniPos[k].classList.remove("placed-right","placed-wrong");
   var choices=makeChoices(t,function(d){ return d.name; });
   cChoices.innerHTML="";
@@ -800,7 +818,6 @@ function stickAnswer(deg){
   if(right){ sim.stick+=5; sim.score+=5; }
   miniPos[t.deg].classList.add("placed-right");
   if(!right) miniPos[deg].classList.add("placed-wrong");
-  miniRotate(t.deg);
   document.getElementById("cStickScore").textContent=sim.stick;
   cScore.textContent="Skor: "+sim.score+" / 80";
   cBar.style.width=((sim.idx+1)/8*100)+"%";
