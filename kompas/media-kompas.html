@@ -214,13 +214,28 @@ tr[data-deg]:hover td{background:var(--yellow-soft)}
 .mini-stage{position:relative; width:100%; max-width:300px; margin:0 auto}
 .mini-stage svg{width:100%; height:auto; display:block}
 .mini-pos{cursor:pointer}
-.mini-pos circle{fill:#ffe66d; stroke:#e63946; stroke-width:3; transition:fill .15s}
-.mini-pos:hover circle,.mini-pos:focus circle{fill:#ffd43b}
-.mini-pos.placed-right circle{fill:var(--green); stroke:#1c7432}
-.mini-pos.placed-right text{fill:#fff}
-.mini-pos.placed-wrong circle{fill:var(--red); stroke:var(--red-dark)}
-.mini-pos.placed-wrong text{fill:#fff}
+.mini-pos circle.dot{fill:#fcf986; stroke:#d81706; stroke-width:3; transition:fill .15s}
+.mini-pos circle.hit{fill:transparent; stroke:none}
+.mini-pos:hover circle.dot,.mini-pos:focus circle.dot{fill:#ffd43b}
+.mini-pos.placed-right circle.dot{fill:var(--green); stroke:#1c7432}
+.mini-pos.placed-wrong circle.dot{fill:var(--red); stroke:var(--red-dark)}
 .mini-pos:disabled{cursor:default}
+.mini-pos.drop-hi circle.dot{fill:#ffd43b; stroke-width:5}
+
+/* Mode D: geser kartu derajat */
+.drag-slot{min-height:176px; display:flex; align-items:center; justify-content:center; padding:8px 0}
+.drag-card{
+  width:128px; background:#fff; color:#17324f; border:3px solid #c22533; border-radius:16px;
+  box-shadow:0 6px 0 rgba(23,50,79,.12), 0 12px 24px rgba(23,50,79,.18);
+  padding:12px 10px; text-align:center; user-select:none; -webkit-user-select:none;
+  touch-action:none; position:relative; z-index:5; transition:transform .2s;
+}
+.drag-card .dc-label{font-size:12.5px; font-weight:900; letter-spacing:1.5px; color:#47617d}
+.drag-card .dc-deg{font-family:"Fredoka"; font-size:46px; font-weight:700; color:#c22533; line-height:1.05}
+.drag-card .dc-hint{font-size:13.5px; font-weight:800; color:#47617d; margin-top:2px}
+.drag-card.ready{cursor:grab; border-color:#25a244; box-shadow:0 6px 0 #1c7432, 0 12px 24px rgba(23,50,79,.18)}
+.drag-card.dragging{cursor:grabbing; transform:scale(1.06); box-shadow:0 10px 0 rgba(23,50,79,.12), 0 20px 34px rgba(23,50,79,.28); z-index:60; transition:none}
+.drag-card.placed{transform:scale(.55); z-index:40}
 .step-tag{display:inline-block; background:var(--blue); color:#fff; font-weight:900; border-radius:999px; padding:6px 16px; font-size:16px; margin-bottom:10px}
 .step-tag.step2{background:var(--orange)}
 .sim-score{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
@@ -370,12 +385,13 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
   <!-- ================= 3. KUIS INTERAKTIF ================= -->
   <section class="block screen-only" id="kuis">
     <div class="sec-head"><div class="sec-num green">3</div><h2>Kuis &amp; Simulasi Lomba</h2></div>
-    <p class="sec-lead">Satu ronde = 8 soal, seperti 8 anak dalam barung. <b>Mode A</b> melatih langkah 1 lomba (ambil kartu derajat, sebut arahnya): jawaban benar = <b>10 poin latihan</b>, maksimal <b>80</b> per ronde. <b>Mode B</b> hanya latihan tambahan (bukan bagian lomba): dari nama arah, tebak derajatnya. <b>Mode C</b> — simulasi lomba sungguhan — nilainya dipecah persis seperti aturan lomba: <b>benar menyebut 5 poin + benar menempel 5 poin</b>.</p>
+    <p class="sec-lead">Satu ronde = 8 soal, seperti 8 anak dalam barung. <b>Mode A</b> melatih langkah 1 lomba (ambil kartu derajat, sebut arahnya): jawaban benar = <b>10 poin latihan</b>, maksimal <b>80</b> per ronde. <b>Mode B</b> hanya latihan tambahan (bukan bagian lomba): dari nama arah, tebak derajatnya. <b>Mode C</b> — simulasi lomba sungguhan — nilainya dipecah persis seperti aturan lomba: <b>benar menyebut 5 poin + benar menempel 5 poin</b>. <b>Mode D</b> — permainan geser kartu: anak mengambil kartu derajat secara acak dengan cara klik kartu, memilih arah mata angin yang sesuai, lalu <b>menggeser kartunya</b> ke lingkaran yang benar pada roda kompas — bergiliran, satu anak satu kartu, skornya sama seperti lomba.</p>
 
     <div class="mode-tabs" role="tablist" aria-label="Pilih mode latihan">
       <button class="mode-tab active" id="tabA" type="button" role="tab" aria-selected="true">Mode A<small>Derajat &rarr; Arah (latihan menyebut)</small></button>
       <button class="mode-tab" id="tabB" type="button" role="tab" aria-selected="false">Mode B<small>Arah &rarr; Derajat (latihan tambahan)</small></button>
       <button class="mode-tab" id="tabC" type="button" role="tab" aria-selected="false">Mode C<small>Simulasi Lomba: Sebut + Tempel</small></button>
+      <button class="mode-tab" id="tabD" type="button" role="tab" aria-selected="false">Mode D<small>Geser Kartu: Ambil, Pilih &amp; Tempel</small></button>
     </div>
 
     <!-- Mode A & B -->
@@ -446,6 +462,58 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
               <p class="final-msg" id="cFinalMsg"></p>
               <div class="quiz-actions" style="justify-content:center">
                 <button class="btn red" id="btnCAgain" type="button" style="flex:0 1 320px">MAIN LAGI</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode D -->
+    <div id="quizD" class="hidden">
+      <div class="quiz-top">
+        <span class="progress-text" id="dProgress">Kartu 1 dari 8</span>
+        <span class="score-badge" id="dScore">Skor: 0 / 80</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="dBar"></div></div>
+      <div class="sim-wrap">
+        <div>
+          <div class="mini-stage">
+            <svg id="dragCompass" viewBox="0 0 260 260" role="group" aria-label="Roda kompas mini untuk menempel kartu dengan cara digeser"></svg>
+          </div>
+          <p style="text-align:center; font-weight:800; color:var(--muted); margin:10px 0 0">Gambar arah mata angin — geser kartumu ke lingkaran yang benar</p>
+        </div>
+        <div>
+          <div class="q-card" id="dCardMain">
+            <span class="step-tag" id="dStepTag">Giliran Anak ke-1</span>
+            <div class="q-label">Kartu derajat yang kamu ambil</div>
+            <div class="drag-slot" id="dragSlot">
+              <button class="btn red" id="btnDraw" type="button">AMBIL KARTU</button>
+              <div class="drag-card hidden" id="dragCard">
+                <div class="dc-label">KARTU DERAJAT</div>
+                <div class="dc-deg" id="dragCardDeg">135&deg;</div>
+                <div class="dc-hint" id="dragCardHint">Pilih arahnya dulu!</div>
+              </div>
+            </div>
+            <p class="q-sub" id="dSub">Klik AMBIL KARTU untuk mengambil satu kartu derajat secara acak.</p>
+            <div class="choices" id="dChoices"></div>
+            <div class="feedback" id="dFeedback" aria-live="polite"></div>
+            <div class="sim-score">
+              <span>Menyebut: <b id="dSayScore">0</b> / 40</span>
+              <span>Menempel: <b id="dStickScore">0</b> / 40</span>
+            </div>
+            <div class="quiz-actions">
+              <button class="btn green hidden" id="btnDNext" type="button">GILIRAN BERIKUTNYA &rarr;</button>
+            </div>
+          </div>
+          <div class="q-card hidden" id="dFinish" style="margin-top:16px">
+            <div class="finish-box">
+              <div class="q-label">Skor akhir permainan geser kartu</div>
+              <div class="final-score" id="dFinalScore">0 / 80</div>
+              <div class="stars" id="dFinalStars" aria-hidden="true"></div>
+              <p class="final-msg" id="dFinalMsg"></p>
+              <div class="quiz-actions" style="justify-content:center">
+                <button class="btn red" id="btnDAgain" type="button" style="flex:0 1 320px">MAIN LAGI</button>
               </div>
             </div>
           </div>
@@ -526,46 +594,59 @@ function el(tag,attrs,parent){ var n=document.createElementNS(SVGNS,tag); for(va
 function txt(parent,x,y,str,cls,size,fill,anchor){ var t=el("text",{x:x,y:y,"class":cls,"font-size":size,fill:fill,"text-anchor":anchor||"middle","dominant-baseline":"middle"},parent); t.textContent=str; return t; }
 
 /* ============ ROSE BUILDER (desain kompas Pesta Siaga) ============ */
-/* Menggambar roda kompas sesuai gambar yang diunggah Anggi: bingkai kuning
-   tepi hijau, cincin biru, lapangan hijau muda, bintang 8 arah dua warna,
-   8 lingkaran kuning di pinggir, dan lencana Pesta Siaga di tengah.
+/* Menggambar roda kompas sesuai gambar yang diunggah Anggi — diukur langsung dari
+   berkas gambarnya (~/workspace/kompas-test/measure_rose.py): bingkai teal tebal
+   + lapangan kuning, cincin biru, lapangan hijau muda, bintang 8 arah pola
+   kincir (belahan berlawanan jarum jam biru muda, searah jarum jam teal),
+   8 lingkaran kuning tepi merah, dan lencana Pesta Siaga di tengah.
    S = ukuran viewBox; kind "big" = roda jelajah (klik sektor),
-   kind "mini" = roda simulasi (klik lingkaran kuning untuk menempel). */
+   kind "mini" = roda simulasi (klik lingkaran kuning untuk menempel),
+   kind "drag" = roda Mode D (geser kartu ke lingkaran). */
 function buildRose(svg, S, kind){
   var c=S/2, k=S/480;
-  el("rect",{x:6*k,y:6*k,width:S-12*k,height:S-12*k,rx:6*k,fill:"#f7f3a1",stroke:"#0e7c7b","stroke-width":10*k,"pointer-events":"none"},svg);
-  el("circle",{cx:c,cy:c,r:210*k,fill:"#29a3d8",stroke:"#6a3fb5","stroke-width":4*k,"pointer-events":"none"},svg);
-  el("circle",{cx:c,cy:c,r:174*k,fill:"#cdeaa0",stroke:"#6a3fb5","stroke-width":3*k,"pointer-events":"none"},svg);
+  el("rect",{x:0,y:0,width:S,height:S,fill:"#02929d","pointer-events":"none"},svg);
+  el("rect",{x:10.5*k,y:10.5*k,width:S-21*k,height:S-21*k,fill:"#fef984","pointer-events":"none"},svg);
+  el("circle",{cx:c,cy:c,r:222*k,fill:"#17b9e0",stroke:"#3c137b","stroke-width":4*k,"pointer-events":"none"},svg);
+  el("circle",{cx:c,cy:c,r:188*k,fill:"#cbe687",stroke:"#3c137b","stroke-width":3*k,"pointer-events":"none"},svg);
   var halves={}, dots={};
   for(var i=0;i<8;i++){
     var d=DIRS[i], cardinal=(d.deg%90===0);
-    var T=(cardinal?164:126)*k, w=26*k;
+    var T=(cardinal?181:156)*k, w=26*k;
     var tip=polar(c,c,T,d.deg), bL=polar(c,c,w,d.deg-90), bR=polar(c,c,w,d.deg+90);
-    var leftFill=(i%2===0)?"#d6ecff":"#14919b", rightFill=(i%2===0)?"#14919b":"#d6ecff";
-    var h1=el("polygon",{points:c+","+c+" "+tip[0]+","+tip[1]+" "+bL[0]+","+bL[1],fill:leftFill,stroke:"#6a3fb5","stroke-width":2*k,"stroke-linejoin":"round","pointer-events":"none","class":"star-half"},svg);
-    var h2=el("polygon",{points:c+","+c+" "+tip[0]+","+tip[1]+" "+bR[0]+","+bR[1],fill:rightFill,stroke:"#6a3fb5","stroke-width":2*k,"stroke-linejoin":"round","pointer-events":"none","class":"star-half"},svg);
+    /* Pola kincir (pinwheel): belahan berlawanan arah jarum jam SELALU biru
+       muda, belahan searah jarum jam SELALU teal — sama untuk ke-8 arah. */
+    var h1=el("polygon",{points:c+","+c+" "+tip[0]+","+tip[1]+" "+bL[0]+","+bL[1],fill:"#cbebff",stroke:"#3c137b","stroke-width":2*k,"stroke-linejoin":"round","pointer-events":"none","class":"star-half"},svg);
+    var h2=el("polygon",{points:c+","+c+" "+tip[0]+","+tip[1]+" "+bR[0]+","+bR[1],fill:"#05a1ae",stroke:"#3c137b","stroke-width":2*k,"stroke-linejoin":"round","pointer-events":"none","class":"star-half"},svg);
     halves[d.deg]=[h1,h2];
   }
   DIRS.forEach(function(d){
-    var p=polar(c,c,192*k,d.deg);
+    var p=polar(c,c,200*k,d.deg);
     if(kind==="mini"){
       var g=el("g",{"class":"mini-pos","data-deg":d.deg,tabindex:"0",role:"button","aria-label":"Tempel di posisi "+d.name},svg);
-      el("circle",{cx:p[0],cy:p[1],r:24*k},g);
+      el("circle",{cx:p[0],cy:p[1],r:30*k,fill:"transparent","pointer-events":"all","class":"hit"},g);
+      el("circle",{cx:p[0],cy:p[1],r:20*k,"class":"dot"},g);
       dots[d.deg]=g;
       g.addEventListener("click",function(){ stickAnswer(d.deg); });
       g.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); stickAnswer(d.deg); } });
+    }else if(kind==="drag"){
+      var g2=el("g",{"class":"mini-pos","data-deg":d.deg,tabindex:"0",role:"button","aria-label":"Geser kartu ke posisi "+d.name},svg);
+      el("circle",{cx:p[0],cy:p[1],r:30*k,fill:"transparent","pointer-events":"all","class":"hit"},g2);
+      el("circle",{cx:p[0],cy:p[1],r:20*k,"class":"dot"},g2);
+      dots[d.deg]=g2;
+      g2.addEventListener("click",function(){ dropAnswer(d.deg); });
+      g2.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); dropAnswer(d.deg); } });
     }else{
-      var dot=el("circle",{cx:p[0],cy:p[1],r:24*k,fill:"#ffe66d",stroke:"#e63946","stroke-width":3*k,"pointer-events":"none","class":"rim-dot","data-deg":d.deg},svg);
+      var dot=el("circle",{cx:p[0],cy:p[1],r:20*k,fill:"#fcf986",stroke:"#d81706","stroke-width":3*k,"pointer-events":"none","class":"rim-dot","data-deg":d.deg},svg);
       dots[d.deg]=dot;
     }
   });
-  var clipId=(kind==="mini")?"badgeClipMini":"badgeClipBig";
+  var clipId="badgeClip"+kind;
   var defs=el("defs",{},svg);
   var cp=el("clipPath",{id:clipId},defs);
-  el("circle",{cx:c,cy:c,r:61*k},cp);
-  var bs=130*k;
+  el("circle",{cx:c,cy:c,r:49*k},cp);
+  var bs=102*k;
   el("image",{href:"badge-pesta-siaga.png",x:c-bs/2,y:c-bs/2,width:bs,height:bs,"clip-path":"url(#"+clipId+")","pointer-events":"none"},svg);
-  el("circle",{cx:c,cy:c,r:61*k,fill:"none",stroke:"#6a3fb5","stroke-width":2*k,"pointer-events":"none"},svg);
+  el("circle",{cx:c,cy:c,r:49*k,fill:"none",stroke:"#3c137b","stroke-width":2*k,"pointer-events":"none"},svg);
   if(kind==="big"){
     DIRS.forEach(function(d){
       var g=el("g",{"class":"dir-sector","data-deg":d.deg,tabindex:"0",role:"button","aria-label":d.name+" "+d.deg+" derajat"},svg);
@@ -610,18 +691,24 @@ var panelDeg=document.getElementById("panelDeg"), panelName=document.getElementB
     panelHint=document.getElementById("panelHint"), slider=document.getElementById("degSlider"),
     sliderVal=document.getElementById("sliderVal");
 var soundOn=true;
-function speakDeg(deg){
+function speakText(text){
   if(!soundOn) return;
   try{
     if(!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    var d=byDeg(deg);
-    var u=new SpeechSynthesisUtterance(d.deg+" derajat, "+d.name);
+    var u=new SpeechSynthesisUtterance(text);
     u.lang="id-ID"; u.rate=0.9;
     var vs=window.speechSynthesis.getVoices()||[];
     for(var i=0;i<vs.length;i++){ if(vs[i].lang && vs[i].lang.toLowerCase().indexOf("id")===0){ u.voice=vs[i]; break; } }
     window.speechSynthesis.speak(u);
   }catch(e){}
+}
+function speakDeg(deg){
+  var d=byDeg(deg);
+  speakText(d.deg+" derajat, "+d.name);
+}
+function speakDegOnly(deg){
+  speakText(deg+" derajat");
 }
 function setDirection(deg, speak){
   var d=byDeg(deg);
@@ -843,19 +930,206 @@ btnCNext.addEventListener("click",function(){
 });
 document.getElementById("btnCAgain").addEventListener("click",startSim);
 
+/* ============ MODE D: GESER KARTU DERAJAT ============ */
+/* Alur: klik AMBIL KARTU (acak dari 8 kartu, satu anak satu kartu bergiliran)
+   -> pilih arah mata angin yang sesuai derajatnya (menyebut +5)
+   -> geser kartunya ke lingkaran yang benar pada roda kompas (menempel +5). */
+var dragSvg=document.getElementById("dragCompass");
+var dragRose=buildRose(dragSvg,260,"drag");
+var dragPos=dragRose.dots;
+var drag={order:[], idx:0, score:0, say:0, stick:0, phase:0, locked:false};
+var dProgress=document.getElementById("dProgress"), dScore=document.getElementById("dScore"),
+    dBar=document.getElementById("dBar"),
+    dSub=document.getElementById("dSub"), dChoices=document.getElementById("dChoices"),
+    dFeedback=document.getElementById("dFeedback"), dStepTag=document.getElementById("dStepTag"),
+    btnDNext=document.getElementById("btnDNext"), dFinish=document.getElementById("dFinish"),
+    btnDraw=document.getElementById("btnDraw"), dragCard=document.getElementById("dragCard"),
+    dragSlot=document.getElementById("dragSlot");
+function startDrag(){
+  drag.order=shuffle(DIRS); drag.idx=0; drag.score=0; drag.say=0; drag.stick=0;
+  dFinish.classList.add("hidden");
+  document.getElementById("dCardMain").classList.remove("hidden");
+  renderDragDraw();
+}
+function renderDragDraw(){
+  drag.phase=0; drag.locked=false;
+  dProgress.textContent="Kartu "+(drag.idx+1)+" dari 8";
+  dScore.textContent="Skor: "+drag.score+" / 80";
+  dBar.style.width=(drag.idx/8*100)+"%";
+  document.getElementById("dSayScore").textContent=drag.say;
+  document.getElementById("dStickScore").textContent=drag.stick;
+  dStepTag.textContent="Giliran Anak ke-"+(drag.idx+1); dStepTag.classList.remove("step2");
+  dSub.textContent="Klik AMBIL KARTU untuk mengambil satu kartu derajat secara acak.";
+  dFeedback.className="feedback"; dFeedback.innerHTML="";
+  btnDNext.classList.add("hidden");
+  for(var k in dragPos) dragPos[k].classList.remove("placed-right","placed-wrong","drop-hi");
+  dChoices.innerHTML="";
+  dragCard.classList.add("hidden");
+  dragCard.classList.remove("ready","placed","dragging");
+  dragCard.style.cssText="";
+  btnDraw.classList.remove("hidden");
+  btnDraw.textContent=drag.idx===0?"AMBIL KARTU":"GILIRAN BERIKUTNYA — AMBIL KARTU";
+}
+btnDraw.addEventListener("click",function(){
+  if(drag.phase!==0) return;
+  var t=drag.order[drag.idx];
+  drag.phase=1; drag.locked=false;
+  btnDraw.classList.add("hidden");
+  dragCard.classList.remove("hidden","placed");
+  dragCard.style.cssText="";
+  document.getElementById("dragCardDeg").textContent=t.deg+"°";
+  document.getElementById("dragCardHint").textContent="Pilih arahnya dulu!";
+  dStepTag.textContent="Langkah 1: Sebutkan Arahnya"; dStepTag.classList.remove("step2");
+  dSub.textContent="Sebutkan dengan keras, lalu sentuh jawabanmu!";
+  speakDegOnly(t.deg);
+  var choices=makeChoices(t,function(d){ return d.name; });
+  dChoices.innerHTML="";
+  choices.forEach(function(c){
+    var b=document.createElement("button");
+    b.type="button"; b.className="choice"; b.textContent=c.label;
+    b.addEventListener("click",function(){ sayAnswerD(b,c.deg,t); });
+    dChoices.appendChild(b);
+  });
+});
+function sayAnswerD(btn,chosenDeg,t){
+  if(drag.phase!==1||drag.locked) return; drag.locked=true;
+  var right=chosenDeg===t.deg;
+  drag._sayRight=right;
+  if(right){ drag.say+=5; drag.score+=5; }
+  var btns=dChoices.querySelectorAll(".choice");
+  for(var i=0;i<btns.length;i++){
+    btns[i].disabled=true;
+    if(btns[i].textContent===t.name) btns[i].classList.add("correct");
+    else if(btns[i]===btn) btns[i].classList.add("wrong");
+  }
+  document.getElementById("dSayScore").textContent=drag.say;
+  dScore.textContent="Skor: "+drag.score+" / 80";
+  speakDeg(t.deg);
+  drag.phase=2; drag.locked=false;
+  dStepTag.textContent="Langkah 2: Geser Kartunya"; dStepTag.classList.add("step2");
+  dSub.textContent="Sekarang geser kartunya ke lingkaran yang benar pada roda kompas!";
+  document.getElementById("dragCardHint").textContent="Seret aku ke roda kompas!";
+  dragCard.classList.add("ready");
+  dFeedback.className="feedback show "+(right?"ok":"no");
+  dFeedback.innerHTML=(right
+    ? "<span class='fb-title'>Menyebut: BENAR! +5 poin</span><br>"
+    : "<span class='fb-title'>Menyebut: belum tepat.</span> Arah "+t.deg+"° adalah <b>"+t.name+"</b>.<br>")
+    +"Lanjut ke Langkah 2: geser kartunya ke roda kompas mini.";
+}
+/* --- seret kartu (pointer events: mouse + sentuhan) --- */
+var dragState=null;
+dragCard.addEventListener("pointerdown",function(ev){
+  if(drag.phase!==2||drag.locked) return;
+  ev.preventDefault();
+  var r=dragCard.getBoundingClientRect();
+  dragState={dx:ev.clientX-r.left, dy:ev.clientY-r.top, moved:false};
+  dragCard.style.position="fixed";
+  dragCard.style.left=r.left+"px"; dragCard.style.top=r.top+"px";
+  dragCard.style.width=r.width+"px"; dragCard.style.margin="0";
+  dragCard.classList.add("dragging");
+  try{ dragCard.setPointerCapture(ev.pointerId); }catch(e){}
+});
+document.addEventListener("pointermove",function(ev){
+  if(!dragState) return;
+  dragState.moved=true;
+  dragCard.style.left=(ev.clientX-dragState.dx)+"px";
+  dragCard.style.top=(ev.clientY-dragState.dy)+"px";
+  var hit=hitCircle(ev.clientX,ev.clientY);
+  for(var k in dragPos) dragPos[k].classList.toggle("drop-hi", hit!==null && +k===hit);
+});
+function endDrag(ev){
+  if(!dragState) return;
+  var st=dragState; dragState=null;
+  dragCard.classList.remove("dragging");
+  for(var k in dragPos) dragPos[k].classList.remove("drop-hi");
+  if(!ev || !st.moved){ snapCardBack(); return; }
+  var hit=hitCircle(ev.clientX,ev.clientY);
+  if(hit===null){ snapCardBack(); return; }
+  dropAnswer(hit);
+}
+document.addEventListener("pointerup",endDrag);
+document.addEventListener("pointercancel",function(){ endDrag(null); });
+function hitCircle(x,y){
+  var pad=22;
+  for(var k in dragPos){
+    var c=dragPos[k].querySelector("circle.dot").getBoundingClientRect();
+    if(x>=c.left-pad && x<=c.right+pad && y>=c.top-pad && y<=c.bottom+pad) return +k;
+  }
+  return null;
+}
+function snapCardBack(){
+  var s=dragSlot.getBoundingClientRect(), r=dragCard.getBoundingClientRect();
+  dragCard.style.transition="left .25s ease, top .25s ease";
+  dragCard.style.left=(s.left+(s.width-r.width)/2)+"px";
+  dragCard.style.top=(s.top+(s.height-r.height)/2)+"px";
+  setTimeout(function(){ dragCard.style.cssText=""; dragCard.classList.remove("dragging"); },260);
+}
+function dropAnswer(deg){
+  if(drag.phase!==2||drag.locked) return; drag.locked=true;
+  var t=drag.order[drag.idx];
+  var right=deg===t.deg;
+  if(right){ drag.stick+=5; drag.score+=5; }
+  dragPos[t.deg].classList.add("placed-right");
+  if(!right) dragPos[deg].classList.add("placed-wrong");
+  document.getElementById("dStickScore").textContent=drag.stick;
+  dScore.textContent="Skor: "+drag.score+" / 80";
+  dBar.style.width=((drag.idx+1)/8*100)+"%";
+  if(right){
+    var c=dragPos[t.deg].querySelector("circle.dot").getBoundingClientRect();
+    var r=dragCard.getBoundingClientRect();
+    dragCard.style.transition="left .25s ease, top .25s ease";
+    /* Kartu yang menempel harus ikut bergulir bersama halaman (position
+       absolute dalam koordinat dokumen), bukan menempel di viewport — kalau
+       tetap fixed, kartu akan melayang lepas dari roda kompas begitu halaman
+       bergulir (mis. saat tombol berikutnya difokuskan). */
+    dragCard.style.position="absolute";
+    dragCard.style.left=(c.left+window.scrollX+c.width/2-r.width/2)+"px";
+    dragCard.style.top=(c.top+window.scrollY+c.height/2-r.height/2)+"px";
+    dragCard.classList.add("placed");
+    document.getElementById("dragCardHint").textContent="✓ Menempel di "+t.name+"!";
+  }else{
+    snapCardBack();
+  }
+  var sayTxt=drag._sayRight?"menyebut +5":"menyebut +0";
+  var stickTxt=right?"menempel +5":"menempel +0";
+  dFeedback.className="feedback show "+(right?"ok":"no");
+  dFeedback.innerHTML="<span class='fb-title'>"+(right?"Kartu menempel TEPAT! +5 poin":"Kartu belum menempel di tempat yang benar.")+"</span><br>"
+    +"Kartu ini: "+sayTxt+", "+stickTxt+". <b>"+t.deg+"° = "+t.name+"</b>. "+t.hint;
+  drag.phase=3;
+  btnDNext.textContent=(drag.idx===7)?"LIHAT SKOR AKHIR":"GILIRAN BERIKUTNYA →";
+  btnDNext.classList.remove("hidden"); btnDNext.focus({preventScroll:true});
+}
+btnDNext.addEventListener("click",function(){
+  drag.idx++;
+  if(drag.idx>=8){
+    document.getElementById("dCardMain").classList.add("hidden");
+    dFinish.classList.remove("hidden");
+    document.getElementById("dFinalScore").textContent=drag.score+" / 80";
+    document.getElementById("dFinalStars").textContent=starStr(drag.score);
+    document.getElementById("dFinalMsg").textContent=cheer(drag.score);
+    dProgress.textContent="Permainan selesai — 8 kartu";
+    dBar.style.width="100%";
+  } else { renderDragDraw(); }
+});
+document.getElementById("btnDAgain").addEventListener("click",startDrag);
+
 /* tabs */
 var tabA=document.getElementById("tabA"), tabB=document.getElementById("tabB"), tabC=document.getElementById("tabC");
 function setTab(which){
   tabA.classList.toggle("active",which==="A"); tabA.setAttribute("aria-selected",which==="A");
   tabB.classList.toggle("active",which==="B"); tabB.setAttribute("aria-selected",which==="B");
   tabC.classList.toggle("active",which==="C"); tabC.setAttribute("aria-selected",which==="C");
-  document.getElementById("quizAB").classList.toggle("hidden",which==="C");
+  var tabD=document.getElementById("tabD");
+  tabD.classList.toggle("active",which==="D"); tabD.setAttribute("aria-selected",which==="D");
+  document.getElementById("quizAB").classList.toggle("hidden",which==="C"||which==="D");
   document.getElementById("quizC").classList.toggle("hidden",which!=="C");
-  if(which==="C") startSim(); else startQuiz(which);
+  document.getElementById("quizD").classList.toggle("hidden",which!=="D");
+  if(which==="C") startSim(); else if(which==="D") startDrag(); else startQuiz(which);
 }
 tabA.addEventListener("click",function(){ setTab("A"); });
 tabB.addEventListener("click",function(){ setTab("B"); });
 tabC.addEventListener("click",function(){ setTab("C"); });
+document.getElementById("tabD").addEventListener("click",function(){ setTab("D"); });
 startQuiz("A");
 
 /* ============ PRINT SHEET ============ */
