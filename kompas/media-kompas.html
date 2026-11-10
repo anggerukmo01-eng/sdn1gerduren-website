@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=1024" />
 <meta name="color-scheme" content="light dark" />
 <link rel="icon" href="data:," />
 <title>Pos Kompas — Taman 4 Pesta Siaga</title>
@@ -359,7 +359,7 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
   <!-- ================= 3. KUIS INTERAKTIF ================= -->
   <section class="block screen-only" id="kuis">
     <div class="sec-head"><div class="sec-num green">3</div><h2>Kuis &amp; Simulasi Lomba</h2></div>
-    <p class="sec-lead">Satu ronde = 8 soal, seperti 8 anak dalam barung. <b>Mode A</b> melatih langkah 1 lomba (ambil kartu derajat, sebut arahnya): jawaban benar = <b>10 poin latihan</b>, maksimal <b>80</b> per ronde. <b>Mode B</b> hanya latihan tambahan (bukan bagian lomba): dari nama arah, tebak derajatnya. <b>Mode C</b> — simulasi lomba sungguhan — nilainya dipecah persis seperti aturan lomba: <b>benar menyebut 5 poin + benar menempel 5 poin</b>. <b>Mode D</b> — permainan geser kartu: anak mengambil kartu derajat secara acak dengan cara klik kartu, memilih arah mata angin yang sesuai, lalu <b>menggeser kartunya</b> ke lingkaran yang benar pada roda kompas — bergiliran, satu anak satu kartu, skornya sama seperti lomba.</p>
+    <p class="sec-lead">Satu ronde = 8 soal, seperti 8 anak dalam barung. <b>Mode A</b> melatih langkah 1 lomba (ambil kartu derajat, sebut arahnya): jawaban benar = <b>10 poin latihan</b>, maksimal <b>80</b> per ronde. <b>Mode B</b> hanya latihan tambahan (bukan bagian lomba): dari nama arah, tebak derajatnya. <b>Mode C</b> — simulasi lomba sungguhan — nilainya dipecah persis seperti aturan lomba: <b>benar menyebut 5 poin + benar menempel 5 poin</b>. <b>Mode D</b> — permainan geser kartu: anak mengambil kartu derajat secara acak dengan cara klik kartu, memilih arah mata angin yang sesuai, lalu <b>menggeser kartunya</b> ke lingkaran yang benar pada roda kompas — bergiliran, satu anak satu kartu, skornya sama seperti lomba. Setiap jawaban dibacakan dengan suara: benar — “Wah hebat, kamu benar!”, salah — “Kamu salah.”</p>
 
     <div class="mode-tabs" role="tablist" aria-label="Pilih mode latihan">
       <button class="mode-tab active" id="tabA" type="button" role="tab" aria-selected="true">Mode A<small>Derajat &rarr; Arah (latihan menyebut)</small></button>
@@ -372,7 +372,7 @@ footer.site .src{background:var(--surface); border:2.5px solid var(--line); bord
     <div id="quizAB">
       <div class="quiz-top">
         <span class="progress-text" id="qProgress">Soal 1 dari 8</span>
-        <span class="score-badge" id="qScore">Skor: 0 / 80</span>
+        <span class="score-badge" id="qScore">Skor Latihan: 0 / 80</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="qBar"></div></div>
       <div class="q-card" id="qCard">
@@ -645,6 +645,13 @@ function speakDeg(deg){
 function speakDegOnly(deg){
   speakText(deg+" derajat");
 }
+/* Suara penilaian kuis: benar -> pujian, salah -> koreksi. Selalu disertai
+   pasangan derajat-arah yang benar, supaya anak mendengar jawabannya. */
+function speakVerdict(right, t){
+  speakText(right
+    ? "Wah hebat, kamu benar! "+t.deg+" derajat, "+t.name+"."
+    : "Kamu salah. Jawabannya "+t.deg+" derajat, "+t.name+".");
+}
 function setDirection(deg, speak){
   var d=byDeg(deg);
   currentDeg=deg;
@@ -748,9 +755,10 @@ function answerAB(btn,chosenDeg,t){
     ? "<span class='fb-title'>BENAR! Hebat sekali! +10 poin</span><br>"
     : "<span class='fb-title'>Belum tepat, tidak apa-apa!</span><br>")
     +"Jawabannya: <b>"+t.deg+"° = "+t.name+"</b>. "+t.hint;
+  speakVerdict(right, t);
   btnNext.textContent=(quiz.idx===7)?"LIHAT SKOR AKHIR":"SOAL BERIKUTNYA →";
   btnNext.classList.remove("hidden");
-  btnNext.focus();
+  btnNext.focus({preventScroll:true});
 }
 btnNext.addEventListener("click",function(){
   quiz.idx++;
@@ -770,6 +778,7 @@ function showFinish(){
   document.getElementById("finalMsg").textContent=cheer(quiz.score);
   qProgress.textContent="Ronde selesai — 8 soal";
   qBar.style.width="100%";
+  document.getElementById("btnAgain").focus({preventScroll:true});
 }
 document.getElementById("btnAgain").addEventListener("click",function(){ startQuiz(quiz.mode); });
 
@@ -832,6 +841,7 @@ function sayAnswer(btn,chosenDeg,t){
     ? "<span class='fb-title'>Menyebut: BENAR! +5 poin</span><br>"
     : "<span class='fb-title'>Menyebut: belum tepat.</span> Arah "+t.deg+"° adalah <b>"+t.name+"</b>.<br>")
     +"Lanjut ke Langkah 2: tempelkan kartunya pada roda kompas mini.";
+  speakVerdict(right, t);
 }
 function stickAnswer(deg){
   if(sim.phase!==2||sim.locked) return; sim.locked=true;
@@ -848,8 +858,9 @@ function stickAnswer(deg){
   cFeedback.className="feedback show "+(right?"ok":"no");
   cFeedback.innerHTML="<span class='fb-title'>"+(right?"Menempel: TEPAT SEKALI! +5 poin":"Menempel: belum tepat.")+"</span><br>"
     +"Kartu ini: "+sayTxt+", "+stickTxt+". <b>"+t.deg+"° = "+t.name+"</b>. "+t.hint;
+  speakVerdict(right, t);
   btnCNext.textContent=(sim.idx===7)?"LIHAT SKOR AKHIR":"KARTU BERIKUTNYA →";
-  btnCNext.classList.remove("hidden"); btnCNext.focus();
+  btnCNext.classList.remove("hidden"); btnCNext.focus({preventScroll:true});
 }
 btnCNext.addEventListener("click",function(){
   sim.idx++;
@@ -861,6 +872,7 @@ btnCNext.addEventListener("click",function(){
     document.getElementById("cFinalMsg").textContent=cheer(sim.score);
     cProgress.textContent="Simulasi selesai — 8 kartu";
     cBar.style.width="100%";
+    document.getElementById("btnCAgain").focus({preventScroll:true});
   } else { renderSimCard(); }
 });
 document.getElementById("btnCAgain").addEventListener("click",startSim);
@@ -887,7 +899,7 @@ function startDrag(){
   renderDragDraw();
 }
 function renderDragDraw(){
-  drag.phase=0; drag.locked=false;
+  drag.phase=0; drag.locked=false; dragState=null; /* batalkan seretan yang tertinggal (mis. pindah tab di tengah menyeret) */
   dProgress.textContent="Kartu "+(drag.idx+1)+" dari 8";
   dScore.textContent="Skor: "+drag.score+" / 80";
   dBar.style.width=(drag.idx/8*100)+"%";
@@ -939,7 +951,7 @@ function sayAnswerD(btn,chosenDeg,t){
   }
   document.getElementById("dSayScore").textContent=drag.say;
   dScore.textContent="Skor: "+drag.score+" / 80";
-  speakDeg(t.deg);
+  speakVerdict(right, t);
   drag.phase=2; drag.locked=false;
   dStepTag.textContent="Langkah 2: Geser Kartunya"; dStepTag.classList.add("step2");
   dSub.textContent="Sekarang geser kartunya ke lingkaran yang benar pada roda kompas!";
@@ -1030,6 +1042,7 @@ function dropAnswer(deg){
   dFeedback.className="feedback show "+(right?"ok":"no");
   dFeedback.innerHTML="<span class='fb-title'>"+(right?"Kartu menempel TEPAT! +5 poin":"Kartu belum menempel di tempat yang benar.")+"</span><br>"
     +"Kartu ini: "+sayTxt+", "+stickTxt+". <b>"+t.deg+"° = "+t.name+"</b>. "+t.hint;
+  speakVerdict(right, t);
   drag.phase=3;
   btnDNext.textContent=(drag.idx===7)?"LIHAT SKOR AKHIR":"GILIRAN BERIKUTNYA →";
   btnDNext.classList.remove("hidden"); btnDNext.focus({preventScroll:true});
@@ -1044,13 +1057,17 @@ btnDNext.addEventListener("click",function(){
     document.getElementById("dFinalMsg").textContent=cheer(drag.score);
     dProgress.textContent="Permainan selesai — 8 kartu";
     dBar.style.width="100%";
+    document.getElementById("btnDAgain").focus({preventScroll:true});
   } else { renderDragDraw(); }
 });
 document.getElementById("btnDAgain").addEventListener("click",startDrag);
 
 /* tabs */
 var tabA=document.getElementById("tabA"), tabB=document.getElementById("tabB"), tabC=document.getElementById("tabC");
+var curTab="A"; /* tab yang sedang aktif — klik tab yang sama tidak boleh memulai ulang ronde */
 function setTab(which){
+  if(which===curTab) return; /* tetap di ronde yang sedang berjalan */
+  curTab=which;
   tabA.classList.toggle("active",which==="A"); tabA.setAttribute("aria-selected",which==="A");
   tabB.classList.toggle("active",which==="B"); tabB.setAttribute("aria-selected",which==="B");
   tabC.classList.toggle("active",which==="C"); tabC.setAttribute("aria-selected",which==="C");
