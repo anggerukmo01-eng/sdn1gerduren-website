@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unduhan — SD Negeri 1 Gerduren</title>
+<meta name="description" content="Bahan cetak dan dokumen SD Negeri 1 Gerduren yang bisa diunduh: kartu latihan Pos Kompas, media cetak Pesta Siaga, dan dokumen resmi.">
+<meta property="og:title" content="SD Negeri 1 Gerduren">
+<meta property="og:description" content="Sekolah dasar negeri di Desa Gerduren, Purwojati, Banyumas. NPSN 20302352.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SD Negeri 1 Gerduren">
+<meta property="og:url" content="https://sdn1gerduren.pages.dev/unduhan/">
+<meta property="og:image" content="https://sdn1gerduren.pages.dev/images/galeri-gedung.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sdn1gerduren.pages.dev/images/galeri-gedung.png">
+<link rel="icon" href="/images/logo-sdn1gerduren.png">
+<script>try{var t=localStorage.getItem('sdn-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+/* Tombol cetak + pemberitahuan (gaya dari media Pos Kompas) */
+.btn{border-radius:16px; padding:16px 22px; font-size:20px; font-weight:900; min-height:62px; border:none; cursor:pointer; font-family:inherit}
+.btn.red{background:#e63946; color:#fff; box-shadow:0 5px 0 #c22533}
+.btn.red:active{transform:translateY(4px); box-shadow:0 1px 0 #c22533}
+.feedback{border-radius:16px; padding:16px 18px; margin-top:16px; font-size:17px; font-weight:700; display:none; text-align:left}
+.feedback.show{display:block}
+.feedback.ok{background:#d8f5df; border:2.5px solid #25a244}
+.feedback .fb-title{font-family:"Fredoka"; font-size:21px; font-weight:600}
+/* Lembar cetak Pos Kompas (dipindah dari media-kompas.html bagian 4) */
+.print-sheet{
+  background:#fff; color:#17324f; border:3px solid var(--line); border-radius:20px; padding:22px;
+}
+.print-sheet h3{margin:0 0 4px; font-size:24px}
+.print-sheet h4{margin:20px 0 8px; font-size:19px; font-family:"Fredoka"; font-weight:600}
+.print-sheet p{font-weight:700; margin:0 0 8px}
+.print-sheet table{width:100%; border-collapse:collapse; font-size:16px; margin-bottom:6px}
+.print-sheet th,.print-sheet td{border:2px solid #9db8cc; padding:8px 9px; text-align:left}
+.print-sheet th{background:#dceefb; font-family:"Fredoka"; font-weight:600}
+.cut-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+@media (max-width:700px){ .cut-grid{grid-template-columns:repeat(2,1fr)} }
+.cut-card{border:2.5px dashed #7ba7c7; border-radius:12px; padding:14px 8px; text-align:center}
+.cut-card .c-deg{font-family:"Fredoka"; font-size:30px; font-weight:700; color:#c22533}
+.cut-card .c-q{font-size:13.5px; font-weight:800; color:#47617d}
+.name-line{display:flex; gap:18px; flex-wrap:wrap; font-weight:800; margin:8px 0 4px}
+.name-line span{border-bottom:2px dotted #7ba7c7; padding:0 30px 2px 4px}
+@media print{
+  body{background:#fff !important}
+  .screen-only, header, footer, .topstrip, .utilbar, .page-head, .lede, .cards, .modal-backdrop{display:none !important}
+  .wrap{max-width:none; padding:0}
+  .print-sheet{border:none; border-radius:0; padding:6px}
+  .cut-card,.print-sheet table{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#konten">Lewati ke konten utama</a>
+<div class="topstrip" aria-hidden="true"></div>
+<div class="utilbar"><div class="wrap utilbar-inner"><span>SD Negeri 1 Gerduren &bull; Purwojati &bull; Banyumas &bull; NPSN 20302352</span><span class="clock" id="clock-widget">Memuat jam&hellip;</span></div></div>
+<header>
+  <div class="wrap topbar">
+    <a class="brand" href="/" aria-label="Beranda SD Negeri 1 Gerduren">
+      <span class="brand-logos" aria-hidden="true"><img src="/images/logo-sdn1gerduren.png" alt=""><img class="logo-bms" src="/images/logo-banyumas.png" alt=""></span>
+      <span><b>SD Negeri 1 Gerduren</b><span>Purwojati &bull; Banyumas &bull; NPSN 20302352</span></span>
+    </a>
+    <div class="header-actions">
+      <button class="theme-btn" type="button" id="theme-btn" aria-label="Ubah mode gelap atau terang">&#127769; Mode Gelap</button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-utama" id="menu-btn">&#9776; Menu</button>
+    </div>
+    <nav aria-label="Navigasi utama" id="nav-utama"><a href="/"><span aria-hidden="true">🏠</span> Beranda</a><a href="/profil/"><span aria-hidden="true">🏫</span> Profil</a><a href="/guru/"><span aria-hidden="true">👩‍🏫</span> Guru</a><a href="/akademik/"><span aria-hidden="true">📚</span> Akademik</a><a href="/berita/"><span aria-hidden="true">📰</span> Berita</a><a href="/kegiatan/"><span aria-hidden="true">🎨</span> Kegiatan</a><a href="/digitalisasi/"><span aria-hidden="true">💻</span> Digitalisasi</a><a href="/unduhan/" class="active"><span aria-hidden="true">📥</span> Unduhan</a><a href="/jadwal/"><span aria-hidden="true">🗓️</span> Jadwal</a><a href="/ppdb/"><span aria-hidden="true">📝</span> PPDB</a><a href="/kontak/"><span aria-hidden="true">📞</span> Kontak</a><a class="cta" href="/berita/">Berita Terbaru &rarr;</a></nav>
+  </div>
+</header>
+<main id="konten">
+  <div class="page-head"><div class="wrap"><img class="page-corner" src="/images/ilustrasi-pojok.png" alt="" aria-hidden="true"><p class="eyebrow" style="color:#ffe082">Dokumen &amp; Media Cetak</p><h1>Unduhan</h1><p>Bahan cetak dan dokumen SD Negeri 1 Gerduren yang bisa diunduh dan dicetak — untuk latihan murid dan keperluan sekolah.</p></div></div>
+  <section>
+    <div class="wrap">
+      <p class="lede">Halaman ini mengumpulkan bahan yang bisa diunduh. Kartu latihan Pos Kompas di bawah ini bisa langsung dicetak dari peramban; media cetak lengkapnya tersedia sebagai PDF.</p>
+      <div class="cards">
+        <div class="card"><span class="crystal-icon ci-cyan" aria-hidden="true">🧭</span><h3>Media Cetak Pos Kompas (PDF)</h3><p>Poster roda kompas, kartu derajat &amp; arah, lembar latihan, lembar simulasi lomba, dan kunci jawaban — siap cetak di kertas A4.</p><p><a href="/kompas/media-cetak-pos-kompas-latihan-siswa.pdf" download>Unduh PDF (12 halaman, 347 KB) &rarr;</a></p><p><a href="/kompas/">Buka Media Kompas &rarr;</a></p></div>
+        <div class="card"><span class="crystal-icon ci-amber" aria-hidden="true">📄</span><h3>Dokumen Resmi</h3><p>Dokumen resmi yang bisa diunduh (misalnya formulir PPDB) akan ditautkan di sini setelah tersedia dari sekolah.</p></div>
+      </div>
+
+      <div class="screen-only" style="margin-top:28px">
+        <h2>Kartu Latihan Pos Kompas — Siap Cetak</h2>
+        <p class="lede">Cetak halaman ini untuk latihan di sanggar: ada tabel hafalan, 8 kartu kuis derajat untuk digunting, dan lembar skor per anak seperti di lomba sungguhan.</p>
+        <button class="btn red" id="btnPrint" type="button" style="width:100%">CETAK KARTU LATIHAN</button>
+        <div class="feedback ok" id="printNotice" role="status">
+          <span class="fb-title">Cara mencetak lembar ini</span><br>
+          Gunakan menu peramban kamu: ketuk tombol <b>Menu (&#8942;)</b> atau <b>Bagikan</b>, lalu pilih <b>Cetak / Print</b>. Di komputer, tekan <b>Ctrl + P</b>. Tenang — yang tercetak hanya lembar Kartu Latihan di bawah ini; bagian lain halaman otomatis disembunyikan.
+        </div>
+      </div>
+
+      <div class="print-sheet" id="printSheet" style="margin-top:18px">
+        <h3>Pos Kompas — Taman 4 Pesta Siaga</h3>
+        <p>Lembar latihan 8 arah mata angin &bull; Skor maksimal 80 (benar menyebut 5 + benar menempel 5, untuk 8 soal)</p>
+        <div class="name-line"><span>Nama Anak: </span><span>Barung: </span><span>Tanggal: </span></div>
+
+        <h4>Tabel Hafalan 8 Arah Mata Angin</h4>
+        <div style="overflow-x:auto">
+        <table aria-label="Tabel hafalan 8 arah untuk dicetak">
+          <thead><tr><th>Derajat</th><th>Arah</th><th>Derajat</th><th>Arah</th></tr></thead>
+          <tbody>
+            <tr><td>0&deg;</td><td>Utara</td><td>180&deg;</td><td>Selatan</td></tr>
+            <tr><td>45&deg;</td><td>Timur Laut</td><td>225&deg;</td><td>Barat Daya</td></tr>
+            <tr><td>90&deg;</td><td>Timur</td><td>270&deg;</td><td>Barat</td></tr>
+            <tr><td>135&deg;</td><td>Tenggara</td><td>315&deg;</td><td>Barat Laut</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>Pola hafalan: tiap langkah 45&deg; &bull; Utara 0&deg; &bull; Timur 90&deg; &bull; Selatan 180&deg; &bull; Barat 270&deg; &bull; arah berlawanan selisih 180&deg; &bull; satu putaran penuh 360&deg;.</p>
+
+        <h4>Kartu Kuis Derajat — Gunting di Garis Putus-Putus</h4>
+        <div class="cut-grid" id="cutGrid"></div>
+
+        <h4>Lembar Skor Latihan Per Anak (seperti format lomba)</h4>
+        <div style="overflow-x:auto">
+        <table aria-label="Lembar skor latihan per anak">
+          <thead><tr><th style="width:44px">No</th><th>Kartu Derajat</th><th>Arah yang Benar</th><th style="width:130px">Benar Menyebut (5)</th><th style="width:130px">Benar Menempel (5)</th><th style="width:90px">Jumlah</th></tr></thead>
+          <tbody id="scoreRows"></tbody>
+          <tfoot><tr><th colspan="5" style="text-align:right">TOTAL SKOR (maksimal 80)</th><th></th></tr></tfoot>
+        </table>
+        </div>
+        <p style="font-size:14px">Cara memakai: anak mengambil satu kartu derajat, menyebutkan arahnya (beri tanda centang bila benar = 5), lalu menempelkan kartu pada gambar arah mata angin (beri tanda centang bila tepat = 5). Ulangi sampai 8 kartu.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-logos"><img src="/images/logo-sdn1gerduren.png" alt="Logo SD Negeri 1 Gerduren"><img src="/images/logo-banyumas.png" alt="Logo Kabupaten Banyumas"></div>
+      <strong style="color:#fff;font-size:18px">SD Negeri 1 Gerduren</strong>
+      <p>Desa Gerduren, Purwojati, Banyumas &bull; NPSN 20302352</p>
+      <p class="small" style="color:#bcd8c8">Situs statis ini dihosting gratis di Cloudflare Pages. Tidak ada data siswa, nilai, atau data pribadi yang disimpan atau ditampilkan di situs ini.</p>
+    </div>
+    <div>
+      <strong style="color:#fff">Navigasi</strong>
+      <ul class="footer-links">
+        <li><a href="/">Beranda</a> &bull; <a href="/profil/">Profil</a> &bull; <a href="/guru/">Guru</a> &bull; <a href="/akademik/">Akademik</a></li>
+        <li><a href="/berita/">Berita</a> &bull; <a href="/kegiatan/">Kegiatan</a> &bull; <a href="/digitalisasi/">Digitalisasi</a> &bull; <a href="/unduhan/">Unduhan</a> &bull; <a href="/jadwal/">Jadwal</a> &bull; <a href="/ppdb/">PPDB</a></li>
+        <li><a href="/kontak/">Kontak</a> &bull; <a href="/admin">Kelola Berita (Admin)</a></li>
+      </ul>
+    </div>
+    <div>
+      <strong style="color:#fff">Catatan</strong>
+      <p class="small" style="color:#bcd8c8">Versi 3.6</p>
+    </div>
+  </div>
+</footer>
+<div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <button class="modal-close" type="button" id="modal-close">Tutup &times;</button>
+    <div class="news-meta" id="modal-meta"></div>
+    <h2 class="news-title" id="modal-title" style="font-size:26px;-webkit-line-clamp:unset"></h2>
+    <div id="modal-media"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+<script src="/assets/site.js"></script>
+<script>
+(function(){
+"use strict";
+var DIRS=[
+ {deg:0,name:"Utara"},{deg:45,name:"Timur Laut"},{deg:90,name:"Timur"},{deg:135,name:"Tenggara"},
+ {deg:180,name:"Selatan"},{deg:225,name:"Barat Daya"},{deg:270,name:"Barat"},{deg:315,name:"Barat Laut"}
+];
+var cutGrid=document.getElementById("cutGrid");
+DIRS.forEach(function(d){
+  var c=document.createElement("div"); c.className="cut-card";
+  c.innerHTML="<div class='c-deg'>"+d.deg+"&deg;</div><div class='c-q'>Arah apa ini?<br>Tulis: ____________</div>";
+  cutGrid.appendChild(c);
+});
+var scoreRows=document.getElementById("scoreRows");
+DIRS.forEach(function(d,i){
+  var tr=document.createElement("tr");
+  tr.innerHTML="<td>"+(i+1)+"</td><td>"+d.deg+"&deg;</td><td>"+d.name+"</td><td></td><td></td><td></td>";
+  scoreRows.appendChild(tr);
+});
+document.getElementById("btnPrint").addEventListener("click",function(){
+  var n=document.getElementById("printNotice");
+  n.classList.add("show");
+  n.scrollIntoView({behavior:"smooth",block:"center"});
+});
+})();
+</script>
+</body>
+</html>
