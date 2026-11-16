@@ -385,3 +385,63 @@
     document.body.appendChild(bar);
   }
 })();
+
+/* Khusus Guru — gerbang kata sandi menuju aplikasi AdminGuru */
+(function(){
+  var URL_ADMINGURU = 'https://anggerukmo01-eng.github.io/AdminGuru/';
+  /* Kata sandi standar = NPSN sekolah (20302352). Ini gerbang lunak di sisi
+     peramban saja, BUKAN pengaman sungguhan: NPSN bersifat publik dan tautan
+     AdminGuru tetap bisa dibuka langsung oleh siapa pun yang mengetahuinya. */
+  var SANDI_KHUSUS_GURU = '20302352';
+  function bukaAdminGuru(){
+    try{ sessionStorage.setItem('sdn-khusus-guru', '1'); }catch(e){}
+    var w = null;
+    try{ w = window.open(URL_ADMINGURU, '_blank'); }catch(e){}
+    if(w){ try{ w.opener = null; }catch(e){} }
+    else { window.location.href = URL_ADMINGURU; }
+  }
+  function tutupModal(){
+    var b = document.getElementById('modal-backdrop');
+    if(b) b.classList.remove('open');
+  }
+  window.bukaKhususGuru = function(ev){
+    if(ev && ev.preventDefault) ev.preventDefault();
+    try{
+      if(sessionStorage.getItem('sdn-khusus-guru') === '1'){ bukaAdminGuru(); return false; }
+    }catch(e){}
+    var backdrop = document.getElementById('modal-backdrop');
+    var title = document.getElementById('modal-title');
+    var meta = document.getElementById('modal-meta');
+    var media = document.getElementById('modal-media');
+    var body = document.getElementById('modal-body');
+    if(!backdrop || !title || !body){ bukaAdminGuru(); return false; }
+    title.textContent = 'Khusus Guru';
+    if(meta) meta.innerHTML = '<span class="pill">Aplikasi AdminGuru</span>';
+    if(media) media.innerHTML = '';
+    body.innerHTML =
+      '<p>Menu ini khusus guru SD Negeri 1 Gerduren. Masukkan kata sandi untuk membuka aplikasi <strong>AdminGuru</strong>.</p>' +
+      '<form id="kg-form" class="kg-form">' +
+        '<label for="kg-sandi">Kata sandi</label>' +
+        '<input id="kg-sandi" name="sandi" type="password" inputmode="numeric" autocomplete="off" placeholder="Masukkan kata sandi" required>' +
+        '<p class="kg-error" id="kg-error" role="alert" hidden>Kata sandi salah. Coba lagi.</p>' +
+        '<button type="submit">Masuk ke AdminGuru</button>' +
+        '<p class="small">Kata sandi standar: NPSN sekolah.</p>' +
+      '</form>';
+    backdrop.classList.add('open');
+    var form = document.getElementById('kg-form');
+    var input = document.getElementById('kg-sandi');
+    var err = document.getElementById('kg-error');
+    if(input) input.focus();
+    if(form) form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(input && input.value === SANDI_KHUSUS_GURU){
+        tutupModal();
+        bukaAdminGuru();
+      } else {
+        if(err) err.hidden = false;
+        if(input){ input.value = ''; input.focus(); }
+      }
+    });
+    return false;
+  };
+})();
