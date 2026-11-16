@@ -425,7 +425,6 @@
         '<input id="kg-sandi" name="sandi" type="password" inputmode="numeric" autocomplete="off" placeholder="Masukkan kata sandi" required>' +
         '<p class="kg-error" id="kg-error" role="alert" hidden>Kata sandi salah. Coba lagi.</p>' +
         '<button type="submit">Masuk ke AdminGuru</button>' +
-        '<p class="small">Kata sandi standar: NPSN sekolah.</p>' +
       '</form>';
     backdrop.classList.add('open');
     var form = document.getElementById('kg-form');
