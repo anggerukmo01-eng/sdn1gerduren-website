@@ -386,7 +386,7 @@
   }
 })();
 
-/* Khusus Guru — gerbang kata sandi menuju aplikasi AdminGuru */
+/* Aplikasi Administrasi Guru — gerbang kata sandi menuju aplikasi AdminGuru */
 (function(){
   var URL_ADMINGURU = 'https://anggerukmo01-eng.github.io/AdminGuru/';
   /* Kata sandi standar = NPSN sekolah (20302352). Ini gerbang lunak di sisi
@@ -415,7 +415,7 @@
     var media = document.getElementById('modal-media');
     var body = document.getElementById('modal-body');
     if(!backdrop || !title || !body){ bukaAdminGuru(); return false; }
-    title.textContent = 'Khusus Guru';
+    title.textContent = 'Aplikasi Administrasi Guru';
     if(meta) meta.innerHTML = '<span class="pill">Aplikasi AdminGuru</span>';
     if(media) media.innerHTML = '';
     body.innerHTML =
@@ -443,4 +443,50 @@
     });
     return false;
   };
+})();
+
+/* Dropdown Digitalisasi — submenu sebagai panel fixed di desktop (nav bisa
+   digeser horizontal, jadi panel tidak boleh jadi anak nav yang terpotong);
+   di menu mobile submenu tampil statis menjorok (diatur CSS). */
+(function(){
+  var drop = document.querySelector('.nav-drop');
+  if(!drop) return;
+  var toggle = drop.querySelector('.nav-drop-toggle');
+  var sub = drop.querySelector('.nav-sub');
+  if(!toggle || !sub) return;
+  var timer = null;
+  function desktop(){ return window.innerWidth > 1180; }
+  function place(){
+    var r = toggle.getBoundingClientRect();
+    var w = sub.offsetWidth || 300;
+    var left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8));
+    sub.style.left = left + 'px';
+    sub.style.top = (r.bottom + 6) + 'px';
+  }
+  function open(){
+    if(!desktop()) return;
+    clearTimeout(timer);
+    sub.classList.add('open');
+    place();
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+  function close(){
+    clearTimeout(timer);
+    sub.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function later(){ clearTimeout(timer); timer = setTimeout(close, 200); }
+  drop.addEventListener('mouseenter', open);
+  drop.addEventListener('mouseleave', later);
+  sub.addEventListener('mouseenter', function(){ clearTimeout(timer); });
+  sub.addEventListener('mouseleave', later);
+  toggle.addEventListener('focus', open);
+  sub.addEventListener('focusout', function(e){ if(!sub.contains(e.relatedTarget)) later(); });
+  sub.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
+  document.addEventListener('click', function(e){ if(!drop.contains(e.target)) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+  window.addEventListener('scroll', close, true);
+  window.addEventListener('resize', close);
+  var nav = document.getElementById('nav-utama');
+  if(nav) nav.addEventListener('scroll', close);
 })();
