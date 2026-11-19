@@ -429,6 +429,7 @@
   .chat-msg b{color:#0369a1;font-family:'Fredoka',sans-serif;font-weight:600;}
   .chat-empty{font-size:11.5px;font-weight:700;color:#94a3b8;line-height:1.5;padding:2px 0 3px;}
   .chat-input-row{display:flex;gap:6px;padding:8px;border-top:2px solid rgba(23,50,74,.08);}
+  #chatForm{margin:0;}
   #chatInput{flex:1;min-width:0;height:42px;border:2px solid #cbd5e1;border-radius:11px;padding:0 10px;font-size:14px;font-weight:700;color:var(--ink);outline:none;background:#f8fafc;}
   #chatInput:focus{border-color:#0284c7;background:#fff;}
   #chatSend{flex:none;height:42px;min-height:42px;padding:0 14px;border:none;border-radius:11px;background:#0284c7;color:#fff;font-family:'Fredoka',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;}
@@ -713,13 +714,13 @@
       <button id="chatToggle" type="button" aria-label="Ciutkan atau buka panel chat">−</button>
     </div>
     <div id="chatLog" aria-live="polite" aria-label="Riwayat pesan chat"></div>
-    <div class="chat-input-row">
+    <form class="chat-input-row" id="chatForm">
       <input id="chatInput" type="text" maxlength="120" placeholder="Ketik pesan…" autocomplete="off" enterkeyhint="send" aria-label="Ketik pesan chat" />
-      <button id="chatSend" type="button" aria-label="Kirim pesan chat">
+      <button id="chatSend" type="submit" aria-label="Kirim pesan chat">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 10.5 13.5M21 3l-6.8 18-3.7-7.5L3 9.8 21 3z"/></svg>
         Kirim
       </button>
-    </div>
+    </form>
   </div>
 
   <div class="hint" id="hint">Joystick kiri untuk berjalan • geser kanan layar untuk memutar kamera</div>
@@ -5269,9 +5270,12 @@ renderDestList();
    Panel chat di kiri tengah layar: kotak ketik + tombol kirim + riwayat pesan.
    Tanpa ruangan multiplayer: pesan pemain sendiri tampil di sini + gelembung di
    atas kepala (mode lokal). Di dalam ruangan Main Bareng, pesan dikirim lewat
-   server dan dibagikan ke semua pemain (lihat modul MULTIPLAYER di bawah):
-   server memantulkan pesan ke semua termasuk pengirim, jadi tampilan lokal
-   selalu berasal dari pesan server supaya urutannya sama untuk semua orang. */
+   server dan dibagikan ke semua pemain (lihat modul MULTIPLAYER di bawah).
+   Pesan sendiri tampil LANGSUNG saat dikirim (optimistis); server tetap
+   memantulkan pesan ke semua termasuk pengirim, dan pantulan itu dipakai
+   sebagai konfirmasi terkirim + didedupe — tampilan pesan sendiri tidak lagi
+   bergantung pada pantulan, yang di sebagian penampil aplikasi/WebView bisa
+   tidak terproses sehingga pesan seolah hilang. */
 var chatLogEl = document.getElementById('chatLog'), chatInputEl = document.getElementById('chatInput');
 var chatHasMsg = false;
 chatLogEl.innerHTML = '<div class="chat-empty">Ketik pesan di sini — muncul juga sebagai gelembung di atas kepalamu. Gabung ruangan lewat tombol <b>Bareng</b> untuk mengobrol dengan teman-teman satu ruangan.</div>';
@@ -5299,17 +5303,46 @@ function sendChat(){
   var text = chatInputEl.value.trim().replace(/\s+/g, ' ');
   if(!text) return;
   chatInputEl.value = '';
-  if(typeof mpSendChat === 'function' && mpSendChat(text)) return; // di ruangan: server memantulkan ke semua (termasuk kita)
+  if(typeof mpSendChat === 'function' && mpSendChat(text)){
+    // Di dalam ruangan: tampilkan pesan sendiri LANGSUNG (optimistis) —
+    // jangan menunggu pantulan server seperti sebelumnya. Pantulan tetap
+    // datang dan dicatat sebagai konfirmasi terkirim oleh mpTrackOwnChat,
+    // lalu didedupe di penangan pesan chat supaya tidak tampil dua kali.
+    addChatMessage(playerName, text);
+    showPlayerBubble(text);
+    AudioSys.sfx('pop');
+    if(typeof mpTrackOwnChat === 'function') mpTrackOwnChat(text);
+    return;
+  }
   addChatMessage(playerName, text);
   showPlayerBubble(text);
   AudioSys.sfx('pop');
 }
-document.getElementById('chatSend').addEventListener('click', sendChat);
+document.getElementById('chatSend').addEventListener('click', function(){
+  sendChat();
+  chatInputEl.focus(); // keyboard tetap terbuka untuk pesan berikutnya
+});
+/* Enter di HP tidak seragam: keyboard virtual di sebagian WebView/penampil
+   aplikasi tidak selalu mengirim keydown dengan key "Enter" — kadang hanya
+   keyup, kadang hanya kodenya (keyCode 13). Kenali Enter dari semua tanda
+   itu, di keydown DAN keyup, ditambah jalur submit formulir chatForm.
+   Aman dari kirim ganda: pemicu berikutnya membaca kotak yang sudah
+   dikosongkan pemicu pertama, lalu berhenti. */
+function chatIsEnter(e){
+  return e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter' || e.keyCode === 13 || e.which === 13;
+}
 chatInputEl.addEventListener('keydown', function(e){
   e.stopPropagation(); // jangan sampai WASD/Spasi menggerakkan karakter saat mengetik
-  if(e.key === 'Enter'){ e.preventDefault(); sendChat(); }
+  if(chatIsEnter(e)){ e.preventDefault(); sendChat(); }
 });
-chatInputEl.addEventListener('keyup', function(e){ e.stopPropagation(); });
+chatInputEl.addEventListener('keyup', function(e){
+  e.stopPropagation();
+  if(chatIsEnter(e)){ e.preventDefault(); sendChat(); }
+});
+document.getElementById('chatForm').addEventListener('submit', function(e){
+  e.preventDefault(); // jangan muat ulang halaman — kirim lewat jalur chat
+  sendChat();
+});
 document.getElementById('chatToggle').addEventListener('click', function(){
   var p = document.getElementById('chatPanel');
   var min = p.classList.toggle('min');
@@ -5398,6 +5431,7 @@ var mp = {
   players: {},   // id -> data pemain dari server (termasuk diri sendiri)
   remotes: {},   // id -> karakter 3D pemain lain {group, legL, legR, armL, armR, bodyG, tx, tz, tdir, walk, bubble, bubbleEnd}
   lastMoveAt: 0, lastX: null, lastZ: null, lastDir: null,
+  ownPending: [],   // pesan chat sendiri yang sudah tampil optimistis & menunggu pantulan server sebagai konfirmasi terkirim
   openCode: null,
   /* Ketahanan koneksi HP (perbaikan "dua hape tidak bisa multiplayer"):
      lastMsgAt = kapan pesan terakhir dari server diterima (server selalu
@@ -5958,6 +5992,7 @@ function mpConnect(code, asGM){
     else if(msg.type === 'joined'){
       mp.myId = msg.id; mp.joined = true; mp.connecting = false; mp.reconnects = 0; mp.gmSeatTries = 0;
       mp.players = {};
+      mp.ownPending = []; // koneksi baru: antrean konfirmasi chat lama tidak berlaku lagi
       (msg.players || []).forEach(function(p){ mp.players[p.id] = p; });
       if(msg.you) mp.players[msg.you.id] = msg.you;
       mpClearRemotes();
@@ -5993,6 +6028,14 @@ function mpConnect(code, asGM){
     }
     else if(msg.type === 'player-moved'){
       var r = mp.remotes[msg.id];
+      if(!r && mp.players[msg.id]){
+        // Pemain ini ada di daftar ruangan tetapi karakternya belum terbuat
+        // di dunia (mis. terlewat/gagal saat gabung) — buat sekarang dari
+        // data ruangan, supaya karakternya tidak "tidak muncul" terus
+        // sampai pemain gabung ulang.
+        mpAddRemote(mp.players[msg.id]);
+        r = mp.remotes[msg.id];
+      }
       if(r){ r.tx = msg.x; r.tz = msg.y; r.tdir = msg.dir; }
     }
     else if(msg.type === 'player-left'){
@@ -6009,9 +6052,14 @@ function mpConnect(code, asGM){
       mpUpdateChip(); if(mpOpen) mpRefreshPanel();
     }
     else if(msg.type === 'chat'){
-      addChatMessage(msg.name, msg.text);
-      if(msg.id === mp.myId) showPlayerBubble(msg.text);
-      else mpShowRemoteBubble(msg.id, msg.text);
+      if(msg.id === mp.myId && mpConsumeOwnEcho(msg.text)){
+        // Pantulan pesan sendiri: sudah tampil optimistis saat dikirim.
+        // Pantulan ini hanya konfirmasi terkirim — jangan tampilkan lagi.
+      } else {
+        addChatMessage(msg.name, msg.text);
+        if(msg.id === mp.myId) showPlayerBubble(msg.text);
+        else mpShowRemoteBubble(msg.id, msg.text);
+      }
     }
     else if(msg.type === 'error'){
       if(!mp.joined && mp.asGM && /game master/i.test(msg.message || '')){
@@ -6127,6 +6175,7 @@ function mpLeave(silent){
   mp.joined = false; mp.connecting = false; mp.myId = null;
   mp.viaOpen = false; mp.gmSeatTries = 0; mp.seatRecovered = false;
   mp.players = {};
+  mp.ownPending = [];
   mpClearRemotes();
   mp.room = null; mp.asGM = false; mp.reconnects = 0;
   mpSetStatus('', 'Belum terhubung. Mode pemain-tunggal tetap jalan seperti biasa.');
@@ -6137,6 +6186,37 @@ function mpLeave(silent){
 function mpSendChat(text){
   if(mp.joined && mp.ws && mp.ws.readyState === 1){
     return mpSend({type: 'chat', text: text.slice(0, 200)});
+  }
+  return false;
+}
+/* ---------- Konfirmasi pantulan chat sendiri ----------
+   Pesan sendiri tampil optimistis saat dikirim (lihat sendChat). Server
+   memantulkan chat ke SEMUA pemain termasuk pengirim; pantulan itu dicatat
+   di sini sebagai bukti pesan benar-benar sampai ke ruangan. Bila 6 detik
+   tidak ada pantulan, pemain diberi tahu dengan jujur lewat catatan sistem
+   (pemain lain mungkin belum menerima pesan itu) — bukan diam seolah
+   terkirim. */
+function mpTrackOwnChat(text){
+  var entry = {text: text, expired: false};
+  mp.ownPending.push(entry);
+  while(mp.ownPending.length > 20) mp.ownPending.shift(); // jaga antrean tetap kecil
+  setTimeout(function(){
+    if(mp.ownPending.indexOf(entry) < 0) return; // pantulan sudah diterima — terkirim, selesai
+    // Lewat 6 detik tanpa pantulan: beri tahu dengan jujur. Entri TIDAK
+    // langsung dibuang — ditandai kedaluwarsa dan disimpan sebentar lagi,
+    // supaya pantulan yang datang terlambat tetap dikenali & didedupe
+    // (tidak tampil kedua kali menabrak peringatan ini).
+    entry.expired = true;
+    if(mp.joined) addChatSystem('Pesanmu belum terkonfirmasi server — pemain lain mungkin belum menerimanya. Bila ini terulang, keluar ruangan lalu gabung lagi.');
+    setTimeout(function(){
+      var i = mp.ownPending.indexOf(entry);
+      if(i >= 0) mp.ownPending.splice(i, 1);
+    }, 24000);
+  }, 6000);
+}
+function mpConsumeOwnEcho(text){
+  for(var i = 0; i < mp.ownPending.length; i++){
+    if(mp.ownPending[i].text === text){ mp.ownPending.splice(i, 1); return true; }
   }
   return false;
 }
