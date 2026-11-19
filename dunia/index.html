@@ -153,8 +153,14 @@
   #jumpBtn{position:absolute;right:20px;bottom:calc(30px + env(safe-area-inset-bottom));width:76px;height:76px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:#f59e0b;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;box-shadow:0 6px 16px rgba(180,83,9,.45);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1;}
   #jumpBtn:active{transform:scale(.94);}
   #jumpBtn svg{width:22px;height:22px;}
-  .keys-hint{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:rgba(255,255,255,.92);text-shadow:0 1px 4px rgba(23,50,74,.65);white-space:nowrap;}
-  @media (pointer:coarse){ .keys-hint{display:none;} }
+  .keys-hint{display:none;position:absolute;bottom:calc(14px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:rgba(255,255,255,.92);text-shadow:0 1px 4px rgba(23,50,74,.65);white-space:nowrap;}
+  /* Mode laptop (kelas .laptop di body, diatur otomatis oleh JS deteksi perangkat):
+     joystick sentuh dimatikan, zona kamera melebar selebar layar untuk seret mouse,
+     tombol bulat Aksi/Lompat disembunyikan (digantikan keyboard), petunjuk keyboard tampil. */
+  body.laptop .keys-hint{display:block;}
+  body.laptop #joyZone{display:none;}
+  body.laptop #camZone{left:0;width:100%;}
+  body.laptop #actionBtn,body.laptop #jumpBtn{display:none;}
   @media (max-width:520px){ .hud-sub{display:none;} .hud-name{font-size:15px;} }
 
   /* ---------- Start screen ---------- */
@@ -745,7 +751,7 @@
 
   <div id="toast" role="status"></div>
 
-  <div class="keys-hint">Di komputer: W A S D untuk berjalan • panah ← → memutar kamera • Spasi untuk lompat</div>
+  <div class="keys-hint">W A S D berjalan • seret mouse / panah: putar kamera • Shift lari • E aksi • Spasi lompat • T chat</div>
 </div>
 
 <!-- TAS / INVENTARIS -->
@@ -2904,13 +2910,56 @@ function updateLocation(){
 }
 
 /* ================= INPUT ================= */
+/* ---------- Konfigurasi otomatis perangkat ----------
+   Laptop/PC (mouse + keyboard): mode laptop — joystick sentuh dimatikan, kamera
+   diputar dengan seret mouse di mana saja, gerak WASD/panah, Shift = lari,
+   E = Aksi, Spasi = lompat, T = fokus chat; petunjuk keyboard tampil di bawah.
+   HP/tablet (sentuh): mode sentuh seperti semula — joystick + tombol di layar.
+   Mode berpindah otomatis mengikuti alat yang terakhir dipakai: sentuhan jari
+   -> mode sentuh; mouse / tombol keyboard -> mode laptop. */
+var deviceMode = '';
+function setDeviceMode(mode){
+  if(mode === deviceMode) return;
+  deviceMode = mode;
+  var lap = mode === 'laptop';
+  document.body.classList.toggle('laptop', lap);
+  var hintEl = document.getElementById('hint');
+  if(hintEl) hintEl.textContent = lap
+    ? 'WASD untuk berjalan • seret mouse untuk memutar kamera • Shift lari • E aksi • Spasi lompat'
+    : 'Joystick kiri untuk berjalan • geser kanan layar untuk memutar kamera';
+  var noteEl = document.querySelector('.start-note');
+  if(noteEl) noteEl.innerHTML = lap
+    ? 'Kontrol laptop: <b>W A S D</b> untuk berjalan ke segala arah, <b>seret mouse</b> atau <b>tombol panah</b> untuk memutar kamera, <b>Shift</b> untuk lari, <b>E</b> untuk Aksi saat dekat objek, <b>Spasi</b> untuk lompat, dan <b>T</b> untuk membuka chat. Ada <b>sepeda pinjaman</b> terparkir di dekat gerbang — dekati lalu tekan E untuk naik dan menjelajah lebih cepat!'
+    : 'Kontrol ala RPG: <b>joystick di kiri</b> untuk berjalan ke segala arah, <b>geser layar kanan</b> untuk memutar kamera, tombol <b>Aksi</b> menyala saat dekat objek, dan tombol <b>Drone</b> untuk melihat dari atas. Ada <b>sepeda pinjaman</b> terparkir di dekat gerbang — dekati lalu tekan Aksi untuk naik dan menjelajah lebih cepat!';
+}
+window.addEventListener('pointerdown', function(e){
+  if(e.pointerType === 'touch') setDeviceMode('touch');
+  else if(e.pointerType === 'mouse' || e.pointerType === 'pen') setDeviceMode('laptop');
+}, true);
+// Tebakan awal dari kemampuan perangkat: penunjuk presisi (mouse/trackpad) = laptop, sentuh = HP/tablet.
+setDeviceMode(window.matchMedia && window.matchMedia('(pointer:fine)').matches ? 'laptop' : 'touch');
+
 var keys = {};
+function typingTarget(e){
+  var t = e.target;
+  return !!(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable));
+}
 window.addEventListener('keydown', function(e){
+  if(typingTarget(e)) return; // sedang mengetik (nama / chat / kata sandi): tombol tidak menggerakkan karakter
+  setDeviceMode('laptop'); // tombol fisik tertekan = perangkat berkibord
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].indexOf(e.code)>=0) e.preventDefault();
   keys[e.code] = true;
   if(e.code === 'Space') tryJump();
+  if(e.repeat) return;
+  if(e.code === 'KeyE' && playing && !uiBlocked()) document.getElementById('actionBtn').click(); // E = tombol Aksi
+  if(e.code === 'KeyT' && playing && !uiBlocked()){ // T = langsung mengetik di chat
+    e.preventDefault();
+    var ci = document.getElementById('chatInput');
+    if(ci) ci.focus();
+  }
 });
 window.addEventListener('keyup', function(e){ keys[e.code] = false; });
+window.addEventListener('blur', function(){ keys = {}; }); // cegah tombol "nyangkut" saat pindah jendela
 
 /* ---------- Arah mata angin dari sudut hadap ---------- */
 var DIRS = ['Utara','Timur Laut','Timur','Tenggara','Selatan','Barat Daya','Barat','Barat Laut'];
@@ -5393,6 +5442,7 @@ function chatIsEnter(e){
 }
 chatInputEl.addEventListener('keydown', function(e){
   e.stopPropagation(); // jangan sampai WASD/Spasi menggerakkan karakter saat mengetik
+  if(e.key === 'Escape'){ chatInputEl.blur(); return; } // Esc di laptop: keluar dari kotak chat, kembali mengendalikan karakter
   if(chatIsEnter(e)){ e.preventDefault(); sendChat(); }
 });
 chatInputEl.addEventListener('keyup', function(e){
@@ -6666,7 +6716,9 @@ function animate(){
       // kecepatan naik & turun mulus (akselerasi dan pengereman lembut, termasuk saat mundur)
       // EP habis = kehabisan tenaga: kecepatan jalan tinggal separuh sampai minum susu lagi
       // Naik sepeda: kecepatan 1,7x — menjelajah desa jadi jauh lebih cepat
-      var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (riding ? 1.7 : 1) : 0;
+      // Shift (kiri/kanan) ditahan = lari 1,5x saat jalan kaki; naik sepeda sudah cepat dari sananya
+      var sprinting = !riding && !!(keys['ShiftLeft'] || keys['ShiftRight']);
+      var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (riding ? 1.7 : 1) * (sprinting ? 1.5 : 1) : 0;
       curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt*7);
       if(curSpeed > 0.05){
         player.position.x += Math.sin(player.rotation.y) * curSpeed * dt;
