@@ -329,6 +329,26 @@
   .dealer-row .d-btns button:disabled{background:#cbd5e1;color:#64748b;cursor:default;}
   .dealer-row .d-prog{height:8px;background:#e2e8f0;border-radius:99px;margin-top:6px;overflow:hidden;}
   .dealer-row .d-prog i{display:block;height:100%;background:#f59e0b;border-radius:99px;}
+  .quest-row{display:flex;gap:11px;align-items:center;background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:11px;margin-top:10px;}
+  .quest-row.done{background:#f0fdf4;border-color:#bbf7d0;}
+  .quest-row .q-ic{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;color:#fff;}
+  .quest-row .q-ic svg{width:25px;height:25px;}
+  .quest-row .q-meta{flex:1;min-width:0;}
+  .quest-row .q-meta b{display:block;font-size:14.5px;color:#17324a;}
+  .quest-row .q-meta span{display:block;font-size:12px;color:#64748b;font-weight:600;margin-top:1px;}
+  .quest-row .q-prog{height:8px;background:#e2e8f0;border-radius:99px;margin-top:6px;overflow:hidden;}
+  .quest-row .q-prog i{display:block;height:100%;background:#0ea5e9;border-radius:99px;}
+  .quest-row.done .q-prog i{background:#16a34a;}
+  .quest-row .q-state{flex:none;font-family:'Fredoka',sans-serif;font-weight:700;font-size:12.5px;padding:8px 11px;border-radius:10px;background:#e0f2fe;color:#0369a1;min-height:40px;display:flex;align-items:center;text-align:center;}
+  .quest-row.done .q-state{background:#16a34a;color:#fff;}
+  #questBtn{position:relative;}
+  #questBadge{position:absolute;top:-7px;right:-7px;min-width:21px;height:21px;border-radius:99px;background:#dc2626;color:#fff;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px;border:2px solid #fff;box-shadow:0 2px 6px rgba(23,50,74,.3);pointer-events:none;}
+  #questBadge.all-done{background:#16a34a;}
+  #flyUI{position:absolute;right:106px;bottom:calc(120px + env(safe-area-inset-bottom));display:none;flex-direction:column;gap:8px;z-index:7;pointer-events:none;}
+  #flyUI.on{display:flex;}
+  body.laptop #flyUI{display:none;}
+  #flyUI button{pointer-events:auto;border:2px solid rgba(23,50,74,.15);background:rgba(255,255,255,.94);color:#17324a;border-radius:12px;padding:10px 13px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13.5px;box-shadow:0 4px 14px rgba(23,50,74,.22);cursor:pointer;min-height:46px;touch-action:none;user-select:none;-webkit-user-select:none;}
+  #flyUI button:active{background:#0ea5e9;color:#fff;}
   .game-bar{display:flex;gap:8px;margin-top:10px;}
   .game-bar button{flex:1;height:46px;border-radius:12px;font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
   #gameAgainBtn{border:none;background:#0284c7;color:#fff;}
@@ -584,6 +604,7 @@
     #actionBtn svg{width:19px;height:19px;}
     #actionLabel{font-size:9.5px;max-width:56px;}
     #jumpBtn{right:12px;width:64px;height:64px;font-size:13px;bottom:calc(22px + env(safe-area-inset-bottom));}
+    #flyUI{right:84px;bottom:calc(102px + env(safe-area-inset-bottom));}
     #jumpBtn svg{width:19px;height:19px;}
     #toast{font-size:12px;padding:8px 12px;bottom:calc(102px + env(safe-area-inset-bottom));border-radius:12px;}
     .hint{font-size:11px;top:calc(62px + env(safe-area-inset-top));padding:5px 10px;}
@@ -721,6 +742,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4z"/><path d="M9 4v14M15 6v14"/></svg>
         <span>Peta</span>
       </button>
+      <button id="questBtn" class="hud-mini" type="button" title="Quest Harian — misi sekolah & desa hari ini">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21.5v-17"/><path d="M5 4.5h12l-2.6 3.8L17 12H5" fill="currentColor" stroke="none"/></svg>
+        <span>Quest</span>
+        <span id="questBadge" aria-label="Jumlah quest harian yang belum selesai">5</span>
+      </button>
       <button id="gmBtn" class="hud-mini" type="button" title="Login Admin / Game Master">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14.5" r="4.2"/><path d="M11.2 11.3 20 2.5M17 5.5l2.8 2.8M14.2 8.3l2.4 2.4"/></svg>
         <span>GM</span>
@@ -755,6 +781,12 @@
     <span id="actionLabel">Aksi</span>
   </button>
 
+  <!-- Kontrol ketinggian saat menerbangkan Helikopter sendiri (mode manual) -->
+  <div id="flyUI" aria-label="Kontrol ketinggian helikopter">
+    <button id="flyUpBtn" type="button">▲ Naik</button>
+    <button id="flyDownBtn" type="button">▼ Turun</button>
+  </div>
+
   <button id="jumpBtn" type="button" aria-label="Lompat">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V6M6 11l6-6 6 6"/></svg>
     Lompat
@@ -770,7 +802,7 @@
 
   <div id="toast" role="status"></div>
 
-  <div class="keys-hint">W A S D berjalan • seret mouse / panah: putar kamera • Shift lari • E aksi • Spasi lompat • T chat</div>
+  <div class="keys-hint">W A S D berjalan • seret mouse / panah: putar kamera • Shift lari • E aksi • Spasi lompat • T chat • Q quest harian</div>
 </div>
 
 <!-- TAS / INVENTARIS -->
@@ -896,7 +928,22 @@
       <span>Kredit kamu:</span><b><span id="dealerKredit">0</span></b><span>poin</span>
     </div>
     <div id="dealerList"></div>
-    <p class="sheet-note">Rumah yang kamu beli adalah rumah di tepi Jl. Sawah Glempang bertanda "Rumah Dijual" — setelah lunas, namanya berubah menjadi <b>Rumah Kamu</b>. Motor &amp; mobil yang lunas terparkir sebagai koleksimu di dealer.</p>
+    <p class="sheet-note">Rumah yang kamu beli adalah rumah di tepi Jl. Sawah Glempang bertanda "Rumah Dijual" — setelah lunas, namanya berubah menjadi <b>Rumah Kamu</b>. <b>Motor Trail</b> &amp; <b>Mobil Polisi</b> yang sudah lunas bisa kamu <b>kendarai sendiri</b>: dekati kendaraannya di dunia (motor di tepi Hutan Desa, mobil polisi di depan Kantor Polsek), tekan Aksi, lalu pilih <b>Kendarai</b>.</p>
+  </div>
+</div>
+
+<!-- QUEST HARIAN: misi sekolah & desa, diperbarui setiap hari -->
+<div id="questOverlay" class="sheet-ovl">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="questTitle">
+    <div class="sheet-head">
+      <div>
+        <h2 class="sheet-title" id="questTitle">Quest Harian</h2>
+        <p class="sheet-sub">Misi hari ini di sekolah &amp; Desa Gerduren. Selesaikan <b>semua quest</b> untuk bonus <b>+100 Kredit</b>! Quest diperbarui lagi besok.</p>
+      </div>
+      <button class="sheet-x" id="questClose" type="button" aria-label="Tutup quest harian">×</button>
+    </div>
+    <div id="questList"></div>
+    <p class="sheet-note" id="questNote"></p>
   </div>
 </div>
 
@@ -1430,7 +1477,8 @@ function pyramidRoofGeo(w, h, d){
 }
 
 var colliders = []; // {minX,maxX,minZ,maxZ}
-function addCollider(x,z,hw,hd){ colliders.push({minX:x-hw, maxX:x+hw, minZ:z-hd, maxZ:z+hd}); }
+var driveColSkip = null; // collider kendaraan yang sedang dikendarai pemain (diabaikan resolveCollisions)
+function addCollider(x,z,hw,hd){ var c = {minX:x-hw, maxX:x+hw, minZ:z-hd, maxZ:z+hd}; colliders.push(c); return c; }
 
 /* ================= TITIK INTERAKSI (tombol Aksi) ================= */
 var interactables = []; // {x,z,r,name,info}
@@ -1972,9 +2020,9 @@ postSign('Sawah', 45, -26, 0.4, {w:2.4});
    mini-game lapangan (tanam/pancing/bola/sampah/pakan), beli rumah-mobil-motor,
    wahana Bis & Helikopter, plus bangunan umum & bentang alam desa. */
 INFO['Kantor Polsek'] = 'Kantor Polsek Purwojati: kantor polisi sektor. Mobil polisi terparkir di depannya — dekati mobilnya untuk bermain Kejar-Kejaran Polisi (bila segelnya sudah dibuka Admin).';
-INFO['Mobil Polisi'] = 'Mobil polisi terparkir di depan Kantor Polsek. Tekan Aksi untuk bermain Kejar-Kejaran Polisi dari sini.';
+INFO['Mobil Polisi'] = 'Mobil polisi terparkir di depan Kantor Polsek. Tekan Aksi untuk bermain Kejar-Kejaran Polisi dari sini. Kalau kamu sudah membelinya di Dealer Gerduren dan lunas, kamu juga bisa MENGENDARAINYA keliling desa!';
 INFO['Mobil Balap'] = 'Mobil balap terparkir di tepi Jl. Sawah Glempang. Tekan Aksi untuk bermain Balapan Kilat dari sini.';
-INFO['Motor Cross'] = 'Motor cross terparkir di tepi Hutan Desa. Tekan Aksi untuk bermain Motocross Lompat dari sini.';
+INFO['Motor Cross'] = 'Motor cross terparkir di tepi Hutan Desa. Tekan Aksi untuk bermain Motocross Lompat dari sini. Kalau kamu sudah membeli Motor Trail di Dealer Gerduren dan lunas, kamu juga bisa MENGENDARAI motor ini keliling desa!';
 INFO['Sungai Gerduren'] = 'Sungai Gerduren di tepi timur desa: airnya jernih dan banyak ikannya. Tekan Aksi untuk memancing!';
 INFO['Hutan Desa'] = 'Hutan Desa Gerduren: pepohonan rindang di barat laut desa. Di tepinya terparkir motor cross.';
 INFO['Kandang Ayam'] = 'Kandang ayam di belakang sekolah. Ayam-ayamnya suka diberi makan jagung. Tekan Aksi untuk memberi pakan!';
@@ -1984,10 +2032,10 @@ INFO['Kolam Ikan'] = 'Kolam ikan di belakang sekolah, di samping kandang. Ikanny
 INFO['Bedeng Kebun'] = 'Bedeng Kebun Sekolah: ayo menanam! Tanam bibit, tunggu tumbuh, lalu panen. Tekan Aksi untuk bermain Menanam di Kebun.';
 INFO['Petak Sawah'] = 'Petak sawah warga: ayo menanam padi! Tanam bibit, tunggu menguning, lalu panen. Tekan Aksi untuk bermain Menanam di Sawah.';
 INFO['Lapangan Bola'] = 'Tengah Lapangan Gerduren: tempat bermain bola. Tekan Aksi untuk bermain Bola — tendang ke gawang melewati kiper!';
-INFO['Tong Sampah'] = 'Halaman sekolah harus bersih! Tekan Aksi untuk bermain Mencari Sampah: pungut semua sampah yang berserakan.';
+INFO['Tong Sampah'] = 'Halaman sekolah harus bersih! Tekan Aksi untuk bermain Mencari Sampah. Quest Harian: pungut juga sampah warna-warni berbingkai kuning yang berserakan di halaman sekolah & lingkungan desa — dekati saja, sampahnya terpungut otomatis!';
 INFO['Dealer Gerduren'] = 'Dealer Gerduren: tempat membeli Rumah, Mobil, dan Motor — bisa tunai, bisa kredit (cicilan) memakai Kredit permainanmu. Tekan Aksi untuk melihat katalognya.';
-INFO['Halte Bis'] = 'Halte Bis desa. Tekan Aksi untuk naik Bis Keliling Desa — berkeliling Desa Gerduren tanpa berjalan kaki!';
-INFO['Helikopter'] = 'Helikopter wisata di landasan Lapangan Gerduren. Tekan Aksi untuk terbang berkeliling Desa Gerduren dari udara!';
+INFO['Halte Bis'] = 'Halte Bis desa. Tekan Aksi untuk naik Bis Keliling Desa: pilih Kendarai Sendiri untuk menyetir bisnya dengan joystick/tombol WASD, atau Tur Otomatis untuk duduk manis mengikuti rute keliling desa!';
+INFO['Helikopter'] = 'Helikopter wisata di landasan Lapangan Gerduren. Tekan Aksi untuk terbang: pilih Kendarai Sendiri untuk menerbangkannya sendiri (ada tombol Naik & Turun), atau Tur Otomatis untuk berkeliling Desa Gerduren dari udara!';
 INFO['Puskesmas'] = 'Puskesmas Purwojati: pusat kesehatan masyarakat. Kalau sakit, berobatlah ke sini bersama orang tuamu.';
 INFO['Taman Desa'] = 'Taman Desa Gerduren: tempat warga bersantai sore hari di bangku-bangku taman.';
 INFO['Rumah Dijual'] = 'Rumah ini dijual! Beli di Dealer Gerduren — bisa tunai, bisa kredit (cicilan). Setelah lunas, rumah ini jadi Rumah Kamu.';
@@ -2011,7 +2059,8 @@ function parkedCar(x, z, ry, bodyCol, kind){
     box(0.14, 0.4, 0.14, 0x111827, -0.8, 0.8, -2.0, g, false); box(0.14, 0.4, 0.14, 0x111827, 0.8, 0.8, -2.0, g, false);
     box(0.5, 0.14, 4.34, 0xfacc15, 0, 0.9, 0, g, false);                        // garis kuning atap-badan
   }
-  addCollider(x, z, 1.6, 2.5);
+  g.userData.col = addCollider(x, z, 1.6, 2.5);
+  g.userData.hw = 1.6; g.userData.hd = 2.5;
   return g;
 }
 function parkedTrailBike(x, z, ry){
@@ -2025,9 +2074,13 @@ function parkedTrailBike(x, z, ry){
   box(0.34, 0.14, 0.85, 0x111827, 0, 1.12, -0.42, g, false);                    // jok panjang trail
   box(0.6, 0.06, 0.06, 0x374151, 0, 1.32, 0.72, g, false);                      // setang
   box(0.4, 0.3, 0.55, 0xd6d3cd, 0, 0.62, 0.05, g, false);                       // blok mesin perak
-  addCollider(x, z, 0.8, 1.2);
+  g.userData.col = addCollider(x, z, 0.8, 1.2);
+  g.userData.hw = 0.8; g.userData.hd = 1.2;
   return g;
 }
+
+/* Referensi kendaraan yang bisa dikendarai setelah dibeli di Dealer (diisi di bawah) */
+var policeCarGroup = null, crossBikeGroup = null;
 
 /* --- Kantor Polsek (bangunan umum, timur desa) + mobil polisi terparkir di depannya --- */
 (function(){
@@ -2043,7 +2096,7 @@ function parkedTrailBike(x, z, ry){
   scene.add(g);
   addCollider(74, 30, 6, 4.5);
   addInteractable(74, 30, 10, 'Kantor Polsek');
-  parkedCar(65, 30, Math.PI/2, 0xf8fafc, 'polisi');
+  policeCarGroup = parkedCar(65, 30, Math.PI/2, 0xf8fafc, 'polisi');
   labelAt('Mobil Polisi', 65, 2.6, 30, 0.62);
   addInteractable(65, 30, 5.5, 'Mobil Polisi', null, {game:'polisi'});
 })();
@@ -2074,7 +2127,7 @@ addInteractable(-24, 44, 5.5, 'Mobil Balap', null, {game:'balap'});
   flat(26, 30, 0x3f9e4d, -92, -63, scene, 0.03);
   postSign('Hutan Desa', -80, -50, 2.4, {w:3.0, bg:'#14532d', fg:'#ffffff'});
   addInteractable(-92, -62, 13, 'Hutan Desa');
-  parkedTrailBike(-82, -52, 0.7);
+  crossBikeGroup = parkedTrailBike(-82, -52, 0.7);
   labelAt('Motor Cross', -82, 2.3, -52, 0.62);
   addInteractable(-82, -52, 5, 'Motor Cross', null, {game:'moto'});
 })();
@@ -3298,12 +3351,14 @@ window.addEventListener('keydown', function(e){
   keys[e.code] = true;
   if(e.code === 'Space') tryJump();
   if(e.repeat) return;
+  if(e.code === 'KeyE' && playing && tourActive && tour && tour.manual){ endManualTour(); return; } // E saat menyetir wahana manual = turun / mendarat (tombol Aksi tersembunyi di laptop)
   if(e.code === 'KeyE' && playing && !uiBlocked()) document.getElementById('actionBtn').click(); // E = tombol Aksi
   if(e.code === 'KeyT' && playing && !uiBlocked()){ // T = langsung mengetik di chat
     e.preventDefault();
     var ci = document.getElementById('chatInput');
     if(ci) ci.focus();
   }
+  if(e.code === 'KeyQ' && playing && !uiBlocked()) openQuests(); // Q = panel Quest Harian
 });
 window.addEventListener('keyup', function(e){ keys[e.code] = false; });
 window.addEventListener('blur', function(){ keys = {}; }); // cegah tombol "nyangkut" saat pindah jendela
@@ -3382,7 +3437,19 @@ var infoImg = document.getElementById('infoImg');
 var infoActions = document.getElementById('infoActions');
 function hideInfo(){ infoCard.classList.remove('show'); infoTarget = null; infoActions.classList.remove('show'); infoActions.innerHTML = ''; if(infoTimer){ clearTimeout(infoTimer); infoTimer = null; } }
 var BIKE_OFF = {name:'Turun Sepeda', dismount:true};
+var VEH_OFF = {name:'Turun Kendaraan', dismountVeh:true};
+var TOUR_OFF = {name:'Turun', tourOff:true};
 function updateInteract(){
+  if(tourActive && tour && tour.manual){
+    // selama menyetir Bis / menerbangkan Helikopter sendiri, tombol Aksi berarti "turun / mendarat"
+    if(currentTarget !== TOUR_OFF){ currentTarget = TOUR_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = tour.kind === 'bis' ? 'Turun dari Bis' : 'Mendarat & Turun'; }
+    return;
+  }
+  if(vehDrive){
+    // selama mengendarai motor / mobil polisi milik sendiri, tombol Aksi selalu berarti "turun"
+    if(currentTarget !== VEH_OFF){ currentTarget = VEH_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = 'Turun Kendaraan'; }
+    return;
+  }
   if(riding){
     // saat bersepeda, tombol Aksi selalu berarti "turun"
     if(currentTarget !== BIKE_OFF){ currentTarget = BIKE_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = 'Turun Sepeda'; }
@@ -3401,6 +3468,8 @@ function updateInteract(){
   if(infoTarget && infoTarget !== currentTarget) hideInfo();
 }
 actionBtn.addEventListener('click', function(){
+  if(tourActive && tour && tour.manual){ endManualTour(); return; }
+  if(vehDrive){ dismountVehicle(); return; }
   if(riding){ dismountBike(); return; }
   if(!currentTarget) return;
   var t = currentTarget;
@@ -3440,6 +3509,23 @@ actionBtn.addEventListener('click', function(){
       gb.addEventListener('click', function(){ AudioSys.sfx('error'); showToast('Permainan ini masih tersegel. Minta Admin / Game Master membukanya dari panel GM.'); });
     }
     infoActions.appendChild(gb);
+    if(t.game === 'polisi' || t.game === 'moto'){
+      // Kendaraan yang sudah dibeli di Dealer (lunas) bisa dikendarai sendiri keliling desa
+      var ownedV = t.game === 'polisi' ? !!eco.assets.polisi : !!eco.assets.motor;
+      var vb = document.createElement('button');
+      vb.type = 'button'; vb.className = 'info-act-btn alt';
+      if(ownedV){
+        vb.textContent = t.game === 'polisi' ? 'Kendarai Mobil Polisi' : 'Kendarai Motor';
+        (function(kind){ vb.addEventListener('click', function(){ hideInfo(); mountVehicle(kind); }); })(t.game);
+      } else {
+        vb.textContent = 'Kendarai — Beli Dulu di Dealer';
+        (function(kind){ vb.addEventListener('click', function(){
+          hideInfo(); openDealer();
+          showToast('Beli ' + (kind === 'polisi' ? 'Mobil Polisi' : 'Motor Trail') + ' di Dealer Gerduren (tunai atau kredit cicilan) — setelah LUNAS kamu bisa mengendarainya ke mana saja!', 4800);
+        }); })(t.game);
+      }
+      infoActions.appendChild(vb);
+    }
     infoActions.classList.add('show');
   } else if(t.act){
     var ab = document.createElement('button');
@@ -3458,9 +3544,14 @@ actionBtn.addEventListener('click', function(){
   } else if(t.tour){
     var tb = document.createElement('button');
     tb.type = 'button'; tb.className = 'info-act-btn';
-    tb.textContent = t.tour === 'bis' ? 'Naik Bis Keliling Desa' : 'Terbang Keliling Desa';
-    (function(kind){ tb.addEventListener('click', function(){ hideInfo(); startTour(kind); }); })(t.tour);
+    tb.textContent = t.tour === 'bis' ? 'Kendarai Sendiri (Manual)' : 'Terbangkan Sendiri (Manual)';
+    (function(kind){ tb.addEventListener('click', function(){ hideInfo(); startTour(kind, true); }); })(t.tour);
     infoActions.appendChild(tb);
+    var tb2 = document.createElement('button');
+    tb2.type = 'button'; tb2.className = 'info-act-btn alt';
+    tb2.textContent = t.tour === 'bis' ? 'Tur Otomatis — Duduk Manis Ikut Rute' : 'Tur Otomatis — Keliling dari Udara';
+    (function(kind){ tb2.addEventListener('click', function(){ hideInfo(); startTour(kind, false); }); })(t.tour);
+    infoActions.appendChild(tb2);
     infoActions.classList.add('show');
   } else {
     infoActions.classList.remove('show');
@@ -3472,7 +3563,7 @@ actionBtn.addEventListener('click', function(){
 document.getElementById('infoClose').addEventListener('click', hideInfo);
 
 var vy = 0, grounded = true;
-function tryJump(){ idleTime = 0; orbiting = false; if(playing && grounded && !riding && !uiBlocked()){ vy = 8.2; grounded = false; AudioSys.sfx('jump'); } }
+function tryJump(){ idleTime = 0; orbiting = false; if(playing && grounded && !riding && !vehDrive && !uiBlocked()){ vy = 8.2; grounded = false; AudioSys.sfx('jump'); } }
 document.getElementById('jumpBtn').addEventListener('pointerdown', function(e){ e.preventDefault(); tryJump(); });
 
 var droneMode = false;
@@ -3621,8 +3712,9 @@ var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, l
   owned:{}, equippedOutfit:'biru', equippedAcc:{},
   pos:{}, // skor 9 Pos Pramuka per id: {best, stamp, plays} — diisi dari POS_IDS di bawah
   unsealed:{balap:false, moto:false, polisi:false}, muted:false,
-  assets:{},  // barang Dealer yang sudah LUNAS: {rumah:true, mobil:true, motor:true}
-  loans:{} }; // cicilan Dealer yang sedang berjalan: {motor:{paid:3, per:150, total:8}, ...}
+  assets:{},  // barang Dealer yang sudah LUNAS: {rumah:true, mobil:true, motor:true, polisi:true}
+  loans:{},   // cicilan Dealer yang sedang berjalan: {motor:{paid:3, per:150, total:8}, ...}
+  quests:{date:'', sampah:0, fed:{}, tanam:false, pancing:false, bola:false, rewarded:{}, bonus:false} }; // progres Quest Harian (reset tiap tanggal baru)
 ITEM_DEFS.forEach(function(d){ if(eco.inv[d.id] === undefined) eco.inv[d.id] = 0; });
 var POS_IDS = ['kompas','kim','bangga','tanda','ketaqwaan','bumbung','grazy','pbb','pionering'];
 POS_IDS.forEach(function(id){ eco.pos[id] = {best:0, stamp:false, plays:0}; });
@@ -3662,6 +3754,14 @@ function loadEco(){
     }
     if(s.assets && typeof s.assets === 'object') eco.assets = s.assets;
     if(s.loans && typeof s.loans === 'object') eco.loans = s.loans;
+    if(s.quests && typeof s.quests === 'object'){
+      var sq = s.quests;
+      eco.quests.date = typeof sq.date === 'string' ? sq.date : '';
+      eco.quests.sampah = typeof sq.sampah === 'number' ? Math.max(0, Math.floor(sq.sampah)) : 0;
+      if(sq.fed && typeof sq.fed === 'object') eco.quests.fed = sq.fed;
+      eco.quests.tanam = !!sq.tanam; eco.quests.pancing = !!sq.pancing; eco.quests.bola = !!sq.bola; eco.quests.bonus = !!sq.bonus;
+      if(sq.rewarded && typeof sq.rewarded === 'object') eco.quests.rewarded = sq.rewarded;
+    }
     eco.muted = !!s.muted;
   }catch(e){ /* simpanan rusak/diabaikan: mulai dari nilai awal */ }
 }
@@ -3703,6 +3803,8 @@ function faintPlayer(){
   if(fainting || !playing) return;
   fainting = true;
   if(riding) dismountBike();
+  if(vehDrive) dismountVehicle();
+  if(tourActive) endTour();
   AudioSys.sfx('crash');
   faintOverlay.classList.add('on');
   faintOverlay.setAttribute('aria-hidden', 'false');
@@ -4108,7 +4210,7 @@ nameInputEl.addEventListener('blur', function(){ setTimeout(syncStartScreen, 120
 
 /* ================= TOKO, POS PRAMUKA, KENDARAAN, ARENA & GM ================= */
 var shopOpen = false, posOpen = false, arenaOpen = false, gmOpen = false, mapOpen = false;
-function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting || actOpen || dealerOpen || tourActive; }
+function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting || actOpen || dealerOpen || questOpen || tourActive; }
 function addKredit(n){
   if(n <= 0) return;
   eco.kredit += n; saveEco(); updateStatsUI();
@@ -4260,6 +4362,38 @@ function dismountBike(){
   if(bikeSpot){ bikeSpot.x = bike.position.x; bikeSpot.z = bike.position.z; }
   AudioSys.sfx('bell');
   showToast('Kamu turun dari sepeda. Sepeda diparkir di sini — dekati lagi untuk naik.');
+}
+
+/* ---------- KENDARAAN MILIK SENDIRI: MOTOR & MOBIL POLISI (dibeli di Dealer) ----------
+   Setelah LUNAS di Dealer, motor cross di tepi hutan & mobil polisi di depan Polsek
+   bisa dikendarai sendiri: kendaraan mengikuti pemain seperti sepeda (lebih cepat),
+   collider-nya ikut berpindah, dan titik interaksinya pindah ke tempat parkir baru. */
+var vehDrive = null; // {kind:'moto'|'polisi', group, mul, spot}
+function mountVehicle(kind){
+  if(tourActive || vehDrive) return;
+  var g = kind === 'polisi' ? policeCarGroup : crossBikeGroup;
+  if(!g) return;
+  if(riding) dismountBike();
+  var spot = null;
+  for(var i = 0; i < interactables.length; i++){ if(interactables[i].game === kind) spot = interactables[i]; }
+  vehDrive = {kind:kind, group:g, mul: kind === 'polisi' ? 3.0 : 2.4, spot:spot};
+  driveColSkip = g.userData.col || null;
+  player.position.x = g.position.x; player.position.z = g.position.z;
+  player.rotation.y = g.rotation.y;
+  AudioSys.sfx('bell');
+  showToast(kind === 'polisi'
+    ? 'Kamu mengendarai Mobil Polisi milikmu! Jauh lebih cepat dari jalan kaki. Tekan tombol Aksi untuk turun.'
+    : 'Kamu mengendarai Motor Trail milikmu! Ngebut keliling desa, tapi tetap hati-hati ya. Tekan tombol Aksi untuk turun.', 4600);
+}
+function dismountVehicle(){
+  if(!vehDrive) return;
+  var g = vehDrive.group;
+  // kendaraan tetap di tempat turun; titik interaksinya (arena + kendarai) ikut pindah
+  if(vehDrive.spot){ vehDrive.spot.x = g.position.x; vehDrive.spot.z = g.position.z; }
+  driveColSkip = null;
+  vehDrive = null;
+  AudioSys.sfx('bell');
+  showToast('Kamu turun. Kendaraanmu diparkir di sini — dekati lagi untuk mengendarai atau bermain.');
 }
 
 /* ================= 9 POS PRAMUKA SIAGA =================
@@ -5573,6 +5707,7 @@ function actOver(win){
   var kredit = win ? act.def.reward : Math.min(act.def.reward - 10, act.score * 4);
   if(kredit > 0) addKredit(kredit);
   act.resultKredit = kredit; act.win = win;
+  if(win) questOnActWin(act.kind); // progres Quest Harian: pakan / tanam / pancing / bola
   AudioSys.sfx(win ? 'win' : 'crash');
   showToast((win ? 'Hebat! Target tercapai. ' : 'Waktu habis. ') + 'Kamu dapat +' + kredit + ' Kredit!', 4200);
 }
@@ -5777,8 +5912,9 @@ function actDrawOver(g){
 
 /* ================= DEALER: BELI RUMAH, MOBIL & MOTOR (TUNAI / KREDIT CICILAN) ================= */
 var DEALER_ITEMS = [
-  {id:'motor', name:'Motor Trail', desc:'Motor trail keren seperti yang terparkir di tepi hutan.', price:1200, per:150, n:8, color:'#b45309', icon:'moto'},
+  {id:'motor', name:'Motor Trail', desc:'Motor trail keren seperti yang terparkir di tepi hutan. Setelah lunas, kamu bisa MENGENDARAINYA keliling desa!', price:1200, per:150, n:8, color:'#b45309', icon:'moto'},
   {id:'mobil', name:'Mobil Keluarga', desc:'Mobil untuk jalan-jalan bersama keluarga.', price:3000, per:300, n:10, color:'#0284c7', icon:'balap'},
+  {id:'polisi', name:'Mobil Polisi', desc:'Mobil polisi seperti yang terparkir di depan Kantor Polsek. Setelah lunas, kamu bisa MENGENDARAINYA keliling desa!', price:3500, per:350, n:10, color:'#1e40af', icon:'polisi'},
   {id:'rumah', name:'Rumah di Desa Gerduren', desc:'Rumah bertanda "Rumah Dijual" di tepi Jl. Sawah Glempang — jadi milikmu setelah lunas.', price:5000, per:500, n:10, color:'#16a34a', icon:'rumah'}
 ];
 function dealerIcon(it){
@@ -5851,32 +5987,270 @@ function renderDealer(){
 }
 refreshHouseName();
 
+/* ================= QUEST HARIAN =================
+   Misi yang diperbarui setiap tanggal baru: bersih-bersih sampah langsung di
+   dunia 3D (halaman sekolah & lingkungan desa), memberi makan peliharaan
+   (misi harian rutin di kandang & kolam), menanam, memancing, bermain bola.
+   Hadiah Kredit per quest + bonus +100 bila semua quest hari itu selesai.
+   Progres tersimpan di eco.quests dan ter-reset otomatis saat tanggal berganti. */
+var questOpen = false;
+var questOverlay = document.getElementById('questOverlay'), questList = document.getElementById('questList'),
+    questNote = document.getElementById('questNote'), questBadge = document.getElementById('questBadge');
+var QUEST_ICONS = {
+  sampah:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9.5 7V5.2A1.7 1.7 0 0 1 11.2 3.5h1.6A1.7 1.7 0 0 1 14.5 5.2V7M6.5 7l.9 13.5h9.2L17.5 7M10 11v5M14 11v5"/></svg>',
+  pakan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19.5C5 10.5 12 4 20.5 3.5c.5 8.5-5 16-14.5 16z"/><path d="M5 19.5c2.8-6 6.8-9.8 11.5-11.5"/></svg>',
+  tanam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5v-8"/><path d="M12 13.5C12 10 9.2 8 5 8c0 4.2 2.3 6.7 7 5.5z"/><path d="M12 11.5c0-3.5 2.8-5.5 7-5.5 0 4.2-2.3 6.7-7 5.5z"/></svg>',
+  pancing:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c2.8-3.9 6.2-5.8 9.8-5.8 3.4 0 6.6 2 9.2 5.8-2.6 3.8-5.8 5.8-9.2 5.8C9.2 17.8 5.8 15.9 3 12z"/><circle cx="16.8" cy="10.4" r="1" fill="currentColor" stroke="none"/><path d="M3 12l-1.2-3.8M3 12l-1.2 3.8"/></svg>',
+  bola:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 8.2l2.5 1.8-.95 3h-3.1l-.95-3z"/><path d="M12 3.4v4.8M20.3 9.3l-4.8.7M17.2 18.9l-2.6-3.9M6.8 18.9l2.6-3.9M3.7 9.3l4.8.7"/></svg>'
+};
+function fedCount(q){ var n = 0; ['ayam','ikan','kambing','sapi'].forEach(function(a){ if(q.fed[a]) n++; }); return n; }
+var QUEST_DEFS = [
+  {id:'sampah', color:'#16a34a', name:'Bersih-Bersih Sekolah & Desa', desc:'Pungut sampah warna-warni berbingkai kuning yang berserakan di halaman sekolah dan lingkungan desa. Cukup dekati sampahnya — langsung terpungut!', target:8, reward:60, prog:function(q){ return Math.min(q.sampah, 8); }},
+  {id:'pakan', color:'#d97706', name:'Beri Makan Peliharaan', desc:'Misi harian rutin: beri makan Ayam, Ikan, Kambing & Sapi di kandang dan kolam belakang sekolah — menangkan permainan memberi makannya untuk tiap hewan.', target:4, reward:80, prog:function(q){ return fedCount(q); }},
+  {id:'tanam', color:'#65a30d', name:'Menanam & Memanen', desc:'Selesaikan permainan Menanam di Kebun Sekolah atau Menanam di Sawah.', target:1, reward:40, prog:function(q){ return q.tanam ? 1 : 0; }},
+  {id:'pancing', color:'#0284c7', name:'Memancing di Sungai', desc:'Selesaikan permainan Memancing di Sungai Gerduren.', target:1, reward:40, prog:function(q){ return q.pancing ? 1 : 0; }},
+  {id:'bola', color:'#dc2626', name:'Bermain Bola', desc:'Selesaikan permainan Bermain Bola di Lapangan Gerduren.', target:1, reward:50, prog:function(q){ return q.bola ? 1 : 0; }}
+];
+function questTodayStr(){ var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+function ensureQuestDay(){
+  var t = questTodayStr();
+  if(eco.quests.date !== t){
+    eco.quests = {date:t, sampah:0, fed:{}, tanam:false, pancing:false, bola:false, rewarded:{}, bonus:false};
+    trashPickups.forEach(function(tp){ tp.taken = false; });
+    saveEco();
+  }
+  refreshTrashVisibility();
+}
+function questIsDone(def){ return def.prog(eco.quests) >= def.target; }
+function checkQuestReward(def){
+  if(!questIsDone(def) || eco.quests.rewarded[def.id]) return;
+  eco.quests.rewarded[def.id] = true;
+  addKredit(def.reward);
+  AudioSys.sfx('win');
+  showToast('Quest Harian selesai: "' + def.name + '"! +' + def.reward + ' Kredit!', 4600);
+  var all = QUEST_DEFS.every(function(d){ return !!eco.quests.rewarded[d.id]; });
+  if(all && !eco.quests.bonus){
+    eco.quests.bonus = true;
+    addKredit(100);
+    setTimeout(function(){ showToast('LUAR BIASA! Semua Quest Harian hari ini selesai — bonus +100 Kredit!', 5200); }, 700);
+  }
+  saveEco(); updateQuestBadge();
+  if(questOpen) renderQuests();
+}
+function updateQuestBadge(){
+  if(!questBadge) return;
+  var left = 0;
+  QUEST_DEFS.forEach(function(d){ if(!questIsDone(d)) left++; });
+  questBadge.textContent = left > 0 ? left : '✓';
+  questBadge.classList.toggle('all-done', left === 0);
+}
+function questOnActWin(kind){
+  ensureQuestDay();
+  var q = eco.quests, changed = false;
+  if(kind === 'pakanAyam'){ q.fed.ayam = true; changed = true; }
+  else if(kind === 'pakanIkan'){ q.fed.ikan = true; changed = true; }
+  else if(kind === 'pakanKambing'){ q.fed.kambing = true; changed = true; }
+  else if(kind === 'pakanSapi'){ q.fed.sapi = true; changed = true; }
+  else if(kind === 'tanamKebun' || kind === 'tanamSawah'){ q.tanam = true; changed = true; }
+  else if(kind === 'pancing'){ q.pancing = true; changed = true; }
+  else if(kind === 'bola'){ q.bola = true; changed = true; }
+  if(!changed) return;
+  saveEco();
+  QUEST_DEFS.forEach(function(d){ checkQuestReward(d); });
+  updateQuestBadge();
+  if(questOpen) renderQuests();
+}
+function openQuests(){ ensureQuestDay(); questOpen = true; questOverlay.classList.add('on'); renderQuests(); AudioSys.sfx('pop'); }
+function closeQuests(){ questOpen = false; questOverlay.classList.remove('on'); }
+document.getElementById('questBtn').addEventListener('click', openQuests);
+document.getElementById('questClose').addEventListener('click', function(){ AudioSys.sfx('click'); closeQuests(); });
+questOverlay.addEventListener('click', function(e){ if(e.target === questOverlay) closeQuests(); });
+function renderQuests(){
+  questList.innerHTML = '';
+  var doneN = 0;
+  QUEST_DEFS.forEach(function(def){
+    var pr = def.prog(eco.quests), done = pr >= def.target;
+    if(done) doneN++;
+    var row = document.createElement('div'); row.className = 'quest-row' + (done ? ' done' : '');
+    row.innerHTML = '<span class="q-ic" style="background:' + def.color + ';">' + QUEST_ICONS[def.id] + '</span>' +
+      '<span class="q-meta"><b>' + def.name + '</b><span>' + def.desc + '</span>' +
+      '<span>Progres: <b>' + pr + ' / ' + def.target + '</b> • Hadiah: <b>' + def.reward + ' Kredit</b></span>' +
+      '<span class="q-prog"><i style="width:' + Math.round(pr / def.target * 100) + '%"></i></span></span>' +
+      '<span class="q-state">' + (done ? 'Selesai ✓' : 'Belum') + '</span>';
+    questList.appendChild(row);
+  });
+  questNote.innerHTML = doneN >= QUEST_DEFS.length
+    ? 'Semua Quest Harian hari ini <b>SELESAI</b> — termasuk bonus +100 Kredit. Sampai jumpa di quest besok!'
+    : 'Sudah selesai <b>' + doneN + ' dari ' + QUEST_DEFS.length + '</b> quest. Quest diperbarui setiap hari — besok ada misi baru menunggumu!';
+  updateQuestBadge();
+}
+
+/* --- Sampah Quest Harian: benda 3D berserakan di sekolah & desa, dipungut dengan mendekatinya --- */
+var TRASH_SPOTS = [[-8,6],[18,-6],[-30,10],[24,18],[-18,-30],[10,-30],[-52,-2],[-50,26],[44,48],[92,22],[58,34],[70,72]];
+var trashPickups = [], trashSpin = 0;
+TRASH_SPOTS.forEach(function(s, i){
+  var g = new THREE.Group(); g.position.set(s[0], 0, s[1]); scene.add(g);
+  var col = [0xef4444, 0xf59e0b, 0x3b82f6, 0xa855f7, 0xec4899, 0x84cc16][i % 6];
+  box(0.36, 0.24, 0.28, col, 0, 0.15, 0, g, false);
+  cyl(0.09, 0.09, 0.3, 0x9ca3af, 0.17, 0.33, 0.1, g, 10);
+  var ring = new THREE.Mesh(new THREE.RingGeometry(0.44, 0.6, 22), new THREE.MeshBasicMaterial({color:0xfacc15, side:THREE.DoubleSide, transparent:true, opacity:0.9}));
+  ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06; g.add(ring);
+  trashPickups.push({g:g, x:s[0], z:s[1], taken:false});
+});
+function refreshTrashVisibility(){
+  var active = eco.quests.sampah < QUEST_DEFS[0].target;
+  trashPickups.forEach(function(tp){ tp.g.visible = active && !tp.taken; });
+}
+function updateTrashPickups(dt){
+  if(!playing) return;
+  trashSpin += dt;
+  var p = player.position;
+  for(var i = 0; i < trashPickups.length; i++){
+    var tp = trashPickups[i];
+    if(tp.taken || !tp.g.visible) continue;
+    tp.g.rotation.y = trashSpin * 1.4 + i;
+    if(Math.abs(p.y) < 2.5 && Math.hypot(p.x - tp.x, p.z - tp.z) < 1.7){
+      tp.taken = true; tp.g.visible = false;
+      ensureQuestDay();
+      eco.quests.sampah = Math.min(QUEST_DEFS[0].target, eco.quests.sampah + 1);
+      AudioSys.sfx('coin');
+      if(eco.quests.sampah >= QUEST_DEFS[0].target) checkQuestReward(QUEST_DEFS[0]);
+      else showToast('Sampah terpungut! (' + eco.quests.sampah + ' dari ' + QUEST_DEFS[0].target + ') — cari sisanya di sekitar sekolah & desa.', 2400);
+      saveEco(); updateQuestBadge();
+      if(questOpen) renderQuests();
+    }
+  }
+}
+ensureQuestDay(); updateQuestBadge();
+
 /* ================= WAHANA: BIS KELILING DESA & HELIKOPTER =================
    Selama wahana berjalan, updateTour (dipanggil dari animate) menggerakkan
    kendaraan + pemain menyusuri rute; input pemain dikunci lewat uiBlocked. */
 var tour = null;
-function startTour(kind){
+function startTour(kind, manual){
   if(tourActive) return;
   if(riding) dismountBike();
+  if(vehDrive) dismountVehicle();
   tourActive = true;
   if(kind === 'bis'){
-    tour = { kind:'bis', i:0, pts:[[22,50.5],[52,50.5],[52,18],[52,50.5],[98,50.5],[52,50.5],[-60,50.5],[-95,50.5],[-60,50.5],[22,50.5]] };
-    showToast('Bis berangkat! Keliling Desa Gerduren lewat jalan raya & jalan timur. Duduk manis, ya!', 4600);
+    if(manual){
+      tour = { kind:'bis', manual:true, heading: busGroup.rotation.y, speed:0 };
+      player.position.set(busGroup.position.x, 0, busGroup.position.z);
+      player.rotation.y = tour.heading;
+      showToast('Kamu menyetir Bis sendiri! Joystick / W-A-S-D: dorong ke atas = gas, ke bawah = rem & mundur, kiri-kanan = setir. Tekan tombol Aksi untuk turun.', 6200);
+    } else {
+      tour = { kind:'bis', i:0, pts:[[22,50.5],[52,50.5],[52,18],[52,50.5],[98,50.5],[52,50.5],[-60,50.5],[-95,50.5],[-60,50.5],[22,50.5]] };
+      showToast('Bis berangkat! Keliling Desa Gerduren lewat jalan raya & jalan timur. Duduk manis, ya!', 4600);
+    }
   } else {
-    tour = { kind:'heli', phase:'up', t:0, ang:-Math.PI/2, cx:0, cz:8, r:64, alt:21 };
-    showToast('Helikopter lepas landas! Terbang berkeliling Desa Gerduren dari udara!', 4600);
+    if(manual){
+      tour = { kind:'heli', manual:true, alt: heliGroup.position.y, landing:false };
+      player.position.set(heliGroup.position.x, heliGroup.position.y, heliGroup.position.z);
+      flyUI.classList.add('on');
+      showToast('Kamu menerbangkan Helikopter sendiri! Joystick / W-A-S-D untuk terbang, tombol Naik & Turun (di laptop: Spasi & C) untuk ketinggian. Tekan tombol Aksi untuk mendarat & turun.', 6200);
+    } else {
+      tour = { kind:'heli', phase:'up', t:0, ang:-Math.PI/2, cx:0, cz:8, r:64, alt:21 };
+      showToast('Helikopter lepas landas! Terbang berkeliling Desa Gerduren dari udara!', 4600);
+    }
   }
   AudioSys.sfx('bell');
 }
 function endTour(){
   tourActive = false; tour = null;
+  flyUI.classList.remove('on'); flyUp = false; flyDown = false;
   if(busGroup){ busGroup.position.set(22, 0, 50.5); busGroup.rotation.y = Math.PI/2; }
-  if(heliGroup){ heliGroup.position.set(-82, 0, -14); }
+  if(heliGroup){ heliGroup.position.set(-82, 0, -14); heliGroup.rotation.y = 0; }
   vy = 0; grounded = true;
   AudioSys.sfx('bell');
 }
+/* --- Kontrol manual wahana: pemain menyetir Bis / menerbangkan Helikopter sendiri ---
+   Input dibaca langsung dari joystick & tombol karena uiBlocked() menolkan input
+   gerak utama selama tour berjalan. Tombol Aksi = turun (Bis) / mendarat (Helikopter). */
+var flyUI = document.getElementById('flyUI'), flyUp = false, flyDown = false;
+function bindFlyHold(el, set){
+  el.addEventListener('pointerdown', function(e){ e.preventDefault(); set(true); });
+  ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ el.addEventListener(ev, function(){ set(false); }); });
+}
+bindFlyHold(document.getElementById('flyUpBtn'), function(v){ flyUp = v; });
+bindFlyHold(document.getElementById('flyDownBtn'), function(v){ flyDown = v; });
+document.getElementById('jumpBtn').addEventListener('pointerdown', function(){ if(tour && tour.manual && tour.kind === 'heli') flyUp = true; });
+document.getElementById('jumpBtn').addEventListener('pointerup', function(){ if(tour && tour.manual && tour.kind === 'heli') flyUp = false; });
+function endManualTour(){
+  if(!tour || !tour.manual) return;
+  if(tour.kind === 'heli' && tour.alt > 0.05){
+    if(!tour.landing){ tour.landing = true; showToast('Mendarat dulu dengan aman…', 1800); }
+    return;
+  }
+  finishManualTour();
+}
+function finishManualTour(){
+  if(!tour) return;
+  var kind = tour.kind;
+  if(kind === 'bis') player.position.set(busGroup.position.x + 3, 0, busGroup.position.z);
+  else player.position.set(heliGroup.position.x + 3.4, 0, heliGroup.position.z);
+  player.position.y = 0;
+  endTour(); // kendaraan kembali ke stasiunnya (Halte Bis / landasan Lapangan)
+  showToast(kind === 'bis'
+    ? 'Kamu turun dari Bis. Bis kembali ke Halte — naik lagi kapan saja!'
+    : 'Helikopter mendarat dengan selamat dan kembali ke landasannya. Terbang lagi kapan saja!', 4400);
+}
+function updateTourManual(dt){
+  // input mentah: joystick, atau WASD (semua relatif kamera untuk helikopter)
+  var ix = joy.x * joy.mag, iy = joy.y * joy.mag;
+  if(!joy.active){
+    if(keys['KeyW']) iy -= 1; if(keys['KeyS']) iy += 1;
+    if(keys['KeyA']) ix -= 1; if(keys['KeyD']) ix += 1;
+    var kl = Math.hypot(ix, iy); if(kl > 1){ ix /= kl; iy /= kl; }
+  }
+  if(tour.kind === 'bis'){
+    var bp = busGroup.position;
+    var throttle = -iy; // dorong joystick ke atas / W = maju
+    var target = throttle >= 0 ? throttle * 13 : throttle * 6; // mundur maks 6
+    tour.speed += (target - tour.speed) * Math.min(1, dt * 2.4);
+    if(Math.abs(tour.speed) > 0.2){
+      // setir: belok makin terasa saat bis berjalan; mundur = arah setir terbalik (seperti mobil sungguhan)
+      tour.heading -= ix * dt * 1.15 * (tour.speed >= 0 ? 1 : -1) * Math.min(1, Math.abs(tour.speed) / 5 + 0.2);
+    }
+    bp.x += Math.sin(tour.heading) * tour.speed * dt;
+    bp.z += Math.cos(tour.heading) * tour.speed * dt;
+    resolveCollisions(bp); // titik tengah bis tidak menembus bangunan & tetap di dalam desa
+    busGroup.rotation.y = tour.heading;
+    player.position.set(bp.x, 0, bp.z);
+    player.rotation.y = tour.heading;
+    vy = 0; grounded = true;
+  } else {
+    var hp = heliGroup.position;
+    if(heliRotor) heliRotor.rotation.y += dt * 22;
+    if(tour.landing){
+      tour.alt = Math.max(0, tour.alt - 8 * dt);
+      hp.y = tour.alt;
+      player.position.set(hp.x, hp.y, hp.z);
+      vy = 0; grounded = tour.alt <= 0;
+      if(tour.alt <= 0) finishManualTour();
+      return;
+    }
+    var mx = Math.sin(camYaw) * (-iy) + (-Math.cos(camYaw)) * ix;
+    var mz = Math.cos(camYaw) * (-iy) + (Math.sin(camYaw)) * ix;
+    var ml = Math.hypot(mx, mz); if(ml > 1){ mx /= ml; mz /= ml; }
+    hp.x += mx * 17 * dt; hp.z += mz * 17 * dt;
+    hp.x = Math.max(-112, Math.min(112, hp.x)); hp.z = Math.max(-88, Math.min(112, hp.z));
+    var up = (keys['Space'] || flyUp) ? 1 : 0, dn = (keys['KeyC'] || flyDown) ? 1 : 0;
+    tour.alt += (up - dn) * 9 * dt;
+    tour.alt = Math.max(0, Math.min(26, tour.alt));
+    hp.y = tour.alt;
+    if(ml > 0.12){
+      var want = Math.atan2(mx, mz), diff = want - heliGroup.rotation.y;
+      while(diff > Math.PI) diff -= Math.PI * 2; while(diff < -Math.PI) diff += Math.PI * 2;
+      heliGroup.rotation.y += Math.max(-2.4 * dt, Math.min(2.4 * dt, diff * Math.min(1, dt * 6)));
+    }
+    player.position.set(hp.x, hp.y, hp.z);
+    player.rotation.y = heliGroup.rotation.y;
+    vy = 0; grounded = tour.alt <= 0.01;
+  }
+}
 function updateTour(dt){
   if(!tour) return;
+  if(tour.manual){ updateTourManual(dt); return; }
   if(tour.kind === 'bis'){
     var bp = busGroup.position;
     var target = tour.pts[tour.i];
@@ -7710,6 +8084,7 @@ var camTarget = new THREE.Vector3();
 
 function resolveCollisions(p){
   for(var i=0;i<colliders.length;i++){ var c = colliders[i];
+    if(c === driveColSkip) continue; // kendaraan yang sedang dikendarai tidak menabrak pengendaranya sendiri
     if(p.x > c.minX-0.45 && p.x < c.maxX+0.45 && p.z > c.minZ-0.45 && p.z < c.maxZ+0.45){
       var dxl = p.x-(c.minX-0.45), dxr = (c.maxX+0.45)-p.x, dzl = p.z-(c.minZ-0.45), dzr = (c.maxZ+0.45)-p.z;
       var m = Math.min(dxl,dxr,dzl,dzr);
@@ -7797,8 +8172,8 @@ function animate(){
       // EP habis = kehabisan tenaga: kecepatan jalan tinggal separuh sampai minum susu lagi
       // Naik sepeda: kecepatan 1,7x — menjelajah desa jadi jauh lebih cepat
       // Shift (kiri/kanan) ditahan = lari 1,5x saat jalan kaki; naik sepeda sudah cepat dari sananya
-      var sprinting = !riding && !!(keys['ShiftLeft'] || keys['ShiftRight']);
-      var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (riding ? 1.7 : 1) * (sprinting ? 1.5 : 1) : 0;
+      var sprinting = !riding && !vehDrive && !!(keys['ShiftLeft'] || keys['ShiftRight']);
+      var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (riding ? 1.7 : (vehDrive ? vehDrive.mul : 1)) * (sprinting ? 1.5 : 1) : 0;
       curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt*7);
       if(curSpeed > 0.05){
         player.position.x += Math.sin(player.rotation.y) * curSpeed * dt;
@@ -7820,6 +8195,16 @@ function animate(){
         armL.rotation.x = -swing*0.8; armR.rotation.x = swing*0.8;
         bodyG.position.y = moving ? Math.abs(Math.sin(walkPhase))*0.07 : 0;
       }
+      if(vehDrive){
+        // kendaraan milik sendiri mengikuti pemain; collider-nya ikut berpindah tempat
+        vehDrive.group.position.set(player.position.x, 0, player.position.z);
+        vehDrive.group.rotation.y = player.rotation.y;
+        var vc = vehDrive.group.userData.col;
+        if(vc){ vc.minX = player.position.x - vehDrive.group.userData.hw; vc.maxX = player.position.x + vehDrive.group.userData.hw; vc.minZ = player.position.z - vehDrive.group.userData.hd; vc.maxZ = player.position.z + vehDrive.group.userData.hd; }
+        legL.rotation.x = -0.9; legR.rotation.x = -0.9;
+        armL.rotation.x = -0.5; armR.rotation.x = -0.5;
+        bodyG.position.y = vehDrive.kind === 'polisi' ? 0.12 : 0.30;
+      }
 
       // lompat / gravitasi
       if(!grounded || player.position.y > 0){
@@ -7828,6 +8213,7 @@ function animate(){
       }
       resolveCollisions(player.position);
       if(tourActive) updateTour(dt);
+      updateTrashPickups(dt);
       updateLocation();
       updateInteract();
       updateCompass();
