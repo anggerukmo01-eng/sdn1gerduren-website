@@ -1704,7 +1704,7 @@ var INFO = {
 };
 function infoFor(name){
   if(INFO[name]) return INFO[name];
-  if(name.indexOf('Ruang Kelas') === 0) return name + ' — tempat belajar membaca, menulis, dan berhitung bersama Bapak/Ibu Guru.' + (name === 'Ruang Kelas 1' ? ' Ini kelasmu!' : '');
+  if(name.indexOf('Ruang Kelas') === 0) return name + ' — tempat belajar membaca, menulis, dan berhitung bersama Bapak/Ibu Guru.' + (name === 'Ruang Kelas 1' ? ' Ini kelasmu!' : '') + ' Tekan Aksi lalu pilih "Masuk ke Dalam" untuk melihat isi kelasnya — ada papan tulis, meja guru, dan bangku-bangku siswa!';
   return 'Ini adalah ' + name + ' di lingkungan SDN 1 Gerduren.';
 }
 function addInteractable(x, z, r, name, img, extra){
@@ -1806,7 +1806,7 @@ for(var i=0;i<6;i++){
      di samping pintu pada x=3,1 y=2,45 — persis menimpa jendela kanan di x=3,6 y=2,5, dan
      gorden jendela berada di z lebih depan dari muka papan, sehingga papan tertutup.) */
   wallSign(cg, CLASS_POS[i].sign, 0, 3.13, 3.78, 3.3, {bg:'#b45309', fg:'#fff7d6', frame:0x92400e});
-  addInteractable(classX[i], -24, 8.2, 'Ruang Kelas ' + (i+1), null, {posList:CLASS_POS[i].ids});
+  addInteractable(classX[i], -24, 8.2, 'Ruang Kelas ' + (i+1), null, {posList:CLASS_POS[i].ids, enterRoom:'kelas' + (i+1)});
 }
 /* papan nama biru gedung utama di atas pintu tengah */
 (function(){
@@ -1820,7 +1820,7 @@ for(var i=0;i<6;i++){
   box(3.4, 1.9, 0.14, PAL.winFrame, 0, 2.8, 4.05, g, false);   // jendela baca besar
   box(3.0, 1.5, 0.06, 0xdff3ff, 0, 2.8, 4.18, g, false);
   wallSign(g, 'PERPUSTAKAAN', 0, 4.35, 4.06, 4.4, {bg:'#1e6fb8', fg:'#ffffff', frame:PAL.trimBlueD});
-  addInteractable(-33, -6, 7.6, 'Perpustakaan');
+  addInteractable(-33, -6, 7.6, 'Perpustakaan', null, {enterRoom:'perpus'});
 })();
 
 /* --- Blok timur halaman depan: bangunan HIJAU tanpa nama (Lampiran B — menggantikan blok
@@ -1937,7 +1937,7 @@ for(var i=0;i<6;i++){
   scene.add(g);
   addCollider(33, 3, w/2 + 0.5, d/2 + 0.5);
   addCollider(28.9, 3.55, 0.7, 0.7);   // tempat tidur istirahat di teras barat UKS ikut padat
-  addInteractable(33, 3, 6.8, 'Ruang UKS');
+  addInteractable(33, 3, 6.8, 'Ruang UKS', null, {enterRoom:'uks'});
 })();
 
 /* --- Sepeda pinjaman: terparkir di timur jalur gerbang, bisa dinaiki untuk menjelajah --- */
@@ -1984,7 +1984,7 @@ var bike = new THREE.Group();
   wallSign(g, 'MASJID AL-IKHLAS', 0, 4.6, d/2 + 0.06, 5.6, {bg:'#0b5c46', fg:'#ffffff', frame:0x0b5c46});
   scene.add(g);
   addCollider(24, 38, w/2 + 1.3, d/2 + 0.6);   // hw diperlebar: menara mini di sudut barat ikut terhalang
-  addInteractable(24, 38, 12.5, 'Masjid Al-Ikhlas');
+  addInteractable(24, 38, 12.5, 'Masjid Al-Ikhlas', null, {enterRoom:'masjid'});
 })();
 
 /* --- Balai Desa: atap joglo bertingkat, di tepi BARAT peta sebagai tujuan jauh (Lampiran A.7) --- */
@@ -2002,7 +2002,7 @@ var bike = new THREE.Group();
   wallSign(g, 'BALAI DESA GERDUREN', 0, 3.6, d/2 + 0.06, 5.8, {bg:'#7c2d12', fg:'#fef3c7', frame:0x7c2d12});
   scene.add(g);
   addCollider(-76, -36, 8, 5.5);
-  addInteractable(-76, -36, 11, 'Balai Desa');
+  addInteractable(-76, -36, 11, 'Balai Desa', null, {enterRoom:'balai'});
 })();
 
 /* --- Rumah warga: lebih kecil, warna dinding & atap bervariasi --- */
@@ -2022,7 +2022,7 @@ function house(x, z, wall, roof, ry){
 house(-26, 42, 0xfde68a, 0xb45309); house(-40, 64, 0xfce7f3, 0x9e3d2c);
 house(48, 62, 0xbbf7d0, 0x8a3320);  house(64, 44, 0xbfdbfe, 0x7c4a21);
 house(56, 16, 0xfed7aa, 0x9a3412);  house(-52, 44, 0xf3e8ff, 0x8a3320);
-addInteractable(-26, 42, 7.5, 'Rumah Warga');
+addInteractable(-26, 42, 7.5, 'Rumah Warga', null, {enterRoom:'warga'});
 
 /* ================= GERBANG KUNING-HIJAU + PAGAR + TIANG BENDERA + PODIUM (Lampiran B) =================
    Gerbang mengikuti acuan foto Nov 2026: tiang kuning berlis hijau + tutup piramida hijau,
@@ -2371,7 +2371,7 @@ var policeCarGroup = null, crossBikeGroup = null;
   box(1.5, 0.55, 0.05, 0xdc2626, -5.72, 6.1, 3.4, g, false); box(1.5, 0.55, 0.05, 0xffffff, -5.72, 5.55, 3.4, g, false);
   scene.add(g);
   addCollider(74, 30, 6, 4.5);
-  addInteractable(74, 30, 10, 'Kantor Polsek');
+  addInteractable(74, 30, 10, 'Kantor Polsek', null, {enterRoom:'polsek'});
   policeCarGroup = parkedCar(65, 30, Math.PI/2, 0xf8fafc, 'polisi');
   labelAt('Mobil Polisi', 65, 2.6, 30, 0.62);
   addInteractable(65, 30, 5.5, 'Mobil Polisi', null, {game:'polisi'});
@@ -2388,7 +2388,7 @@ var policeCarGroup = null, crossBikeGroup = null;
   wallSign(g, 'PUSKESMAS', 0, 3.6, 3.81, 4.6, {bg:'#15803d', fg:'#ffffff', frame:0x14532d});
   scene.add(g);
   addCollider(64, -34, 5.5, 4.2);
-  addInteractable(64, -34, 9, 'Puskesmas');
+  addInteractable(64, -34, 9, 'Puskesmas', null, {enterRoom:'puskesmas'});
 })();
 
 /* --- Mobil balap terparkir di tepi Jl. Sawah Glempang --- */
@@ -2613,28 +2613,543 @@ var playerHouseGroup = null, houseSignGroup = null, homeCarGroup = null, homeBik
   box(1.95, 1.0, 0.04, 0x38bdf8, 0, 1.45, 146.12, scene, false);
   // lemari + pot tanaman + lampu gantung
   box(1.6, 2.4, 0.6, 0x92400e, 5.1, 1.2, 146.2, scene);
-  cyl(0.22, 0.16, 0.4, 0xb45309, -5.3, 0.2, 153.4, scene, 10);
-  var plantTop = new THREE.Mesh(new THREE.SphereGeometry(0.42, 9, 8), mat(0x2f9e44)); plantTop.position.set(-5.3, 0.75, 153.4); scene.add(plantTop);
+  cyl(0.22, 0.16, 0.4, 0xb45309, -1.9, 0.2, 146.8, scene, 10);
+  var plantTop = new THREE.Mesh(new THREE.SphereGeometry(0.42, 9, 8), mat(0x2f9e44)); plantTop.position.set(-1.9, 0.75, 146.8); scene.add(plantTop);
   cyl(0.03, 0.03, 0.5, 0x374151, 0, 3.05, 150, scene, 6);
   var lamp = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 9), new THREE.MeshBasicMaterial({color:0xfde68a})); lamp.position.set(0, 2.72, 150); scene.add(lamp);
   wallSign(scene, 'RUMAH KAMU', 0, 2.3, 145.78, 3.4, {bg:'#b45309', fg:'#fff7d6'});
+  /* ===== Perabot khas rumah Indonesia (perluasan interior Rumah Kamu) =====
+     DAPUR di dinding timur: meja dapur + kompor 2 tungku + panci + magic com
+     (rice cooker) + wastafel cuci piring + kulkas. KAMAR MANDI di sudut barat
+     daya: sekat + bak mandi + gayung + kloset duduk + ember. Ditambah
+     dispenser galon, kipas angin berdiri, sofa, foto keluarga, kalender,
+     dan jam dinding — seperti rumah-rumah di perumahan Indonesia. */
+  // --- Dapur (dinding timur, selatan lemari) ---
+  box(1.05, 0.88, 3.6, 0xd6d3cd, 5.32, 0.44, 150.2, scene);                    // meja dapur beton
+  box(1.15, 0.06, 3.7, 0x9ca3af, 5.32, 0.91, 150.2, scene, false);            // permukaan meja dapur
+  box(0.7, 0.07, 0.55, 0x1f2937, 5.32, 0.97, 149.0, scene, false);            // kompor gas 2 tungku
+  cyl(0.1, 0.1, 0.03, 0x374151, 5.18, 1.01, 149.0, scene, 10); cyl(0.1, 0.1, 0.03, 0x374151, 5.47, 1.01, 149.0, scene, 10);
+  cyl(0.17, 0.15, 0.19, 0x9ca3af, 5.32, 1.1, 149.0, scene, 12);               // panci di atas kompor
+  cyl(0.17, 0.17, 0.03, 0x6b7280, 5.32, 1.21, 149.0, scene, 12);              // tutup panci
+  cyl(0.19, 0.16, 0.25, 0xf8fafc, 5.32, 1.06, 150.15, scene, 12);             // magic com / rice cooker
+  cyl(0.19, 0.19, 0.04, 0xe5e7eb, 5.32, 1.2, 150.15, scene, 12);
+  box(0.62, 0.14, 0.52, 0xe5e7eb, 5.32, 0.96, 151.45, scene, false);          // wastafel cuci piring
+  cyl(0.025, 0.025, 0.3, 0x9ca3af, 5.55, 1.15, 151.45, scene, 6);             // keran wastafel
+  box(0.3, 0.04, 0.04, 0x9ca3af, 5.42, 1.3, 151.45, scene, false);
+  cyl(0.14, 0.14, 0.1, 0xffffff, 5.25, 1.0, 150.85, scene, 12);               // tumpukan piring
+  box(0.95, 1.85, 0.85, 0xe2e8f0, 5.35, 0.93, 147.55, scene);                 // kulkas
+  box(0.06, 0.5, 0.08, 0x9ca3af, 4.85, 1.25, 147.55, scene, false);           // gagang kulkas
+  box(0.97, 0.05, 0.87, 0x94a3b8, 5.35, 1.42, 147.55, scene, false);          // garis pintu freezer
+  labelAt('Dapur', 4.9, 2.7, 150.2, 0.42);
+  addCollider(5.32, 150.2, 0.62, 1.9); addCollider(5.35, 147.55, 0.55, 0.5);
+  // --- Kamar mandi (sudut barat daya, bersekat, pintu masuk celah di utara) ---
+  box(0.15, 2.2, 1.9, 0xfef3c7, -3.35, 1.1, 153.45, scene);                   // sekat timur kamar mandi
+  box(1.25, 2.2, 0.15, 0xfef3c7, -5.38, 1.1, 152.55, scene);                  // sekat utara (celah pintu 1,25 m di antaranya)
+  box(1.15, 0.62, 0.85, 0xdbeafe, -5.3, 0.31, 153.95, scene);                 // bak mandi
+  box(1.0, 0.05, 0.7, 0x38bdf8, -5.3, 0.6, 153.95, scene, false);             // air di bak mandi
+  box(0.22, 0.12, 0.22, 0xf97316, -4.82, 0.68, 153.75, scene, false);         // gayung oranye
+  box(0.5, 0.38, 0.62, 0xffffff, -4.48, 0.19, 153.3, scene);                  // kloset duduk
+  box(0.52, 0.06, 0.5, 0xe5e7eb, -4.48, 0.42, 153.22, scene, false);          // tutup kloset
+  box(0.5, 0.55, 0.18, 0xffffff, -4.48, 0.78, 152.92, scene, false);          // tangki air kloset
+  cyl(0.19, 0.15, 0.3, 0x2563eb, -5.72, 0.15, 153.0, scene, 10);              // ember biru
+  labelAt('Kamar Mandi', -5.0, 2.55, 153.5, 0.42);
+  addCollider(-3.35, 153.45, 0.15, 1.0); addCollider(-5.38, 152.55, 0.62, 0.15);
+  // --- Dispenser galon + kipas angin + sofa + hiasan dinding ---
+  box(0.42, 1.05, 0.42, 0xf1f5f9, 1.9, 0.53, 153.9, scene);                   // dispenser
+  cyl(0.16, 0.16, 0.42, 0x2563eb, 1.9, 1.27, 153.9, scene, 10);               // galon air biru
+  box(0.07, 0.07, 0.05, 0xdc2626, 1.78, 0.82, 154.12, scene, false);          // keran panas
+  box(0.07, 0.07, 0.05, 0x2563eb, 2.02, 0.82, 154.12, scene, false);          // keran dingin
+  cyl(0.2, 0.24, 0.05, 0x374151, -5.55, 0.03, 150.6, scene, 10);              // kaki kipas angin
+  cyl(0.03, 0.03, 1.25, 0x374151, -5.55, 0.65, 150.6, scene, 6);              // tiang kipas angin
+  var fanHead = cyl(0.27, 0.27, 0.13, 0x9ca3af, -5.55, 1.38, 150.6, scene, 14); fanHead.rotation.z = Math.PI/2; // kepala kipas
+  box(0.8, 0.32, 1.9, 0x8a5a2b, -5.35, 0.35, 151.6, scene);                   // sofa cokelat: dudukan
+  box(0.22, 0.78, 1.9, 0x8a5a2b, -5.78, 0.6, 151.6, scene);                    // sofa: sandaran punggung
+  box(0.55, 0.16, 0.55, 0xdc2626, -5.3, 0.58, 151.15, scene, false);          // bantal sofa merah
+  box(0.55, 0.16, 0.55, 0xf59e0b, -5.3, 0.58, 152.05, scene, false);          // bantal sofa kuning
+  addCollider(-5.45, 151.6, 0.5, 1.0);
+  box(0.95, 0.75, 0.05, 0x6d4c2f, -2.6, 2.0, 145.79, scene, false);           // foto keluarga: bingkai
+  box(0.8, 0.6, 0.02, 0xfbbf24, -2.6, 2.0, 145.83, scene, false);             // foto keluarga: isi
+  box(0.95, 0.75, 0.05, 0x6d4c2f, 3.0, 2.05, 145.79, scene, false);           // foto liburan: bingkai
+  box(0.8, 0.6, 0.02, 0x38bdf8, 3.0, 2.05, 145.83, scene, false);             // foto liburan: isi
+  var wallClock = cyl(0.3, 0.3, 0.05, 0xffffff, 0, 2.72, 145.8, scene, 16); wallClock.rotation.x = Math.PI/2; // jam dinding
+  box(0.62, 0.85, 0.04, 0xffffff, -3.4, 1.95, 154.22, scene, false);          // kalender dinding
+  box(0.62, 0.2, 0.045, 0xdc2626, -3.4, 2.28, 154.22, scene, false);
   addCollider(0, 145.4, 6.2, 0.5); addCollider(-6.2, 150, 0.5, 4.7); addCollider(6.2, 150, 0.5, 4.7);
   addCollider(-3.7, 154.6, 2.4, 0.5); addCollider(3.7, 154.6, 2.4, 0.5);
+  // Kasur bisa dipakai TIDUR (pulihkan HP & EP) dan kursi makan bisa dipakai DUDUK
+  addInteractable(-4.2, 148, 2.9, 'Kasur Rumah Kamu', null, {bed:true});
+  addInteractable(2.2, 152.6, 1.7, 'Kursi Makan', null, {sitSpot:true, sitX:2.2, sitZ:152.6, sitRy:Math.PI, sitDy:-0.34});
   addInteractable(0, 153.4, 2.8, 'Pintu Rumah', null, {homeExit:true});
 })();
 function enterHome(){
   if(!eco.assets.rumah){ showToast('Rumah ini belum milikmu — beli dulu di Dealer Gerduren (tunai atau kredit cicilan).', 4200); return; }
+  if(poseMode) standPose(true);
+  interiorClamp = {minX:-5.6, maxX:5.6, minZ:145.6, maxZ:154.2};
   player.position.set(0, 0, 152.8); player.position.y = 0; vy = 0; grounded = true;
   player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
   AudioSys.sfx('pop');
   showToast('Selamat datang di Rumah Kamu! Istirahat yang nyaman — dekati pintu lalu tekan Aksi untuk keluar.', 4600);
 }
 function exitHome(){
+  if(poseMode) standPose(true);
+  interiorClamp = null;
   player.position.set(-14, 0, 56.6); player.position.y = 0; vy = 0; grounded = true;
   player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
   AudioSys.sfx('pop');
   showToast('Kamu keluar dari Rumah Kamu. Motor & mobilmu terparkir rapi di depan rumah!', 3800);
 }
+
+/* ================= INTERIOR SEMUA RUANGAN + POSE DUDUK / TIDUR / BERENANG =================
+   Setiap ruangan yang ada di dunia kini punya INTERIOR yang bisa dimasuki:
+   Ruang Kelas 1-6, Perpustakaan, Ruang UKS, Kantin, Koperasi, Masjid,
+   Balai Desa, Kantor Polsek, Puskesmas, dan Rumah Warga. Seperti Rumah Kamu,
+   interior dibangun sebagai ruangan terpisah di zona selatan peta (z > 160,
+   di luar area desa); pemain masuk lewat pintu bangunan (tombol Aksi ->
+   "Masuk ke Dalam") dan keluar lewat Pintu Keluar di dalam ruangan.
+   Karakter juga bisa DUDUK (di bangku/kursi bertanda), TIDUR (di kasur
+   Rumah Kamu — HP & EP pulih penuh dan hari menjadi pagi), dan BERENANG
+   (berjalan masuk ke air Sungai Gerduren). */
+var interiorClamp = null;              // batas gerak ruangan interior aktif {minX,maxX,minZ,maxZ}
+var ROOMS = {};                        // id ruangan -> {name, cx, cz, w, d, clamp}
+var roomReturn = null;                 // titik kembali di depan pintu bangunan
+var poseMode = null;                   // null | 'sit' | 'sleep'
+var poseSit = null;                    // {x, z, ry, dy} titik duduk aktif
+var swimOn = false, swimMsgCd = 0;
+var SIT_OFF = {name:'Berdiri', standUp:true};
+var WAKE_OFF = {name:'Bangun Tidur', standUp:true};
+var BOOK_COLS = [0xdc2626, 0x2563eb, 0x16a34a, 0xf59e0b, 0xec4899, 0x7c3aed, 0x0ea5e9, 0xf97316];
+
+INFO['Pintu Keluar'] = 'Pintu keluar ruangan. Tekan Aksi lalu pilih Keluar Ruangan untuk kembali ke depan bangunan.';
+INFO['Kasur Rumah Kamu'] = 'Kasur di Rumah Kamu. Tekan Aksi lalu pilih Tidur di Kasur untuk tidur nyenyak: HP & EP pulih penuh dan hari langsung menjadi pagi!';
+INFO['Kursi Makan'] = 'Kursi meja makan di Rumah Kamu. Tekan Aksi lalu pilih Duduk di Sini untuk duduk santai.';
+INFO['Bangku Taman'] = 'Bangku kayu di Taman Desa. Tekan Aksi lalu pilih Duduk di Sini untuk duduk santai menikmati taman.';
+INFO['Bangku Terminal'] = 'Bangku ruang tunggu Terminal Gerduren. Tekan Aksi lalu pilih Duduk di Sini sambil menunggu Bis Keliling Desa.';
+INFO['Bangku Istirahat'] = 'Bangku istirahat dekat gerbang sekolah. Tekan Aksi lalu pilih Duduk di Sini untuk beristirahat sejenak.';
+INFO['Pintu Kantin'] = 'Pintu masuk Kantin sekolah. Tekan Aksi lalu pilih Masuk ke Dalam untuk melihat interior kantin — ada etalase jajanan, dapur, dan meja makan!';
+INFO['Pintu Koperasi'] = 'Pintu masuk Koperasi Sekolah. Tekan Aksi lalu pilih Masuk ke Dalam untuk melihat rak-rak barang dan meja kasirnya.';
+INFO['Bangku Kelas'] = 'Bangku siswa di dalam kelas. Tekan Aksi lalu pilih Duduk di Sini — rasakan duduk di kelas seperti siswa sungguhan!';
+INFO['Kursi Baca'] = 'Kursi di meja baca Perpustakaan. Tekan Aksi lalu pilih Duduk di Sini untuk membaca dengan tenang.';
+INFO['Bangku Kantin'] = 'Bangku meja makan di Kantin. Tekan Aksi lalu pilih Duduk di Sini untuk makan jajananmu.';
+INFO['Kursi Rapat'] = 'Kursi meja rapat Balai Desa. Tekan Aksi lalu pilih Duduk di Sini seperti peserta musyawarah desa.';
+INFO['Karpet Masjid'] = 'Karpet salat di Masjid Al-Ikhlas. Tekan Aksi lalu pilih Duduk di Sini untuk duduk beristirahat dan berzikir dengan tenang.';
+
+function infoAppend(name, extra){
+  for(var i = 0; i < interactables.length; i++) if(interactables[i].name === name) interactables[i].info += extra;
+}
+infoAppend('Perpustakaan', ' Tekan Aksi lalu pilih "Masuk ke Dalam" untuk masuk dan melihat rak-rak bukunya!');
+infoAppend('Ruang UKS', ' Tekan Aksi lalu pilih "Masuk ke Dalam" untuk melihat tempat tidur periksa dan lemari obatnya!');
+infoAppend('Masjid Al-Ikhlas', ' Tekan Aksi lalu pilih "Masuk ke Dalam" untuk masuk ke ruang salatnya — lepaskan alas kaki dan jaga ketenangan, ya.');
+infoAppend('Balai Desa', ' Tekan Aksi lalu pilih "Masuk ke Dalam" untuk melihat meja rapat dan papan pengumumannya!');
+infoAppend('Rumah Warga', ' Tekan Aksi lalu pilih "Masuk ke Dalam" untuk bertamu dan melihat isi rumah warga (permisi dulu, ya!).');
+infoAppend('Kantor Polsek', ' Tekan Aksi lalu pilih "Masuk ke Dalam" untuk melihat meja piket dan ruang selnya!');
+infoAppend('Puskesmas', 'Puskesmas Gerduren: tempat berobat dan memeriksakan kesehatan warga. Tekan Aksi lalu pilih "Masuk ke Dalam" untuk melihat ruang periksanya!');
+infoAppend('Sungai Gerduren', ' Kamu juga boleh BERENANG di sungai ini: berjalanlah masuk ke airnya (bukan di atas jembatan) dan kamu akan berenang! Berenanglah ke tepi untuk naik lagi.');
+for(var _ci = 1; _ci <= 6; _ci++) infoAppend('Ruang Kelas ' + _ci, '');
+
+/* ---------- Masuk / keluar ruangan interior ---------- */
+function enterRoom(id){
+  var R = ROOMS[id]; if(!R) return;
+  if(poseMode) standPose(true);
+  roomReturn = {x: player.position.x, z: player.position.z, ry: player.rotation.y};
+  interiorClamp = R.clamp;
+  player.position.set(R.cx, 0, R.cz + R.d/2 - 1.7);
+  player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
+  AudioSys.sfx('pop');
+  showToast('Kamu masuk ke ' + R.name + '. Jelajahi isinya — dekati pintu lalu tekan Aksi untuk keluar.', 4400);
+}
+function exitRoom(){
+  if(poseMode) standPose(true);
+  var r = roomReturn; roomReturn = null; interiorClamp = null;
+  if(r){ player.position.set(r.x, 0, r.z); player.rotation.y = r.ry; camYawT = r.ry; camYaw = r.ry; }
+  player.position.y = 0; vy = 0; grounded = true;
+  AudioSys.sfx('pop');
+  showToast('Kamu keluar ruangan.', 2400);
+}
+
+/* ---------- Pose DUDUK & TIDUR ---------- */
+function startSit(t){
+  poseMode = 'sit';
+  poseSit = {x: t.sitX, z: t.sitZ, ry: t.sitRy, dy: (t.sitDy !== undefined ? t.sitDy : -0.33)};
+  player.position.set(t.sitX, 0, t.sitZ);
+  player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = t.sitRy; camYawT = t.sitRy; camYaw = t.sitRy;
+  AudioSys.sfx('pop');
+  showToast('Kamu duduk santai. Gerakkan joystick / WASD atau tekan Aksi untuk berdiri lagi.', 3600);
+}
+function startSleep(){
+  poseMode = 'sleep'; poseSit = null;
+  player.position.set(-4.2, 0, 149.2);
+  player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = 0; camYawT = Math.PI; camYaw = Math.PI;
+  AudioSys.sfx('pop');
+  faintOverlay.classList.add('on'); faintOverlay.setAttribute('aria-hidden', 'false');
+  setTimeout(function(){
+    eco.hp = 100; eco.ep = 100; WX.hour = 6.6;
+    saveEco(); updateStatsUI();
+    faintOverlay.classList.remove('on'); faintOverlay.setAttribute('aria-hidden', 'true');
+    showToast('Kamu tidur nyenyak di kasur Rumah Kamu. HP & EP pulih PENUH dan hari sudah pagi! Tekan Aksi atau bergerak untuk bangun.', 5600);
+  }, 1700);
+}
+function standPose(silent){
+  if(!poseMode) return;
+  poseMode = null; poseSit = null;
+  bodyG.rotation.x = 0; bodyG.position.y = 0;
+  legL.rotation.x = 0; legR.rotation.x = 0; armL.rotation.x = 0; armR.rotation.x = 0;
+  if(!silent) AudioSys.sfx('pop');
+}
+
+/* ---------- BERENANG: air Sungai Gerduren (x 99.2..106.8), kecuali di atas jembatan ---------- */
+function inRiverWater(x, z){
+  if(x < 99.2 || x > 106.8) return false;
+  if(z < -108 || z > 108) return false;
+  if(z > 45 && z < 59.5) return false;     // Jembatan Gerduren (beton, di Jl. Sawah Glempang)
+  if(z > 16.5 && z < 23.5) return false;   // jembatan papan dekat titik memancing
+  return true;
+}
+
+/* ---------- Pembangun ruangan & perabot interior ---------- */
+function colL(cx, cz, x, z, hw, hd){ addCollider(cx + x, cz + z, hw, hd); }
+function furnChair(g, x, z, ry, col){
+  var c = new THREE.Group(); c.position.set(x, 0, z); c.rotation.y = ry || 0; g.add(c);
+  var cc = col || 0xb45309;
+  box(0.55, 0.07, 0.55, cc, 0, 0.46, 0, c, false);
+  box(0.55, 0.62, 0.07, cc, 0, 0.79, -0.24, c, false);
+  [[-0.22,-0.22],[0.22,-0.22],[-0.22,0.22],[0.22,0.22]].forEach(function(p){ box(0.06, 0.46, 0.06, 0x8a5a2b, p[0], 0.23, p[1], c, false); });
+  return c;
+}
+function furnBed(g, x, z, ry, blanket){
+  var b = new THREE.Group(); b.position.set(x, 0, z); b.rotation.y = ry || 0; g.add(b);
+  box(2.1, 0.35, 3.3, 0x7c4a21, 0, 0.3, 0, b);
+  box(2.0, 0.22, 3.2, 0xffffff, 0, 0.58, 0, b, false);
+  box(1.05, 0.15, 0.65, 0xfef9c3, 0, 0.74, -1.15, b, false);
+  box(2.0, 0.13, 1.8, blanket || 0x2563eb, 0, 0.72, 0.55, b, false);
+  box(2.14, 0.85, 0.12, 0x7c4a21, 0, 0.72, -1.68, b, false);
+  return b;
+}
+function furnShelf(g, x, z, ry, w){
+  var s = new THREE.Group(); s.position.set(x, 0, z); s.rotation.y = ry || 0; g.add(s);
+  box(w, 2.1, 0.45, 0x8a5a2b, 0, 1.05, 0, s);
+  [0.45, 1.05, 1.65].forEach(function(sy){
+    box(w - 0.15, 0.06, 0.4, 0x6d4c2f, 0, sy, 0.03, s, false);
+    var bx = -w/2 + 0.22;
+    while(bx < w/2 - 0.3){
+      var bw = 0.13 + Math.random() * 0.1;
+      box(bw, 0.4, 0.26, BOOK_COLS[Math.floor(Math.random() * BOOK_COLS.length)], bx + bw/2, sy + 0.23, 0.04, s, false);
+      bx += bw + 0.035;
+    }
+  });
+  return s;
+}
+function furnDesk(g, x, z, col){
+  box(1.5, 0.08, 0.7, col || 0xb45309, x, 0.74, z, g, false);
+  box(1.3, 0.68, 0.52, col || 0x92400e, x, 0.36, z, g, false);
+}
+function buildRoomShell(id, name, cx, cz, w, d, o){
+  var g = new THREE.Group(); g.position.set(cx, 0, cz); scene.add(g);
+  flat(w, d, o.floor, 0, 0, g, 0.03);
+  var wall = o.wall;
+  box(w, 3.2, 0.3, wall, 0, 1.6, -d/2, g);                                   // dinding utara
+  box(0.3, 3.2, d, wall, -w/2, 1.6, 0, g);                                  // dinding barat
+  box(0.3, 3.2, d, wall, w/2, 1.6, 0, g);                                   // dinding timur
+  var seg = (w - 1.7) / 2;
+  box(seg, 3.2, 0.3, wall, -(0.85 + seg/2), 1.6, d/2, g);                   // dinding selatan kiri pintu
+  box(seg, 3.2, 0.3, wall, 0.85 + seg/2, 1.6, d/2, g);                      // dinding selatan kanan pintu
+  box(1.7, 0.85, 0.3, wall, 0, 2.78, d/2, g);                               // ambang di atas pintu
+  box(w + 0.6, 0.25, d + 0.6, 0x9e3d2c, 0, 3.32, 0, g);                     // plafon
+  box(0.12, 2.35, 0.12, 0x6d4c2f, -0.85, 1.17, d/2, g, false);              // kusen pintu
+  box(0.12, 2.35, 0.12, 0x6d4c2f, 0.85, 1.17, d/2, g, false);
+  var leaf = box(0.95, 2.2, 0.07, 0xb45309, -1.5, 1.1, d/2 - 0.4, g, false); leaf.rotation.y = 0.55; // daun pintu terbuka
+  [-d/4, d/4].forEach(function(wz){                                          // jendela kaca di dinding barat & timur
+    box(0.1, 1.25, 1.7, 0x6d4c2f, -w/2 + 0.1, 2.0, wz, g, false);
+    box(0.06, 1.0, 1.45, 0xdff3ff, -w/2 + 0.16, 2.0, wz, g, false);
+    box(0.1, 1.25, 1.7, 0x6d4c2f, w/2 - 0.1, 2.0, wz, g, false);
+    box(0.06, 1.0, 1.45, 0xdff3ff, w/2 - 0.16, 2.0, wz, g, false);
+  });
+  cyl(0.03, 0.03, 0.45, 0x374151, 0, 3.05, 0, g, 6);                        // tangkai lampu
+  var lamp = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 9), new THREE.MeshBasicMaterial({color:0xfde68a}));
+  lamp.position.set(0, 2.75, 0); g.add(lamp);                               // lampu gantung
+  wallSign(g, o.sign, 0, 2.62, -d/2 + 0.18, Math.min(6.4, w - 3), {bg:o.signBg || '#1e6fb8', fg:'#ffffff', frame:0x144e82});
+  addCollider(cx, cz - d/2, w/2, 0.4);
+  addCollider(cx - w/2, cz, 0.4, d/2); addCollider(cx + w/2, cz, 0.4, d/2);
+  addCollider(cx - (0.85 + seg/2), cz + d/2, seg/2, 0.4); addCollider(cx + (0.85 + seg/2), cz + d/2, seg/2, 0.4);
+  addInteractable(cx, cz + d/2 - 1.15, 2.6, 'Pintu Keluar', null, {exitRoom:true});
+  ROOMS[id] = {name:name, cx:cx, cz:cz, w:w, d:d,
+    clamp:{minX:cx - w/2 + 0.5, maxX:cx + w/2 - 0.5, minZ:cz - d/2 + 0.5, maxZ:cz + d/2 - 0.4}};
+  return g;
+}
+
+/* ----- Ruang Kelas 1-6: papan tulis, meja guru, 6 bangku siswa, lemari, jam, bendera ----- */
+function buildClassroom(n, cx, cz){
+  var g = buildRoomShell('kelas' + n, 'Ruang Kelas ' + n, cx, cz, 15, 11,
+    {wall:0xfef3c7, floor:0xd6c7a8, sign:'KELAS ' + n, signBg:'#1e6fb8'});
+  box(6.0, 1.7, 0.09, 0x14532d, 0, 1.75, -5.28, g, false);                  // papan tulis hijau
+  box(6.2, 0.12, 0.14, 0x8a5a2b, 0, 0.84, -5.26, g, false);                 // baki kapur
+  box(0.5, 0.05, 0.08, 0xffffff, -1.8, 0.92, -5.24, g, false);              // kapur tulis
+  box(1.9, 0.1, 0.95, 0x8a5a2b, -4.6, 0.78, -3.9, g);                       // meja guru
+  box(1.7, 0.72, 0.75, 0x7c4a21, -4.6, 0.36, -3.9, g);
+  furnChair(g, -4.6, -3.0, Math.PI, 0x7c4a21);                              // kursi guru
+  box(0.55, 0.09, 0.4, 0xdc2626, -4.9, 0.87, -3.9, g, false);               // buku di meja guru
+  box(0.45, 0.07, 0.34, 0x2563eb, -4.25, 0.86, -3.8, g, false);
+  colL(cx, cz, -4.6, -3.9, 1.05, 0.6);
+  [-3.4, 0, 3.4].forEach(function(dx){ [-1.4, 1.6].forEach(function(dz){    // 6 bangku siswa (2 baris x 3)
+    furnDesk(g, dx, dz);
+    furnChair(g, dx, dz + 0.95, Math.PI, 0x2563eb);
+    box(0.4, 0.06, 0.3, BOOK_COLS[(n + (dx > 0 ? 2 : 0) + (dz > 0 ? 1 : 0)) % BOOK_COLS.length], dx - 0.3, 0.81, dz, g, false);
+  }); });
+  colL(cx, cz, 0, -1.4, 4.6, 0.38); colL(cx, cz, 0, 1.6, 4.6, 0.38);
+  box(1.6, 2.2, 0.55, 0x92400e, 6.55, 1.1, -4.5, g);                         // lemari kelas
+  box(0.05, 1.9, 0.4, 0x6d4c2f, 6.28, 1.1, -4.5, g, false);
+  colL(cx, cz, 6.55, -4.5, 0.85, 0.4);
+  var jam = cyl(0.34, 0.34, 0.07, 0xffffff, 4.6, 2.55, -5.3, g, 20); jam.rotation.x = Math.PI/2; // jam dinding
+  wallSign(g, 'A B C • 1 2 3', -4.6, 2.45, -5.32, 3.2, {bg:'#f59e0b', fg:'#451a03', frame:0xb45309}); // poster belajar
+  cyl(0.03, 0.03, 2.6, 0x9ca3af, 6.9, 1.3, -3.2, g, 6);                     // tiang bendera sudut kelas
+  box(0.85, 0.3, 0.03, 0xdc2626, 7.32, 2.32, -3.2, g, false);
+  box(0.85, 0.3, 0.03, 0xffffff, 7.32, 2.02, -3.2, g, false);
+  addInteractable(cx, cz + 2.55, 1.7, 'Bangku Kelas', null, {sitSpot:true, sitX:cx, sitZ:cz + 2.55, sitRy:Math.PI, sitDy:-0.34});
+}
+buildClassroom(1, -64, 180); buildClassroom(2, -32, 180); buildClassroom(3, 0, 180);
+buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 206);
+
+/* ----- Perpustakaan: rak-rak buku, meja baca, karpet, globe ----- */
+(function(){
+  var cx = -32, cz = 206;
+  var g = buildRoomShell('perpus', 'Perpustakaan', cx, cz, 15, 11,
+    {wall:0xe0f2fe, floor:0xc9a877, sign:'PERPUSTAKAAN', signBg:'#1e6fb8'});
+  flat(5.2, 3.6, 0x7c2d1e, 3.2, 0.9, g, 0.05);                              // karpet baca merah
+  furnShelf(g, -3.6, -4.95, 0, 6.4); furnShelf(g, 3.4, -4.95, 0, 5.2);      // rak buku dinding utara
+  furnShelf(g, -7.05, 0.2, Math.PI/2, 5.4);                                 // rak buku dinding barat
+  furnShelf(g, -3.4, -0.9, 0, 4.6);                                         // rak tengah
+  colL(cx, cz, -3.6, -4.95, 3.3, 0.45); colL(cx, cz, 3.4, -4.95, 2.7, 0.45);
+  colL(cx, cz, -7.05, 0.2, 0.45, 2.8); colL(cx, cz, -3.4, -0.9, 2.4, 0.45);
+  box(3.6, 0.09, 1.4, 0x8a5a2b, 3.2, 0.76, 0.9, g);                          // meja baca panjang
+  box(3.3, 0.7, 1.1, 0x7c4a21, 3.2, 0.36, 0.9, g);
+  colL(cx, cz, 3.2, 0.9, 1.9, 0.75);
+  furnChair(g, 2.2, -0.15, 0, 0x0e7a5f); furnChair(g, 4.2, -0.15, 0, 0x0e7a5f);
+  furnChair(g, 2.2, 1.95, Math.PI, 0x0e7a5f); furnChair(g, 4.2, 1.95, Math.PI, 0x0e7a5f);
+  var globe = new THREE.Mesh(new THREE.SphereGeometry(0.24, 14, 10), mat(0x38bdf8));
+  globe.position.set(2.5, 1.05, 0.7); globe.castShadow = true; g.add(globe); // globe di meja baca
+  box(0.5, 0.07, 0.36, 0xdc2626, 3.9, 0.84, 1.1, g, false);                 // buku terbuka di meja
+  wallSign(g, 'RAJIN MEMBACA', 4.9, 2.4, -5.32, 3.4, {bg:'#0e7a5f', fg:'#ffffff', frame:0x0b5c46});
+  addInteractable(cx + 4.2, cz + 1.95, 1.7, 'Kursi Baca', null, {sitSpot:true, sitX:cx + 4.2, sitZ:cz + 1.95, sitRy:Math.PI, sitDy:-0.34});
+})();
+
+/* ----- Ruang UKS: tempat tidur periksa, lemari obat, meja perawat, timbangan ----- */
+(function(){
+  var cx = 0, cz = 206;
+  var g = buildRoomShell('uks', 'Ruang UKS', cx, cz, 13, 10,
+    {wall:0xf8fafc, floor:0xdbeafe, sign:'RUANG UKS', signBg:'#dc2626'});
+  furnBed(g, -3.9, -3.1, Math.PI/2, 0xdc2626);                              // tempat tidur periksa
+  colL(cx, cz, -3.9, -3.1, 1.75, 1.15);
+  box(0.95, 0.95, 0.05, 0xffffff, -3.9, 2.45, -4.82, g, false);             // papan palang merah
+  box(0.62, 0.2, 0.06, 0xdc2626, -3.9, 2.45, -4.8, g, false);
+  box(0.2, 0.62, 0.06, 0xdc2626, -3.9, 2.45, -4.8, g, false);
+  box(1.5, 2.1, 0.5, 0xe2e8f0, 5.6, 1.05, -4.15, g);                         // lemari obat
+  box(1.3, 1.5, 0.05, 0xcfeeff, 5.6, 1.25, -3.88, g, false);                // kaca lemari obat
+  [5.25, 5.6, 5.95].forEach(function(bx, bi){ cyl(0.07, 0.07, 0.24, BOOK_COLS[bi % BOOK_COLS.length], bx, 0.85, -3.85, g, 8); }); // botol obat
+  colL(cx, cz, 5.6, -4.15, 0.85, 0.4);
+  furnDesk(g, 4.0, -3.2, 0x64748b); furnChair(g, 4.0, -2.25, Math.PI, 0x64748b); // meja + kursi perawat
+  colL(cx, cz, 4.0, -3.2, 0.85, 0.45);
+  box(0.5, 0.12, 0.5, 0x374151, 5.9, 0.06, 2.8, g, false);                  // timbangan badan
+  cyl(0.03, 0.03, 1.5, 0x374151, 5.9, 0.85, 2.8, g, 6);
+  box(0.44, 0.18, 0.1, 0x9ca3af, 5.9, 1.68, 2.8, g, false);
+  [-3, 0, 3].forEach(function(kx){ furnChair(g, kx, 4.1, Math.PI, 0x2563eb); }); // kursi tunggu
+  box(0.7, 0.5, 0.45, 0xe5e7eb, -6.0, 0.75, 3.9, g, false);                 // wastafel UKS
+  cyl(0.025, 0.025, 0.25, 0x9ca3af, -6.0, 1.1, 3.9, g, 6);
+  wallSign(g, 'HIDUP SEHAT', 3.6, 2.4, -4.82, 3.2, {bg:'#0e7a5f', fg:'#ffffff', frame:0x0b5c46});
+})();
+
+/* ----- Kantin: etalase jajanan, dapur, meja makan + bangku ----- */
+(function(){
+  var cx = 32, cz = 206;
+  var g = buildRoomShell('kantin', 'Kantin Sekolah', cx, cz, 15, 11,
+    {wall:0xfef9c3, floor:0xe7d8b7, sign:'KANTIN', signBg:'#b45309'});
+  box(7.5, 1.0, 0.9, 0x92400e, 0, 0.5, -4.2, g);                             // etalase / meja saji
+  box(7.5, 0.65, 0.06, 0xdff3ff, 0, 1.35, -3.82, g, false);                 // kaca etalase
+  [-3.2, -1.6, 0, 1.6, 3.2].forEach(function(fx, fi){                        // jajanan warna-warni di etalase
+    box(1.1, 0.5, 0.6, BOOK_COLS[fi % BOOK_COLS.length], fx, 1.28, -4.35, g, false);
+  });
+  colL(cx, cz, 0, -4.2, 3.9, 0.6);
+  box(0.9, 0.9, 3.4, 0xd6d3cd, -6.55, 0.45, -2.6, g);                       // meja dapur kantin
+  box(0.7, 0.07, 0.55, 0x1f2937, -6.55, 0.94, -3.4, g, false);              // kompor
+  cyl(0.2, 0.18, 0.22, 0x9ca3af, -6.55, 1.08, -3.4, g, 12);                 // panci besar
+  cyl(0.17, 0.17, 0.5, 0x16a34a, -6.55, 0.25, -1.2, g, 10);                 // tabung gas elpiji hijau
+  colL(cx, cz, -6.55, -2.6, 0.55, 1.8);
+  wallSign(g, 'MENU: NASI • MIE • BAKSO • TEH', 0, 2.45, -5.32, 5.6, {bg:'#b45309', fg:'#fff7d6', frame:0x92400e});
+  [-3.6, 0.4, 4.4].forEach(function(tx){                                    // meja makan bundar + bangku
+    var top = cyl(0.62, 0.62, 0.07, 0x8a5a2b, tx, 0.74, 1.3, g, 16);
+    cyl(0.05, 0.05, 0.7, 0x374151, tx, 0.37, 1.3, g, 8);
+    box(1.3, 0.09, 0.4, 0xb45309, tx, 0.47, 2.25, g, false);
+    box(1.3, 0.09, 0.4, 0xb45309, tx, 0.47, 0.35, g, false);
+    colL(cx, cz, tx, 1.3, 0.7, 0.55);
+  });
+  addInteractable(cx + 0.4, cz + 2.25, 1.7, 'Bangku Kantin', null, {sitSpot:true, sitX:cx + 0.4, sitZ:cz + 2.25, sitRy:Math.PI, sitDy:-0.28});
+})();
+
+/* ----- Koperasi: rak barang, meja kasir, etalase, tumpukan seragam ----- */
+(function(){
+  var cx = 64, cz = 206;
+  var g = buildRoomShell('koperasi', 'Koperasi Sekolah', cx, cz, 13, 10,
+    {wall:0xfef9c3, floor:0xd6c7a8, sign:'KOPERASI', signBg:'#15803d'});
+  furnShelf(g, -3.2, -4.55, 0, 5.6); furnShelf(g, 3.6, -4.55, 0, 4.4);      // rak barang
+  colL(cx, cz, -3.2, -4.55, 2.9, 0.4); colL(cx, cz, 3.6, -4.55, 2.3, 0.4);
+  furnShelf(g, -6.05, 0.6, Math.PI/2, 4.6);                                 // rak dinding barat
+  colL(cx, cz, -6.05, 0.6, 0.4, 2.4);
+  box(2.6, 0.95, 0.8, 0x92400e, 0.4, 0.48, -3.3, g);                         // meja kasir
+  box(0.5, 0.35, 0.4, 0x111827, 0.9, 1.13, -3.3, g, false);                 // mesin kasir
+  box(0.55, 0.4, 0.05, 0x38bdf8, 0.9, 1.45, -3.42, g, false);               // layar kasir
+  furnChair(g, 0.4, -2.35, Math.PI, 0x7c4a21);
+  colL(cx, cz, 0.4, -3.3, 1.4, 0.55);
+  box(0.7, 0.5, 0.5, 0xdc2626, -0.35, 1.2, -3.3, g, false);                 // tumpukan seragam merah
+  box(0.7, 0.5, 0.5, 0xffffff, 0.42, 1.2, -3.3, g, false);                  // tumpukan seragam putih
+  box(3.4, 1.0, 0.7, 0x8a5a2b, 3.9, 0.5, 3.9, g);                            // etalase depan
+  box(3.4, 0.55, 0.06, 0xdff3ff, 3.9, 1.28, 4.28, g, false);
+  colL(cx, cz, 3.9, 3.9, 1.8, 0.5);
+  cyl(0.03, 0.03, 1.7, 0x374151, -5.6, 0.85, 2.9, g, 6);                    // gantungan baju
+  box(0.7, 0.85, 0.08, 0x2563eb, -5.6, 1.15, 2.9, g, false);
+})();
+
+/* ----- Masjid Al-Ikhlas: karpet sajadah, mihrab, mimbar, rak Al-Qur'an ----- */
+(function(){
+  var cx = -52, cz = 234;
+  var g = buildRoomShell('masjid', 'Masjid Al-Ikhlas', cx, cz, 18, 12,
+    {wall:0xf3f7ee, floor:0xe8e3d3, sign:'MASJID AL-IKHLAS', signBg:'#0e7a5f'});
+  flat(15, 8.6, 0x14532d, 0, -0.6, g, 0.045);                               // karpet besar hijau
+  [-3.6, -1.8, 0].forEach(function(rz, ri){ var sxi = 0; for(var sx = -6.4; sx <= 6.4; sx += 1.6){ // baris sajadah
+    box(1.3, 0.05, 0.85, ((sxi + ri) % 2 === 0) ? 0x166534 : 0x7f1d1d, sx, 0.07, rz, g, false); sxi++;
+  } });
+  box(2.4, 2.9, 0.28, 0x0e7a5f, 0, 1.45, -5.82, g);                          // mihrab: bingkai
+  box(1.6, 2.3, 0.12, 0xfef3c7, 0, 1.3, -5.7, g, false);                    // mihrab: relung
+  var dome = new THREE.Mesh(new THREE.SphereGeometry(0.85, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat(0x0e7a5f));
+  dome.position.set(0, 2.9, -5.82); g.add(dome);                            // kubah kecil mihrab
+  box(0.9, 0.35, 0.9, 0x8a5a2b, 3.6, 0.18, -4.9, g);                         // mimbar: undakan
+  box(0.8, 0.35, 0.8, 0x8a5a2b, 3.6, 0.52, -4.95, g);
+  box(0.7, 0.9, 0.7, 0x7c4a21, 3.6, 1.1, -5.0, g);
+  cyl(0.03, 0.03, 1.6, 0x6d4c2f, 3.6, 2.2, -5.0, g, 6);
+  colL(cx, cz, 3.6, -4.9, 0.6, 0.6); colL(cx, cz, 0, -5.82, 1.3, 0.35);
+  furnShelf(g, 7.7, -4.9, 0, 2.4);                                          // rak Al-Qur'an & buku agama
+  colL(cx, cz, 7.7, -4.9, 1.3, 0.4);
+  flat(3.6, 1.1, 0xd6d3cd, -5.6, 5.0, g, 0.05);                             // tempat sandal di dekat pintu
+  [[-6.6, 5.0], [-5.9, 5.1], [-5.0, 4.95], [-4.4, 5.05]].forEach(function(sp){
+    box(0.34, 0.07, 0.16, BOOK_COLS[Math.floor(Math.random() * 8)], sp[0], 0.09, sp[1], g, false);
+  });
+  var jam2 = cyl(0.34, 0.34, 0.07, 0xffffff, -4.8, 2.55, -5.85, g, 20); jam2.rotation.x = Math.PI/2;
+  addInteractable(cx, cz + 1.6, 1.9, 'Karpet Masjid', null, {sitSpot:true, sitX:cx, sitZ:cz + 1.6, sitRy:Math.PI, sitDy:-0.74});
+})();
+
+/* ----- Balai Desa: meja rapat panjang, podium, papan pengumuman, bendera ----- */
+(function(){
+  var cx = -16, cz = 234;
+  var g = buildRoomShell('balai', 'Balai Desa Gerduren', cx, cz, 15, 11,
+    {wall:0xfef3c7, floor:0xd6c7a8, sign:'BALAI DESA', signBg:'#7c2d1e'});
+  box(6.2, 0.1, 1.5, 0x8a5a2b, 0, 0.78, -0.8, g);                            // meja rapat panjang
+  box(5.8, 0.7, 1.2, 0x7c4a21, 0, 0.36, -0.8, g);
+  colL(cx, cz, 0, -0.8, 3.2, 0.8);
+  [-2.7, -0.9, 0.9, 2.7].forEach(function(kx){
+    furnChair(g, kx, -2.15, 0, 0x7c4a21);
+    furnChair(g, kx, 0.55, Math.PI, 0x7c4a21);
+  });
+  box(0.95, 1.18, 0.7, 0x7f1d1d, -6.2, 0.59, -3.9, g);                       // podium
+  cyl(0.02, 0.02, 0.5, 0x111827, -6.2, 1.4, -3.9, g, 6);                    // mikrofon podium
+  colL(cx, cz, -6.2, -3.9, 0.6, 0.5);
+  box(3.6, 1.5, 0.08, 0x8a5a2b, 4.6, 1.9, -5.3, g, false);                   // papan pengumuman
+  [[3.4, 2.1], [4.4, 1.75], [5.5, 2.15], [5.9, 1.7]].forEach(function(pp){
+    box(0.55, 0.4, 0.03, 0xffffff, pp[0], pp[1], -5.24, g, false);
+  });
+  cyl(0.03, 0.03, 3.0, 0x9ca3af, 6.9, 1.5, -4.8, g, 6);                     // bendera Merah Putih sudut ruangan
+  box(0.95, 0.32, 0.03, 0xdc2626, 7.38, 2.62, -4.8, g, false);
+  box(0.95, 0.32, 0.03, 0xffffff, 7.38, 2.3, -4.8, g, false);
+  [-2.25, -0.75, 0.75, 2.25].forEach(function(kx){                          // kursi plastik warga (2 baris)
+    box(0.52, 0.5, 0.52, 0x2563eb, kx, 0.25, 3.3, g, false);
+    box(0.52, 0.5, 0.52, 0x2563eb, kx, 0.25, 4.4, g, false);
+  });
+  addInteractable(cx + 0.9, cz + 0.55, 1.7, 'Kursi Rapat', null, {sitSpot:true, sitX:cx + 0.9, sitZ:cz + 0.55, sitRy:Math.PI, sitDy:-0.34});
+})();
+
+/* ----- Kantor Polsek: meja piket + komputer, sel tahanan berjeruji, rak berkas ----- */
+(function(){
+  var cx = 18, cz = 234;
+  var g = buildRoomShell('polsek', 'Kantor Polsek', cx, cz, 14, 10,
+    {wall:0xe0e7ff, floor:0xcbd5e1, sign:'POLSEK PURWOJATI', signBg:'#1e3a5f'});
+  box(2.4, 0.1, 1.0, 0x374151, 0, 0.78, -3.4, g);                            // meja piket
+  box(2.2, 0.72, 0.8, 0x1f2937, 0, 0.36, -3.4, g);
+  box(0.6, 0.42, 0.06, 0x111827, -0.5, 1.05, -3.55, g, false);              // monitor komputer piket
+  box(0.5, 0.04, 0.22, 0x111827, -0.5, 0.85, -3.3, g, false);               // keyboard
+  furnChair(g, 0.3, -2.4, Math.PI, 0x1f2937);
+  colL(cx, cz, 0, -3.4, 1.3, 0.6);
+  // Sel tahanan di sudut timur laut: jeruji besi + tempat tidur papan + ember
+  for(var bx = 3.9; bx <= 6.55; bx += 0.44) cyl(0.035, 0.035, 2.4, 0x374151, bx, 1.2, -1.7, g, 6);
+  box(2.9, 0.12, 0.12, 0x374151, 5.2, 2.42, -1.7, g, false);
+  box(2.9, 0.12, 0.12, 0x374151, 5.2, 0.5, -1.7, g, false);
+  box(1.9, 0.25, 0.8, 0x6d4c2f, 5.6, 0.35, -4.3, g, false);                  // tempat tidur papan di sel
+  cyl(0.16, 0.13, 0.28, 0x2563eb, 4.1, 0.14, -4.4, g, 8);                   // ember di sel
+  colL(cx, cz, 5.2, -1.7, 1.5, 0.25); colL(cx, cz, 3.75, -3.3, 0.25, 1.7);
+  furnShelf(g, -6.35, -3.2, Math.PI/2, 3.2);                                // rak berkas
+  colL(cx, cz, -6.35, -3.2, 0.4, 1.7);
+  box(3.2, 1.4, 0.08, 0x1e3a5f, -3.4, 1.9, -4.82, g, false);                 // papan info polsek
+  [[-4.3, 2.05], [-3.3, 1.8], [-2.5, 2.1]].forEach(function(pp){ box(0.55, 0.4, 0.03, 0xffffff, pp[0], pp[1], -4.76, g, false); });
+  furnChair(g, -2.5, 3.9, Math.PI, 0x374151); furnChair(g, -1.2, 3.9, Math.PI, 0x374151); // kursi tunggu
+  wallSign(g, 'MELAYANI & MELINDUNGI', 2.8, 2.45, -4.82, 4.2, {bg:'#1e3a5f', fg:'#ffffff', frame:0x0f2440});
+})();
+
+/* ----- Puskesmas: 2 tempat tidur periksa bertirai, meja dokter, lemari obat, kursi tunggu ----- */
+(function(){
+  var cx = 50, cz = 234;
+  var g = buildRoomShell('puskesmas', 'Puskesmas Gerduren', cx, cz, 15, 11,
+    {wall:0xf0fdf4, floor:0xdbeafe, sign:'PUSKESMAS', signBg:'#0e7a5f'});
+  furnBed(g, -4.6, -3.6, Math.PI/2, 0xffffff);
+  furnBed(g, 0.6, -3.6, Math.PI/2, 0xffffff);
+  colL(cx, cz, -4.6, -3.6, 1.75, 1.15); colL(cx, cz, 0.6, -3.6, 1.75, 1.15);
+  box(0.08, 2.0, 2.8, 0xe0f2fe, -2.0, 1.0, -3.6, g, false);                  // tirai pembatas periksa
+  box(0.08, 2.0, 2.8, 0xe0f2fe, 3.2, 1.0, -3.6, g, false);
+  furnDesk(g, 5.2, -3.8, 0x64748b); furnChair(g, 5.2, -2.85, Math.PI, 0x64748b); // meja dokter
+  box(0.55, 0.4, 0.06, 0x111827, 5.2, 1.05, -3.95, g, false);
+  colL(cx, cz, 5.2, -3.8, 0.85, 0.5);
+  box(0.5, 2.1, 1.5, 0xe2e8f0, 7.05, 1.05, -0.6, g);                         // lemari obat kaca
+  box(0.05, 1.5, 1.3, 0xcfeeff, 6.78, 1.25, -0.6, g, false);
+  colL(cx, cz, 7.05, -0.6, 0.4, 0.85);
+  box(0.5, 0.12, 0.5, 0x374151, 6.2, 0.06, 3.6, g, false);                  // timbangan
+  cyl(0.03, 0.03, 1.5, 0x374151, 6.2, 0.85, 3.6, g, 6);
+  box(0.44, 0.18, 0.1, 0x9ca3af, 6.2, 1.68, 3.6, g, false);
+  [-4.5, -2.5, 3.5, 5.0].forEach(function(kx){ furnChair(g, kx, 4.5, Math.PI, 0x0e7a5f); }); // kursi tunggu
+  wallSign(g, 'PHBS: CUCI TANGAN PAKAI SABUN', -1.5, 2.45, -5.32, 5.2, {bg:'#0e7a5f', fg:'#ffffff', frame:0x0b5c46});
+})();
+
+/* ----- Rumah Warga: kasur, meja + kursi, TV, lemari, dapur mini, tikar ----- */
+(function(){
+  var cx = -16, cz = 262;
+  var g = buildRoomShell('warga', 'Rumah Warga', cx, cz, 13, 10,
+    {wall:0xfce7f3, floor:0xd6c7a8, sign:'RUMAH WARGA', signBg:'#9d174d'});
+  furnBed(g, -4.4, -3.0, 0, 0x16a34a);                                      // kasur berselimut hijau
+  colL(cx, cz, -4.4, -3.0, 1.15, 1.75);
+  box(1.7, 0.09, 1.1, 0x8a5a2b, 2.6, 0.76, -1.6, g);                         // meja makan
+  box(1.5, 0.7, 0.9, 0x7c4a21, 2.6, 0.36, -1.6, g);
+  furnChair(g, 1.9, -0.6, Math.PI, 0xb45309); furnChair(g, 3.3, -0.6, Math.PI, 0xb45309);
+  colL(cx, cz, 2.6, -1.6, 0.95, 0.65);
+  box(1.9, 0.45, 0.45, 0x6d4c2f, 2.6, 0.23, -4.55, g);                       // meja TV
+  box(1.5, 0.92, 0.07, 0x111827, 2.6, 1.0, -4.6, g, false);                 // TV
+  box(1.3, 0.75, 0.03, 0x38bdf8, 2.6, 1.0, -4.55, g, false);
+  box(1.5, 2.2, 0.55, 0x92400e, 5.9, 1.1, -4.5, g);                          // lemari pakaian
+  colL(cx, cz, 5.9, -4.5, 0.85, 0.4);
+  box(0.95, 0.85, 2.6, 0xd6d3cd, 5.95, 0.43, 0.6, g);                        // dapur mini
+  box(0.65, 0.07, 0.5, 0x1f2937, 5.95, 0.9, 0.1, g, false);                 // kompor
+  cyl(0.16, 0.14, 0.18, 0x9ca3af, 5.95, 1.03, 0.1, g, 12);                  // panci
+  cyl(0.18, 0.15, 0.24, 0xf8fafc, 5.95, 1.0, 1.15, g, 12);                  // magic com
+  colL(cx, cz, 5.95, 0.6, 0.55, 1.4);
+  flat(3.6, 2.6, 0xb45309, -1.5, 1.9, g, 0.05);                             // tikar pandan ruang tengah
+  box(0.8, 0.65, 0.05, 0x6d4c2f, -2.2, 2.0, -4.82, g, false);               // foto keluarga
+  box(0.66, 0.52, 0.02, 0xfbbf24, -2.2, 2.0, -4.78, g, false);
+  box(0.42, 1.0, 0.42, 0xf1f5f9, -6.0, 0.5, 4.3, g, false);                 // dispenser galon
+  cyl(0.15, 0.15, 0.4, 0x2563eb, -6.0, 1.2, 4.3, g, 10);
+})();
+
+/* ----- Titik duduk di dunia luar + pintu masuk Kantin & Koperasi ----- */
+addInteractable(-55, 28, 1.8, 'Bangku Taman', null, {sitSpot:true, sitX:-55, sitZ:28, sitRy:0, sitDy:-0.28});
+addInteractable(-49, 32.5, 1.8, 'Bangku Taman', null, {sitSpot:true, sitX:-49, sitZ:32.5, sitRy:0, sitDy:-0.28});
+addInteractable(14, 45.6, 1.8, 'Bangku Istirahat', null, {sitSpot:true, sitX:14, sitZ:45.6, sitRy:Math.PI, sitDy:-0.24});
+addInteractable(65.1, 63.6, 1.9, 'Bangku Terminal', null, {sitSpot:true, sitX:65.1, sitZ:63.6, sitRy:Math.PI, sitDy:-0.23});
+addInteractable(33, 16.9, 1.8, 'Pintu Kantin', null, {enterRoom:'kantin'});
+addInteractable(-33, -10.6, 1.6, 'Pintu Koperasi', null, {enterRoom:'koperasi'});
 
 /* --- Taman Desa (fasilitas umum) --- */
 (function(){
@@ -3947,6 +4462,22 @@ addInteractable(30, 88, 12, 'Sawah');
 
 /* ================= ZONA LOKASI ================= */
 var zones = [
+  {name:'Rumah Kamu (Dalam)',   minX:-6.5, maxX:6.5, minZ:145, maxZ:155},
+  {name:'Ruang Kelas 1 (Dalam)', minX:-71.5, maxX:-56.5, minZ:174.5, maxZ:185.5},
+  {name:'Ruang Kelas 2 (Dalam)', minX:-39.5, maxX:-24.5, minZ:174.5, maxZ:185.5},
+  {name:'Ruang Kelas 3 (Dalam)', minX:-7.5, maxX:7.5, minZ:174.5, maxZ:185.5},
+  {name:'Ruang Kelas 4 (Dalam)', minX:24.5, maxX:39.5, minZ:174.5, maxZ:185.5},
+  {name:'Ruang Kelas 5 (Dalam)', minX:56.5, maxX:71.5, minZ:174.5, maxZ:185.5},
+  {name:'Ruang Kelas 6 (Dalam)', minX:-71.5, maxX:-56.5, minZ:200.5, maxZ:211.5},
+  {name:'Perpustakaan (Dalam)', minX:-39.5, maxX:-24.5, minZ:200.5, maxZ:211.5},
+  {name:'Ruang UKS (Dalam)',    minX:-6.5, maxX:6.5, minZ:201, maxZ:211},
+  {name:'Kantin (Dalam)',       minX:24.5, maxX:39.5, minZ:200.5, maxZ:211.5},
+  {name:'Koperasi (Dalam)',     minX:57.5, maxX:70.5, minZ:201, maxZ:211},
+  {name:'Masjid Al-Ikhlas (Dalam)', minX:-61, maxX:-43, minZ:228, maxZ:240},
+  {name:'Balai Desa (Dalam)',   minX:-23.5, maxX:-8.5, minZ:228.5, maxZ:239.5},
+  {name:'Kantor Polsek (Dalam)', minX:11, maxX:25, minZ:229, maxZ:239},
+  {name:'Puskesmas (Dalam)',    minX:42.5, maxX:57.5, minZ:228.5, maxZ:239.5},
+  {name:'Rumah Warga (Dalam)',  minX:-22.5, maxX:-9.5, minZ:257, maxZ:267},
   {name:'Kebun Sekolah',        minX:-41, maxX:-25, minZ:3,   maxZ:17},
   {name:'Perpustakaan',         minX:-40, maxX:-26, minZ:-12, maxZ:0},
   {name:'Ruang UKS',            minX:29.5,maxX:36.5, minZ:0,   maxZ:6.2},
@@ -4134,6 +4665,16 @@ function updateInteract(){
     if(currentTarget !== BIKE_OFF){ currentTarget = BIKE_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = 'Turun Sepeda'; }
     return;
   }
+  if(poseMode === 'sit'){
+    // saat duduk, tombol Aksi selalu berarti "berdiri"
+    if(currentTarget !== SIT_OFF){ currentTarget = SIT_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = 'Berdiri'; }
+    return;
+  }
+  if(poseMode === 'sleep'){
+    // saat tidur, tombol Aksi selalu berarti "bangun"
+    if(currentTarget !== WAKE_OFF){ currentTarget = WAKE_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = 'Bangun Tidur'; }
+    return;
+  }
   var p = player.position, best = null, bestScore = 1e9;
   for(var i=0;i<interactables.length;i++){ var it = interactables[i];
     var d = Math.hypot(p.x - it.x, p.z - it.z);
@@ -4147,6 +4688,7 @@ function updateInteract(){
   if(infoTarget && infoTarget !== currentTarget) hideInfo();
 }
 actionBtn.addEventListener('click', function(){
+  if(poseMode){ standPose(); return; }
   if(tourActive && tour && tour.manual){ endManualTour(); return; }
   if(vehDrive){ dismountVehicle(); return; }
   if(riding){ dismountBike(); return; }
@@ -4303,6 +4845,38 @@ actionBtn.addEventListener('click', function(){
   } else {
     infoActions.classList.remove('show');
   }
+  /* Tombol tambahan lintas-jenis target: masuk ruangan interior, keluar
+     ruangan, tidur di kasur, dan duduk di bangku/kursi. Ditambahkan SETELAH
+     rantai cabang utama di atas supaya tetap muncul di kartu yang juga
+     punya Pos / toko / permainan sendiri. */
+  if(t.enterRoom){
+    var eb = document.createElement('button');
+    eb.type = 'button'; eb.className = 'info-act-btn';
+    eb.textContent = 'Masuk ke Dalam — Lihat Interiornya';
+    (function(rid){ eb.addEventListener('click', function(){ hideInfo(); enterRoom(rid); }); })(t.enterRoom);
+    infoActions.appendChild(eb); infoActions.classList.add('show');
+  }
+  if(t.exitRoom){
+    var xb2 = document.createElement('button');
+    xb2.type = 'button'; xb2.className = 'info-act-btn';
+    xb2.textContent = 'Keluar Ruangan';
+    xb2.addEventListener('click', function(){ hideInfo(); exitRoom(); });
+    infoActions.appendChild(xb2); infoActions.classList.add('show');
+  }
+  if(t.bed){
+    var bb = document.createElement('button');
+    bb.type = 'button'; bb.className = 'info-act-btn';
+    bb.textContent = 'Tidur di Kasur — Pulihkan HP & EP';
+    bb.addEventListener('click', function(){ hideInfo(); startSleep(); });
+    infoActions.appendChild(bb); infoActions.classList.add('show');
+  }
+  if(t.sitSpot){
+    var sb9 = document.createElement('button');
+    sb9.type = 'button'; sb9.className = 'info-act-btn';
+    sb9.textContent = 'Duduk di Sini';
+    sb9.addEventListener('click', function(){ hideInfo(); startSit(t); });
+    infoActions.appendChild(sb9); infoActions.classList.add('show');
+  }
   infoCard.classList.add('show');
   if(infoTimer) clearTimeout(infoTimer);
   infoTimer = setTimeout(hideInfo, 7000);
@@ -4310,7 +4884,7 @@ actionBtn.addEventListener('click', function(){
 document.getElementById('infoClose').addEventListener('click', hideInfo);
 
 var vy = 0, grounded = true;
-function tryJump(){ idleTime = 0; orbiting = false; if(playing && grounded && !riding && !vehDrive && !uiBlocked()){ vy = 8.2; grounded = false; AudioSys.sfx('jump'); } }
+function tryJump(){ idleTime = 0; orbiting = false; if(playing && grounded && !riding && !vehDrive && !poseMode && !swimOn && !uiBlocked()){ vy = 8.2; grounded = false; AudioSys.sfx('jump'); } }
 document.getElementById('jumpBtn').addEventListener('pointerdown', function(e){ e.preventDefault(); tryJump(); });
 
 var droneMode = false;
@@ -4713,6 +5287,8 @@ var faintOverlay = document.getElementById('faintOverlay');
 function faintPlayer(){
   if(fainting || !playing) return;
   fainting = true;
+  if(poseMode) standPose(true);
+  if(swimOn){ swimOn = false; bodyG.rotation.x = 0; player.position.y = 0; }
   if(riding) dismountBike();
   if(vehDrive) dismountVehicle();
   if(tourActive) endTour();
@@ -10496,11 +11072,13 @@ function resolveCollisions(p){
     }
   }
   if(p.z > 120){
-    // Di dalam Rumah Kamu (ruang interior terpisah di selatan peta, z 145..155):
-    // penjepit dunia normal (z maks 104) TIDAK berlaku di sini, kalau tidak
-    // pemain akan terlempar keluar rumah pada frame pertama setelah masuk.
-    p.x = Math.max(-5.6, Math.min(5.6, p.x));
-    p.z = Math.max(145.6, Math.min(154.2, p.z));
+    // Di dalam ruangan interior (Rumah Kamu z 145..155 dan ruang-ruang interior
+    // baru di zona selatan peta): penjepit dunia normal (z maks 104) TIDAK
+    // berlaku di sini — dipakai batas ruangan aktif (interiorClamp), dengan
+    // bawaan batas Rumah Kamu bila belum ada ruangan aktif yang tercatat.
+    var ib = interiorClamp || {minX:-5.6, maxX:5.6, minZ:145.6, maxZ:154.2};
+    p.x = Math.max(ib.minX, Math.min(ib.maxX, p.x));
+    p.z = Math.max(ib.minZ, Math.min(ib.maxZ, p.z));
     return;
   }
   p.x = Math.max(-104, Math.min(104, p.x));
@@ -10555,6 +11133,17 @@ function animate(){
       var mz = Math.cos(camYaw)*(-iy) + ( Math.sin(camYaw))*ix;
       var mLen = Math.hypot(mx, mz);
       var moving = mLen > 0.05;
+      /* Pose DUDUK / TIDUR: input gerak apa pun memberdirikan / membangunkan
+         pemain; selama pose aktif pemain terkunci di tempat duduk / kasurnya. */
+      if(poseMode && mLen > 0.35) standPose();
+      if(poseMode){ mx = 0; mz = 0; mLen = 0; moving = false; }
+      /* BERENANG di Sungai Gerduren: berjalan masuk ke air sungai (bukan di
+         atas jembatan!) mengubah pose jadi renang dan gerak jadi lebih lambat. */
+      var wasSwim = swimOn;
+      swimOn = !poseMode && !riding && !vehDrive && !tourActive && inRiverWater(player.position.x, player.position.z);
+      if(swimOn && !wasSwim){ AudioSys.sfx('pop'); if(swimMsgCd <= 0){ showToast('Kamu BERENANG di Sungai Gerduren! Airnya sejuk dan jernih. Berenanglah ke tepi barat untuk naik lagi ke darat.', 4600); swimMsgCd = 30; } }
+      if(!swimOn && wasSwim){ player.position.y = 0; vy = 0; grounded = true; bodyG.rotation.x = 0; }
+      if(swimMsgCd > 0) swimMsgCd -= dt;
       /* EP kini berkurang berbasis waktu (0,0001/detik) di blok drain di atas —
          tidak lagi per gerak. Yang tersisa di sini hanya akibatnya: EP habis =
          gerakan melambat (lihat targetSpeed di bawah). */
@@ -10587,15 +11176,40 @@ function animate(){
       // Naik sepeda: kecepatan 1,7x — menjelajah desa jadi jauh lebih cepat
       // Shift (kiri/kanan) ditahan = lari 1,5x saat jalan kaki; naik sepeda sudah cepat dari sananya
       var sprinting = !riding && !vehDrive && !!(keys['ShiftLeft'] || keys['ShiftRight']);
-      var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (riding ? 1.7 : (vehDrive ? vehDrive.mul : 1)) * (sprinting ? 1.5 : 1) : 0;
+      var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (riding ? 1.7 : (vehDrive ? vehDrive.mul : 1)) * (sprinting ? 1.5 : 1) * (swimOn ? 0.45 : 1) : 0;
       curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt*7);
       if(curSpeed > 0.05){
         player.position.x += Math.sin(player.rotation.y) * curSpeed * dt;
         player.position.z += Math.cos(player.rotation.y) * curSpeed * dt;
         walkPhase += dt * 11 * (curSpeed/10.5);
       } else { walkPhase = 0; }
-      if(riding){
+      if(poseMode === 'sleep'){
+        // TIDUR: badan berbaring telentang di atas kasur Rumah Kamu, napas pelan teratur
+        bodyG.rotation.x += (-1.5 - bodyG.rotation.x) * Math.min(1, dt*6);
+        bodyG.position.y = 0.74 + Math.sin(clock.elapsedTime * 1.6) * 0.02;
+        legL.rotation.x = 0; legR.rotation.x = 0;
+        armL.rotation.x = -0.12; armR.rotation.x = -0.12;
+        player.position.set(-4.2, 0, 149.2);
+      } else if(poseMode === 'sit'){
+        // DUDUK: paha mendatar ke depan, betis turun, tangan bertumpu santai
+        bodyG.rotation.x += (0 - bodyG.rotation.x) * Math.min(1, dt*8);
+        bodyG.position.y = poseSit ? poseSit.dy : -0.33;
+        legL.rotation.x = -1.25; legR.rotation.x = -1.25;
+        armL.rotation.x = -0.38; armR.rotation.x = -0.38;
+        if(poseSit){ player.position.x = poseSit.x; player.position.z = poseSit.z; }
+      } else if(swimOn){
+        // BERENANG: badan mendatar di permukaan air, tangan mengayuh bergantian, kaki menendang kecil
+        var swT = clock.elapsedTime;
+        bodyG.rotation.x += (1.08 - bodyG.rotation.x) * Math.min(1, dt*6);
+        bodyG.position.y = 0.52 + Math.sin(swT * 2.6) * 0.05;
+        player.position.y = -0.42;
+        armL.rotation.x = Math.sin(swT * 6.2) * 1.05 - 0.25;
+        armR.rotation.x = Math.sin(swT * 6.2 + Math.PI) * 1.05 - 0.25;
+        legL.rotation.x = Math.sin(swT * 9.5) * 0.32;
+        legR.rotation.x = Math.sin(swT * 9.5 + Math.PI) * 0.32;
+      } else if(riding){
         // sepeda mengikuti pemain; kaki menekuk mengayuh, badan duduk sedikit lebih tinggi
+        bodyG.rotation.x = 0;
         bike.position.set(player.position.x, 0, player.position.z);
         bike.rotation.y = player.rotation.y;
         var pedal = curSpeed > 0.05 ? Math.sin(walkPhase * 1.6) * 0.28 : 0;
@@ -10604,6 +11218,7 @@ function animate(){
         bodyG.position.y = 0.30;
       } else {
         // animasi jalan: ayun kaki & tangan, badan sedikit memantul
+        bodyG.rotation.x += (0 - bodyG.rotation.x) * Math.min(1, dt*8);
         var swing = curSpeed > 0.05 ? Math.sin(walkPhase)*0.55 : 0;
         legL.rotation.x = swing; legR.rotation.x = -swing;
         armL.rotation.x = -swing*0.8; armR.rotation.x = swing*0.8;
