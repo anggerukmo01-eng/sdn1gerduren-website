@@ -27,7 +27,7 @@
   #hud{position:fixed;inset:0;pointer-events:none;z-index:20;display:none;}
   #hud.on{display:block;}
   .hud-top{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
-  .hud-card{background:var(--panel);border:2px solid rgba(23,50,74,.12);border-radius:14px;padding:8px 12px;box-shadow:0 4px 14px rgba(23,50,74,.18);backdrop-filter:blur(4px);}
+  .hud-card{background:var(--panel);border:2px solid rgba(23,50,74,.12);border-radius:12px;padding:6px 10px;box-shadow:0 4px 14px rgba(23,50,74,.18);backdrop-filter:blur(4px);}
   .hud-name{font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px;line-height:1.1;display:flex;align-items:center;gap:7px;}
   .hud-name .dot{width:34px;height:34px;border-radius:50%;background:#dc2626;color:#fff;display:grid;place-items:center;font-size:15px;flex:none;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);overflow:hidden;position:relative;}
   .hud-name .dot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(2.1);transform-origin:50% 15%;display:none;background:#fff;}
@@ -41,24 +41,24 @@
   #compassArrow svg{width:15px;height:15px;display:block;}
   #compassDeg{background:#fef3c7;border:1.5px solid #f59e0b;color:#92400e;font-size:11.5px;font-weight:800;line-height:1;padding:3px 7px;border-radius:999px;min-width:46px;text-align:center;flex:none;}
   /* ---------- HUD kiri: Kredit + HP + EP + Tas ---------- */
-  .hud-left{display:flex;flex-direction:column;gap:8px;align-items:flex-start;max-width:min(62vw,248px);}
-  .hud-card.stats{width:100%;padding:10px 12px 11px;}
+  .hud-left{display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:min(58vw,228px);}
+  .hud-card.stats{width:100%;padding:7px 10px 8px;}
   .kredit-row{display:flex;align-items:center;gap:9px;}
-  .kredit-coin{width:36px;height:36px;flex:none;border-radius:50%;background:#f59e0b;border:2.5px solid #fbbf24;box-shadow:inset 0 -3px 0 rgba(146,64,14,.35),0 2px 6px rgba(180,83,9,.35);display:grid;place-items:center;color:#fff7d6;}
+  .kredit-coin{width:29px;height:29px;flex:none;border-radius:50%;background:#f59e0b;border:2.5px solid #fbbf24;box-shadow:inset 0 -3px 0 rgba(146,64,14,.35),0 2px 6px rgba(180,83,9,.35);display:grid;place-items:center;color:#fff7d6;}
   .kredit-coin svg{width:20px;height:20px;}
   .kredit-meta{line-height:1.05;min-width:0;}
   .kredit-label{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#92400e;}
-  .kredit-val{font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#17324a;line-height:1;}
+  .kredit-val{font-family:'Fredoka',sans-serif;font-weight:700;font-size:20px;color:#17324a;line-height:1;}
   .kredit-val small{font-size:12px;font-family:'Nunito',sans-serif;font-weight:800;color:#64748b;}
   .kredit-sub{font-size:11px;font-weight:700;color:#64748b;line-height:1.4;margin-top:6px;}
   .kredit-sub b{color:#b45309;}
-  .stat{margin-top:9px;}
+  .stat{margin-top:6px;}
   .stat-head{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;line-height:1;margin-bottom:4px;}
   .stat-name{display:flex;align-items:center;gap:5px;}
   .stat-name svg{width:15px;height:15px;flex:none;}
   .stat.hp .stat-name{color:#b91c1c;} .stat.ep .stat-name{color:#a16207;}
   .stat-num{color:#475569;font-size:11.5px;}
-  .bar-track{height:11px;border-radius:999px;background:#e2e8f0;border:1.5px solid rgba(23,50,74,.14);overflow:hidden;}
+  .bar-track{height:9px;border-radius:999px;background:#e2e8f0;border:1.5px solid rgba(23,50,74,.14);overflow:hidden;}
   .bar-fill{height:100%;border-radius:999px;transition:width .45s ease;}
   .stat.hp .bar-fill{background:#ef4444;}
   .stat.ep .bar-fill{background:#eab308;}
@@ -68,7 +68,7 @@
   @media (prefers-reduced-motion: reduce){ .stat.low .bar-fill{animation:none;} }
   .hud-card.stats .hud-loc{margin-top:9px;}
   .hud-card.stats .hud-dir{margin-top:3px;}
-  #tasBtn{pointer-events:auto;display:flex;align-items:center;gap:8px;border:2px solid rgba(23,50,74,.12);background:var(--panel);color:var(--ink);border-radius:14px;padding:9px 14px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;box-shadow:0 4px 14px rgba(23,50,74,.18);cursor:pointer;min-height:48px;backdrop-filter:blur(4px);}
+  #tasBtn{pointer-events:auto;display:flex;align-items:center;gap:7px;border:2px solid rgba(23,50,74,.12);background:var(--panel);color:var(--ink);border-radius:12px;padding:6px 11px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:13.5px;box-shadow:0 4px 14px rgba(23,50,74,.18);cursor:pointer;min-height:40px;backdrop-filter:blur(4px);}
   #tasBtn:active{transform:scale(.96);}
   #tasBtn svg{width:21px;height:21px;flex:none;color:#c2410c;}
   #tasCount{background:#dc2626;color:#fff;font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:800;min-width:22px;height:22px;border-radius:999px;display:grid;place-items:center;padding:0 5px;}
@@ -120,7 +120,7 @@
   /* ---------- Toast ---------- */
   #toast{position:absolute;left:50%;bottom:calc(118px + env(safe-area-inset-bottom));transform:translate(-50%,14px);background:rgba(12,74,110,.94);color:#fff;font-size:13.5px;font-weight:800;line-height:1.4;text-align:center;padding:10px 16px;border-radius:14px;max-width:min(88vw,380px);box-shadow:0 10px 26px rgba(10,52,92,.4);opacity:0;visibility:hidden;transition:opacity .3s,transform .3s,visibility .3s;pointer-events:none;z-index:30;}
   #toast.show{opacity:1;visibility:visible;transform:translate(-50%,0);}
-  #droneBtn{pointer-events:auto;border:2px solid rgba(23,50,74,.12);background:var(--panel);color:var(--ink);border-radius:14px;padding:9px 14px;font-weight:800;font-size:14px;box-shadow:0 4px 14px rgba(23,50,74,.18);cursor:pointer;display:flex;align-items:center;gap:7px;min-height:48px;}
+  #droneBtn{pointer-events:auto;border:2px solid rgba(23,50,74,.12);background:var(--panel);color:var(--ink);border-radius:12px;padding:6px 11px;font-weight:800;font-size:12.5px;box-shadow:0 4px 14px rgba(23,50,74,.18);cursor:pointer;display:flex;align-items:center;gap:6px;min-height:40px;}
   #droneBtn.active{background:#0369a1;color:#fff;border-color:#075985;}
   #droneBtn svg{width:20px;height:20px;flex:none;}
 
@@ -136,7 +136,7 @@
   #joyKnob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,255,255,.95);border:2px solid rgba(23,50,74,.15);box-shadow:0 4px 10px rgba(23,50,74,.3);display:grid;place-items:center;color:#0369a1;}
   #joyKnob svg{width:26px;height:26px;}
   /* Tombol Aksi: menyala saat dekat objek */
-  #actionBtn{position:absolute;right:20px;bottom:calc(120px + env(safe-area-inset-bottom));width:76px;height:76px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(100,116,139,.45);color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;box-shadow:0 6px 16px rgba(23,50,74,.3);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.05;padding:4px;opacity:.8;}
+  #actionBtn{position:absolute;right:16px;bottom:calc(104px + env(safe-area-inset-bottom));width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(100,116,139,.45);color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;box-shadow:0 6px 16px rgba(23,50,74,.3);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.05;padding:4px;opacity:.8;}
   #actionBtn svg{width:22px;height:22px;flex:none;}
   #actionLabel{font-size:10.5px;font-family:'Nunito',sans-serif;font-weight:800;text-align:center;max-width:66px;}
   #actionBtn.ready{background:#16a34a;border-color:#bbf7d0;opacity:1;animation:aksiPulse 1.1s ease-out infinite;}
@@ -150,7 +150,7 @@
   #infoImg.show{display:block;}
   #infoText{margin:0;font-size:13.5px;font-weight:600;color:#334155;line-height:1.5;}
   #infoClose{position:absolute;top:8px;right:8px;width:32px;height:32px;min-height:32px;border:none;border-radius:50%;background:#f1f5f9;color:#475569;font-size:17px;font-weight:800;cursor:pointer;line-height:1;}
-  #jumpBtn{position:absolute;right:20px;bottom:calc(30px + env(safe-area-inset-bottom));width:76px;height:76px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:#f59e0b;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;box-shadow:0 6px 16px rgba(180,83,9,.45);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1;}
+  #jumpBtn{position:absolute;right:16px;bottom:calc(24px + env(safe-area-inset-bottom));width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:#f59e0b;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;box-shadow:0 6px 16px rgba(180,83,9,.45);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1;}
   #jumpBtn:active{transform:scale(.94);}
   #jumpBtn svg{width:22px;height:22px;}
   .keys-hint{display:none;position:absolute;bottom:calc(14px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:rgba(255,255,255,.92);text-shadow:0 1px 4px rgba(23,50,74,.65);white-space:nowrap;}
@@ -223,10 +223,10 @@
   .locked-items span{background:#e2e8f0;color:#64748b;font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;opacity:.85;}
 
   /* ---------- Kolom tombol kanan HUD (Drone, Suara, Arena, GM) ---------- */
-  .hud-right{display:flex;flex-direction:column;gap:8px;align-items:stretch;}
-  .hud-mini{pointer-events:auto;border:2px solid rgba(23,50,74,.12);background:var(--panel);color:var(--ink);border-radius:14px;padding:8px 10px;font-weight:800;font-size:12.5px;font-family:'Fredoka',sans-serif;box-shadow:0 4px 14px rgba(23,50,74,.18);cursor:pointer;display:flex;align-items:center;gap:6px;min-height:44px;backdrop-filter:blur(4px);}
+  .hud-right{display:flex;flex-direction:column;gap:6px;align-items:stretch;}
+  .hud-mini{pointer-events:auto;border:2px solid rgba(23,50,74,.12);background:var(--panel);color:var(--ink);border-radius:12px;padding:5px 9px;font-weight:800;font-size:11.5px;font-family:'Fredoka',sans-serif;box-shadow:0 4px 14px rgba(23,50,74,.18);cursor:pointer;display:flex;align-items:center;gap:5px;min-height:37px;backdrop-filter:blur(4px);}
   .hud-mini:active{transform:scale(.96);}
-  .hud-mini svg{width:19px;height:19px;flex:none;}
+  .hud-mini svg{width:16px;height:16px;flex:none;}
   .hud-mini.on{background:#b45309;color:#fff;border-color:#92400e;}
   #infoActions{display:none;margin-top:10px;}
   #infoActions.show{display:block;}
@@ -330,6 +330,20 @@
   .dealer-row .d-prog{height:8px;background:#e2e8f0;border-radius:99px;margin-top:6px;overflow:hidden;}
   .dealer-row .d-prog i{display:block;height:100%;background:#f59e0b;border-radius:99px;}
   .quest-row{display:flex;gap:11px;align-items:center;background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:11px;margin-top:10px;}
+  /* ---------- Dialog NPC (quest dari warga & tokoh desa) ---------- */
+  .npc-head{display:flex;gap:12px;align-items:center;margin-top:4px;}
+  .npc-ava{width:54px;height:54px;flex:none;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:19px;border:3px solid #fff;box-shadow:0 3px 10px rgba(23,50,74,.25);}
+  .npc-head b{display:block;font-size:17px;color:#17324a;font-family:'Fredoka',sans-serif;}
+  .npc-head span{display:block;font-size:12px;color:#64748b;font-weight:700;margin-top:1px;}
+  .npc-bubble{background:#fffbeb;border:2px solid #fde68a;border-radius:14px;padding:12px 13px;margin-top:12px;font-size:14px;line-height:1.5;color:#44403c;font-weight:600;}
+  .npc-questbox{background:#f0fdf4;border:2px solid #bbf7d0;border-radius:14px;padding:11px 13px;margin-top:10px;font-size:13.5px;line-height:1.5;color:#14532d;font-weight:600;}
+  .npc-questbox b{color:#166534;}
+  .npc-opts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+  .npc-opt{border:none;border-radius:12px;padding:12px 14px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14.5px;cursor:pointer;background:#0284c7;color:#fff;min-height:46px;text-align:left;}
+  .npc-opt.alt{background:#f1f5f9;color:#17324a;border:2px solid #e2e8f0;}
+  .npc-opt.gold{background:#f59e0b;color:#fff;}
+  .npc-opt:active{transform:scale(.98);}
+  .npc-sect{margin-top:16px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;color:#92400e;border-top:2px dashed #e2e8f0;padding-top:12px;}
   .quest-row.done{background:#f0fdf4;border-color:#bbf7d0;}
   .quest-row .q-ic{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;color:#fff;}
   .quest-row .q-ic svg{width:25px;height:25px;}
@@ -468,7 +482,7 @@
      dibuat tembus pandang — dunia di belakangnya tetap terlihat, sementara
      teks tetap terbaca karena gelembung pesan & kotak ketik jauh lebih pekat
      daripada latar panel dan latar panel memakai blur kuat. */
-  #chatPanel{position:absolute;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));width:min(250px,60vw);pointer-events:auto;background:rgba(255,255,255,.48);border:2px solid rgba(23,50,74,.18);border-radius:16px;box-shadow:0 6px 18px rgba(23,50,74,.18);display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(10px) saturate(1.3);-webkit-backdrop-filter:blur(10px) saturate(1.3);z-index:6;}
+  #chatPanel{position:absolute;left:10px;bottom:calc(10px + env(safe-area-inset-bottom));width:min(218px,54vw);pointer-events:auto;background:rgba(255,255,255,.48);border:2px solid rgba(23,50,74,.18);border-radius:16px;box-shadow:0 6px 18px rgba(23,50,74,.18);display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(10px) saturate(1.3);-webkit-backdrop-filter:blur(10px) saturate(1.3);z-index:6;}
   .chat-head{display:flex;align-items:center;gap:7px;padding:8px 8px 6px 11px;}
   .chat-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;color:#0c4a6e;display:flex;align-items:center;gap:6px;}
   .chat-title svg{width:17px;height:17px;color:#0284c7;}
@@ -492,7 +506,7 @@
 
   /* ---------- Multiplayer M1: Main Bareng (ruangan, daftar pemain, status) ---------- */
   .chat-msg.sys{background:rgba(254,252,232,.92);border-color:rgba(253,230,138,.95);color:#854d0e;font-weight:700;}
-  #mpChip{pointer-events:auto;display:none;align-items:center;gap:7px;border:2px solid #16a34a;background:rgba(240,253,244,.96);color:#14532d;border-radius:14px;padding:7px 11px;box-shadow:0 4px 14px rgba(22,163,74,.28);font-size:12.5px;font-weight:800;max-width:100%;cursor:pointer;font-family:inherit;text-align:left;}
+  #mpChip{pointer-events:auto;display:none;align-items:center;gap:6px;border:2px solid #16a34a;background:rgba(240,253,244,.96);color:#14532d;border-radius:12px;padding:5px 9px;box-shadow:0 4px 14px rgba(22,163,74,.28);font-size:11.5px;font-weight:800;max-width:100%;cursor:pointer;font-family:inherit;text-align:left;}
   #mpChip.on{display:flex;}
   #mpChip .mp-dot{width:9px;height:9px;border-radius:50%;background:#16a34a;flex:none;}
   #mpChip.connecting .mp-dot{background:#eab308;}
@@ -577,16 +591,16 @@
     #compassArrow{width:13px;height:13px;}
     #compassArrow svg{width:12px;height:12px;}
     #compassDeg{font-size:10px;padding:2px 5px;min-width:38px;border-width:1px;}
-    #tasBtn{padding:6px 10px;font-size:13px;min-height:40px;border-radius:11px;gap:6px;border-width:1.5px;}
+    #tasBtn{padding:5px 9px;font-size:12px;min-height:35px;border-radius:10px;gap:5px;border-width:1.5px;}
     #tasBtn svg{width:17px;height:17px;}
     #tasCount{min-width:19px;height:19px;font-size:10.5px;}
     #navChip{gap:6px;padding:5px 8px 5px 5px;border-radius:11px;border-width:1.5px;font-size:11px;}
     #navArrow{width:28px;height:28px;}
     #navArrow svg{width:15px;height:15px;}
     .hud-right{gap:6px;}
-    .hud-mini{padding:6px 8px;font-size:11px;min-height:40px;border-radius:11px;gap:5px;border-width:1.5px;}
-    .hud-mini svg{width:16px;height:16px;}
-    #chatPanel{left:8px;width:min(200px,54vw);border-radius:13px;border-width:1.5px;}
+    .hud-mini{padding:4px 7px;font-size:10.5px;min-height:34px;border-radius:10px;gap:4px;border-width:1.5px;}
+    .hud-mini svg{width:14px;height:14px;}
+    #chatPanel{left:7px;width:min(178px,50vw);border-radius:12px;border-width:1.5px;}
     .chat-head{padding:6px 6px 4px 9px;}
     .chat-title{font-size:13px;gap:5px;}
     .chat-title svg{width:15px;height:15px;}
@@ -600,10 +614,10 @@
     #joyBase{width:104px;height:104px;margin:-52px 0 0 -52px;}
     #joyKnob{width:48px;height:48px;margin:-24px 0 0 -24px;}
     #joyKnob svg{width:22px;height:22px;}
-    #actionBtn{right:12px;width:64px;height:64px;bottom:calc(102px + env(safe-area-inset-bottom));}
-    #actionBtn svg{width:19px;height:19px;}
-    #actionLabel{font-size:9.5px;max-width:56px;}
-    #jumpBtn{right:12px;width:64px;height:64px;font-size:13px;bottom:calc(22px + env(safe-area-inset-bottom));}
+    #actionBtn{right:10px;width:56px;height:56px;bottom:calc(90px + env(safe-area-inset-bottom));}
+    #actionBtn svg{width:17px;height:17px;}
+    #actionLabel{font-size:9px;max-width:50px;}
+    #jumpBtn{right:10px;width:56px;height:56px;font-size:12px;bottom:calc(18px + env(safe-area-inset-bottom));}
     #flyUI{right:84px;bottom:calc(102px + env(safe-area-inset-bottom));}
     #jumpBtn svg{width:19px;height:19px;}
     #toast{font-size:12px;padding:8px 12px;bottom:calc(102px + env(safe-area-inset-bottom));border-radius:12px;}
@@ -928,7 +942,7 @@
       <span>Kredit kamu:</span><b><span id="dealerKredit">0</span></b><span>poin</span>
     </div>
     <div id="dealerList"></div>
-    <p class="sheet-note">Rumah yang kamu beli adalah rumah di tepi Jl. Sawah Glempang bertanda "Rumah Dijual" — setelah lunas, namanya berubah menjadi <b>Rumah Kamu</b>. <b>Motor Trail</b> &amp; <b>Mobil Polisi</b> yang sudah lunas bisa kamu <b>kendarai sendiri</b>: dekati kendaraannya di dunia (motor di tepi Hutan Desa, mobil polisi di depan Kantor Polsek), tekan Aksi, lalu pilih <b>Kendarai</b>.</p>
+    <p class="sheet-note">Rumah yang kamu beli adalah rumah di tepi Jl. Sawah Glempang bertanda "Rumah Dijual" — setelah lunas, namanya berubah menjadi <b>Rumah Kamu</b>, papan "Dijual" hilang, muncul <b>tanda khusus bintang emas "RUMAH KAMU"</b> + lingkaran emas + bendera di halamannya, dan kamu bisa <b>masuk ke dalam rumah</b> lewat pintunya. <b>Mobil</b> &amp; <b>Motor</b> yang sudah lunas juga tampil <b>terparkir di depan Rumah Kamu</b>. <b>Motor Trail</b> &amp; <b>Mobil Polisi</b> yang sudah lunas bisa kamu <b>kendarai sendiri</b>: dekati kendaraannya di dunia (motor di tepi Hutan Desa, mobil polisi di depan Kantor Polsek), tekan Aksi, lalu pilih <b>Kendarai</b>.</p>
   </div>
 </div>
 
@@ -944,6 +958,26 @@
     </div>
     <div id="questList"></div>
     <p class="sheet-note" id="questNote"></p>
+  </div>
+</div>
+
+<!-- DIALOG NPC: tokoh desa & sekolah pemberi Quest berhadiah Kredit -->
+<div id="npcOverlay" class="sheet-ovl">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="npcName">
+    <div class="sheet-head">
+      <div>
+        <h2 class="sheet-title">Bicara dengan Warga</h2>
+        <p class="sheet-sub">Tokoh desa &amp; sekolah bisa memberimu <b>Quest berhadiah Kredit</b> — satu quest per tokoh setiap hari.</p>
+      </div>
+      <button class="sheet-x" id="npcClose" type="button" aria-label="Tutup dialog NPC">×</button>
+    </div>
+    <div class="npc-head">
+      <span class="npc-ava" id="npcAva">?</span>
+      <div><b id="npcName">Warga</b><span id="npcRole">Desa Gerduren</span></div>
+    </div>
+    <div class="npc-bubble" id="npcText"></div>
+    <div class="npc-questbox" id="npcQuestBox" style="display:none;"></div>
+    <div class="npc-opts" id="npcOpts"></div>
   </div>
 </div>
 
@@ -2161,7 +2195,7 @@ addInteractable(-60, 8, 5.5, 'Lapangan Bola', null, {act:'bola'});
   [[6,-3],[13,-5],[4,5],[15,4],[8,-8],[12,8]].forEach(function(p, i){
     box(0.34, 0.14, 0.26, [0xef4444, 0xf59e0b, 0x3b82f6, 0xec4899, 0xffffff, 0x84cc16][i], p[0], 0.12, p[1], scene, false);
   });
-  addInteractable(10, 2, 5, 'Tong Sampah', null, {act:'sampah'});
+  addInteractable(10, 2, 5, 'Tong Sampah', null, {trashBin:true});
 })();
 
 /* --- Kandang ternak + kolam ikan di BELAKANG sekolah (utara gedung kelas) --- */
@@ -2217,6 +2251,7 @@ function pen(cx, cz, w, d){
 
 /* --- Dealer Gerduren (etalase kendaraan di tepi jalan timur) + rumah yang dijual --- */
 var dealerCarRef = null, playerHouseIt = null;
+var playerHouseGroup = null, houseSignGroup = null, homeCarGroup = null, homeBikeGroup = null, homeMarker = null;
 (function(){
   flat(13, 9, 0xd6d3cd, 38, 42, scene, 0.05);
   [[-5.8,-3.8],[5.8,-3.8],[-5.8,3.8],[5.8,3.8]].forEach(function(p){ box(0.24, 2.7, 0.24, 0xb45309, 38 + p[0], 1.35, 42 + p[1], scene); });
@@ -2225,11 +2260,85 @@ var dealerCarRef = null, playerHouseIt = null;
   dealerCarRef = parkedCar(35.5, 42.5, 0.2, 0x0284c7, 'biasa');
   parkedTrailBike(41.5, 42.5, -0.3);
   addInteractable(38, 42, 7.5, 'Dealer Gerduren', null, {dealer:true});
-  var hg = house(-14, 62, 0xfef3c7, 0x9e3d2c);
-  postSign('Rumah Dijual', -14, 57.6, Math.PI, {w:2.8, bg:'#b45309', fg:'#fff7d6'});
-  addInteractable(-14, 62, 7.5, 'Rumah Dijual');
+  playerHouseGroup = house(-14, 62, 0xfef3c7, 0x9e3d2c);
+  houseSignGroup = postSign('Rumah Dijual', -14, 57.6, Math.PI, {w:2.8, bg:'#b45309', fg:'#fff7d6'});
+  addInteractable(-14, 62, 7.5, 'Rumah Dijual', null, {homeDoor:true});
   playerHouseIt = interactables[interactables.length - 1];
+  /* Kendaraan milik pemain diparkir di depan rumah — tampil hanya setelah LUNAS di Dealer */
+  homeCarGroup = parkedCar(-20.5, 57.6, Math.PI / 2, 0x0284c7, 'biasa');
+  homeBikeGroup = parkedTrailBike(-7.6, 57.8, -0.5);
+  homeCarGroup.visible = false; homeBikeGroup.visible = false;
+  addInteractable(-20.5, 57.6, 4.2, 'Mobil Kamu', null, {homeVeh:'mobil'});
+  addInteractable(-7.6, 57.8, 3.6, 'Motor Kamu', null, {homeVeh:'motor'});
+  /* Tanda khusus rumah milik pemain: lingkaran emas berdenyut di halaman depan,
+     papan nama emas "★ RUMAH KAMU ★" di atas atap, dan tiang bendera Merah Putih */
+  homeMarker = new THREE.Group(); scene.add(homeMarker);
+  var hRing = new THREE.Mesh(new THREE.RingGeometry(5.6, 6.3, 36), new THREE.MeshBasicMaterial({color:0xf59e0b, side:THREE.DoubleSide, transparent:true, opacity:0.85}));
+  hRing.rotation.x = -Math.PI / 2; hRing.position.set(-14, 0.07, 60.5); homeMarker.add(hRing);
+  homeMarker.userData.ring = hRing;
+  var hLabel = makeLabel('★ RUMAH KAMU ★', 1.05); hLabel.position.set(-14, 6.6, 62); homeMarker.add(hLabel);
+  cyl(0.05, 0.06, 4.4, 0xd6d3cd, -8.6, 2.2, 58.6, homeMarker, 8);
+  var flagTop = box(1.15, 0.42, 0.05, 0xdc2626, -8.0, 4.05, 58.6, homeMarker, false);
+  var flagBot = box(1.15, 0.42, 0.05, 0xffffff, -8.0, 3.63, 58.6, homeMarker, false);
+  // denyut lingkaran & kibaran bendera dianimasikan dari updateNPCWorld (blok ini
+  // berjalan SEBELUM daftar ambients dibuat, jadi tidak boleh ambients.push di sini)
+  homeMarker.userData.parts = {ring:hRing, flagTop:flagTop, flagBot:flagBot};
+  homeMarker.visible = false;
 })();
+
+/* --- Bagian dalam Rumah Kamu: ruangan sederhana yang bisa dimasuki setelah rumah LUNAS ---
+   Dibangun jauh di selatan peta (z=150, di luar area desa) sebagai ruang interior;
+   pemain berpindah ke sini lewat pintu rumah, dan keluar lewat pintu yang sama. */
+(function buildHomeInterior(){
+  flat(12, 9, 0xb08968, 0, 150, scene, 0.03);
+  flat(4.6, 3.2, 0xdc2626, 0, 150.5, scene, 0.05);                       // karpet merah ruang tengah
+  box(12, 3.2, 0.3, 0xfef3c7, 0, 1.6, 145.6, scene);                     // dinding belakang
+  box(0.3, 3.2, 9, 0xfef3c7, -6, 1.6, 150, scene);                      // dinding kiri
+  box(0.3, 3.2, 9, 0xfef3c7, 6, 1.6, 150, scene);                       // dinding kanan
+  box(4.6, 3.2, 0.3, 0xfef3c7, -3.7, 1.6, 154.4, scene);                 // dinding depan kiri pintu
+  box(4.6, 3.2, 0.3, 0xfef3c7, 3.7, 1.6, 154.4, scene);                  // dinding depan kanan pintu
+  box(3.2, 0.9, 0.3, 0xfef3c7, 0, 2.75, 154.4, scene);                   // ambang di atas pintu
+  box(12.6, 0.25, 9.6, 0x9e3d2c, 0, 3.32, 150, scene);                  // plafon/atap interior
+  // tempat tidur + bantal + selimut
+  box(2.2, 0.4, 3.4, 0x7c4a21, -4.2, 0.35, 148, scene);
+  box(2.0, 0.25, 3.2, 0xffffff, -4.2, 0.67, 148, scene, false);
+  box(1.1, 0.16, 0.7, 0xfef9c3, -4.2, 0.85, 146.9, scene, false);
+  box(2.0, 0.14, 1.7, 0x2563eb, -4.2, 0.82, 149.2, scene, false);
+  // meja + dua kursi + buku di atasnya
+  box(2.4, 0.14, 1.3, 0x8a5a2b, 3.4, 0.95, 150.5, scene);
+  [[2.4,149.9],[4.4,149.9],[2.4,151.1],[4.4,151.1]].forEach(function(p){ box(0.12, 0.95, 0.12, 0x6d4c2f, p[0], 0.48, p[1], scene, false); });
+  box(0.7, 0.5, 0.7, 0xb45309, 2.2, 0.25, 152.6, scene, false);
+  box(0.7, 0.5, 0.7, 0xb45309, 4.6, 0.25, 152.6, scene, false);
+  box(0.55, 0.09, 0.4, 0xdc2626, 3.2, 1.06, 150.4, scene, false);
+  box(0.5, 0.07, 0.36, 0x2563eb, 3.75, 1.05, 150.7, scene, false);
+  // TV di dinding belakang + meja TV
+  box(2.6, 0.5, 0.5, 0x6d4c2f, 0, 0.25, 146.1, scene);
+  box(2.2, 1.25, 0.09, 0x111827, 0, 1.45, 146.05, scene, false);
+  box(1.95, 1.0, 0.04, 0x38bdf8, 0, 1.45, 146.12, scene, false);
+  // lemari + pot tanaman + lampu gantung
+  box(1.6, 2.4, 0.6, 0x92400e, 5.1, 1.2, 146.2, scene);
+  cyl(0.22, 0.16, 0.4, 0xb45309, -5.3, 0.2, 153.4, scene, 10);
+  var plantTop = new THREE.Mesh(new THREE.SphereGeometry(0.42, 9, 8), mat(0x2f9e44)); plantTop.position.set(-5.3, 0.75, 153.4); scene.add(plantTop);
+  cyl(0.03, 0.03, 0.5, 0x374151, 0, 3.05, 150, scene, 6);
+  var lamp = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 9), new THREE.MeshBasicMaterial({color:0xfde68a})); lamp.position.set(0, 2.72, 150); scene.add(lamp);
+  wallSign(scene, 'RUMAH KAMU', 0, 2.3, 145.78, 3.4, {bg:'#b45309', fg:'#fff7d6'});
+  addCollider(0, 145.4, 6.2, 0.5); addCollider(-6.2, 150, 0.5, 4.7); addCollider(6.2, 150, 0.5, 4.7);
+  addCollider(-3.7, 154.6, 2.4, 0.5); addCollider(3.7, 154.6, 2.4, 0.5);
+  addInteractable(0, 153.4, 2.8, 'Pintu Rumah', null, {homeExit:true});
+})();
+function enterHome(){
+  if(!eco.assets.rumah){ showToast('Rumah ini belum milikmu — beli dulu di Dealer Gerduren (tunai atau kredit cicilan).', 4200); return; }
+  player.position.set(0, 0, 152.8); player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
+  AudioSys.sfx('pop');
+  showToast('Selamat datang di Rumah Kamu! Istirahat yang nyaman — dekati pintu lalu tekan Aksi untuk keluar.', 4600);
+}
+function exitHome(){
+  player.position.set(-14, 0, 56.6); player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
+  AudioSys.sfx('pop');
+  showToast('Kamu keluar dari Rumah Kamu. Motor & mobilmu terparkir rapi di depan rumah!', 3800);
+}
 
 /* --- Taman Desa (fasilitas umum) --- */
 (function(){
@@ -2618,6 +2727,19 @@ function makeGerobak(col){
   });
 })();
 
+/* Jajan di pedagang keliling: kedua gerobak bakso bisa diajak jajan memakai
+   Kredit (toko mode 'gerobak'). Titik gerobak berjalan mengikuti gerobaknya. */
+var movingCartGrp = null, movingCartIt = null;
+(function(){
+  addInteractable(11, 45.2, 4.6, 'Gerobak Bakso Keliling', null, {shop:'gerobak'});
+  addInteractable(6.8, 30, 4.6, 'Gerobak Bakso Keliling', null, {shop:'gerobak'});
+  movingCartIt = interactables[interactables.length - 1];
+  for(var ci = 0; ci < scene.children.length; ci++){
+    var ch = scene.children[ci];
+    if(ch && ch.isGroup && ch.position && ch.position.x === 6.8 && ch.children.length >= 2) movingCartGrp = ch;
+  }
+})();
+
 /* ---------- Mobil & motor lalu-lalang di Jl. Sawah Glempang ---------- */
 function makeCar(col){
   var g = new THREE.Group();
@@ -2686,6 +2808,15 @@ ambients.push(function(dt){
       eff = Math.min(eff, leadSpeed * f);   // makin rapat makin pelan; rapat penuh = berhenti di belakangnya
       if(gapMin <= 4.6) eff = 0;
     }
+    // Lampu lalu lintas: kendaraan warga BERHENTI di garis henti sebelum
+    // persimpangan Gerbang (x=0) & persimpangan Timur (x=52) saat lampu merah/kuning
+    if(typeof TL !== 'undefined' && TL.phase !== 'green'){
+      var stops = v.dir > 0 ? [-4, 48] : [4, 56];
+      for(var si = 0; si < stops.length; si++){
+        var sd = (stops[si] - v.x) * v.dir;
+        if(sd > 0 && sd < 8){ eff = Math.min(eff, Math.max(0, (sd - 2.2) * 1.6)); if(sd <= 2.3) eff = 0; }
+      }
+    }
     v.x += v.dir * eff * dt;
     if(v.x > 108) v.x = -108;
     if(v.x < -108) v.x = 108;
@@ -2693,6 +2824,111 @@ ambients.push(function(dt){
   }
 });
 
+
+/* ================= LAMPU LALU LINTAS JALAN RAYA =================
+   Tiga lampu lalu lintas di sekitar sekolah: persimpangan Gerbang, persimpangan
+   Timur (Polsek), dan jalan timur. Semua menyala serempak: hijau 6 dtk → kuning
+   1,4 dtk → merah 6 dtk. Kendaraan warga (lalu-lalang di atas) dan mobil buronan
+   pada mode Kejar-Kejaran WAJIB berhenti saat lampu merah/kuning. */
+var TL = {phase:'green', t:0};
+var tlLampSets = [];
+function tlApply(){
+  tlLampSets.forEach(function(L){
+    L.r.material.color.setHex(TL.phase === 'red' ? 0xef4444 : 0x374151);
+    L.y.material.color.setHex(TL.phase === 'yellow' ? 0xfacc15 : 0x374151);
+    L.g.material.color.setHex(TL.phase === 'green' ? 0x22c55e : 0x374151);
+  });
+}
+function buildTrafficLight(x, z, ry){
+  var g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry || 0; scene.add(g);
+  cyl(0.07, 0.09, 3.6, 0x374151, 0, 1.8, 0, g, 8);
+  box(0.55, 1.55, 0.42, 0x1f2937, 0, 3.95, 0, g);
+  var lamps = {};
+  ['r','y','g'].forEach(function(k, i){
+    var m = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 8), new THREE.MeshBasicMaterial({color:0x374151}));
+    m.position.set(0, 4.42 - i * 0.47, 0.23); g.add(m); lamps[k] = m;
+    var m2 = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 8), new THREE.MeshBasicMaterial({color:0x374151}));
+    m2.position.set(0, 4.42 - i * 0.47, -0.23); g.add(m2);
+    lamps[k + '2'] = m2;
+  });
+  tlLampSets.push({r:lamps.r, y:lamps.y, g:lamps.g});
+  tlLampSets.push({r:lamps.r2, y:lamps.y2, g:lamps.g2});
+  addCollider(x, z, 0.4, 0.4);
+  return g;
+}
+buildTrafficLight(5.6, 46.4, 0);            // persimpangan Gerbang Sekolah
+buildTrafficLight(46.6, 46.4, 0);           // persimpangan Timur (arah Polsek)
+buildTrafficLight(57.8, 17.5, -Math.PI / 2); // jalan timur dekat Polsek
+postSign('Lampu Lalu Lintas', 5.6, 44.6, Math.PI, {w:2.6, bg:'#1f2937', fg:'#facc15'});
+ambients.push(function(dt){
+  TL.t += dt;
+  var dur = TL.phase === 'green' ? 6 : (TL.phase === 'yellow' ? 1.4 : 6);
+  if(TL.t >= dur){
+    TL.t = 0;
+    TL.phase = TL.phase === 'green' ? 'yellow' : (TL.phase === 'yellow' ? 'red' : 'green');
+    tlApply();
+  }
+});
+tlApply();
+/* true bila titik (x,z) dekat persimpangan dan lampunya sedang bukan hijau */
+function tlMustStop(x, z){
+  if(TL.phase === 'green') return false;
+  return Math.hypot(x - 0, z - 52) < 7.5 || Math.hypot(x - 52, z - 52) < 7.5 || Math.hypot(x - 52, z - 20) < 7.5;
+}
+
+/* ================= KEJAR-KEJARAN DI JALAN RAYA =================
+   Mode permainan dari mobil polisi di depan Polsek: pemain mengendarai mobil
+   polisi mengejar mobil buronan hitam yang kabur menyusuri jalan raya & jalan
+   desa. Buronan pun patuh lampu lalu lintas (berhenti saat merah) — kesempatan
+   pemain menyusul! Tertangkap bila jarak < 5 sebelum 75 detik habis. */
+var chase = null;
+var CHASE_WPS = [[98,52],[52,52],[52,20],[52,52],[0,52],[0,22],[0,52],[-95,52],[0,52],[52,52]];
+function startChase(){
+  if(chase){ showToast('Kejar-kejaran sedang berjalan! Tangkap mobil hitam itu!'); return; }
+  if(tourActive){ showToast('Selesaikan dulu wahana yang sedang berjalan.'); return; }
+  if(riding) dismountBike();
+  if(vehDrive) dismountVehicle();
+  if(!policeCarGroup){ showToast('Mobil polisi tidak ditemukan.'); return; }
+  var tg = makeCar(0x111827);
+  tg.position.set(88, 0, 52);
+  var lb = makeLabel('★ BURONAN ★', 0.62); lb.position.set(0, 3.1, 0); tg.add(lb);
+  chase = {t:75, g:tg, wp:0, speed:0, warned30:false, warned10:false};
+  mountVehicle('polisi');
+  AudioSys.sfx('bell');
+  showToast('KEJAR-KEJARAN JALAN RAYA! Mobil hitam BURONAN kabur — kejar & dekati sampai tertangkap sebelum 75 detik habis! Kendaraan warga berhenti saat lampu merah — buronan juga!', 6200);
+}
+function endChase(win, silent){
+  if(!chase) return;
+  var g = chase.g; chase = null;
+  if(g) scene.remove(g);
+  if(vehDrive) dismountVehicle();
+  if(win){
+    addKredit(150); AudioSys.sfx('win');
+    showToast('TERTANGKAP! Kamu menangkap mobil buronan di jalan raya — hadiah +150 Kredit!', 5200);
+  } else if(!silent){
+    AudioSys.sfx('error');
+    showToast('Mobil buronan lolos! Coba lagi dari mobil polisi di depan Kantor Polsek.', 4600);
+  }
+}
+function updateChase(dt){
+  if(!chase) return;
+  if(!vehDrive){ endChase(false, true); showToast('Kejar-kejaran batal — kamu turun dari mobil polisi.', 3200); return; }
+  chase.t -= dt;
+  if(chase.t <= 30 && !chase.warned30){ chase.warned30 = true; showToast('Sisa waktu kejar-kejaran: 30 detik!', 2400); }
+  if(chase.t <= 10 && !chase.warned10){ chase.warned10 = true; showToast('Sisa waktu: 10 detik — sedikit lagi!', 2400); }
+  if(chase.t <= 0){ endChase(false); return; }
+  var g = chase.g, wp = CHASE_WPS[chase.wp];
+  var dx = wp[0] - g.position.x, dz = wp[1] - g.position.z, d = Math.hypot(dx, dz);
+  if(d < 3){ chase.wp = (chase.wp + 1) % CHASE_WPS.length; return; }
+  var targetSpeed = tlMustStop(g.position.x, g.position.z) ? 0 : 10.5;  // buronan patuh lampu merah
+  chase.speed += (targetSpeed - chase.speed) * Math.min(1, dt * 1.6);
+  if(chase.speed > 0.2){
+    g.rotation.y = Math.atan2(dx, dz);
+    g.position.x += Math.sin(g.rotation.y) * chase.speed * dt;
+    g.position.z += Math.cos(g.rotation.y) * chase.speed * dt;
+  }
+  if(Math.hypot(player.position.x - g.position.x, player.position.z - g.position.z) < 5) endChase(true);
+}
 
 /* ================= PEMAIN (Murid Kelas 1) ================= */
 /* 20 karakter dari aset avatar Paragon: warna kulit, gaya rambut/hijab, warna mata,
@@ -3475,6 +3711,7 @@ actionBtn.addEventListener('click', function(){
   var t = currentTarget;
   if(t.shop){ openShop(t.shop); return; }
   if(t.bike){ mountBike(); return; }
+  if(t.npc){ openNPCDialog(t.npc); return; }
   infoTarget = t;
   infoTitle.textContent = t.name;
   infoText.textContent = t.info;
@@ -3526,6 +3763,19 @@ actionBtn.addEventListener('click', function(){
       }
       infoActions.appendChild(vb);
     }
+    if(t.game === 'polisi'){
+      // Kejar-kejaran versi JALAN RAYA: kejar buronan di jalan sekitar sekolah (ada lampu lalu lintas)
+      var cb = document.createElement('button');
+      cb.type = 'button'; cb.className = 'info-act-btn alt';
+      if(gameUnlocked('polisi')){
+        cb.textContent = 'Kejar-Kejaran di Jalan Raya (Ada Lampu Lalu Lintas!)';
+        cb.addEventListener('click', function(){ hideInfo(); startChase(); });
+      } else {
+        cb.textContent = 'Kejar-Kejaran Jalan Raya — Masih Tersegel';
+        cb.addEventListener('click', function(){ AudioSys.sfx('error'); showToast('Permainan ini masih tersegel. Minta Admin / Game Master membukanya dari panel GM.'); });
+      }
+      infoActions.appendChild(cb);
+    }
     infoActions.classList.add('show');
   } else if(t.act){
     var ab = document.createElement('button');
@@ -3533,6 +3783,44 @@ actionBtn.addEventListener('click', function(){
     ab.textContent = 'Mulai Bermain di Sini';
     (function(kind){ ab.addEventListener('click', function(){ hideInfo(); startActGame(kind); }); })(t.act);
     infoActions.appendChild(ab);
+    infoActions.classList.add('show');
+  } else if(t.homeDoor){
+    if(eco.assets.rumah){
+      var hb = document.createElement('button');
+      hb.type = 'button'; hb.className = 'info-act-btn';
+      hb.textContent = 'Masuk Rumah';
+      hb.addEventListener('click', function(){ hideInfo(); enterHome(); });
+      infoActions.appendChild(hb);
+    } else {
+      var hb2 = document.createElement('button');
+      hb2.type = 'button'; hb2.className = 'info-act-btn';
+      hb2.textContent = 'Beli Rumah Ini di Dealer Gerduren';
+      hb2.addEventListener('click', function(){ hideInfo(); openDealer(); });
+      infoActions.appendChild(hb2);
+    }
+    infoActions.classList.add('show');
+  } else if(t.homeExit){
+    var xb = document.createElement('button');
+    xb.type = 'button'; xb.className = 'info-act-btn';
+    xb.textContent = 'Keluar Rumah';
+    xb.addEventListener('click', function(){ hideInfo(); exitHome(); });
+    infoActions.appendChild(xb);
+    infoActions.classList.add('show');
+  } else if(t.homeVeh){
+    if(!eco.assets[t.homeVeh]){
+      var vb2 = document.createElement('button');
+      vb2.type = 'button'; vb2.className = 'info-act-btn';
+      vb2.textContent = 'Belum Dibeli — Ke Dealer Gerduren';
+      vb2.addEventListener('click', function(){ hideInfo(); openDealer(); });
+      infoActions.appendChild(vb2);
+      infoActions.classList.add('show');
+    }
+  } else if(t.trashBin){
+    var tb3 = document.createElement('button');
+    tb3.type = 'button'; tb3.className = 'info-act-btn';
+    tb3.textContent = 'Mulai Misi Bersih-Bersih di Halaman & Desa';
+    tb3.addEventListener('click', function(){ hideInfo(); startWorldTrashMission(); });
+    infoActions.appendChild(tb3);
     infoActions.classList.add('show');
   } else if(t.dealer){
     var db = document.createElement('button');
@@ -3648,6 +3936,66 @@ var AudioSys = (function(){
     if(!ensure() || bgmTimer) return;
     bgmStep = 0; nextNoteTime = ctx.currentTime + 0.1;
     bgmTimer = setInterval(scheduleBGM, 120);
+    startAmbience();
+  }
+  /* Hiruk pikuk khas sekolah: gumaman keramaian anak-anak (noise cokelat yang
+     disaring rendah + naik-turun pelan) dan celetukan suara anak dari kejauhan
+     sesekali. Semua disintesis WebAudio, tanpa berkas audio eksternal. */
+  var ambStarted = false;
+  function blipAt(freq, t0, dur, vol){
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, t0);
+    o.frequency.exponentialRampToValueAtTime(freq * 0.78, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  function startAmbience(){
+    if(ambStarted || !ensure()) return;
+    ambStarted = true;
+    try{
+      var len = ctx.sampleRate * 2;
+      var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      var d = buf.getChannelData(0), last = 0;
+      for(var i = 0; i < len; i++){ var w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; d[i] = last * 3.4; }
+      var src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+      var f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 430;
+      var g = ctx.createGain(); g.gain.value = 0.045;
+      var lfo = ctx.createOscillator(); lfo.frequency.value = 0.13;
+      var lg = ctx.createGain(); lg.gain.value = 0.018;
+      lfo.connect(lg); lg.connect(g.gain);
+      src.connect(f); f.connect(g); g.connect(master);
+      src.start(); lfo.start();
+      setInterval(function(){
+        if(muted || !ctx || ctx.state !== 'running') return;
+        if(Math.random() < 0.72){
+          var base = 480 + Math.random() * 380, t0 = ctx.currentTime + 0.05;
+          var n = 2 + Math.floor(Math.random() * 3);
+          for(var k = 0; k < n; k++) blipAt(base * (1 + Math.random() * 0.16), t0 + k * 0.17, 0.11, 0.011);
+        }
+      }, 3400);
+    }catch(e){ /* ambience gagal dibuat: permainan tetap jalan tanpa suara keramaian */ }
+  }
+  /* Sapaan suara saat pemain baru masuk dunia. Memakai speechSynthesis perangkat
+     (bahasa Indonesia bila tersedia); dipanggil dari gestur klik MASUK / ADMIN,
+     dan hanya sekali per sesi. Bila perangkat tidak mendukung, dilewati diam-diam. */
+  var spokeWelcome = false;
+  function speakWelcome(){
+    if(spokeWelcome) return;
+    spokeWelcome = true;
+    try{
+      if(!('speechSynthesis' in window)) return;
+      var u = new SpeechSynthesisUtterance('Selamat datang di SD Negeri 1 Gerduren');
+      u.lang = 'id-ID'; u.rate = 0.95; u.pitch = 1.05;
+      var vs = window.speechSynthesis.getVoices();
+      for(var i = 0; i < vs.length; i++){
+        if(vs[i].lang && vs[i].lang.toLowerCase().indexOf('id') === 0){ u.voice = vs[i]; break; }
+      }
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }catch(e){ /* suara sambutan tidak tersedia di perangkat ini */ }
   }
   function sfx(name){
     if(muted) return;
@@ -3672,6 +4020,7 @@ var AudioSys = (function(){
   return {
     unlock: function(){ ensure(); },
     startBGM: startBGM,
+    speakWelcome: speakWelcome,
     sfx: sfx,
     beep: function(f, d, v){ tone(f, 0, d || 0.08, 'square', v || 0.04); },
     setMuted: function(m){ muted = m; if(master) master.gain.value = m ? 0 : 0.9; },
@@ -3714,7 +4063,8 @@ var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, l
   unsealed:{balap:false, moto:false, polisi:false}, muted:false,
   assets:{},  // barang Dealer yang sudah LUNAS: {rumah:true, mobil:true, motor:true, polisi:true}
   loans:{},   // cicilan Dealer yang sedang berjalan: {motor:{paid:3, per:150, total:8}, ...}
-  quests:{date:'', sampah:0, fed:{}, tanam:false, pancing:false, bola:false, rewarded:{}, bonus:false} }; // progres Quest Harian (reset tiap tanggal baru)
+  quests:{date:'', sampah:0, fed:{}, tanam:false, pancing:false, bola:false, rewarded:{}, bonus:false}, // progres Quest Harian (reset tiap tanggal baru)
+  npcQuests:{date:'', st:{}, prog:{}} }; // quest dari NPC (Lurah/Warga/Polisi/Guru/Kepsek/Siswa): st per id = offer|active|ready|done, reset tiap tanggal baru
 ITEM_DEFS.forEach(function(d){ if(eco.inv[d.id] === undefined) eco.inv[d.id] = 0; });
 var POS_IDS = ['kompas','kim','bangga','tanda','ketaqwaan','bumbung','grazy','pbb','pionering'];
 POS_IDS.forEach(function(id){ eco.pos[id] = {best:0, stamp:false, plays:0}; });
@@ -3761,6 +4111,11 @@ function loadEco(){
       if(sq.fed && typeof sq.fed === 'object') eco.quests.fed = sq.fed;
       eco.quests.tanam = !!sq.tanam; eco.quests.pancing = !!sq.pancing; eco.quests.bola = !!sq.bola; eco.quests.bonus = !!sq.bonus;
       if(sq.rewarded && typeof sq.rewarded === 'object') eco.quests.rewarded = sq.rewarded;
+    }
+    if(s.npcQuests && typeof s.npcQuests === 'object'){
+      if(typeof s.npcQuests.date === 'string') eco.npcQuests.date = s.npcQuests.date;
+      if(s.npcQuests.st && typeof s.npcQuests.st === 'object') eco.npcQuests.st = s.npcQuests.st;
+      if(s.npcQuests.prog && typeof s.npcQuests.prog === 'object') eco.npcQuests.prog = s.npcQuests.prog;
     }
     eco.muted = !!s.muted;
   }catch(e){ /* simpanan rusak/diabaikan: mulai dari nilai awal */ }
@@ -4113,6 +4468,7 @@ document.getElementById('startBtn').addEventListener('click', function(){
   updateStatsUI(); renderBag(); refreshMBG();
   checkMBGOnEnter();
   AudioSys.unlock(); AudioSys.setMuted(eco.muted); syncSndBtn(); AudioSys.startBGM(); AudioSys.sfx('pop');
+  AudioSys.speakWelcome(); // sapaan suara "Selamat datang di SD Negeri 1 Gerduren" saat masuk dunia
   mpStartAutoWait(); // login langsung multiplayer: periksa sesi GM & gabung otomatis begitu terbuka
   setTimeout(function(){ document.getElementById('hint').classList.add('hide'); }, 6000);
 });
@@ -4155,6 +4511,7 @@ function enterAdminWorld(){
   updateStatsUI(); renderBag(); refreshMBG();
   checkMBGOnEnter();
   AudioSys.unlock(); AudioSys.setMuted(eco.muted); syncSndBtn(); AudioSys.startBGM(); AudioSys.sfx('lock');
+  AudioSys.speakWelcome(); // sapaan suara "Selamat datang di SD Negeri 1 Gerduren" saat masuk dunia
   setTimeout(function(){ document.getElementById('hint').classList.add('hide'); }, 6000);
   setTimeout(function(){
     showToast('Selamat datang, Admin! Semua segel permainan terbuka untukmu. Buka panel GM (tombol GM) untuk memberi Kredit & item ke pemain.', 5600);
@@ -4210,7 +4567,7 @@ nameInputEl.addEventListener('blur', function(){ setTimeout(syncStartScreen, 120
 
 /* ================= TOKO, POS PRAMUKA, KENDARAAN, ARENA & GM ================= */
 var shopOpen = false, posOpen = false, arenaOpen = false, gmOpen = false, mapOpen = false;
-function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting || actOpen || dealerOpen || questOpen || tourActive; }
+function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting || actOpen || dealerOpen || questOpen || npcOpen || tourActive; }
 function addKredit(n){
   if(n <= 0) return;
   eco.kredit += n; saveEco(); updateStatsUI();
@@ -4268,6 +4625,13 @@ function renderShop(){
     shopSub.textContent = 'Seragam & perlengkapan sekolah. Beli sekali, jadi milikmu selamanya!';
     shopNote.innerHTML = 'Seragam &amp; perlengkapan yang sudah dibeli bisa <b>dipakai / dilepas</b> kapan saja di sini — tampilannya langsung berubah pada karaktermu di dunia. Kredit didapat dari <b>jawaban benar</b> Quest &amp; Kuis, Pos Pramuka, permainan seru di desa, dan <b>Uang Saku harian</b>.';
     KOPERASI_ITEMS.forEach(function(it){ shopGrid.appendChild(koperasiCard(it)); });
+  } else if(shopMode === 'gerobak'){
+    shopTitle.textContent = 'Pedagang Keliling';
+    shopSub.textContent = 'Gerobak bakso keliling Desa Gerduren. Jajan hangat pakai Kreditmu — hasil belanja masuk ke Tas!';
+    shopNote.innerHTML = 'Jajanan yang dibeli masuk ke <b>Tas</b> — buka Tas untuk makan &amp; minum: <b>makanan → +HP</b>, <b>minuman → +EP</b>, <b>buah → +HP &amp; +EP</b>. Pedagang keliling mangkal di tepi jalan dekat gerbang, dan satu lagi berkeliling menyusuri jalan desa.';
+    ['bakso','roti','teh','air','jeruk'].forEach(function(id){
+      for(var di = 0; di < ITEM_DEFS.length; di++) if(ITEM_DEFS[di].id === id) shopGrid.appendChild(kantinCard(ITEM_DEFS[di]));
+    });
   } else {
     shopTitle.textContent = 'Kantin Sekolah';
     shopSub.textContent = 'Jajanan & minuman sehat untuk mengisi HP dan EP. Hasil belanja masuk ke Tas.';
@@ -5611,7 +5975,6 @@ var ACT_DEFS = {
   tanamSawah:  {title:'Menanam di Sawah', sub:'Ketuk petak kosong untuk menanam bibit padi. Tunggu padinya menguning, lalu ketuk untuk memanen. Panen 6 petak sebelum waktu habis!', target:6, time:45, reward:40},
   pancing:     {title:'Memancing di Sungai', sub:'Ikan-ikan berenang di bawah kailmu. Ketuk layar saat ikan tepat di dekat kail untuk menariknya! Tangkap 5 ikan sebelum waktu habis.', target:5, time:45, reward:40},
   bola:        {title:'Bermain Bola di Lapangan', sub:'Garis bidik bergerak ke kiri-kanan. Ketuk untuk menendang ke arah bidik — hindari kiper! Cetak 3 gol dari 6 tendangan.', target:3, time:99, reward:50},
-  sampah:      {title:'Mencari Sampah di Halaman', sub:'Sampah berserakan di halaman! Ketuk semua sampah untuk memungutnya. Jangan ketuk bunga, ya. Pungut 10 sampah sebelum waktu habis.', target:10, time:40, reward:40},
   pakanAyam:   {title:'Memberi Makan Ayam', sub:'Ketuk tanah untuk menabur jagung. Ayam akan datang memakannya. Beri makan 5 kali sebelum waktu habis!', target:5, time:40, reward:35, animal:'ayam'},
   pakanIkan:   {title:'Memberi Makan Ikan', sub:'Ketuk permukaan kolam untuk menabur pelet. Ikan akan berenang memakannya. Beri makan 5 kali sebelum waktu habis!', target:5, time:40, reward:35, animal:'ikan'},
   pakanKambing:{title:'Memberi Makan Kambing', sub:'Ketuk tanah untuk meletakkan daun hijau. Kambing akan datang memakannya. Beri makan 5 kali sebelum waktu habis!', target:5, time:40, reward:35, animal:'kambing'},
@@ -5926,8 +6289,19 @@ var dealerOverlay = document.getElementById('dealerOverlay'), dealerList = docum
 function refreshHouseName(){
   if(eco.assets.rumah && playerHouseIt){
     playerHouseIt.name = 'Rumah Kamu';
-    playerHouseIt.info = 'Ini rumahmu sendiri di Desa Gerduren — hasil jerih payahmu mengumpulkan Kredit. Selamat, kamu sudah punya rumah!';
+    playerHouseIt.info = 'Ini rumahmu sendiri di Desa Gerduren — hasil jerih payahmu mengumpulkan Kredit. Ada tanda khusus bintang emas "RUMAH KAMU" di atasnya, dan kendaraanmu terparkir di depan. Tekan Aksi lalu pilih Masuk Rumah untuk masuk ke dalam!';
   }
+}
+/* Tanda khusus & isi halaman rumah milik pemain mengikuti kepemilikan di eco.assets:
+   papan "Rumah Dijual" hilang, penanda emas + bendera tampil, mobil/motor yang
+   sudah lunas muncul terparkir di depan rumah. */
+function refreshHomeOwnership(){
+  refreshHouseName();
+  var owned = !!eco.assets.rumah;
+  if(houseSignGroup) houseSignGroup.visible = !owned;
+  if(homeMarker) homeMarker.visible = owned;
+  if(homeCarGroup) homeCarGroup.visible = !!eco.assets.mobil;
+  if(homeBikeGroup) homeBikeGroup.visible = !!eco.assets.motor;
 }
 function openDealer(){ dealerOpen = true; dealerOverlay.classList.add('on'); renderDealer(); AudioSys.sfx('pop'); }
 function closeDealer(){ dealerOpen = false; dealerOverlay.classList.remove('on'); }
@@ -5954,7 +6328,7 @@ function renderDealer(){
       b1.addEventListener('click', function(){
         if(eco.kredit < it.price) return;
         eco.kredit -= it.price; eco.assets[it.id] = true;
-        saveEco(); updateStatsUI(); refreshHouseName(); renderDealer();
+        saveEco(); updateStatsUI(); refreshHomeOwnership(); renderDealer();
         AudioSys.sfx('buy'); showToast(it.name + ' terbeli TUNAI dan jadi milikmu!', 4200);
       });
       var b2 = document.createElement('button'); b2.type = 'button'; b2.className = 'cicil'; b2.textContent = 'Ambil Kredit';
@@ -5977,7 +6351,7 @@ function renderDealer(){
         } else {
           AudioSys.sfx('coin'); showToast('Cicilan ' + it.name + ' ke-' + loan.paid + ' dari ' + loan.n + ' terbayar. Sisa ' + (loan.n - loan.paid) + ' kali lagi!', 3800);
         }
-        saveEco(); updateStatsUI(); refreshHouseName(); renderDealer();
+        saveEco(); updateStatsUI(); refreshHomeOwnership(); renderDealer();
       });
       btns.appendChild(b3);
     }
@@ -5985,7 +6359,7 @@ function renderDealer(){
     dealerList.appendChild(row);
   });
 }
-refreshHouseName();
+refreshHomeOwnership();
 
 /* ================= QUEST HARIAN =================
    Misi yang diperbarui setiap tanggal baru: bersih-bersih sampah langsung di
@@ -6079,6 +6453,7 @@ function renderQuests(){
       '<span class="q-state">' + (done ? 'Selesai ✓' : 'Belum') + '</span>';
     questList.appendChild(row);
   });
+  if(typeof renderNPCQuestRows === 'function') renderNPCQuestRows(questList);
   questNote.innerHTML = doneN >= QUEST_DEFS.length
     ? 'Semua Quest Harian hari ini <b>SELESAI</b> — termasuk bonus +100 Kredit. Sampai jumpa di quest besok!'
     : 'Sudah selesai <b>' + doneN + ' dari ' + QUEST_DEFS.length + '</b> quest. Quest diperbarui setiap hari — besok ada misi baru menunggumu!';
@@ -6086,7 +6461,7 @@ function renderQuests(){
 }
 
 /* --- Sampah Quest Harian: benda 3D berserakan di sekolah & desa, dipungut dengan mendekatinya --- */
-var TRASH_SPOTS = [[-8,6],[18,-6],[-30,10],[24,18],[-18,-30],[10,-30],[-52,-2],[-50,26],[44,48],[92,22],[58,34],[70,72]];
+var TRASH_SPOTS = [[-8,6],[18,-6],[-30,10],[24,18],[-18,-30],[10,-30],[-52,-2],[-50,26],[44,48],[92,22],[58,34],[70,72],[-36,-18],[36,12],[-6,-14],[28,-24],[4,34],[-58,44]];
 var trashPickups = [], trashSpin = 0;
 TRASH_SPOTS.forEach(function(s, i){
   var g = new THREE.Group(); g.position.set(s[0], 0, s[1]); scene.add(g);
@@ -6122,6 +6497,516 @@ function updateTrashPickups(dt){
   }
 }
 ensureQuestDay(); updateQuestBadge();
+
+/* ================= MISI BERSIH-BERSIH LANGSUNG DI DUNIA =================
+   Memungut sampah TIDAK lagi lewat panel permainan: sampahnya benda 3D
+   berbingkai kuning yang berserakan di halaman sekolah & lingkungan desa
+   (trashPickups di atas) dan dipungut cukup dengan MENDEKATINYA. Tong Sampah
+   di halaman hanya menjadi titik mulai/panduan misinya. */
+function startWorldTrashMission(){
+  ensureQuestDay();
+  if(eco.quests.sampah >= QUEST_DEFS[0].target){
+    showToast('Misi Bersih-Bersih hari ini sudah selesai — halaman sekolah & desa sudah bersih! Sampah baru muncul lagi besok.', 3800);
+    return;
+  }
+  refreshTrashVisibility();
+  AudioSys.sfx('pop');
+  showToast('Misi Bersih-Bersih dimulai! Pungut sampah warna-warni berbingkai kuning di halaman sekolah & lingkungan desa — cukup DEKATI sampahnya, langsung terpungut! (' + eco.quests.sampah + ' dari ' + QUEST_DEFS[0].target + ')', 5800);
+}
+
+/* ================= NPC: TOKOH DESA & SEKOLAH PEMBERI QUEST =================
+   NPC dibangun dengan pembangun figur khusus (proporsi mirip karakter pemain:
+   kepala berwajah mata + senyum + pipi, rambut/peci/topi/hijab bervariasi,
+   lengan & kaki berayun saat berjalan) — jauh lebih menarik dari figur warga
+   lama. Enam peran pemberi quest: Kepala Sekolah, Guru, Polisi, Lurah, Warga,
+   dan Siswa. Satu quest per peran per hari, berhadiah Kredit, tersimpan di
+   eco.npcQuests dan reset tiap tanggal baru. */
+var npcOpen = false, curNPC = null;
+var npcOverlay = document.getElementById('npcOverlay'), npcAva = document.getElementById('npcAva'),
+    npcName = document.getElementById('npcName'), npcRole = document.getElementById('npcRole'),
+    npcText = document.getElementById('npcText'), npcQuestBox = document.getElementById('npcQuestBox'),
+    npcOpts = document.getElementById('npcOpts');
+function npcTodayStr(){ return questTodayStr(); }
+function ensureNPCDay(){
+  var t = npcTodayStr();
+  if(eco.npcQuests.date !== t){
+    eco.npcQuests = {date:t, st:{}, prog:{}};
+    saveEco();
+  }
+}
+function npcState(id){ ensureNPCDay(); return eco.npcQuests.st[id] || 'offer'; }
+function setNPCState(id, st){ ensureNPCDay(); eco.npcQuests.st[id] = st; saveEco(); refreshNPCMarkers(); }
+
+var batikTexCache = null;
+function getBatikTex(){
+  if(batikTexCache) return batikTexCache;
+  var cv = document.createElement('canvas'); cv.width = cv.height = 128;
+  var g = cv.getContext('2d');
+  g.fillStyle = '#92400e'; g.fillRect(0, 0, 128, 128);
+  g.fillStyle = '#fbbf24';
+  for(var i = 0; i < 26; i++){ g.beginPath(); g.arc(Math.random() * 128, Math.random() * 128, 2.5 + Math.random() * 3, 0, Math.PI * 2); g.fill(); }
+  g.strokeStyle = '#fde68a'; g.lineWidth = 2;
+  for(var j = 0; j < 8; j++){ g.beginPath(); g.arc((j % 4) * 32 + 16, Math.floor(j / 4) * 64 + 32, 9, 0, Math.PI * 2); g.stroke(); }
+  var t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace;
+  batikTexCache = t; return t;
+}
+
+/* Pembangun figur NPC: mirip bahasa bentuk karakter pemain (CapsuleGeometry
+   torso, kepala bundar berwajah), dengan variasi rambut & atribut peran. */
+function makeNPCFigure(o){
+  var g = new THREE.Group();
+  var S = o.kid ? 0.78 : 1.05;
+  function sph(r, c, x, y, z, parent){
+    var m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 11), mat(c));
+    m.position.set(x, y, z); m.castShadow = true; (parent || g).add(m); return m;
+  }
+  function bx(w, h, d, c, x, y, z, parent){
+    var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(c));
+    m.position.set(x, y, z); m.castShadow = true; (parent || g).add(m); return m;
+  }
+  function cy(rt, rb, h, c, x, y, z, parent, seg){
+    var m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 12), mat(c));
+    m.position.set(x, y, z); m.castShadow = true; (parent || g).add(m); return m;
+  }
+  var hipY = 0.84 * S;
+  function leg(side){
+    var lg = new THREE.Group(); lg.position.set(0.125 * S * side, hipY, 0); g.add(lg);
+    if(o.shorts){
+      cy(0.085 * S, 0.09 * S, 0.3 * S, o.bottom, 0, -0.15 * S, 0, lg);
+      cy(0.058 * S, 0.064 * S, 0.36 * S, o.skin, 0, -0.47 * S, 0, lg);
+    } else {
+      cy(0.075 * S, 0.09 * S, hipY - 0.1 * S, o.bottom, 0, -(hipY - 0.1 * S) / 2, 0, lg);
+    }
+    bx(0.13 * S, 0.07 * S, 0.25 * S, 0x1f2937, 0, -hipY + 0.035 * S, 0.045 * S, lg);
+    return lg;
+  }
+  var legL = leg(-1), legR = leg(1);
+  var torsoMat = o.batik ? new THREE.MeshLambertMaterial({map:getBatikTex()}) : mat(o.shirt);
+  var torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.27 * S, 0.3 * S, 6, 14), torsoMat);
+  torso.position.y = 1.17 * S; torso.scale.set(1.06, 1, 0.78); torso.castShadow = true; g.add(torso);
+  if(o.belt){ var bt = cy(0.285 * S, 0.285 * S, 0.09 * S, 0x14100c, 0, hipY + 0.07 * S, 0, g); bt.scale.set(1.06, 1, 0.8); bx(0.1 * S, 0.07 * S, 0.02 * S, 0xf5c542, 0, hipY + 0.07 * S, 0.235 * S, g); }
+  function arm(side){
+    var ag = new THREE.Group(); ag.position.set(0.335 * S * side, 1.42 * S, 0); ag.rotation.z = 0.08 * side; g.add(ag);
+    var sl = new THREE.Mesh(new THREE.CapsuleGeometry(0.085 * S, 0.16 * S, 5, 12), mat(o.shirt));
+    sl.position.y = -0.16 * S; sl.castShadow = true; ag.add(sl);
+    var hd = sph(0.075 * S, o.skin, 0, -0.42 * S, 0, ag); hd.scale.set(0.85, 1.15, 0.9);
+    return ag;
+  }
+  var armL = arm(-1), armR = arm(1);
+  var headG = new THREE.Group(); headG.position.y = 1.66 * S; g.add(headG);
+  sph(0.21 * S, o.skin, 0, 0, 0, headG);
+  sph(0.024 * S, 0x1a1a1a, -0.075 * S, 0.02 * S, 0.185 * S, headG);
+  sph(0.024 * S, 0x1a1a1a, 0.075 * S, 0.02 * S, 0.185 * S, headG);
+  var smile = new THREE.Mesh(new THREE.TorusGeometry(0.07 * S, 0.013 * S, 6, 14, Math.PI), mat(0x7c2d12));
+  smile.position.set(0, -0.045 * S, 0.185 * S); smile.rotation.z = Math.PI; headG.add(smile);
+  var bl1 = sph(0.035 * S, 0xf9a8a8, -0.12 * S, -0.03 * S, 0.165 * S, headG); bl1.scale.z = 0.4;
+  var bl2 = sph(0.035 * S, 0xf9a8a8, 0.12 * S, -0.03 * S, 0.165 * S, headG); bl2.scale.z = 0.4;
+  var HC = o.hairColor || 0x2b211b;
+  function hairCap(r, frac, col){
+    var m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10, 0, Math.PI * 2, 0, Math.PI * frac), mat(col));
+    m.position.y = 0.02 * S; m.castShadow = true; headG.add(m); return m;
+  }
+  if(o.hair === 'peci'){
+    cy(0.215 * S, 0.225 * S, 0.14 * S, 0x17130f, 0, 0.16 * S, 0, headG);
+    sph(0.032 * S, 0xf5c542, 0, 0.16 * S, 0.215 * S, headG);
+  } else if(o.hair === 'policap'){
+    cy(0.22 * S, 0.23 * S, 0.11 * S, 0x3f3a33, 0, 0.17 * S, 0, headG);
+    bx(0.34 * S, 0.04 * S, 0.2 * S, 0x2a2622, 0, 0.11 * S, 0.24 * S, headG);
+    sph(0.03 * S, 0xf5c542, 0, 0.17 * S, 0.225 * S, headG);
+  } else if(o.hair === 'cap'){
+    cy(0.22 * S, 0.23 * S, 0.1 * S, o.capCol || 0x16a34a, 0, 0.17 * S, 0, headG);
+    bx(0.34 * S, 0.04 * S, 0.2 * S, o.capCol || 0x16a34a, 0, 0.12 * S, 0.24 * S, headG);
+  } else if(o.hair === 'hijab'){
+    hairCap(0.238 * S, 0.6, o.hijabCol || 0x0ea5e9);
+    bx(0.44 * S, 0.44 * S, 0.12 * S, o.hijabCol || 0x0ea5e9, 0, -0.16 * S, -0.13 * S, headG);
+  } else if(o.hair === 'pigtails'){
+    hairCap(0.222 * S, 0.55, HC);
+    sph(0.09 * S, HC, -0.21 * S, -0.06 * S, 0, headG);
+    sph(0.09 * S, HC, 0.21 * S, -0.06 * S, 0, headG);
+    sph(0.032 * S, 0xef4444, -0.2 * S, 0.05 * S, 0, headG);
+    sph(0.032 * S, 0xef4444, 0.2 * S, 0.05 * S, 0, headG);
+  } else if(o.hair === 'long'){
+    hairCap(0.222 * S, 0.58, HC);
+    bx(0.37 * S, 0.52 * S, 0.1 * S, HC, 0, -0.2 * S, -0.15 * S, headG);
+  } else if(o.hair === 'spiky'){
+    hairCap(0.222 * S, 0.52, HC);
+    [[0, 0.3, 0], [-0.09, 0.26, 0.05], [0.09, 0.26, -0.04]].forEach(function(p){
+      var cone = new THREE.Mesh(new THREE.ConeGeometry(0.06 * S, 0.17 * S, 6), mat(HC));
+      cone.position.set(p[0] * S, p[1] * S, p[2] * S); headG.add(cone);
+    });
+  } else {
+    hairCap(0.218 * S, 0.5, HC); // buzz / potongan pendek
+  }
+  if(o.tie){
+    bx(0.09 * S, 0.08 * S, 0.02 * S, 0xdc2626, 0, 1.4 * S, 0.222 * S, g);
+    bx(0.07 * S, 0.3 * S, 0.018 * S, 0xdc2626, 0, 1.18 * S, 0.228 * S, g);
+  }
+  if(o.tag){
+    bx(0.17 * S, 0.05 * S, 0.012 * S, 0xffffff, -0.13 * S, 1.33 * S, 0.222 * S, g);
+    sph(0.016 * S, 0xf5c542, -0.13 * S, 1.42 * S, 0.222 * S, g);
+  }
+  if(o.badge){
+    bx(0.07 * S, 0.09 * S, 0.015 * S, 0xf5c542, 0.14 * S, 1.31 * S, 0.222 * S, g);
+    bx(0.15 * S, 0.03 * S, 0.1 * S, 0xf5c542, -0.335 * S, 1.52 * S, 0, g);
+    bx(0.15 * S, 0.03 * S, 0.1 * S, 0xf5c542, 0.335 * S, 1.52 * S, 0, g);
+  }
+  if(o.hasduk){
+    var rk = new THREE.Mesh(new THREE.TorusGeometry(0.155 * S, 0.045 * S, 8, 18), mat(0xd92b25));
+    rk.position.y = 1.47 * S; rk.rotation.x = Math.PI / 2; g.add(rk);
+    bx(0.13 * S, 0.3 * S, 0.015 * S, 0xd92b25, 0, 1.24 * S, 0.228 * S, g);
+  }
+  if(o.pack) bx(0.36 * S, 0.44 * S, 0.17 * S, o.pack, 0, 1.2 * S, -0.27 * S, g);
+  return {g:g, legL:legL, legR:legR, armL:armL, armR:armR, headG:headG, S:S};
+}
+
+/* Penanda quest melayang di atas kepala NPC: ! = ada quest, ? = sedang berjalan, ★ = siap klaim */
+function makeQuestMarker(){
+  var cv = document.createElement('canvas'); cv.width = cv.height = 96;
+  var tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+  var sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false}));
+  sp.scale.set(0.8, 0.8, 1); sp.renderOrder = 6;
+  sp.userData.cv = cv; sp.userData.tex = tex;
+  drawQuestMarker(sp, '!');
+  return sp;
+}
+function drawQuestMarker(sp, sym){
+  var g = sp.userData.cv.getContext('2d');
+  g.clearRect(0, 0, 96, 96);
+  g.beginPath(); g.arc(48, 48, 39, 0, Math.PI * 2);
+  g.fillStyle = sym === '★' ? '#16a34a' : (sym === '?' ? '#0284c7' : '#f59e0b'); g.fill();
+  g.lineWidth = 6; g.strokeStyle = '#ffffff'; g.stroke();
+  g.fillStyle = '#ffffff'; g.font = '700 50px Fredoka, Arial, sans-serif';
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(sym, 48, 52);
+  sp.userData.tex.needsUpdate = true;
+}
+
+var NPC_QUEST_DEFS = {
+  kepsek:{questName:'Kuis Kepala Sekolah', reward:120, desc:'Jawab pertanyaan Bapak dengan benar.', quiz:{q:'Ibu kota Kabupaten Banyumas adalah…', opts:['Purwokerto','Cilacap','Purbalingga'], ans:0}, doneText:'Bagus! Kamu anak yang cerdas dan rajin. Pertahankan semangat belajarmu, ya!'},
+  guru:{questName:'Kuis Matematika Bu Guru', reward:80, desc:'Jawab soal perkalian Ibu dengan benar.', quiz:{q:'7 × 8 = …', opts:['54','56','48'], ans:1}, doneText:'Pintar! Matematika memang seru kalau rajin berlatih. Besok Ibu beri soal baru lagi.'},
+  polisi:{questName:'Patroli Jalan Raya', reward:150, desc:'Kunjungi 3 titik patroli berurutan: Gerbang Sekolah → Lapangan Gerduren → Kantor Polsek. Berdirilah di lingkaran emas pada tiap titik.', doneText:'Patroli yang rapi! Jalan raya aman berkat anak-anak yang tertib dan patuh lampu lalu lintas.'},
+  lurah:{questName:'Menyapa Warga Desa', reward:130, desc:'Sapa 3 warga desa: dekati Bu Tini, Pak Darto, dan Bu Wati lalu bicara dengan mereka.', doneText:'Terima kasih sudah menyapa warga. Desa kita rukun karena warganya saling menyapa!'},
+  warga:{questName:'Antar Surat ke Rumah Warga', reward:90, desc:'Antarkan surat ini ke Rumah Warga (rumah kuning di barat desa) — cukup dekati rumahnya sampai surat terkirim, lalu kembali melapor ke warga mana pun.', doneText:'Suratnya sudah sampai dengan selamat. Terima kasih banyak, Nak!'},
+  siswa:{questName:'Bola yang Hilang', reward:70, desc:'Bola oranye temanmu hilang di sekitar Taman Desa. Temukan bola bercahaya itu (dekati untuk mengambilnya), lalu kembali ke siswa mana pun.', doneText:'Hore, bolanya ketemu! Ayo kapan-kapan main bola bareng lagi di Lapangan!'}
+};
+var NPC_CHECKPOINTS = [{x:0, z:19, n:'Gerbang Sekolah'}, {x:-66, z:0, n:'Lapangan Gerduren'}, {x:65, z:26, n:'Kantor Polsek'}];
+var NPCS = [];
+function addNPC(inst){
+  var f = makeNPCFigure(inst.fig);
+  f.g.position.set(inst.x, 0, inst.z);
+  f.g.rotation.y = inst.ry || 0;
+  scene.add(f.g);
+  inst.fig3 = f;
+  inst.home = {x:inst.x, z:inst.z};
+  inst.tx = inst.x; inst.tz = inst.z;
+  inst.wait = Math.random() * 3;
+  inst.ph = Math.random() * 10;
+  inst.marker = makeQuestMarker();
+  inst.marker.position.set(inst.x, 2.5 * f.S, inst.z);
+  scene.add(inst.marker);
+  addInteractable(inst.x, inst.z, 3.4, inst.name, null, {npc:inst.key});
+  inst.it = interactables[interactables.length - 1];
+  NPCS.push(inst);
+  return inst;
+}
+function refreshNPCMarkers(){
+  for(var i = 0; i < NPCS.length; i++){
+    var n = NPCS[i], st = npcState(n.def);
+    n.marker.visible = st !== 'done';
+    drawQuestMarker(n.marker, st === 'ready' ? '★' : (st === 'active' ? '?' : '!'));
+  }
+}
+addNPC({key:'kepsek', def:'kepsek', name:'Pak Yudhy', role:'Kepala Sekolah SDN 1 Gerduren', color:'#334155', x:28, z:-0.5, ry:-1.1,
+  greet:'Selamat datang di SDN 1 Gerduren. Saya Kepala Sekolah di sini — sekolah kita harus bersih, tertib, dan penuh semangat belajar.',
+  fig:{skin:0xb07a45, hair:'peci', shirt:0x334155, bottom:0x1f2937, tie:true, tag:true}});
+addNPC({key:'guru', def:'guru', name:'Bu Guru Sari', role:'Guru SDN 1 Gerduren', color:'#0284c7', x:-28, z:-0.5, ry:1.1,
+  greet:'Halo, Nak! Ibu guru di SDN 1 Gerduren. Sudah sarapan? Jangan lupa jaga kesehatan dan rajin belajar, ya.',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x0ea5e9, shirt:0xc9a26b, bottom:0x4a3220, tag:true}});
+addNPC({key:'polisi', def:'polisi', name:'Pak Polisi Budi', role:'Polisi — Kantor Polsek Gerduren', color:'#1e40af', x:61.5, z:23.5, ry:2.7,
+  greet:'Selamat pagi! Saya petugas Polsek Gerduren. Di jalan raya semua harus tertib: lampu MERAH berarti BERHENTI, lampu HIJAU berarti jalan. Kendaraan warga di desa kita patuh aturan itu!',
+  fig:{skin:0xd9a066, hair:'policap', shirt:0x77685a, bottom:0x3f3a33, badge:true, belt:true}});
+addNPC({key:'lurah', def:'lurah', name:'Pak Lurah', role:'Lurah Desa Gerduren — Balai Desa', color:'#92400e', x:-76, z:-28.5, ry:0.7,
+  greet:'Sugeng rawuh di Desa Gerduren! Saya Lurah di sini. Desa kita ramai dan rukun — warganya saling menyapa setiap hari.',
+  fig:{skin:0xb07a45, hair:'peci', shirt:0x92400e, batik:true, bottom:0x292524, tag:true}});
+addNPC({key:'warga1', def:'warga', name:'Bu Tini', role:'Warga Desa — Taman Desa', color:'#db2777', x:-50, z:27, ry:0.6, wander:3,
+  greet:'Eh, ada anak sekolah! Bu Tini lagi santai di Taman Desa. Taman kita makin ramai dan asri, ya.',
+  fig:{skin:0xf2c79b, hair:'long', hairColor:0x3b2416, shirt:0xdb2777, bottom:0x7c2d12}});
+addNPC({key:'warga2', def:'warga', name:'Pak Darto', role:'Warga Desa Gerduren', color:'#16a34a', x:-23.5, z:36.5, ry:-0.7, wander:3,
+  greet:'Halo, Nak! Pak Darto baru pulang dari sawah. Cuaca cerah begini enak buat jalan-jalan keliling desa.',
+  fig:{skin:0x8a5a2e, hair:'cap', capCol:0x16a34a, shirt:0x65a30d, bottom:0x44403c}});
+addNPC({key:'warga3', def:'warga', name:'Bu Wati', role:'Warga Desa Gerduren', color:'#7c3aed', x:50, z:56.5, ry:2.9, wander:2.5,
+  greet:'Halo! Bu Wati habis belanja di warung. Nanti kalau lapar, jajan saja di gerobak bakso keliling — enak dan murah!',
+  fig:{skin:0xd9a066, hair:'hijab', hijabCol:0x7c3aed, shirt:0xa78bfa, bottom:0x4c1d95}});
+addNPC({key:'siswa1', def:'siswa', name:'Raka', role:'Siswa SDN 1 Gerduren', color:'#dc2626', x:-8, z:7, ry:0.4, wander:5, speed:0.95,
+  greet:'Hai! Aku Raka, siswa SDN 1 Gerduren. Aku suka main di halaman sekolah — luas dan banyak temannya!',
+  fig:{kid:true, skin:0xd9a066, hair:'spiky', shirt:0xffffff, bottom:0xd92b25, shorts:true}});
+addNPC({key:'siswa2', def:'siswa', name:'Sinta', role:'Siswa SDN 1 Gerduren', color:'#16a34a', x:10, z:-9, ry:2.6, wander:5, speed:0.9,
+  greet:'Hai! Aku Sinta. Aku paling suka Pramuka Siaga — hasdukku selalu rapi, kan?',
+  fig:{kid:true, skin:0xf2c79b, hair:'hijab', hijabCol:0xfef3c7, shirt:0xc9a26b, bottom:0x4a3220, hasduk:true}});
+addNPC({key:'siswa3', def:'siswa', name:'Bimo', role:'Siswa SDN 1 Gerduren', color:'#2563eb', x:-58, z:6, ry:1.4, wander:6, speed:1.0,
+  greet:'Hai! Aku Bimo. Aku suka main bola di Lapangan Gerduren. Tendanganku kencang, lho!',
+  fig:{kid:true, skin:0xb07a45, hair:'buzz', shirt:0x2f7fe0, bottom:0x25355e, shorts:true, pack:0xf59e0b}});
+/* Pedagang keliling versi figur baru (menggantikan figur lama di gerobak mangkal) */
+(function(){
+  var f = makeNPCFigure({skin:0xc98a4b, hair:'cap', capCol:0xf59e0b, shirt:0xf59e0b, bottom:0x44403c});
+  f.g.position.set(9.4, 0, 47.6); f.g.rotation.y = Math.PI;
+  scene.add(f.g);
+})();
+
+/* Penanda titik patroli (quest Polisi) & bola hilang (quest Siswa) di dunia */
+var patrolRing = new THREE.Mesh(new THREE.RingGeometry(1.7, 2.15, 26), new THREE.MeshBasicMaterial({color:0xf59e0b, side:THREE.DoubleSide, transparent:true, opacity:0.9}));
+patrolRing.rotation.x = -Math.PI / 2; patrolRing.position.y = 0.07; patrolRing.visible = false; scene.add(patrolRing);
+var lostBall = new THREE.Group(); lostBall.position.set(-47, 0, 33.5); lostBall.visible = false; scene.add(lostBall);
+(function(){
+  var b = new THREE.Mesh(new THREE.SphereGeometry(0.34, 12, 10), mat(0xf97316)); b.position.y = 0.36; b.castShadow = true; lostBall.add(b);
+  var r = new THREE.Mesh(new THREE.RingGeometry(0.55, 0.75, 22), new THREE.MeshBasicMaterial({color:0xfacc15, side:THREE.DoubleSide, transparent:true, opacity:0.9}));
+  r.rotation.x = -Math.PI / 2; r.position.y = 0.06; lostBall.add(r);
+  var lb = makeLabel('BOLA HILANG', 0.55); lb.position.set(0, 1.5, 0); lostBall.add(lb);
+})();
+
+function npcInitials(name){
+  var clean = name.replace(/^(Pak|Bu)\s+/, '');
+  var parts = clean.split(/\s+/);
+  var s = parts[0].charAt(0) + (parts.length > 1 ? parts[1].charAt(0) : '');
+  return s.toUpperCase();
+}
+function closeNPCDialog(){ npcOpen = false; curNPC = null; npcOverlay.classList.remove('on'); }
+document.getElementById('npcClose').addEventListener('click', function(){ AudioSys.sfx('click'); closeNPCDialog(); });
+npcOverlay.addEventListener('click', function(e){ if(e.target === npcOverlay) closeNPCDialog(); });
+function openNPCDialog(key){
+  var n = null;
+  for(var i = 0; i < NPCS.length; i++) if(NPCS[i].key === key) n = NPCS[i];
+  if(!n) return;
+  curNPC = n; npcOpen = true; npcOverlay.classList.add('on');
+  // Quest Lurah "Menyapa Warga": bicara dengan warga saat quest berjalan = menyapa
+  if(n.def === 'warga' && npcState('lurah') === 'active'){
+    ensureNPCDay();
+    var pr = eco.npcQuests.prog.lurah || (eco.npcQuests.prog.lurah = {talked:[]});
+    if(!pr.talked) pr.talked = [];
+    if(pr.talked.indexOf(n.key) < 0){
+      pr.talked.push(n.key); saveEco();
+      AudioSys.sfx('coin');
+      if(pr.talked.length >= 3){
+        setNPCState('lurah', 'ready');
+        showToast('Kamu sudah menyapa 3 warga! Kembali ke Pak Lurah di Balai Desa untuk mengambil hadiah 130 Kredit.', 5000);
+      } else {
+        showToast('Kamu menyapa ' + n.name + ' (' + pr.talked.length + ' dari 3 warga) — sapa warga lainnya juga!', 3000);
+      }
+    }
+  }
+  renderNPCDialog();
+  AudioSys.sfx('pop');
+}
+function renderNPCDialog(){
+  var n = curNPC; if(!n) return;
+  var def = NPC_QUEST_DEFS[n.def], st = npcState(n.def);
+  npcAva.textContent = npcInitials(n.name);
+  npcAva.style.background = n.color;
+  npcName.textContent = n.name;
+  npcRole.textContent = n.role;
+  npcText.textContent = n.greet;
+  npcQuestBox.style.display = 'none';
+  npcOpts.innerHTML = '';
+  function addOpt(label, cls, fn){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'npc-opt' + (cls ? ' ' + cls : '');
+    b.textContent = label;
+    b.addEventListener('click', fn);
+    npcOpts.appendChild(b);
+  }
+  if(st === 'done'){
+    npcText.textContent = def.doneText + ' Quest dariku untuk hari ini sudah selesai — kembali lagi besok, ya!';
+    addOpt('Sama-sama! (Tutup)', 'alt', closeNPCDialog);
+    return;
+  }
+  if(st === 'ready'){
+    npcQuestBox.style.display = 'block';
+    npcQuestBox.innerHTML = 'Quest <b>"' + def.questName + '"</b> sudah kamu selesaikan! Ambil hadiahmu: <b>' + def.reward + ' Kredit</b>.';
+    addOpt('Klaim Hadiah +' + def.reward + ' Kredit', 'gold', function(){
+      addKredit(def.reward);
+      AudioSys.sfx('win');
+      setNPCState(n.def, 'done');
+      showToast('Quest "' + def.questName + '" selesai! +' + def.reward + ' Kredit dari ' + n.name + '.', 4400);
+      renderNPCDialog();
+    });
+    addOpt('Nanti Saja', 'alt', closeNPCDialog);
+    return;
+  }
+  if(st === 'active'){
+    npcQuestBox.style.display = 'block';
+    var progTxt = def.desc;
+    if(n.def === 'polisi'){
+      var pr = eco.npcQuests.prog.polisi || {step:0};
+      progTxt += ' Progres: menuju titik ' + Math.min((pr.step || 0) + 1, 3) + ' dari 3 — ' + NPC_CHECKPOINTS[Math.min(pr.step || 0, 2)].n + ' (ikuti lingkaran emas).';
+    }
+    if(n.def === 'lurah'){
+      var pr2 = eco.npcQuests.prog.lurah || {talked:[]};
+      progTxt += ' Progres: sudah menyapa ' + ((pr2.talked || []).length) + ' dari 3 warga.';
+    }
+    npcQuestBox.innerHTML = 'Quest <b>"' + def.questName + '"</b> sedang berjalan. ' + progTxt;
+    if(def.quiz){
+      npcQuestBox.innerHTML += '<br><br><b>Soalnya:</b> ' + def.quiz.q;
+      def.quiz.opts.forEach(function(op, ix){
+        addOpt(op, 'alt', function(){
+          if(ix === def.quiz.ans){
+            setNPCState(n.def, 'ready');
+            AudioSys.sfx('correct');
+            showToast('Jawaban BENAR! Bicara lagi untuk mengambil hadiahmu.', 3000);
+            renderNPCDialog();
+          } else {
+            AudioSys.sfx('wrong');
+            showToast('Belum tepat — pikirkan lagi, lalu jawab lagi.', 2600);
+          }
+        });
+      });
+    }
+    addOpt('Tutup', 'alt', closeNPCDialog);
+    return;
+  }
+  npcQuestBox.style.display = 'block';
+  npcQuestBox.innerHTML = 'Quest <b>"' + def.questName + '"</b> — ' + def.desc + '<br>Hadiah: <b>' + def.reward + ' Kredit</b>.';
+  addOpt('Ambil Quest', '', function(){
+    ensureNPCDay();
+    if(n.def === 'polisi') eco.npcQuests.prog.polisi = {step:0};
+    if(n.def === 'lurah') eco.npcQuests.prog.lurah = {talked:[]};
+    if(n.def === 'warga') eco.npcQuests.prog.warga = {delivered:false};
+    if(n.def === 'siswa') eco.npcQuests.prog.siswa = {got:false};
+    setNPCState(n.def, 'active');
+    AudioSys.sfx('pop');
+    showToast('Quest dimulai: "' + def.questName + '"! ' + def.desc, 5600);
+    renderNPCDialog();
+  });
+  addOpt('Nanti Saja', 'alt', closeNPCDialog);
+}
+/* Baris-baris quest NPC di panel Quest Harian */
+function renderNPCQuestRows(container){
+  var head = document.createElement('div');
+  head.className = 'npc-sect';
+  head.textContent = 'Quest dari Warga & Tokoh Desa (NPC)';
+  container.appendChild(head);
+  ensureNPCDay();
+  var order = ['kepsek','guru','polisi','lurah','warga','siswa'];
+  var names = {kepsek:'Pak Yudhy — Kepala Sekolah', guru:'Bu Guru Sari', polisi:'Pak Polisi Budi', lurah:'Pak Lurah — Balai Desa', warga:'Warga Desa (Bu Tini / Pak Darto / Bu Wati)', siswa:'Siswa SDN 1 Gerduren (Raka / Sinta / Bimo)'};
+  var cols = {kepsek:'#334155', guru:'#0284c7', polisi:'#1e40af', lurah:'#92400e', warga:'#16a34a', siswa:'#dc2626'};
+  var icons = {kepsek:'tanam', guru:'tanam', polisi:'pancing', lurah:'pakan', warga:'pakan', siswa:'bola'};
+  order.forEach(function(id){
+    var def = NPC_QUEST_DEFS[id], st = npcState(id);
+    var row = document.createElement('div');
+    row.className = 'quest-row' + (st === 'done' ? ' done' : '');
+    var stat = st === 'done' ? 'Selesai ✓' : (st === 'ready' ? 'Siap Klaim!' : (st === 'active' ? 'Berjalan…' : 'Belum Diambil'));
+    row.innerHTML = '<span class="q-ic" style="background:' + cols[id] + ';">' + QUEST_ICONS[icons[id]] + '</span>' +
+      '<span class="q-meta"><b>' + def.questName + '</b><span>Dari ' + names[id] + ' — dekati tokohnya (bertanda ! di atas kepala) lalu tekan Aksi untuk bicara.</span>' +
+      '<span>Hadiah: <b>' + def.reward + ' Kredit</b> • 1 quest per tokoh setiap hari</span></span>' +
+      '<span class="q-state">' + stat + '</span>';
+    container.appendChild(row);
+  });
+}
+
+/* Gerakan NPC (jalan santai di sekitar rumahnya + ayunan lengan/kaki + kepala
+   menoleh) dan pemeriksaan tujuan quest yang berada di dunia 3D. */
+var npcT = 0;
+function updateNPCWorld(dt){
+  npcT += dt;
+  for(var i = 0; i < NPCS.length; i++){
+    var n = NPCS[i], f = n.fig3, p = f.g.position, moving = false;
+    if(n.wander){
+      var dx = n.tx - p.x, dz = n.tz - p.z, d = Math.hypot(dx, dz);
+      if(n.wait > 0){ n.wait -= dt; }
+      else if(d < 0.3){
+        n.wait = 1.5 + Math.random() * 3;
+        var a = Math.random() * Math.PI * 2, r = Math.random() * n.wander;
+        n.tx = n.home.x + Math.cos(a) * r; n.tz = n.home.z + Math.sin(a) * r;
+      } else {
+        moving = true;
+        var sp = n.speed || 0.85;
+        f.g.rotation.y = Math.atan2(dx, dz);
+        p.x += Math.sin(f.g.rotation.y) * sp * dt;
+        p.z += Math.cos(f.g.rotation.y) * sp * dt;
+      }
+    }
+    var sw = moving ? Math.sin(npcT * 8 + n.ph) * 0.55 : Math.sin(npcT * 1.7 + n.ph) * 0.05;
+    f.legL.rotation.x = sw; f.legR.rotation.x = -sw;
+    f.armL.rotation.x = -sw * 0.8; f.armR.rotation.x = sw * 0.8;
+    f.g.position.y = moving ? Math.abs(Math.sin(npcT * 8 + n.ph)) * 0.04 : 0;
+    f.headG.rotation.y = Math.sin(npcT * 0.6 + n.ph) * 0.3;
+    n.marker.position.set(p.x, 2.5 * f.S + Math.sin(npcT * 2.4 + n.ph) * 0.08, p.z);
+    if(n.it){ n.it.x = p.x; n.it.z = p.z; }
+  }
+  if(movingCartIt && movingCartGrp){ movingCartIt.x = movingCartGrp.position.x; movingCartIt.z = movingCartGrp.position.z; }
+  // denyut tanda khusus Rumah Kamu (lingkaran emas + kibaran bendera)
+  if(homeMarker && homeMarker.visible && homeMarker.userData.parts){
+    var hp = homeMarker.userData.parts, hs = 1 + Math.sin(npcT * 2.2) * 0.045;
+    hp.ring.scale.set(hs, hs, 1);
+    hp.flagTop.rotation.y = Math.sin(npcT * 3.1) * 0.16;
+    hp.flagBot.rotation.y = Math.sin(npcT * 3.1 + 0.4) * 0.16;
+  }
+  if(!playing) return;
+  var pp = player.position;
+  // Quest Polisi: titik patroli berurutan
+  if(npcState('polisi') === 'active'){
+    ensureNPCDay();
+    var pr = eco.npcQuests.prog.polisi || (eco.npcQuests.prog.polisi = {step:0});
+    var cp = NPC_CHECKPOINTS[Math.min(pr.step || 0, NPC_CHECKPOINTS.length - 1)];
+    patrolRing.visible = true;
+    patrolRing.position.set(cp.x, 0.07, cp.z);
+    if(Math.hypot(pp.x - cp.x, pp.z - cp.z) < 3.2){
+      pr.step = (pr.step || 0) + 1; saveEco();
+      if(pr.step >= NPC_CHECKPOINTS.length){
+        patrolRing.visible = false;
+        setNPCState('polisi', 'ready');
+        AudioSys.sfx('win');
+        showToast('Patroli selesai! Kembali ke Pak Polisi Budi di Polsek untuk mengambil hadiah 150 Kredit.', 5200);
+      } else {
+        AudioSys.sfx('coin');
+        showToast('Titik patroli ' + pr.step + ' dari 3 tercapai! Lanjut ke: ' + NPC_CHECKPOINTS[pr.step].n + ' (ikuti lingkaran emas).', 3800);
+      }
+    }
+  } else patrolRing.visible = false;
+  // Quest Warga: antar surat ke Rumah Warga (-26, 42)
+  if(npcState('warga') === 'active'){
+    ensureNPCDay();
+    var pw = eco.npcQuests.prog.warga || (eco.npcQuests.prog.warga = {delivered:false});
+    if(!pw.delivered && Math.hypot(pp.x - (-26), pp.z - 42) < 4.5){
+      pw.delivered = true; saveEco();
+      setNPCState('warga', 'ready');
+      AudioSys.sfx('win');
+      showToast('Surat terkirim ke Rumah Warga! Kembali ke warga mana pun untuk mengambil hadiah 90 Kredit.', 5000);
+    }
+  }
+  // Quest Siswa: temukan bola hilang di Taman Desa
+  var siswaActive = npcState('siswa') === 'active';
+  ensureNPCDay();
+  var ps = eco.npcQuests.prog.siswa || {got:false};
+  lostBall.visible = siswaActive && !ps.got;
+  if(lostBall.visible){
+    lostBall.rotation.y = npcT * 1.5;
+    if(Math.hypot(pp.x - lostBall.position.x, pp.z - lostBall.position.z) < 2){
+      eco.npcQuests.prog.siswa = {got:true}; saveEco();
+      lostBall.visible = false;
+      setNPCState('siswa', 'ready');
+      AudioSys.sfx('win');
+      showToast('Kamu menemukan bola yang hilang! Kembali ke siswa mana pun untuk mengambil hadiah 70 Kredit.', 5000);
+    }
+  }
+}
+ensureNPCDay();
+refreshNPCMarkers();
+
+/* --- Lingkungan makin ramai: hewan & tumbuhan tambahan + Pos Ronda --- */
+makeChicken(20, 58); makeChicken(-60, -20);
+makeDuck(30, 67.6);
+makeCat(-52, 28.5, 0.5);
+makeBird(0, 40, 26, 17, 0.1, 1.2);
+tree(92, 58, 1.1); tree(-96, 44, 1.0);
+palm(70, 86, 1); banana(-30, 84, 0.9);
+(function(){ // Pos Ronda dekat Balai Desa: tempat warga berjaga malam
+  [[-1.6,-1.2],[1.6,-1.2],[-1.6,1.2],[1.6,1.2]].forEach(function(p){ box(0.16, 2.4, 0.16, 0x7c4a21, -70 + p[0], 1.2, -22 + p[1], scene); });
+  box(4.4, 0.14, 3.6, 0x9e3d2c, -70, 2.5, -22, scene);
+  box(2.6, 0.12, 0.5, 0x8a5a2b, -70, 0.55, -22, scene, false);
+  box(0.5, 0.35, 0.5, 0x374151, -69, 0.85, -22.6, scene, false); // kentongan
+  postSign('Pos Ronda', -70, -19.6, 0, {w:2.4, bg:'#7c2d12', fg:'#fef3c7'});
+  addInteractable(-70, -22, 5.5, 'Pos Ronda');
+})();
 
 /* ================= WAHANA: BIS KELILING DESA & HELIKOPTER =================
    Selama wahana berjalan, updateTour (dipanggil dari animate) menggerakkan
@@ -8104,6 +8989,8 @@ function animate(){
     for(var ci=0; ci<clouds.length; ci++){ clouds[ci].position.x += dt*0.55; if(clouds[ci].position.x > 120) clouds[ci].position.x = -120; }
     // kehidupan desa tetap bergerak (hewan, kendaraan, pedagang, warga) — juga di balik layar mulai
     updateAmbients(dt);
+    updateNPCWorld(dt);
+    updateChase(dt);
 
     if(playing){
       /* --- HP berkurang 0,1 poin setiap detik; EP berkurang 0,0001 poin setiap
