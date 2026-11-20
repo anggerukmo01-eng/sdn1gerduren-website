@@ -309,6 +309,26 @@
   #gameCanvasWrap{display:none;margin-top:12px;}
   #gameCanvasWrap.on{display:block;}
   #gameCanvas{width:100%;aspect-ratio:36/50;display:block;background:#1e3a5f;border-radius:16px;touch-action:none;}
+  /* ---------- Permainan lapangan (tanam, pancing, bola, sampah, pakan) ---------- */
+  #actCanvasWrap{display:none;margin-top:12px;}
+  #actCanvasWrap.on{display:block;}
+  #actCanvas{width:100%;aspect-ratio:36/50;display:block;background:#14532d;border-radius:16px;touch-action:none;}
+  .act-bar{display:flex;gap:8px;margin-top:10px;}
+  .act-bar button{flex:1;border:none;border-radius:12px;padding:11px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;cursor:pointer;background:#0284c7;color:#fff;min-height:46px;}
+  .act-bar button.alt{background:#e2e8f0;color:#17324a;}
+  /* ---------- Dealer: beli rumah / mobil / motor (tunai atau kredit/cicilan) ---------- */
+  .dealer-row{display:flex;gap:11px;align-items:center;background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:11px;margin-top:10px;}
+  .dealer-row .d-ic{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;color:#fff;}
+  .dealer-row .d-ic svg{width:25px;height:25px;}
+  .dealer-row .d-meta{flex:1;min-width:0;}
+  .dealer-row .d-meta b{display:block;font-size:14.5px;color:#17324a;}
+  .dealer-row .d-meta span{display:block;font-size:12px;color:#64748b;font-weight:600;margin-top:1px;}
+  .dealer-row .d-btns{display:flex;flex-direction:column;gap:6px;flex:none;}
+  .dealer-row .d-btns button{border:none;border-radius:10px;padding:8px 11px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;background:#16a34a;color:#fff;min-height:40px;}
+  .dealer-row .d-btns button.cicil{background:#b45309;}
+  .dealer-row .d-btns button:disabled{background:#cbd5e1;color:#64748b;cursor:default;}
+  .dealer-row .d-prog{height:8px;background:#e2e8f0;border-radius:99px;margin-top:6px;overflow:hidden;}
+  .dealer-row .d-prog i{display:block;height:100%;background:#f59e0b;border-radius:99px;}
   .game-bar{display:flex;gap:8px;margin-top:10px;}
   .game-bar button{flex:1;height:46px;border-radius:12px;font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
   #gameAgainBtn{border:none;background:#0284c7;color:#fff;}
@@ -701,10 +721,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4z"/><path d="M9 4v14M15 6v14"/></svg>
         <span>Peta</span>
       </button>
-      <button id="arenaBtn" class="hud-mini" type="button" title="Arena permainan seru">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8h11a5 5 0 0 1 4.9 6l-.6 2.3a3 3 0 0 1-5.3 1.2L14.9 15h-5.8l-1.6 2.5a3 3 0 0 1-5.3-1.2L1.6 14A5 5 0 0 1 6.5 8z"/><path d="M7.5 11v3M6 12.5h3"/><circle cx="15.8" cy="11.6" r=".4" fill="currentColor"/><circle cx="17.8" cy="13.6" r=".4" fill="currentColor"/></svg>
-        <span>Arena</span>
-      </button>
       <button id="gmBtn" class="hud-mini" type="button" title="Login Admin / Game Master">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14.5" r="4.2"/><path d="M11.2 11.3 20 2.5M17 5.5l2.8 2.8M14.2 8.3l2.4 2.4"/></svg>
         <span>GM</span>
@@ -788,7 +804,7 @@
       <span class="lg-both">Buah → +HP &amp; +EP</span>
     </div>
     <div class="bag-grid" id="bagGrid"></div>
-    <p class="bag-note">HP berkurang <b>0,1 poin setiap detik</b> — isi lagi dengan <b>makan</b>. Kalau HP sampai habis, kamu akan <b>pingsan</b> dan bangun di <b>Ruang UKS</b> dengan HP pulih 50. EP berkurang sangat pelan, <b>0,0001 poin setiap detik</b> — isi lagi dengan <b>minum susu</b>; kalau EP sampai habis, gerakanmu jadi <b>melambat</b> sampai kamu minum susu lagi. Makanan &amp; minuman tambahan bisa dibeli di <b>Kantin</b> (dekati Kantin, tekan tombol Aksi), dan seragam serta perlengkapan di <b>Koperasi Sekolah</b>, memakai <b>Kredit</b> dari jawaban benar, Pos Pramuka, Arena, dan Uang Saku harian.</p>
+    <p class="bag-note">HP berkurang <b>0,1 poin setiap detik</b> — isi lagi dengan <b>makan</b>. Kalau HP sampai habis, kamu akan <b>pingsan</b> dan bangun di <b>Ruang UKS</b> dengan HP pulih 50. EP berkurang sangat pelan, <b>0,0001 poin setiap detik</b> — isi lagi dengan <b>minum susu</b>; kalau EP sampai habis, gerakanmu jadi <b>melambat</b> sampai kamu minum susu lagi. Makanan &amp; minuman tambahan bisa dibeli di <b>Kantin</b> (dekati Kantin, tekan tombol Aksi), dan seragam serta perlengkapan di <b>Koperasi Sekolah</b>, memakai <b>Kredit</b> dari jawaban benar, Pos Pramuka, permainan seru di desa, dan Uang Saku harian.</p>
   </div>
 </div>
 
@@ -829,8 +845,8 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="arenaTitle">
     <div class="sheet-head">
       <div>
-        <h2 class="sheet-title" id="arenaTitle">Arena Permainan</h2>
-        <p class="sheet-sub">Permainan seru berhadiah Kredit — versi solo melawan komputer (bermain bersama teman-teman menyusul nanti). Permainan yang masih tersegel hanya bisa dibuka oleh Admin / Game Master.</p>
+        <h2 class="sheet-title" id="arenaTitle">Permainan Kendaraan</h2>
+        <p class="sheet-sub">Balap, Motocross, dan Kejar-Kejaran sekarang dimainkan dari kendaraannya yang terparkir: mobil balap di tepi jalan, motor cross di tepi hutan, mobil polisi di depan Kantor Polsek. Yang masih tersegel hanya bisa dibuka Admin / Game Master.</p>
       </div>
       <button class="sheet-x" id="arenaClose" type="button" aria-label="Tutup arena">×</button>
     </div>
@@ -843,6 +859,44 @@
       </div>
     </div>
     <p class="sheet-note">Kredit hadiah masuk otomatis ke Kreditmu setiap permainan selesai. Selamat bermain!</p>
+  </div>
+</div>
+
+<!-- PERMAINAN LAPANGAN: tanam, pancing, bola, cari sampah, beri pakan -->
+<div id="actOverlay" class="sheet-ovl">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="actTitle">
+    <div class="sheet-head">
+      <div>
+        <h2 class="sheet-title" id="actTitle">Permainan Lapangan</h2>
+        <p class="sheet-sub" id="actSub">Ketuk layar untuk bermain. Selesaikan targetnya sebelum waktu habis untuk mendapat Kredit!</p>
+      </div>
+      <button class="sheet-x" id="actClose" type="button" aria-label="Tutup permainan">×</button>
+    </div>
+    <div id="actCanvasWrap">
+      <canvas id="actCanvas" width="360" height="500"></canvas>
+      <div class="act-bar">
+        <button id="actAgainBtn" type="button">Main Lagi</button>
+        <button id="actBackBtn" type="button" class="alt">Kembali</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEALER: BELI RUMAH, MOBIL & MOTOR (TUNAI / KREDIT CICILAN) -->
+<div id="dealerOverlay" class="sheet-ovl">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="dealerTitle">
+    <div class="sheet-head">
+      <div>
+        <h2 class="sheet-title" id="dealerTitle">Dealer Gerduren</h2>
+        <p class="sheet-sub">Beli <b>Rumah</b>, <b>Mobil</b>, dan <b>Motor</b> — bisa tunai, bisa <b>kredit (cicilan)</b> memakai Kredit permainanmu. Cicilan dibayar kapan saja dari panel ini; barang jadi milikmu setelah lunas.</p>
+      </div>
+      <button class="sheet-x" id="dealerClose" type="button" aria-label="Tutup dealer">×</button>
+    </div>
+    <div class="shop-kredit">
+      <span>Kredit kamu:</span><b><span id="dealerKredit">0</span></b><span>poin</span>
+    </div>
+    <div id="dealerList"></div>
+    <p class="sheet-note">Rumah yang kamu beli adalah rumah di tepi Jl. Sawah Glempang bertanda "Rumah Dijual" — setelah lunas, namanya berubah menjadi <b>Rumah Kamu</b>. Motor &amp; mobil yang lunas terparkir sebagai koleksimu di dealer.</p>
   </div>
 </div>
 
@@ -893,6 +947,15 @@
           <rect x="332" y="192" width="16" height="13"/><rect x="116" y="248" width="16" height="13"/>
         </g>
         <text x="220" y="352" font-size="13" font-weight="800" fill="rgba(255,255,255,.6)" text-anchor="middle" letter-spacing="3">DESA GERDUREN</text>
+        <rect x="414" y="0" width="12" height="380" fill="#4db8e8"/>
+        <text x="408" y="200" font-size="8" font-weight="800" fill="#075985" text-anchor="middle" transform="rotate(-90 408 200)">SUNGAI GERDUREN</text>
+        <g fill="#2f9e44"><circle cx="24" cy="36" r="11"/><circle cx="40" cy="26" r="9"/><circle cx="12" cy="24" r="8"/><circle cx="34" cy="46" r="8"/></g>
+        <text x="26" y="62" font-size="8" font-weight="800" fill="#14532d" text-anchor="middle">HUTAN</text>
+        <polygon points="380,34 396,6 412,34" fill="#94a3b8" stroke="#64748b"/>
+        <polygon points="390,18 396,6 402,18 399,15 396,19 393,15" fill="#ffffff"/>
+        <text x="396" y="44" font-size="8" font-weight="800" fill="#475569" text-anchor="middle">GUNUNG</text>
+        <ellipse cx="356" cy="330" rx="26" ry="10" fill="#65bd45"/>
+        <text x="356" y="333" font-size="8" font-weight="800" fill="#14532d" text-anchor="middle">BUKIT</text>
         <g id="mapMarkers"></g>
         <g id="mapPlayer">
           <polygon points="0,-9 6,7 0,3.5 -6,7" fill="#2563eb" stroke="#ffffff" stroke-width="1.6"/>
@@ -927,7 +990,7 @@
       <button class="gm-go" id="gmGo" type="button">Masuk Panel GM</button>
     </div>
     <div id="gmPanelView" style="display:none;">
-      <p class="sheet-sub" style="margin-top:10px;">Kamu masuk sebagai <b>Game Master</b> — penjaga utama dunia ini. Buka segel permainan agar siswa bisa memainkannya di Arena. Keadaan segel tersimpan, jadi tetap berlaku setelah panel ditutup.</p>
+      <p class="sheet-sub" style="margin-top:10px;">Kamu masuk sebagai <b>Game Master</b> — penjaga utama dunia ini. Buka segel permainan kendaraan (Balap, Motocross, Kejar-Kejaran) agar siswa bisa memainkannya dari kendaraan terparkirnya. Keadaan segel tersimpan, jadi tetap berlaku setelah panel ditutup.</p>
       <div id="gmSealList"></div>
       <div class="gm-give">
         <h4 class="gm-give-title">Kelola Pemain — Beri Kredit &amp; Item</h4>
@@ -1022,74 +1085,64 @@
 <!-- START -->
 <div id="startScreen">
   <div class="start-card">
-    <span class="badge">Fase 1 • Jelajah Dunia</span>
     <h1>Dunia <span>SDN 1 Gerduren</span></h1>
-    <p class="start-sub">Selamat datang, Murid Kelas 1! Jalan-jalan keliling sekolah, kebun, sawah, dan desa Gerduren di siang yang cerah.</p>
-    <div class="start-feats"><span>6 Ruang Kelas</span><span>Perpustakaan</span><span>Koperasi &amp; Kantin</span><span>9 Pos Pramuka (Kelas &amp; Lapangan)</span><span>Peta &amp; Penunjuk Arah</span><span>Ruang UKS</span><span>Sepeda Pinjaman</span><span>Arena Permainan</span><span>Masjid Al-Ikhlas</span><span>Lapangan Gerduren</span><span>Sawah &amp; Parit Irigasi</span><span>Hewan &amp; Pedagang Keliling</span></div>
+    <p class="start-sub">Jelajahi sekolah &amp; Desa Gerduren. Bermain, belajar, bersenang-senang!</p>
     <div class="step" id="stepName">
-      <label class="field" for="nameInput">1. Tulis namamu (boleh dikosongkan)</label>
+      <label class="field" for="nameInput">Nama kamu</label>
       <input id="nameInput" type="text" maxlength="20" placeholder="Murid Baru" autocomplete="off" enterkeyhint="go" />
       <button id="nextBtn" type="button">
-        Buat Karakter
+        MASUK
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
+      <p class="sheet-note" style="text-align:center;margin-top:7px;">Untuk siswa baru: tulis nama, tekan <b>MASUK</b>, lalu buat karaktermu.</p>
       <div class="start-or">ATAU</div>
       <div class="gm-login-box">
         <div class="gm-login-head">
           <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAFWAZADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8/wCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiijBoAKKMUoVj0BP0oASipBbzt92CQ/RTUgsb1ulrLz/smgCvRVltPvVGTbSflmmG0ugM/Zpf++TQBDRTzFKpw0Tj6qaaQR1GPrQAlFGCaKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKOtadjpLXEIuLhjHAemBy/0/xq7+7tcpaQBP8AbPLfnTsBlQ6beTAMISi/3pDtH61ZGkxIM3F/Gp/uxqWP9KfJLM7EvIc/WocdcnNPlAkFvpiclbiX6sFH8qRns0P7uxT/AIExaoWYd6YTmhoCcXZH3IYEHtGKU3tz1ExH+7xVbPFL/DQBM11cN96eQ/8AAqZ50hI/eN+dRnp+tC/eoAmllcYAc/gajE0o6SsPoaSXG4UygCcXVwo4nf6Zp32y4xzJuHoQDVaigCwLgNy9vbuPdAP5UubFvv2ZU+sbkfzqt2pcmgCx9l09/uTTxn/aUMP0ph07d/qrmFh75U1Hk04NzyaVgI5LG6iGTCxH95fmH6VX71oLM6EbJGU+xqXzRKf30aSfUc/nRYDKorUbT7eY/u5jC3o/Iz9etUri0ntX2zJjPQjkH6GkBBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAU6NDJKqKMliAPrTa0dDhEutwkjITMh/AZ/nimgOhnUIi26fdjUIMH0rMnPzMOmKtXMp80/NVF3J/PmrAgc/NkLULHAOc81NmomIoAj60HpSnGOKQ464qQEz8tJmlpMCgBO2KcD9PxpMUqjPFADpu30qMdKkk+8AOmKj+lABiiikoAWiiigAxQOKKKAHAknpUqZ4xUajipFJoAsxsQecVdiiW7gkt3+beMD2PY1nRn5+vfvWlZMRKCOo9KAOaIIOD1pKuapD5GrTIOhbcPoeap1IBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABW54fjwl1ckdFEY/Hk/wAqw66XTk8nw7G3Qyuz/wBP6VUdwIpiS55qsTnmppThzz+FVy2DiqAiJyeKYeuKkPFR55zSuAhOBTc5peopOopAHSjtxR6UHgigBDTo+Xppp8f36AFuOJPwqKprn/W1COKADtQOlHejvQAUZooHIoAM8UuMc9qB0znFfRHxE+C0Hgj9jXw34jGnRy69d3sN/q92y5kt4p4W8mAEfdRQYy3955BnoBXNiMXSw8oRqPWTsvU0p0pVE3FbK7PnoEYp6nPFex3H7M3j2z/Z+f4pzXmkeQkC3zaWsxa4FoygiXIGzODny87gOevFU7T4Uxa7+yXL8VdESdL7RNTls9WgZ96TwExlJoxj5WQyhWXkEYbjBzmsww8leM01fl+fYfsKnVdLnlinDYq7AxU9cVRX73arET/Piu1GQ3XU3PBcf3lKnHqP/wBdY9b+oqJdGLY5Rw30zx/hWBSe4BRRRSAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAHWutmQQ2kNvjHlxBfqcc/qTXN6fD9o1SCE9GcZ+nf9K6K8bfM7Zxk5qogZshyahJ+YcVI9Rscc1QEbcimUuaTPOKTAKD0oNHahANo60GkpALjNOjGHHFNp6ffFABP/AK41Eakmz5pzUZ60AFFFFABjNGB60UdqAFP3D9K/Us2+meLPB9vHe2VtfaHrGnRbrWRf3ckLxJheOQBxgjBUgegr8tBX11+zr+0V4e0zwPa+APiFfiy/s87dO1KUExmInPlOcEqVJO1umMDIxz8dxlgK+JoQrYe7dN3st/Velj2skxFOnUlCptJW1PefDfwo0rwr8C9Y+HtnqV0dP1Q3oguLoGRreGcbVBUY3bCM7vl3deM1NZ+A/DXg74G3/wANdFtpm0hdLvI55pyPMu5ZIW8yeTHC7mC4HZVVRmuji1CW8tbe5F1HdQTwRzQXELh0miZRsdSOCCMcivOfjX8VfD/gn4U6zC2q2c/iG6t5bCzsIplkmWRl8tndQcoqKSfmxyFAzmvhoYnFYqrGhSbblJOStrddX28z36tCjRp+0n0TS+fbufnfGcxqT1wKlQ4aoU4UAdBxUycmv2pHwxoiMzWM8XXdGcfUciuarqLAr5y7skdK526j8m8lix91yP1pMCGiiikAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAGtoEedRkmPSKMt+J4/rV65bLH3qPQ49mm3Mx/jdUH4cn+YonJzx371a2AqsQSc1E5GM1I1QvTAZ1pOM4pe1KKAEpOAcUvY0mRmgBMik7UppDUgGfSnpncODUfapIvvigAmOZD+tR96fJ981H3oAWgDn60UUAA60ppBSnpQACvbfhN8UPAlr4Kufh78XvDceteHgzT6fPHBuuLORjl1R1IdQx5yrcHOQQePEaUda5sVho4mHs5NrzTs0+6NaNV05cyV/U/UjQvC1za6H4h/tPW2efX2kmtzEPs50y1e3SK2giQFlUxIowVbkjIyc189/Fm1+FPgzwn4g1fxW2j+Jvirf6cmk3MWWaJLnywhvVgdQySFAsjSNwW+5jcTXzl4a+L3xJ8H6Dd6N4f8XajaWVzGIzHv3+UBjHlFsmM4GMrjiuV1TVtU13V5tU1rUrvUL6YgyXN1KZJHwMDLHk4AAHtXzGX8O4qhip1qtb3W7+6rN26Psu9t7HpYjH0p0owjDVLrsvQrjpUinDCo1p4zX2B5BoWr/OOtUNdiEers46SKH/of1FW4Gw4OabrkRa1trj0JjP8AMf1pvYDEoooqACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoopVUuwVRkk4FAHT2iGDQbZDwXBkPvk8fpiqcxBbgYrVvwI2SFD8saqg/AYrKkOcjGK0AruaiJ9akYGo269KAG9zSe9KQc009aAFPSmEc049KDipAaOtB60YHSl6jFADaliHzVHipYR8wFADJf9YaZ3qSUfvSOtR0AApc54o60ACgBabS9qD1oASilxRjigA7U4U0U7pQA4HmpAfcVEOtSDk0AWoTyMVb1EGfQpMA/u2D/wBP61Tj7VowL51vLAf+WiFf0oA5XvRQcg4NFSAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFXtIiEuswKRkK28/Qc/0qjW34ciJnnmwchAg/E/4CmtwNK4k3MSeev41nSjBPpWpcW7K3zkAdfSqkq24Ul50+g5q7gZ7cjJ+tR4wxzVjz7JTgyE+9OiRbuXy7SF5nx91alyS1Y0m9EUzknpTG47V0dv4S8Q3ShrfRZ3z6EVpQfC3x7eEfZvDFy+enIrGWKox3mvvN44StLaD+44kn2pvevTG+BXxSjtftM/hU28J/wCWk88cY/NiKpr8IfGrsEFrpak8APqMKk/m1JYqi9pIHhKy3izz8Dmlwa9Ztf2d/iveRmSz8O21yoGSYb2N/wCRpJP2d/i4inPhQZHUeepqXjKC0ckWsBiHtBnk+DUsKneOO9elt8A/ivHy3hN+PSVarS/Bj4nWo3N4VmGOeGBpfXaH86+8f9n4n/n2zzmYfviAKTHy16LD8FPidc/Mvheb8WAqxH8A/ivLJtTwq+T281af1yh/Og+oYn/n2zzEcUvNeo3f7P3xVsYxJfeH7e1j/v3F3HGPzJrnLn4e+IrSTy5JNJZuvyXqOPzHFXHEU5fDK5lLC1YfFGxyIGaXFdPF4F8QS4CR2RJ7G5Vf51ff4TfEJY/NTwxPLH/fhkSRfzBpyr04/FJIUcPUn8MWzhwc0tdRP8PfGVtzc+HLuP64qnJ4W16L/WaLdjHoAf60liKT2kvvG8NVW8X9zMOjvWlJo2oQjMunXaeuYzVH9yHKsxVh1DDFaKUXszJwlHdCL6dqeuc47U9RBniVRUixIQCkiH8aokSM9q0bV9kqkHvVRYH27wMip4g4kHyng00BjajD5GqTxjoHJH0PIqrWvr8QW9imHSSMHPuOP8KyKl7gFFFFIAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigArcsr0WGg7ogDNJISSegAAArDq1ZpJczpZopcyMAoHYmgC9BFqetOfL3so4zyefStS18MosoS8lLP3VTz712lpaW2lAaZZoVdE3+bN82PU5HU85wOlZ2sXEGmoFs2eSZxuMmMsc98dqdhpGbfeHtLt4WjghLzooyFzyx7E16V+z74EtdZn1DVr63WSJZBBFkcEgZJHtzXmNvetFp8qXJ5ZSWUn15OT/AD/+vX1z8CdBbTfhjprTKVmuQbl88ffOR+mK8nOKzhQ5Vu2exktBVMRzPZI7zRfBumW7qEtYxj0XisD4m/EzTPh5t0XRY7STWSPnMi71thjuvQt04PTvXZeKNcPhbwZcanAoe5xshUjOXPHTvj/CvF/DPwpn8S6s/iLxeTI8zmQRK44JOcdCK8HDU6cf3td6Lp3Po8VUqP8AdUN317Hles+I/GfjXVxNLcX+qysMbgDsUegA4A+gFOi8E+PJFEp0GUf3ctnI9jk19Y6b4c0rSYEhsLCGMKMAhBn88VPdQMqZCAfhXVLOnHSlBJHHHJObWrNtnyVbHx54av47m1tb+1dT9+EkdO2B/Kvob4Z/EXXNRit7bWkM7yPtWUrglepJ/T8+eRWjcRJvIkjBB6gjIqWwWwinSWOCNJFOcqMZrlr5iq8bSjqddDLXh5e7K6PSvtEcnYCkZbcjlFP1rn7W+3IGLc45FW1u+eSc+leb7VnpKnY0N1vH/AvfqK5Xxh4kutE00y6dErTbTtyvGeg/U/kK0bm7Iyc1z+qXME6lLhd+PWqjVs7sJ07rQ+dtft/HHjC9llb7RcmP5sTZ2IDycL/PuayIPhd46uAXMMYPcOv6D/OK+iopUB8qCMKuegGK0La3ldtxGCe5r1I5xUiuWEUkeTPJac3zTk2fLWp/D7x9Yqwl0hpxjloCGwPf/wDXVLQNZ8U+DdWW6t2vtOeM/MpB2OP7rKeCPY5r7FisgRh0DfXmqOteGdE1aya31HT4ZQf7y9/Wt45y5aVY3RhLJFHWlKzOc8GeOtB8faWttdW1vb6si/PCMbZP9pf54q9qXgvSboFmsox77RXlGv8Aw01Twtria94UnkCxOJBGqkMmDngjOele46Jq6a54YtdTVAGkQb1A6N347V52MpwTVWi9H+B34SpU/h1lqvxPLte+GenTQsIYwufQV8x/EfwU2g+MY4Nvy3CFlxxkj+tfd80IkBBH5ivnL9oHShDPpOromDHI0Z44ORnB+uK6MoxMo11CT0ZzZxhYzw8ppao8JXwnZvpiTmXa5wevGP8AD+XPpVCbwxOMtBIQBwVJ5BrpJrrcR9nJCMAdp55Pb3p9rNayw+XJKQoBUlThoz7Z/EY78V9jc+LOJmsL+2AZSW4zxTrPVZYJNsqhjn+IV2dnbPPMIZJoplbmOTaQCCMjnHHSs/xD4dWS2ae2RN6LvyDgH1x/9egTMPV3hvdGS4h4aJ8Mp7A//qFYFWnlZLIxEnLkEj2FVabdxBRRRSAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAK6TwRAZfFKzf88Imk9s9Bn865uui8GXJg8QMgKjzYmTn86AR31xxazXcTPcTEldgwBGo9fr/KufnMENr9svZvMmbJSJOh98ntWztP2NrXZiNiWZwfvY659q53XJlkbcQF54jUD5B2Gf6U+hRVsrSXWtasdKhzvvbhIgCfUjJP0FfoR4U05LDRbe2jUBIkCAAegwK+J/gppB1X436ZuXdHao9yc+wwP1avvWwhENkvHbmvmc4nerGHZH1ORU+WlKfd/kUNYtbfUXihuUEiRNvCt0J9x3p9sFjUIgCqOABxiorqUicnsetYPiLxDa6HpE93d3At4okLyS/3VHp79hXz05OcrH0cIqKudaL6CN2jijkuJlGWSPHyj/aJwF/E1hX3ie2Fw0DXuhwPnBifUVL/AI4BH61S+Gfwu8TfGbT013xbqF94d8ITHdZaTZsY57tD0kmfqN3XA5Oeo4FZnjq0+BvhB9T0zwR8B7n4gPpBdNS1MTsttasn+sDSjezFejEAKDkZODj28Pk1ScE5ux4tfO6VObjBXNW5u4nhVrmJYhJ9yVHV43PoHXjPscGsd5zFcblbivPdF13Qtf1aPTfBOiap4E127QyWnh/VL37dpWsrjJiilIDRSEAlQeDjjnium0vU49R0wlY5oZYyY5bef/WQOOGjf1IPfuMGuTGYCeGfvbHdgcfTxSfLv2O4068ZlC5rZVyI85zmuS0F2lZVweuM5ruobBmt87ckivL5Xex6d0YtzchVJJNclfXjG5Iz17V02tobdGB4Jrh5G8zUM9QOTVQiTJ9jdtZre0iWa4Jy5wqgZLH0A71Pqfi3TdFjV9V1jSdHB5VLqTfKf+AqePzrI03Tda8aeLIPCHhuf7HdSx+bfant3fYLXOPkH/PRzkD6HsOe9vND8F/DvXZvAnwv+Fdt8Q/HsFml9qUuozhhZxucI00jZZnbqI0xxgkjIB9jBZXLER55OyPFx+bRw0vZpXkc9pPxC8MaliGw8YaHdSdo2zCT9CSRWv8A2jHNKIpk8qRhleQQ49VYcEfSvNB8W9F1aS4T4ufBXwWvh6K4FtdX+gsVvNPOSDIYWJZ1Ug7tuGHueK6Txh8NtW+GGhL4q8GarN4l8CzItzJYvKZpLeJhuWe3l6lcEH1x69K2xOTTpx5oO5hhc7hUly1FY6eXyiCrqGGOhqLT4orQSRQRqkbtu2r61zuh+IIdU0+KaG4FxE6h4ph/Gp7/AF9a37ecA9Qa8N3Wh7vKtzQkx5fGK8t+MPh0658Or+KJMzxjzovUMvNen7twIrJ1q2Fzp8sDdGUj860pScJKa6GVWCnBwlsz4Kgu/wB2Q4Vgn3kI7Z5H4H+tPti9vq+14/3bgMGfDD1zntxVjxdpcug/EHUrQKVQTFx2xk/41et/IvtIkCxwrNndtL7PqADxz17d6++oyVSKkup+d1abpzcH0Lk5u47WNbaAiA5I8kdGBz+fer8TNeR3bqfvQMCpXBHy9f1NYtoZIpV3TkQqQrDduLehx2I6VfWc2sk8ySllVXcnI+Zdp7dvStDM8lkz5rZOTk8+tNpWOWJ9eaSgkKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACr+i3AttdtpmOFDgH6HiqFOTO7IJyOmKAPT767aPSmgtx+8LYAXGcd/wCfWuf1OJnuhGG+RTyTzz0x74rrrnwj4207w7Drl74T1S10yZAyXVxDsV8gHdg/Nt98Yrn76FfMIT5gvQjgY6CpjOMlozSdOUPiVj2L9ljR1v8AxxrmoFf+PeCOEN1yWYsf/QRX1vdAwW4UfkK8E/ZF0fZ4V1/VynE1+IVbGARHGOn4tX0VcWrTvyPlFfKZm3KrJo+yymPLQijjNQuBES7nAHUmvM9Xs28b+PdG0W5hm/sBb5G1GcKdhVQWCNjsduPx969yk0az3b5Ig5HbGf51QuJ200fubHyohySicfjXmUZKlJT3aPXnH2sHBaXPSbnxFbxeCtRs/Deo2kd8unXC2SpKoKyiFvLwM9Q23FfmbpvxC+J3hj4Zah4f8OeIL2xstVjC6nBDEElkBXa2WxuzglSepBPrX27J4mtZYGO6Jm/2lDfzrMm8ZXEKMqSR89Mxr/hXrRzxpq8djxXw7GzXMfDPhe18T3d5oywXkxvUvrcWETMS6MJF2AH+AA8+3NfZ3i60tp/jlLLoyxumowk3Jg5TzU6Px6rkE+y046/qF/IYreITyNkbUjU/nxxWxoelX0CtLeSIJZP+WcSgBPxA5rPEZp7eDUonRhco+rTU4y1F0HSjFdt8uQGxxXodphLfG0cVj6ZaLGconNbyRsI+VrxOZuV0ey4q2pyXie0WdSyrj6dq4e30YmW4yPnC5UD+L6e9em6jHuDB14rnHscXOU/A06c7PUco6aFH4E6gmi2OoX2uCK11DUrj7RKshwY48YjjORwVUYI7EmvnX4rWvxT0z9pXxv4k8I3HiKG5v7+SW31PSI5iksDhSiiRAeAoUY7Fe2K+jNQ/tqzHn2kklxH3iY5YfT1H61mHxjfwOFe6mgYHlSxX9DXtwzWVOKSjojxKmSwrTc3LVnx54f8AhP8AE68vJrmfwl4kPmtuObOQl2zksSw/UnnNfd/wu1C48PfszeGvCPiS1un1C0sHt57Z4izRKZHKRntlUZR14xiub/4TmQJiS/ZsjucUtt4omvZPKtfNmY8YjBaiWd1JN2iRDh6lFJN7HmWl6PrvhDxRqVmdHuo9Ae8JsGcYKqw3cAdACSvPtXomnzNMB8rj6giunsLTUXBa5tyoI+7JzmtNNJhIybeMH/drzqk1VfNazPVhD2aUd0jCjUjGQaS5g8yMjg1ty6dg8JjHTHSqstuFUjvURj0CTPjX4/aUtj8RLO9RQq3kTKxxxlSP6GvOtNBhJlYKYlwpDHJXtn3ANe9ftN6QY9M0XVAowl55RJ9GU/4V4XZ3C2srFxlWO1gVyOQeSPw5r7HK5Xw8fI+IzeHLiZeepdke2kSYYIkVP4/lOR/PjvVe9nuIfC+ozSkZCFFfGCQ2BVo6NrWvTpa+GtCu9SuDEAy2kRYL6EnoBjpVPxppPiPw94aTTvEugapo9xJIpjS9t3iEqjPKk8N+BNdvPG/LfU8/2cuXmtp3POqKD1oqzIKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAAdRX1R+zD8OdEtNLPxT8UWsV1KszR6PbTqGjQrw1wVPUg/KvoQx64x8sKCXAUZJ6V963+lf8ACP8Aw30Lw1YgxrZ2MMBCjGW2AufqWLH8a8bOsXKhRUYOzke/w9gY4mu5T2jqemXuoaR4s0G7trx45xMhjYrgnJH8/r6V8FeLNKl8PeLtU0eeXz2tLpkaTrux0P156etfSukaNqNhcjUdOnaOZeWBJKyD0Yd/5ivIvjpZrL45+32ysJNTtUZYduNkg/d7fclh1968/JKzVVwbumj1uIsMvYqaWz/M+of2ZdB/sz9m3Q5pVKzaj5t82euJJG2n/vkLXq0pWP5FHuTWf4b0dPCXgbSPDiAAadYw2mB6pGqt+oNWPNLsSfWuXG1byfmdWAotQS7IlWBXTmmNp6YOF5q1HKuMDirDSRBOcZrgUU1e56N3F2OZuvDGmXjFp7KF27sUAJ/EVnjwLoSuWXTICfU5b+ZrqZ76CEcAGuc1TxTHao2Cvtis3K3U0im+gHTtP0u327IoUz91QFH5CpIoHlCmOFkDHAZhgn3rO8M3MOo6lJqepEuA22JCenq2PWugv9bsYf3cRVCO5qW09ZMrVOyRqWmnpDEqkgnGcCr5tIxDknnvXIxeIEVwRLk/WpJvEak/63r71pCrBdDKVKcnubNzaQtEfnXPYGuYlsriOZtke4A/dqvdeI1WTlzjtzWla+IrVbYNKqMTznNZuUZO+xooyiu5XWexeQW82YpjzscYNWX0e0ulxNDDMv8AtqG/nWT4nu7DUdFkliUR3EKmSJwehHP5HpWR4e8WHYsc8nJAxnvTut0PlOoj8IaGku9NJsw3tCuf5Vr22lwQIEhhWNP7qLtH5Cmafq1vcLu3jPfPFacdzDu3KwIq0k+pm+bsVjZqvReKaVCA/LnHerb3MZ6AelVZbhVHGDQ+VbAk3uU3I3HjiqF3AGO5atSSjcaiEgY7exq6VTWxnVhbVHhn7RumCb4LXd0y/wDHpcwT5x28wA/o1fJ88MnmlYEy5ZQ0Y9c9vYg190/GXRf7Y+CPiS0jj3P9hkcAf7I3D+VfHnw4019f+JWjQSIrorC6nDAEeXGMnIPUHgfjX0+XVVToTb6f5HyWbUXUxEEuun4n0v8ABXw3Y+EvAtvcXCA3V0i3Em7oMjIH5YrtNevPDPjbR5/CviS0tdW0qbhrdyMxtjG+Nusbjsw59cjivN/ET6lqzDStML29hEMO0fy+af7ox0QdMd/pWBpNnd6TrETKzKu7a3pXzFSpVlJ1lKz3Pr6GGpOmqLV1sfMvxN8D3Pw8+JOo+GJpWuIYWElrclcefA4yj49ccEdiCK4+vpv9qnSo5tA8LeI9g89WlsJJMcsuBIgJ9jvx9a+ZK+1wGJ+s0I1Xuz89zLC/VcTOktlsFFFFdhwhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAE9lj+0bfPTzFzn6iv0V1+2NzfxcZVmyK/ORSQwI69q/RvwvqkXib4feH/ABBFyLq0ilYdcMUAYf8AfQNfM8SRfLTl0u/0PruE6iU6kXvZfqT3Bg0zRjIEUM3JOK8km0A+Pvjz4ICwfuYNWia5x3gRvOYn6eX+tera/E8+jbUySFwRVf4Q6MP+FgSX8qAi0spXU+juRGP0LV4uAnKFRSW59Jj6EalCUZnsGq3RkndyRliWP1JrJF2AcFjjNGqTnzWI9eKxmuCCTn86yxVS8gwsEonQJfKv8dQXWrKq/e96w2u8KSWrm9d12KztJJXlCqoJJJrlUm9EdTSWpoa54nS3jcmTAHvWDoa3PiO+N5dLILRT8mf4/wD61ecr4n0/UNQa+1a8ENhG3yxjlpj247Cuig+Mvh2ygez023aUx5XduCrkDn6D3r0aOBqtXUbnBWzCjHRyOp8Xalf+Fbc6hZ20kloygN5SljGw7kDnB9a8G1v4n/EDUtWkl0vWbOxtoz8qS2u4kf7Rb+QrT8Q/GXW9VWS3tyscT/u1UDB+vP8AT25FeW3EN1ql291MZpcnDMcncew/+tXr4XLOX36iR4uMzZSXLSbPX/CvxW1YsIfEccDN0+02ZOz6sh5X6jI+ldXP8SLGFTJ9thKY/vivne407VNNlgNhb3JMh+QpGxDnpwO/412beGrq48G+c1iw1ErkbowzZ/TJ/wAis8Rl9JSunua4XMqsoNOOqNXxJ8W9QumaLw6kCsOPtd0SVz/soOW+pIH1rC0v4h+P7eZZ77xJaXkW4b7cWw6eg2DIP51za+G72K1e5vbecKHxISp/dtjjjquapwRW634lViCDkMox/k12wy+lycsbHBUzOqp80k1+B9A6V4w1TxWkWn6baXQST5ZZ5I2RUXvjPU16FdeHA2koYQYpUHysD7d6+cNI8f6ro9zC8FyZI4yPmT5SQex9foe/416OPjhOkSxXNvFICMBwNuf94dvqK86rlc46QWh6lLN6ctZvU77RfEUtpcmxvyY5F457+9dxZayrgbZAfx5r521v4k+HNchAZ5bC6H3W4yjehPTH6H2rd8GeOPtEw0+6mU3CDgg8OB3H6cds/SvNr4KpTXM0elRx1Gs+WLPe11HJyXpsl/wfmzXKQagXiDButT/amPVq4Ls7NDaN3noaWKUls5NZCzgjhqt20uTjNXCVmZ1FdG21mmqaZcWUoDJPE0TZ9GBB/nXx/oXhnVfheLy71W2QandD7LaRbslIw53OcdOFHHutfY2nvhQ2fwryn4oaLZajaveFVF1Z3BC+rRyYyPwIU/nXsRrtU+XpI8hYeM6qk947GR4X8RRapFHBJCinAHA6Vd1nSQmoHyk4ba4xXKeD7GaHWQoBwK9MeEXN4qgbiqqM/jXmVvdk0j26UUjxj9p+JY/gRpe8jf8A2vFgf9sZc/0r4/r6k/a31mJdP8OeG42zJ5kt7IoPQABF4/Fq+W6+xyOLjg4363/M/P8AiGaljpW6JfkFFFFeueIFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAKOor7Q/ZX8VQa18MJ/CtxKDc6TMwRSeTDISyn6Btw/Kvi4da7b4WePbr4d/Eey16Jma1J8m8hU/6yFiN34jAYe4rhzHC/WaDgt90ellWL+q4hTez0fofoCLVPtUtjdHbv5Rj0rZ8FaNLpEOsXcqACRoo42HcAMx/Uim6alr4j0m11W0ZJoJUWWKVDwykAgg+hGK3IW+z6PJAHLZlOT9ABXxmHi4SbZ9/iailG0WY+pT5ckGsOVyCfStC8Yb2596zGySc/lXJUd2bUtEVLqZxGQuRXh3xk1m8sPD/kwna08giznGB1JP4Cvd5Ig4wQa8a+PPhu6vPCcF1ax5EMpZxjkgjH6V05fyuvHn2uc+Yyn9Wnyb2Pm8a/Mn+jmd5cZYZY9T3rpfC+g6zr7+XaRkR5G5j8q59z6VQ8KeEbrU5JbxIVlYMVVW6EjsfSi88e+KdCEmmLa29iysVaJoeVx+PP1r7GpWcm6dG1z4ijhkkqte9j2PTPh34csrZLrX9T+03LAE2tseE5BwX6HpXY2C+BtKsEitdLtgqqykzMZGOcZPPfj8K5v4OeDNS8fot5q180kG+J9i/KGQsVcHHpgfnX0vpfwN8HWd7cPJYwzxFQqrINwU856/hXnSoV6j1dz2aeMwdBaQPKLP4h2UEixxw6aVQbFDW6/KvoK2YfHmg+QZTpenC4z97YcY+ler6T8CvAsNvJHd6FaS+ZIzhpIwDjsB7U64+AfgCLVvNXR18jyjmMOwXdke/pUPL6jszoWeYZXjyHhesfEGx1GVobiLTvmG1tsCrkenrXOGXwSDNJJpOmyNNu8z5NpbIwTweOAK+mLn4HeCpLArbaJZxfMpyEGfvDvWb4l+C3hm4S3t4NKiiVZVyfJ2kjnI6e1N4GcVoZf2xh56ch8q3XhPwNqO82kktkGUIed447/WuC1fwXqkDO2m3y3saD5WQ8/lX1L4w+Dfh2yuFltbdLWNLZnZYiV3N2NfJ3jw+JPBU/nWurSA/KCpCsPmGccj6VtRVaMuVS+85K9TCVI83LZ+Rxuptq1reLDd27IeeoxnHWr+j+JJdL1PT9TilbEMy5UnsThh+Wa6nwTpXiXxs8l3fusliiEtLLGBliOAvFY9l4EvNQ+L8PheGLMYnV5TjgIDk/oMV1PEQmpU6ttFqcTwlSlKFSlfV6H1ppMkr2aNnhlBGa1VLAZqza6eltYxrgLhQMelDoqtXw8rX0Pu4ybWoiMSRV62J3VTQACrULBWHFJAzpNPkBAXpmvOfiCLhvHCaXbxPIJYknKqM7jyB+WDXd2Em11x1zS6nbJPrBmUKJ1hXnAzjJ713wlenc41pVOG0rSYtI09rm6XZO3Re4+tbGlx+XavfT4APOW4x6VrS6Ib0ieRWcr94GvFP2i/ifB4P8FN4Z0mYLrGpRtENp5giPDyH0JGVH1J7VnToTr1VCK1ZtWxcMPSlVnsj5j+M3jFPG3xc1LU7d91lARaWpzkGNCRuH+8xZvxrz+nEjHWm19/SpqlBQjsj8zrVZVakqkt2FFFFaGQUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAfWX7N/wAbrHT/AAvF4B8QXi209uzf2fcSthZI2OfKJ7MDnHqDjtX0/o+qxan4fuLhGBKXTRn/AL4Uj+dfleCQeK+sP2R/F9xdW3iXwne3kszqsV/bLJIWwo/duBn6pXz+ZZclzYiD9UfT5Vmzly4aovRn0fdPuYtVEsCD0qW5c4wTVEvg9a+SmtT66Mi5GwJ5qrrdlBf6VLBLGGV1IwwyAcUokwMU95PMh29falFuLuim01ZnmvgzwRaaal7AFG03DSICMEKegNZnxU+EVj4q0n7XaxCG9QYMqLkj0YjuD0Ir1PT7Qx6hITkZ5ramgUJvADAjkGvRhipwmqiepxewpuLpyV4nxZZeP/i98E4G0i18m1iZHiiuZLYSo4boyseNwIyO4PUU9fjr8f8AxVrMOoR+PdUs3jh+zqbN0tEI4JJRAAzEgEsQT9K+ptZ0nTruBrO/s45rWTgq6hl/EEYrW8MaFZaNDt0aLRyrp5Yiu9PgmAHsWXcPzr6ClmMZxvy69zyqnD13zwm3Htt+J81aPrP7QFnaXF5ZfFTxNA91IZ5iupOd7kAbjknnAA49KYdQ+PN1rUesv8UvEz30cZgWf+033BGILL1xgkA4x2FfbK+ItbtrGC0fwZ4fnjhxgRRBNwAwOCGANWIfGFwLpJB4GsfMRGB4i3c46Hy+BVrEt/a/BlPLYR/5h/8AydHwxrV58aNf0yTTNe+JfiS9tGIZoZ9SkKOVOQSA3OCAR7gVy98/xQtLu11Gf4geIJLiwl8+1km1SZjC4GNyFmODg4/Sv0Bl1/xTdXhnt/CmjQxDhROgbb6ngKK53Wry7fS4rC/n0iOOFi8aQ2MRZG/vBmDHPPWj6049fwH/AGRGenskv+3r/kj4d1D4z/HLU9Uuobjxnq+pXGoRC3ZdiykqBgCNQvyHk8qATmuq8J/C3xn45uo5/iBey+XuEgs5ABI2BjMhH3Rx06n2r3m20bSLW9mbTbKFJpSXklSNVLE9ScAVv6fZiIlUAOfvEDHP+FceKzWytBJMujkdKi+acuby6f8ABMSz8MafpGjJp9hAqQwjAwMbjjrVPwl4UtbXxjqGtlMzSsEyR2A45ruLuBI7Qn255qnpieQrg9znJrwalWXK3fc9KMIuSbWxp3LgJgdhWe5DYFPuZe+e9VDIc55rlOi6LgwE7U6OT5h0qgZqdFLk/SgTZ0NhL/pCjmsfxF4kWx+Ib2iuF8q1hDfiC3/swrQ0rM12saH5mIUfjXxh8Wvi3rsvxf8AE0vh7WpY7eTUXSHaFZUijAiQDI4JCbjzXq4LBTxUHGDseVjMwp4OalNXPq/xX8WNG8FeFZtX1W7RVVT5UKt88744RR6n17da/P3xf4n1Lxl4z1DxJqrg3N5KZCo6Iv8ACi+wGB+FVNX13Vtevvtms6jc304GA8zlsD0Hp+FZ1fT5dlywibbvJnyuZ5pLGNJK0V0CiiivSPKCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAK774OeM08C/GLR9cuJNtkXNree0Mg2sfwyG/4DXA0oOKmcVOLi+pdObhJSW6P0tu5VPzo6upwVZTww7Ee1UTNzxivGvgH8Tk8S+EI/B2q3A/tfTI9sDOebm3HT6snQ+2D616y0mxiK/P8AG4aVCq4M/RMFio4ikpxL/nApjHNSwyLv5NZazDHNTwyjOc5rjOvmNYMq3AIwP8/rWrFmaHPtXMTXiooc5yOldFpMyyQq24N6810pe6Yp2dihexeWxJXIxyKxZby1gk3rI8G05z1FdvdWC3Mfy8nFcxq3hV7qNk8v1pwumaxm4/CZb+NRaSAjWoRjgBpNv86RvHK483+2rYHGAfPFeVeMPA+vRXTfZUYwqrMST+WT3OegHrXmFxbavFqSWJdw7vhdvPP+GM17VHDurG6mcFfOJ0XZ0z6mXxo91bmNNZhbtxJuz+VUDcQ3Fxulumm5+gry7wh4L1+W1jnKOVbKsiEk/Ue/869d0TwxcRRqzxn2yOn4dq48ReGilc6qOMqVVflsT24MuEhUIvriugsYRDFlqmtNIWJQXUDHNJeyxwRkbgAPwrz33NH5lHUrhdm3JHP8PWoItqwDZkDH1rIutSjudQ+zZYFW5IHcdj+YNXvM8uIAvk980VFZJGcZXbsSSSZJBPeq7SAd6iknB7mqzz1z2NOYsmXOelOil5xWcJvrU8MiKrSyuI40Bd3c4CgDJJPpVxjd2JlNJXZkfFDxz/wgHwi1LV7afytSuFNnYY+8JnBG4f7q7m/AV8FSOzSMzsWYnJJOSTXpfxp+JDePvGvl2Erf2Jp26GyXp5n96Uj1bAx6AD3rzE9a+6yzCfV6KUt3qz4PNcX9ZrNx2WiCiiivRPNCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACjNFFAF7SdVv9F1i31XTLqS1vLZxJFNGcFWH+enevrD4dfGLTPG9jHYaiYrDXUX54CdqXP+1Fnv6r1HbIr5CBxTo5XilWSN2R1O5WU4IPqDXHjcFTxULS0fRndgcfUwkrx1XVH38t1njNSpdDA5r5e8F/HfVNMjj0/wAUxSajbrhRdpjzkH+12f8AQ/WvoX7TKLKzvJLeeCK7hS4gMqFN6MoZSM+xFfHYrL6uGlaa07n2OFzGliVeD17G1eyhrGRt5DBTtweh9a53w58TrOymazuy6NF8hUDJZvf9TVwXQlTaG68Z9K8H8X2N/o+sS34ZsSTltw5wAeBn6Ec105fRhVvCRz5hXnRtOB9g+H/GFlfxrLHIuw9Cx6+nH9K3Tr+jGFpHuEIXOcEdO9fFuh/EF7W1iDSMGSTcx3ckHr+eK23+IRe3ZDcEeZgcHAGWyf6flXTLK5RlpsRDN6co67n0jrWuaLcJNMnkHykyA/OQemRn24rx65TSW12C/jRAQxZSMHavc/nXGX3ji5axuA0oUyEB2HtgY/IE1zEnimaC5SeOXZJG52uOwPOR9eK6aOElFHPXx8JWPqvRta0jTl2YTyT+9izn7pbnHp3OPTj0rt49V0yS0EiyoPbPXuOa+OdM8czNJvabCxxkfP6n/A8/jVx/iVcLaGGOTD79+1T8pzyQfbk1z1MBNvQ6KeZQSsz6l1LxLYQWruJo8IcMARmvKPF/xBt4ZMQygg8YB9en1FeOXPj+Saz/AH8zY27evOR/PtXLHWbnXtUFtExByVJJ6DP+FVSytp81Qyr5smuWnuz3rwdqbX8r3shc+YcLuPBwMZ/p+FdvJdAr94H2rh/DEcNnoESRjaQMY9ePT862XvcDBavIxNpVHbY9PDtqCvuaUl2QSM1X+1ZP3qzGujJuAbgck+n1q14btE8Rautvb38IhDYeaP8AeAewI4J/GsFTb2NJ1owV2yW51G0sbKW7vbmO3t4VLySysFVQO5NfNnxS+M934oSbw94daS20UnbLLysl39f7qe3fv6VzXxM8UeLtR8YaloXiK7KDT7qS3NnCNkSlGK5x3PHU5rg819Xl2Uxo2qVNZfkfKZjm0q16dPSIE5NJRRXtniBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFGDQAUuDWho+haxr+pR2GiaXeahdOcLDaxNIx/ADivbvCf7JnxG1t45dfe08P27YyszedP9NicA/Uiuevi6NBXqySNadCpVdoK54DtPpQVI6iv0A0L9jH4e6Bp4vvE93Nf7ADJJeXqQx+/wAqEfzNdL4a8B/Cee7urDw14J0aW1tiEF99mWVZW/iUM4y2OMkcc14K4qwk6jpUk2/SyPQhlFVx5m0j82sGgA9hX2l8U/A3wy8VeNbPwPoukRWOpoPNuL7RrNC0fOBG2Cq4OSSTnGK6Lwz+zv8ABHQFRr6xufEF8v8AyzvLhpef+uUWB+ea9COcUXBSaab6GLy+opWTPlD4M/DW++JXxLtNOaGRdItmE+pXQXKxxDnZnpufG0D3J7V90eI4IZrAWyxIsCqFSMDKqAMAAewro7Cw0XR/DQs9E0a30m3Mh/0eC3WAcDAJVfb15rCv1MiEGvEx+OeJkrKyR6mEwyopq+p43rravosjz2dol/bDrHu8uQcdjyD+I/GuLu/EPhzxPaSaddXcmnXykkQ3Y8p1OMZGflYfQ17LqVnkONu78K8t8XeA7TWI2cQhXHKsowQf6Vjh5wT97R9zqqVJpW3XY8e8SeHNV0i9Y/Z3MJJZZoRlGGM5BFYBvpY1RSSp7e/tXf8A2TxB4WbybkTzWaniSI8ge69DU/2DR9aty6xwNnn5UA5+le7DHuK9/Vd0eZLBKbvTdvI4EavK1sQz8g8+je9Qx6jgsc7sMMZ/Sutn8EWLykxyyRg/3eMVTPgbyn/d37/VkFdCx1F9TCWCrdjA/tRkYq/ygDknuaWTVpJFLthfQdzXUQ/D2xkdXnvriTHPAAya0rbwZottKrNG87D++eM/T+lRLMaC21Ljl9d7nA2NtqOrXqRWsTsB0OM4zXrvgjwUdLja+1GUCYsfw9fz5qKCEWEIjsY44FzklF5J9c0661Nbe3zc3DMAMYLV5+Jx06y5IaI9DC4KFF809Wd1Jr1jbP5ayBu21Bn+Vc5rvxDisE8q1txPcvxHFncxP0FcjE+s68/k6PCYYDwZ2HGPb1rsfDfgK2sZRPcAz3Dfelk+YmuD2NOnrPV9jqnipvSBj6Loninxfe/bPFF/L9kDblsYztiX6qOGP1zX0H4PsItNhgjt0CKgAwtc/pWkpGqgKFPpXb6XB5QBxWNWvzyt0MVDq9WfOf7VvwuutP8AEa/E7SLZpNL1LZFqBQZ+z3IGAzeiuAOf7wI7ivmYqcniv1Yhh03V9Fm0fWLG3vbC5jMc9vcRh0dfQg/nXiGs/s5fBjxOzCyiv/DV+wzstpGjXP8A1ymBH5GvdweaQhBQq/eeViMDKUnKB8LbW9KNrelfWuj/AAO+G3w2+JFofGmsQ+JdPuW8hba6tJIfszMDtlYqxV1yAuM984r1jWvg78HITby3XgPTxp8hxJeW6sqwg42klT905PzdOKeLz6hh05NNryIo5XVq6XSPzy2nGaMGvv8A1n9j74Pa/osk/hvxEuk3LKGhe31AXEb+ihGycn0yK8C8Zfsk/EXQHkl8PyWviKBCf3cJ8m4H/bN+D+BNGE4iwOJslPlb6PQirltenfS6XY+fMUVqa34c17w5emz17Rr/AEycHHl3kDRH8Nw5rLwfSvbTT1TOFprcKKKMGmIKKKKACiiigAooooAKKKKACiiigAooooAKKKcvPYUANqzZ2V3f3S2tlazXM7nCxQoXZvoBzX0X8JP2Uda8V2tpr/jq4l0TSJgJEtIgPtUyHkEg8Rgj15xzivtnwH8JvA/gDwnIfAOiW0UuBlpgJJpG/wBuQ/M354HYV83mvEtDA3hCLnPstvv6+iPSw+WzqpSm+VHwH4M/Za+J3igJcanZReHLFgG87UshyPaMfN+eK+gvBX7I3w+8PyJd+JLi68S3K8+XcfubcH/cU5P4t+FfTcOha7qEvm30kCZPKImcD09K5DxR4p8K+DYHk1/WbeyVBxFvDOcdeO3418fR4qx+On7OUeRS2srf5s9pZXhqUeZO7W9w0nw/ofh+yWy0PSbLTrdeBFaQrEv6Dmr7RqELuwRByWY4A/GvANc/acGoai+mfDbwtc6xcZws+3ev1/uj9axP+ER+NfxFnW58XeJTolk/P2S0O9wPTPQV3PBVJa1na/ff7txqslpBHqHi3x98JfDQk/t28ttQnUnECuZsn05O3+deXaz8VviX4+J0T4a+GX0bSGXy/trJ5WV9jgHHsoArtfDvwD8HaG6Xk9o2o3o5a6vW81yfx6V6RZaXa2cYSKFEA6ADFaUaeHw6tSjf5WX3BJ1Knxs85+GvwnsfDdk95rL/ANpapP8APcTy5IJ9AM4xXoTypp9uYLGGOFMdI0Cj9KtyN5a7R0qq6hwdwzTlVlJ3bBQS2MvTZ3TUpra4csLkeZHn++o5H4rg/wDATS3alsgCo9StpXiDW7+VMjCSKT+645BPt6+xNWYJ49Q0xL2OPyySUliPWJxwyn6H8wQe9K+g3uc7c2pJJwTWNd6cGBO38K7GW3Bzxx61Vlsht6CoTdyrXPONS0CG6gZHQHPbFebap4Alt75rnS2a3kJJI/hb6ivf30/JOBkVWm0ISqCI934VvTryhsZyh1Pm5nvdNuxb6tbNDk4D9Vb8a0NkUmHjINbnxM+IHhPQ/M0S0tI9Z1NOJFXmOH2JHU+1YnhhYvEUStYaLrdpMwDBU06eWJs9xhTgfQmvRVKpKHtOUmNeMXyyY8R4XkCmYCkk10L+E/FSyhP+ET11icYZdPnKkH32VW1jTYPDunG517SNdZgu4wxadOi8erlMVn7Cf8r+5nQ69NLc5qd7m7m+zafE803ovQfU9q1NL+HtzdXCzawzSkc+V/AP8fxqx8O/iL4P1DWF0u/046JM8hWCSQHy5BnjJPQ17pFoar820EEZBHIPvmorTnQfI1Ywv7XU43TPDtvaQpHHAowMdK3rXSlQAqgraTT9rdPrV6K1AXkH8q4JTb1LUbGba2ZQ524rctUwMYohtuc4NaMMCAEyMEQDLM3AUDqTUxeo3sMuL42likan9/dN5MK/hl2+gX9SPWrdpO32X7NKolQDAWQbgPwNYtjv1bVG1llZISnlWkTDBSHOdxHq5w302jtW/FCBjjn2raUraIhI5Hx18ONN8Y6HJbbDbysOHhYp+g4/SvNNF8W/FD4OMdM13Tp/EPh9TtSZQXeNfQjr+X5V9ERn5QCAKr31hBeRFZY1YHjBHWhVfd5ZK6Fy63WjOO8I/Fv4VeKLtDYS2WnageqzwojA+m4AEfiBXpv7uSNJ0ZZVYZWQMGBH1rxHxb8CvCfiItdx2psr3qtxanYwP4Vw0GkfGn4WSs/h7WTrmmocm1ueWx/I/ka5nl+HnLnpO0vP/P8AzL9vUStLVeR9Najpmna1p8ljq1jbX9o4w0N1EsqEY9GBFeK+Lv2U/hj4jMlxpEV14bu25BsW3w594nzj8CKPCn7S+h3F2ul+ONJuNCvc7C5XCk/Q8fkc+1e9aAuleKdD+3aTdxXsROTNbvnb6Ajqv0Nc2KxmJyqKmr/LZjjSo4nSdrHwR4t/ZO+IWhSSSaBc2HiKBeVSBvJnI/65tx+TGvEdW0XVtD1GSw1rTbvT7pDhoLqJo3H4Gv1/0bRNStJim22nsWz99PnHPr3rP8ZaH4M1vRZdD1zw9pusxtkPBdwiQIf948g/7pGPaunLuM8Q/wDeqd4+Wj+7Z/gceJyek5ctCWv9fcfj+etFfWvxM/ZDaKyvNb+HF4XMYaX+xbo5Zh12xSdyB0Vuvrmvk2RGjlZHUqynBUjBB9K++wmNpYuHPSfy6o8KvQnRlyzGUUUV1GIUUUUAFFFFABRRRQAUUUUAFdR8PdH1TW/ibodhpGkPqtz9sjk+yBch1VgzbuwXA5J4ArmlQuwVQSScAAZzX6D/ALOfwbh+GngOPWtatF/4SnVohJOX+9aQnBWAeh6F/fA/hrix2Kjh6Tk93sdOFoOrOy6HrGj6kl3Z7XTy5UO14j/C3cf59qvL4ssfBlvLq2rXkVvZR8t5jYDjugHc1zuuW09lfx67YqzbfluokGfMTswHdl/UZFeF694a8V/GrxeLjVRdaf4YtZNgidGjM+08qFPOB3JHJ9QK+ArYGGJaU3ZJ3v1Ppo1XCLsr36Fzxv8AtJ/EX4i+IJ/Dvwo017ewZihvVzgDPXf3+vA+tUfD/wCz1d61dJq3xC1y71i5YhzA0h8tfw/+tXtnhnwhonh3SIbHTbGG3jjAACKOfcnua6VNoTArrjUhRVqEeXz6v5/5GSpX+PX8jmNB8FaD4ctVttL0+C2jUcBEA/M966EIqLhQAPSnOecdKj3gcVk5N7myVtEPJ7VC5xQSR1pp+Y5qb3CxE4DHNROmBxVjg8UhXJNCAotGrD5qxZZF0bXDdvxZXW2K59Ebokv/ALKfbB7V0bR/NxVa6tIrm3eKaJXRwVZWGQwPUVadhNDZYNjbSD9KrvBnOB+FQaNLLHI2g3bs88Cb7aVzzNCOME92XgH1GD3NawXJCFefSk1YEZhs+SQua8U+K3xRVLz/AIQLwjdhb6U7L2+jP+oU9VQ/3uvNdH8Z/iePDmmyeFfC8qza7cKVmlT5haKeDn/a/wA+tfM2keEddtNfh1N5t3nTDzpbl9qjccb2bsBnk+n0r0cJhk4upPfoisLWo/Wqca/wX19P63PStF0OysbJYbaJAB1cqCzHuSe5Nd34f8e+PPB5VfD3inUoIBx9kkmM0BHp5T5UD6AVA3w68faPYedqPhLUjEoybi0QXUWPXdEW4rMZAsnlv8sg4KHhl+oPIrNzrU5czumfvFGll2OoqnTUJw7KzR754M/aKW5lS28daCYucHUNJLEfVoGJP/fDH6V7ro+taP4j0oXvh3WYtQsidpe3mJ2nH3XXqp9mANfCoURpnFXdB8Q634W8QJreg6lNY3icF4zlZF/uOp4dfY/hivSw2c1IO1XVfifFZ14c4TEqVTAv2c+i3j/mvl9x9A/GL9nTwt4t0G61XQdNtLHXNpfyQoSC8PoR/A57OMAnr6j5i+HPxQ/4R3Xm+H/iuSVY45TDa3FxnfCwODE+e4PH/wBcV9ceHvizp3j/AMDT3Sxx2erWYCX1oGyq5+7IhP8AyzbB69CCD6n4H+JWmD4hfF7W/EuirIunPOGjkHy+e6qFaUexYEj1znvXbi6GHrR9onZP+r+p+dzxuKw8J5fjo3qU3o3uu6v1j1XbofXsdtuUMANpGQwPBHqKlEIB4/WvGvg78S5YEh8FeMbgrKo2WV5Kfv8A+wx9f/1+te4mPZJjGR6+tfLVaTpuzM4TUldEUcK8AYJrI1Vjqur/APCOWrf6NDtk1GRe56rB+PDN7bR/FVvxDqcmjWEUNiiy6resYrOEjIDd3Yf3EByfXgd6n0PSI9I0tLdS8shJkmmfl5ZCcs7H1J5qVorlPVlyKERoABjAxVuJfY01FyehqYDHTIqXIdh+AeetKDkdKQHjmkBw2alsZKoHTGajuLWKZNrIGB9RT93GRjNOVwetK4HB+Lfhf4a8VWMkOoadDIzA4cryPxrxw+E/iT8GtTbVfh9rdy9op3GzlclSB2H+SPavqAEEVWvLW3uoWSWMMvuK2hXaXJLWPZ6mcoJu/U5v4b/tIQePNNOgalGNJ8SR4SSJ8Rlx/sjoCfUcHtzxXUXlyliGmnk24657e1eVeLPgtaa3eDWNDlFhqsJ3Qzrxg+h9Qe4q7oWleNfFmk2Vr4rja1soI8TusgZrzB4wwOdmByTgkdutcssvoKp7an9z1t6FwqSjHka/4JvPcax42lMGi3jafpCNtmv0AMkhH8MQPBA7seOw9R8I/Gj4YeIPhr8RLm21cC4tL6SS5stQjBCXClsn6MucFe3HYiv0ctFgsraK1t4liiiAUIoAAHp9KwPiF4A8PfFHwBd+F9bCxh/3lpeKoMlpMM7XX1HYjuCRXt5Xi1hZ26Pc4cbRdeOm6Py5NJW94x8J6v4I8baj4X1yDyr6xlMUgH3WHVXU91YEEH0NYNfZRakro+fas7MKKKKYgooooAKKKKAClCkmkFeifBj4bXfxR+LFh4eSGU2EZ+1ajMgP7q3TluexbhR7tWdarCjTlUm7JasqEHOSjHdnt/7MP7O19qeq6T8S/E4spLBVa507Smb99PIDiOVlI27RgsFzkkDjFfXVxOfMYsSGJwQeoPcH3q2iWenWUGn2Vv5FpCgjht4hwiKBjA7YAAFUvEO6TRX1yaaO3uLXy1uPMbAnjbhTnvIuf+BD6CvzXFZxVrYhe2tyv4bdPI+ro4KNGn7vzIHnDL5QI96p2zRw6ldW+3mVVuF+v3W/ktVreY+cSx/CkvpBHf2V0M/6wwOR6OMDP/AgtbJl2LrTBTtzU8OduTWWztJdADHJ6VqpcQLiLcN/p70JDB+BmocknHWppCAf51C2AOuaTBID3zTQxINNByaGO2Mt6c0DNjR9Cm1Z98ky2ttu2edIOGb0H+Na1x4UtIrY7bhhMuQW+Z1bng5HQY9Aa0dO8QRQ+ENPsFVUgZPkuOq5Zcc/8COTWtDrdy8aWVzBbWT4KCeWMsH7KQuQQD6mvBxONp1pcsKrX3rXtuvv2C1WDu4/1/XQ8z1C0j02CK4luVZJG2kbWHlnOOTjGM9+Oo4qmQCT1+tdR8QPEOgWnw6vvtNvOyJbvGl1IpRXYLjCBuSMgn0FcTpk7z6VbyyA7zGpbPXOOa6crr1JwlGpLmtbX+uxU7O0rWuQanaSTRpcWjiK7t382CXGdrDsR3BBII7g1w3jr4oz22kx6V4XsJJPFNzmNrUDP2Q9C5Pp3DemD1r0sjnP41C9rbyyGQwR+ZjG/aMkfWvZhNRd2rmMlfY+e/CnwwuI7mTUddd7m9nYySu5ySx9a7yTwpaCyaEQJgjBGOK7+SzQZ+UZqGS2BXIAqp15Td2EYRirDfhH4yvNJ1q38EatNJ8i4024YnMiKM+ST/eUD5fVRj+Gvd9W8MeF/GNgIvEOg2GpqR9+eEFx7iQYYfga+Zdf0nzLQzQs8U8ZEkcsbFXjdeVZSOQQeQa9H/Z+1n4p+MdK1VNf122fSbF/s0GptahryeXqy54Qqoxk4JBIHrX02V45V4+yqK7OCrhKtJTxdCfLyWejaerto1+WnlsS+Lf2ZbO4017rwRq7W0o5FhqTmSM+yy/eX8dwr508Q+H9b8K6nNo/iHTJ9Ovk58uUcOufvIw4dfcGvY/i1478ceC/iOdKsvHF+1hPaGOKEW8KslxkZk34OVVf4cckrzjNePeNfF/jnxTpA0XWvE0l7AsqzQSXNtEzwsP7rBQQCOGA6j8K5szpYWE+WPuy/A/VeCsfnmKw3ta1qlK7WrtPTqns/m/mcbo15rkuv6jpulXEsFvf232K8eM4JiLqxQHtnbgnsCfWvVbDwjZRadHEkCIAuPlGBVbwJ4Xih0yG73CSR/mZ9uMnv+teiRWyrGFK4NeRUqvlUVsj4vOMQ8Xjalaas72t2S0PHvE/ww/tFCbRSHXlSDtII6EHsfeun8B/EW70O3Hhn4hCSO5t1xaXu3m5AHCY7v2wO/t09ES1XGcZqxDaWwYM9vG7KcgsgJU+oPY1k8Q3HllqeZ7NXujJ0OwvL3UJvEesRbL24AWKEnItYQcrGPfux7k+wrpMAU3ODjHT0p1YuVykrD1AA4pQcGmAgdSKUsp71IxxPORSg8+1NB9Oaev4UwFzkYpB1xTGba1AfHI+tSwJ3U7eKpecRLtJwaq3esCG9WBuKWZw0qOvR8HIpoC5c3JNp9kRir3BESkdQD1P/fINXIdlvGEiAWMLtCjsK59Lnf4gAABS2hyf95zj/wBBU/nWt5m+PhvenewWHb5Jb5La1iaaed9kcS9WP+AHJPYVsxiDTnSO2eOa6Od92wznH3hCp4wP7x69q4a/13UvDWrW+uQQfarBEkgv4EH7zymxmSP3XHI7gn0wexacaxHZXOj3FvcabdgPE8ZJLccbQOMj+7/SvEzCvKNVRqvlha9+/kdFCmnqeY/tDfB+y+LHgX7VpUqDxLp+ZLSaXb/pAx80LHAIB4wexA7E1+c17Z3NhfTWd5C8FxBI0UsUgwyOpIKkdiCCK/WG61rTdEuG0mzsH13WVTDWyS7I4M9PNk6D6Dn0B618J/tWeGr3T/inB4ouvC39htrcbSTrBcC4t5p0OGeNuoypQlTznJ719dwpmc6v7hxah9m/4/I8TN8NFfvI79TwKiiivtjwgooooAKKKKAFUZYCvtH9kHw3qOn/AAy1XxfYa7cWM97feTClvgriJRnzVIw4JfgduT1PBRXl5xFSwsoy2Z24D+Mj6e0y+n8R6XJcNHHa3kF0LK7WEkRu56PGeoBzyp6c4Neaanqi+K/H0/h+NHg0Xw66MYGOWu7kjcsj/wCyuMgeuOw5KK/J8FBPGyg9o3a8tUfX8z9mjool2pkdaqavOx0S6IzmJfNH1Uhh/KiivpEciLMc+WaTHI6c+tY9veS3XiIKGYbT3NFFBR1nmFlGaAcnGTRRQITOGJApZVDQEHuKKKBM8/uPiZffD3xJDo17bf2jpt5IDaqrbXtpPUHt1OCD0JGCK39U8d6fFC2tXC6ze3Mo3SQS3CpCcD0UBiB/dyBRRXy+b4alGvBJaPc7MPJtXPPbHxLq/wAYtbhvNQumi0XTpPLjtG+9K6HgMBwEBwcZJJAzjGK9at0WOBUHQAUUV9JGlCjanTVkjj5nJtsmIyppij3ooq0IZID+FROoBxmiimBWj0o65rthoazmA39ylsZR1QMeWHuADj3xX0domjaZ4a0aDRtFtEtNPtIxHDCg6L1JPqSckk9SSaKK+pyCK9lOfU8jM6s9Kd/d3t5nwL8S/GE3jr4v3eueW0FnbTPbWlux+ZUycs2ONzFcn0AA7Vt+DfCh8deONI8OfahapdMzSzD7yxou59v+0QCB2yc9qKK8pP22KXtNbtH9CRisvyWbwvu8sG1bo+VvqfRvxH8O6bolpol1pVrFawRxrpghjGAI1UtHj6AMPxFcOOeaKKrOoqOJaiux+C4CpKdJSk7t3/MsovOKk4Vc+lFFeOdrPKvihrmtWXiDT4NP1W7s4vIZitvKY9zbgMnHXjFcWPGPi6Ffl8T6r1/5+GP86KK6oJWR+6cJ4PD1MpoynTi3ruk+rHJ8QfGyjjxNqB/3nB/mKnj+JHjhTn/hIZ27/PHG381oorTlR70spwUld0Y/+Ar/ACOq+H/j7xTrHj200vVtQjurWZZQyG3RSCEJBBAB6ivYHbDccCiiuaskpaH4/wAcYWjhsfGFGCiuVaJW6sjkJIzUPm7Tjmiisj47ocz4kJh1KJ1PLLmrdtdu2n5PVQDRRVoRX02d3hvbs53PcMv0CAKP6n8a1dKu2lQhs9cUUVLGLM3mq8bdOlc3paeJvDWoTweFtStrbTLsMZoZlLNbuf4occc88HgH64ooqJUYVfcqK6BScdUdTodpDp0CpCCSx3O7HLOx6sx7k+tQ/Ez4d6X8VPhheeF9SCR3G0z2N2Rk206g7W+h5BHcE+1FFdWEk4Ti46GOIinFpn5gXUD215LbuVLROyMV6ZBxx+VQ0UV+go+UCiiimB//2Q==" alt="Foto Admin / Game Master berseragam ASN" />
           <div>
-            <b>Masuk sebagai Admin / Game Master</b>
-            <span>Khusus Bapak/Ibu Guru — pengendali &amp; penjaga dunia ini</span>
+            <b>ADMIN</b>
+            <span>Khusus Bapak/Ibu Guru</span>
           </div>
         </div>
-        <p>Kamu akan masuk sebagai <b>karakter khusus Admin</b> berseragam ASN lengkap (peci beremblem Garuda &amp; dasi merah-putih seperti foto). Semua menu &amp; segel permainan <b>langsung terbuka</b>, dan dari panel GM kamu bisa memberi Kredit &amp; item langsung ke pemain.</p>
         <label class="field" for="gmStartPass" style="margin-top:10px;">Kata Sandi Admin</label>
         <input id="gmStartPass" type="password" autocomplete="off" enterkeyhint="go" placeholder="Masukkan kata sandi" />
         <div class="gm-err" id="gmStartErr">Kata sandi salah. Coba lagi.</div>
         <button id="gmStartBtn" type="button">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14.5" r="4.2"/><path d="M11.2 11.3 20 2.5M17 5.5l2.8 2.8M14.2 8.3l2.4 2.4"/></svg>
-          Masuk sebagai Admin
+          ADMIN — Buka Gerbang
         </button>
       </div>
     </div>
     <div class="step hide" id="stepChar">
-      <label class="field">2. Kamu laki-laki atau perempuan?</label>
+      <label class="field">Buat karaktermu</label>
       <div class="gender-row" role="group" aria-label="Pilih jenis kelamin">
         <button class="gender-btn on" id="genderL" type="button">Laki-laki</button>
         <button class="gender-btn" id="genderP" type="button">Perempuan</button>
       </div>
-      <label class="field" id="skinLabel">3. Pilih warna kulitmu</label>
+      <label class="field" id="skinLabel">Warna kulit</label>
       <div class="swatch-row" id="skinRow" role="group" aria-labelledby="skinLabel"></div>
-      <label class="field" id="hairColorLabel">4. Pilih warna rambutmu</label>
+      <label class="field" id="hairColorLabel">Warna rambut</label>
       <div class="swatch-row" id="hairColorRow" role="group" aria-labelledby="hairColorLabel"></div>
-      <label class="field" id="hairStyleLabel">5. Pilih jenis rambutmu</label>
+      <label class="field" id="hairStyleLabel">Gaya rambut</label>
       <div class="opt-row" id="hairStyleRow" role="group" aria-labelledby="hairStyleLabel"></div>
-      <label class="field" id="bodyLabel">6. Pilih bentuk badanmu</label>
+      <label class="field" id="bodyLabel">Bentuk badan</label>
       <div class="opt-row" id="bodyRow" role="group" aria-labelledby="bodyLabel"></div>
       <p class="custom-summary" id="customSummary"></p>
-      <div class="locked-box">
-        <div class="locked-head">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5 5.5 3h13L20 7.5M4 7.5h16M4 7.5V19a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19V7.5M9.5 20.5v-6h5v6"/></svg>
-          Seragam &amp; Atribut — Beli di Koperasi
-        </div>
-        <p>Seragam dan atribut tidak dipilih di sini — semuanya dibeli di <b>Koperasi Sekolah</b> (kios hijau di samping Perpustakaan) dengan <b>Kredit</b> dari jawaban benar, Pos Pramuka, Arena, dan Uang Saku harian. Pakaian awalmu: Kaos Biru sekolah.</p>
-        <div class="locked-items"><span>Seragam Merah Putih</span><span>Seragam Pramuka</span><span>Kaos Biru SDN</span><span>Topi</span><span>Dasi</span><span>Ransel</span><span>Kacamata</span><span>Syal</span><span>Sepatu Keren</span><span>Lencana</span><span>Tongkat Pramuka</span></div>
-      </div>
+      <p class="sheet-note" style="text-align:center;">Seragam &amp; atribut dibeli nanti di <b>Koperasi Sekolah</b>.</p>
       <div class="btn-row">
         <button id="backBtn" type="button">← Nama</button>
         <button id="startBtn" type="button">
-          Masuk Sekolah
+          MASUK
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </div>
-      <div class="start-or">ATAU MAIN BARENG TEMAN</div>
+      <div class="start-or">ATAU</div>
       <button id="mpStartBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="17" cy="9.5" r="2.6"/><path d="M16.4 14.6c2.3.2 3.8 1.6 4.3 4"/></svg>
-        Main Bareng (Multiplayer)
+        Main Bareng Teman
       </button>
-      <p class="sheet-note" style="text-align:center;margin-top:7px;">Masuk dunia lalu gabung ruangan: bila GM sudah login, langsung masuk tanpa kode; bila belum, pakai kode ruangan 4 huruf.</p>
     </div>
-    <p class="start-note">Kontrol ala RPG: <b>joystick di kiri</b> untuk berjalan ke segala arah, <b>geser layar kanan</b> untuk memutar kamera, tombol <b>Aksi</b> menyala saat dekat objek, dan tombol <b>Drone</b> untuk melihat dari atas. Ada <b>sepeda pinjaman</b> terparkir di dekat gerbang — dekati lalu tekan Aksi untuk naik dan menjelajah lebih cepat!</p>
+    <p class="start-note">Joystick kiri untuk berjalan • geser layar untuk kamera • tombol <b>Aksi</b> saat dekat objek.</p>
   </div>
 </div>
 
@@ -1913,6 +1966,289 @@ function riceField(cx, cz){
 }
 riceField(58, -14); riceField(-58, 90); riceField(30, 88);
 postSign('Sawah', 45, -26, 0.4, {w:2.4});
+
+/* ================= DESA DIPERLUAS: Polsek, Sungai, Hutan, Kandang, Dealer, Wahana =================
+   Tambahan sesuai permintaan: permainan kendaraan dipindah ke kendaraan terparkirnya,
+   mini-game lapangan (tanam/pancing/bola/sampah/pakan), beli rumah-mobil-motor,
+   wahana Bis & Helikopter, plus bangunan umum & bentang alam desa. */
+INFO['Kantor Polsek'] = 'Kantor Polsek Purwojati: kantor polisi sektor. Mobil polisi terparkir di depannya — dekati mobilnya untuk bermain Kejar-Kejaran Polisi (bila segelnya sudah dibuka Admin).';
+INFO['Mobil Polisi'] = 'Mobil polisi terparkir di depan Kantor Polsek. Tekan Aksi untuk bermain Kejar-Kejaran Polisi dari sini.';
+INFO['Mobil Balap'] = 'Mobil balap terparkir di tepi Jl. Sawah Glempang. Tekan Aksi untuk bermain Balapan Kilat dari sini.';
+INFO['Motor Cross'] = 'Motor cross terparkir di tepi Hutan Desa. Tekan Aksi untuk bermain Motocross Lompat dari sini.';
+INFO['Sungai Gerduren'] = 'Sungai Gerduren di tepi timur desa: airnya jernih dan banyak ikannya. Tekan Aksi untuk memancing!';
+INFO['Hutan Desa'] = 'Hutan Desa Gerduren: pepohonan rindang di barat laut desa. Di tepinya terparkir motor cross.';
+INFO['Kandang Ayam'] = 'Kandang ayam di belakang sekolah. Ayam-ayamnya suka diberi makan jagung. Tekan Aksi untuk memberi pakan!';
+INFO['Kandang Kambing'] = 'Kandang kambing di belakang sekolah. Kambingnya suka daun hijau segar. Tekan Aksi untuk memberi pakan!';
+INFO['Kandang Sapi'] = 'Kandang sapi di belakang sekolah. Sapinya suka rumput & jerami. Tekan Aksi untuk memberi pakan!';
+INFO['Kolam Ikan'] = 'Kolam ikan di belakang sekolah, di samping kandang. Ikannya suka pelet. Tekan Aksi untuk memberi pakan!';
+INFO['Bedeng Kebun'] = 'Bedeng Kebun Sekolah: ayo menanam! Tanam bibit, tunggu tumbuh, lalu panen. Tekan Aksi untuk bermain Menanam di Kebun.';
+INFO['Petak Sawah'] = 'Petak sawah warga: ayo menanam padi! Tanam bibit, tunggu menguning, lalu panen. Tekan Aksi untuk bermain Menanam di Sawah.';
+INFO['Lapangan Bola'] = 'Tengah Lapangan Gerduren: tempat bermain bola. Tekan Aksi untuk bermain Bola — tendang ke gawang melewati kiper!';
+INFO['Tong Sampah'] = 'Halaman sekolah harus bersih! Tekan Aksi untuk bermain Mencari Sampah: pungut semua sampah yang berserakan.';
+INFO['Dealer Gerduren'] = 'Dealer Gerduren: tempat membeli Rumah, Mobil, dan Motor — bisa tunai, bisa kredit (cicilan) memakai Kredit permainanmu. Tekan Aksi untuk melihat katalognya.';
+INFO['Halte Bis'] = 'Halte Bis desa. Tekan Aksi untuk naik Bis Keliling Desa — berkeliling Desa Gerduren tanpa berjalan kaki!';
+INFO['Helikopter'] = 'Helikopter wisata di landasan Lapangan Gerduren. Tekan Aksi untuk terbang berkeliling Desa Gerduren dari udara!';
+INFO['Puskesmas'] = 'Puskesmas Purwojati: pusat kesehatan masyarakat. Kalau sakit, berobatlah ke sini bersama orang tuamu.';
+INFO['Taman Desa'] = 'Taman Desa Gerduren: tempat warga bersantai sore hari di bangku-bangku taman.';
+INFO['Rumah Dijual'] = 'Rumah ini dijual! Beli di Dealer Gerduren — bisa tunai, bisa kredit (cicilan). Setelah lunas, rumah ini jadi Rumah Kamu.';
+
+/* --- Pembangun kendaraan terparkir (mobil polisi, mobil balap, motor cross) --- */
+function parkedCar(x, z, ry, bodyCol, kind){
+  var g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry || 0; scene.add(g);
+  box(2.0, 0.55, 4.3, bodyCol, 0, 0.58, 0, g);                                  // badan
+  box(1.8, 0.52, 2.1, kind === 'balap' ? bodyCol : 0xe2e8f0, 0, 1.1, -0.25, g);  // kabin
+  box(1.84, 0.3, 1.9, 0x1e3a5f, 0, 1.12, -0.25, g, false);                      // kaca
+  [[-0.98,1.35],[0.98,1.35],[-0.98,-1.35],[0.98,-1.35]].forEach(function(w){
+    var wh = cyl(0.36, 0.36, 0.18, 0x111827, w[0], 0.36, w[1], g, 12); wh.rotation.z = Math.PI/2;
+  });
+  if(kind === 'polisi'){
+    box(2.04, 0.2, 4.34, 0x1e40af, 0, 0.62, 0, g, false);                       // garis biru polisi
+    box(0.5, 0.16, 0.7, 0xdc2626, -0.3, 1.45, -0.25, g, false);                 // lampu rotator merah
+    box(0.5, 0.16, 0.7, 0x2563eb, 0.3, 1.45, -0.25, g, false);                  // lampu rotator biru
+  }
+  if(kind === 'balap'){
+    box(2.2, 0.12, 0.5, 0x111827, 0, 1.05, -2.05, g, false);                     // spoiler
+    box(0.14, 0.4, 0.14, 0x111827, -0.8, 0.8, -2.0, g, false); box(0.14, 0.4, 0.14, 0x111827, 0.8, 0.8, -2.0, g, false);
+    box(0.5, 0.14, 4.34, 0xfacc15, 0, 0.9, 0, g, false);                        // garis kuning atap-badan
+  }
+  addCollider(x, z, 1.6, 2.5);
+  return g;
+}
+function parkedTrailBike(x, z, ry){
+  var g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry || 0; scene.add(g);
+  [-0.85, 0.85].forEach(function(wz){
+    var w = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.11, 10, 20), mat(0x1f2937));
+    w.position.set(0, 0.42, wz); w.rotation.y = Math.PI/2; w.castShadow = true; g.add(w);
+  });
+  var f1 = cyl(0.05, 0.05, 1.3, 0xb45309, 0, 0.75, -0.1, g, 8); f1.rotation.x = 1.1;
+  var f2 = cyl(0.05, 0.05, 0.9, 0xb45309, 0, 0.95, 0.3, g, 8); f2.rotation.x = 0.45;
+  box(0.34, 0.14, 0.85, 0x111827, 0, 1.12, -0.42, g, false);                    // jok panjang trail
+  box(0.6, 0.06, 0.06, 0x374151, 0, 1.32, 0.72, g, false);                      // setang
+  box(0.4, 0.3, 0.55, 0xd6d3cd, 0, 0.62, 0.05, g, false);                       // blok mesin perak
+  addCollider(x, z, 0.8, 1.2);
+  return g;
+}
+
+/* --- Kantor Polsek (bangunan umum, timur desa) + mobil polisi terparkir di depannya --- */
+(function(){
+  var g = new THREE.Group(); g.position.set(74, 0, 30); scene.add(g);
+  box(11, 4.6, 8, 0xe0f2fe, 0, 2.3, 0, g);
+  box(11.14, 0.7, 8.14, 0x1e40af, 0, 0.35, 0, g, false);
+  gableRoof(g, 11, 8, 2.4, 4.6, 0x334155, 0x1e293b);
+  box(1.6, 2.8, 0.16, 0x1e3a5f, 0, 1.4, 4.05, g, false);
+  [-3.4, 3.4].forEach(function(wx){ box(1.7, 1.3, 0.12, PAL.winFrame, wx, 2.6, 4.05, g, false); box(1.45, 1.05, 0.06, 0xcfeeff, wx, 2.6, 4.14, g, false); });
+  wallSign(g, 'KANTOR POLSEK', 0, 3.9, 4.06, 5.2, {bg:'#1e40af', fg:'#ffffff', frame:0x172554});
+  cyl(0.07, 0.09, 6.5, 0xf8fafc, -6.5, 3.25, 3.4, g, 8);                        // tiang bendera polsek
+  box(1.5, 0.55, 0.05, 0xdc2626, -5.72, 6.1, 3.4, g, false); box(1.5, 0.55, 0.05, 0xffffff, -5.72, 5.55, 3.4, g, false);
+  scene.add(g);
+  addCollider(74, 30, 6, 4.5);
+  addInteractable(74, 30, 10, 'Kantor Polsek');
+  parkedCar(65, 30, Math.PI/2, 0xf8fafc, 'polisi');
+  labelAt('Mobil Polisi', 65, 2.6, 30, 0.62);
+  addInteractable(65, 30, 5.5, 'Mobil Polisi', null, {game:'polisi'});
+})();
+
+/* --- Puskesmas (bangunan umum, timur laut desa) --- */
+(function(){
+  var g = new THREE.Group(); g.position.set(64, 0, -34); scene.add(g);
+  box(10, 4.2, 7.5, 0xf0fdf4, 0, 2.1, 0, g);
+  box(10.14, 0.6, 7.64, 0x16a34a, 0, 0.3, 0, g, false);
+  gableRoof(g, 10, 7.5, 2.2, 4.2, PAL.roofTile, PAL.roofDark);
+  box(1.5, 2.6, 0.16, 0x0e7a5f, 0, 1.3, 3.8, g, false);
+  box(0.12, 0.9, 0.3, 0xdc2626, 2.8, 3.1, 3.82, g, false); box(0.12, 0.3, 0.9, 0xdc2626, 2.8, 3.1, 3.82, g, false);
+  wallSign(g, 'PUSKESMAS', 0, 3.6, 3.81, 4.6, {bg:'#15803d', fg:'#ffffff', frame:0x14532d});
+  scene.add(g);
+  addCollider(64, -34, 5.5, 4.2);
+  addInteractable(64, -34, 9, 'Puskesmas');
+})();
+
+/* --- Mobil balap terparkir di tepi Jl. Sawah Glempang --- */
+parkedCar(-24, 44, 0.25, 0xdc2626, 'balap');
+labelAt('Mobil Balap', -24, 2.6, 44, 0.62);
+addInteractable(-24, 44, 5.5, 'Mobil Balap', null, {game:'balap'});
+
+/* --- Hutan Desa (barat laut) + motor cross terparkir di tepinya --- */
+(function(){
+  var pts = [[-92,-62],[-98,-54],[-86,-56],[-100,-66],[-88,-70],[-96,-74],[-82,-64],[-102,-46],[-90,-48],[-84,-74],[-98,-84],[-88,-86],[-78,-56],[-104,-58]];
+  pts.forEach(function(p, i){ tree(p[0], p[1], 1.25 + (i % 3) * 0.3); });
+  flat(26, 30, 0x3f9e4d, -92, -63, scene, 0.03);
+  postSign('Hutan Desa', -80, -50, 2.4, {w:3.0, bg:'#14532d', fg:'#ffffff'});
+  addInteractable(-92, -62, 13, 'Hutan Desa');
+  parkedTrailBike(-82, -52, 0.7);
+  labelAt('Motor Cross', -82, 2.3, -52, 0.62);
+  addInteractable(-82, -52, 5, 'Motor Cross', null, {game:'moto'});
+})();
+
+/* --- Sungai Gerduren (tepi timur desa) + jembatan papan + titik memancing --- */
+(function(){
+  box(11, 0.22, 220, 0x77572f, 103, 0.08, 0, scene, false).receiveShadow = true;   // galian sungai
+  var wtr = new THREE.Mesh(new THREE.PlaneGeometry(7.5, 220), new THREE.MeshLambertMaterial({color:0x38b6e8}));
+  wtr.rotation.x = -Math.PI/2; wtr.position.set(103, 0.26, 0); scene.add(wtr);
+  flat(2.2, 220, 0x7cc75f, 96.8, 0, scene, 0.05); flat(2.2, 220, 0x7cc75f, 109.2, 0, scene, 0.05);
+  for(var i = -3; i <= 3; i++) box(13.5, 0.16, 0.95, 0xb45309, 103, 0.44, 20 + i * 1.0, scene, false); // jembatan papan
+  box(0.25, 0.55, 7.6, 0x78350f, 97.2, 0.3, 20, scene, false); box(0.25, 0.55, 7.6, 0x78350f, 108.8, 0.3, 20, scene, false);
+  postSign('Sungai Gerduren', 94.5, 14.5, 2.2, {w:3.2, bg:'#075985', fg:'#ffffff'});
+  labelAt('Tempat Memancing', 94, 2.2, 26, 0.6);
+  addInteractable(94, 26, 6, 'Sungai Gerduren', null, {act:'pancing'});
+  addInteractable(103, 20, 7, 'Sungai Gerduren', null, {act:'pancing'});
+})();
+
+/* --- Sawah baru (tenggara) + titik menanam padi --- */
+riceField(84, 84);
+addInteractable(84, 84, 12, 'Sawah');
+addInteractable(84, 69.5, 6, 'Petak Sawah', null, {act:'tanamSawah'});
+
+/* --- Titik permainan lapangan di sekolah & lapangan --- */
+addInteractable(-25.2, 15.2, 4.5, 'Bedeng Kebun', null, {act:'tanamKebun'});
+addInteractable(-60, 8, 5.5, 'Lapangan Bola', null, {act:'bola'});
+(function(){ // tong sampah hijau di halaman + sampah warna-warni berserakan (visual permainan Mencari Sampah)
+  cyl(0.42, 0.36, 0.95, 0x16a34a, 10, 0.48, 2, scene, 12);
+  cyl(0.45, 0.45, 0.1, 0x14532d, 10, 1.0, 2, scene, 12);
+  addCollider(10, 2, 0.6, 0.6);
+  [[6,-3],[13,-5],[4,5],[15,4],[8,-8],[12,8]].forEach(function(p, i){
+    box(0.34, 0.14, 0.26, [0xef4444, 0xf59e0b, 0x3b82f6, 0xec4899, 0xffffff, 0x84cc16][i], p[0], 0.12, p[1], scene, false);
+  });
+  addInteractable(10, 2, 5, 'Tong Sampah', null, {act:'sampah'});
+})();
+
+/* --- Kandang ternak + kolam ikan di BELAKANG sekolah (utara gedung kelas) --- */
+function pen(cx, cz, w, d){
+  var hw = w/2, hd = d/2;
+  box(w, 0.55, 0.14, 0x8a5a2b, cx, 0.28, cz - hd, scene, false); box(w, 0.55, 0.14, 0x8a5a2b, cx, 0.28, cz + hd, scene, false);
+  box(0.14, 0.55, d, 0x8a5a2b, cx - hw, 0.28, cz, scene, false); box(0.14, 0.55, d, 0x8a5a2b, cx + hw, 0.28, cz, scene, false);
+  flat(w - 0.3, d - 0.3, 0xa98a5b, cx, cz, scene, 0.05);
+}
+(function(){
+  // Kandang Ayam + 3 ayam
+  pen(-24, -40, 8, 6);
+  [[-25.5,-41],[-22.8,-39.2],[-24.2,-38.6]].forEach(function(p){
+    var b = new THREE.Mesh(new THREE.SphereGeometry(0.32, 9, 8), mat(0xffffff)); b.position.set(p[0], 0.42, p[1]); b.castShadow = true; scene.add(b);
+    var hd2 = new THREE.Mesh(new THREE.SphereGeometry(0.17, 8, 7), mat(0xffffff)); hd2.position.set(p[0] + 0.24, 0.66, p[1]); scene.add(hd2);
+    var bk = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.22, 6), mat(0xf59e0b)); bk.rotation.z = -Math.PI/2; bk.position.set(p[0] + 0.44, 0.64, p[1]); scene.add(bk);
+    box(0.16, 0.12, 0.05, 0xdc2626, p[0] + 0.22, 0.82, p[1], scene, false);
+  });
+  postSign('Kandang Ayam', -24, -35.8, 0, {w:2.8});
+  addInteractable(-24, -36.5, 5.5, 'Kandang Ayam', null, {act:'pakanAyam'});
+  // Kandang Kambing + 2 kambing
+  pen(-11, -41, 8, 7);
+  [[-12.5,-41.5],[-9.6,-40.2]].forEach(function(p){
+    box(0.95, 0.62, 0.5, 0xe7e5e4, p[0], 0.72, p[1], scene); box(0.42, 0.4, 0.36, 0xe7e5e4, p[0] + 0.62, 0.95, p[1], scene, false);
+    [[-0.32,-0.16],[0.32,-0.16],[-0.32,0.16],[0.32,0.16]].forEach(function(l){ box(0.11, 0.5, 0.11, 0xd6d3d1, p[0] + l[0], 0.25, p[1] + l[1], scene, false); });
+    box(0.2, 0.07, 0.07, 0x78716c, p[0] + 0.6, 1.2, p[1] - 0.14, scene, false); box(0.2, 0.07, 0.07, 0x78716c, p[0] + 0.6, 1.2, p[1] + 0.14, scene, false);
+  });
+  postSign('Kandang Kambing', -11, -36.8, 0, {w:3.0});
+  addInteractable(-11, -37.5, 5.5, 'Kandang Kambing', null, {act:'pakanKambing'});
+  // Kandang Sapi + 2 sapi
+  pen(3, -40, 9, 7);
+  [[1.6,-41],[4.6,-39.4]].forEach(function(p){
+    box(1.5, 0.95, 0.8, 0xf5f5f4, p[0], 1.0, p[1], scene); box(0.6, 0.55, 0.55, 0xf5f5f4, p[0] + 0.98, 1.25, p[1], scene, false);
+    box(0.5, 0.4, 0.3, 0x92400e, p[0] - 0.3, 1.3, p[1] + 0.2, scene, false);
+    [[-0.55,-0.28],[0.55,-0.28],[-0.55,0.28],[0.55,0.28]].forEach(function(l){ box(0.16, 0.62, 0.16, 0xe7e5e4, p[0] + l[0], 0.31, p[1] + l[1], scene, false); });
+    box(0.34, 0.1, 0.1, 0xfda4af, p[0] + 1.3, 1.05, p[1], scene, false);
+  });
+  postSign('Kandang Sapi', 3, -35.8, 0, {w:2.8});
+  addInteractable(3, -36.5, 5.5, 'Kandang Sapi', null, {act:'pakanSapi'});
+  // Kolam Ikan + ikan-ikan oranye
+  (function(){
+    box(8.6, 0.35, 6.6, 0x78716c, 16, 0.17, -40, scene, false);
+    var wp = new THREE.Mesh(new THREE.PlaneGeometry(7.8, 5.8), new THREE.MeshLambertMaterial({color:0x38b6e8}));
+    wp.rotation.x = -Math.PI/2; wp.position.set(16, 0.37, -40); scene.add(wp);
+    [[14.5,-41.2],[17.5,-39],[16,-38.6],[18.2,-41.4]].forEach(function(p){
+      var f = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 6), mat(0xf97316)); f.scale.set(1.5, 0.5, 0.7); f.position.set(p[0], 0.4, p[1]); scene.add(f);
+    });
+    addCollider(16, -40, 4.4, 3.4);
+    postSign('Kolam Ikan', 16, -35.9, 0, {w:2.8});
+    addInteractable(16, -36.2, 5.5, 'Kolam Ikan', null, {act:'pakanIkan'});
+  })();
+})();
+
+/* --- Dealer Gerduren (etalase kendaraan di tepi jalan timur) + rumah yang dijual --- */
+var dealerCarRef = null, playerHouseIt = null;
+(function(){
+  flat(13, 9, 0xd6d3cd, 38, 42, scene, 0.05);
+  [[-5.8,-3.8],[5.8,-3.8],[-5.8,3.8],[5.8,3.8]].forEach(function(p){ box(0.24, 2.7, 0.24, 0xb45309, 38 + p[0], 1.35, 42 + p[1], scene); });
+  box(13.4, 0.16, 9.4, 0x0ea5e9, 38, 2.82, 42, scene);
+  postSign('Dealer Gerduren', 31.5, 37.2, 2.6, {w:3.4, bg:'#b45309', fg:'#fff7d6'});
+  dealerCarRef = parkedCar(35.5, 42.5, 0.2, 0x0284c7, 'biasa');
+  parkedTrailBike(41.5, 42.5, -0.3);
+  addInteractable(38, 42, 7.5, 'Dealer Gerduren', null, {dealer:true});
+  var hg = house(-14, 62, 0xfef3c7, 0x9e3d2c);
+  postSign('Rumah Dijual', -14, 57.6, Math.PI, {w:2.8, bg:'#b45309', fg:'#fff7d6'});
+  addInteractable(-14, 62, 7.5, 'Rumah Dijual');
+  playerHouseIt = interactables[interactables.length - 1];
+})();
+
+/* --- Taman Desa (fasilitas umum) --- */
+(function(){
+  flat(12, 9, 0x86d95e, -52, 30, scene, 0.04);
+  [[-55,28],[-49,28],[-55,32.5],[-49,32.5]].forEach(function(p){ box(1.7, 0.12, 0.45, 0x8a5a2b, p[0], 0.5, p[1], scene, false); box(0.14, 0.5, 0.4, 0x6d4c2f, p[0] - 0.7, 0.25, p[1], scene, false); box(0.14, 0.5, 0.4, 0x6d4c2f, p[0] + 0.7, 0.25, p[1], scene, false); });
+  [[-56,25.8],[-48,25.8],[-56,34.4],[-48,34.4]].forEach(function(p, i){ box(1.1, 0.3, 1.1, [0xef4444, 0xf59e0b, 0xec4899, 0xa855f7][i], p[0], 0.15, p[1], scene, false); });
+  tree(-58, 30, 1.1); tree(-46, 30, 1.1);
+  postSign('Taman Desa', -52, 24.8, 2.8, {w:2.8, bg:'#166534', fg:'#ffffff'});
+  addInteractable(-52, 30, 8, 'Taman Desa');
+})();
+
+/* --- Rumah warga tambahan --- */
+house(84, 40, 0xdbeafe, 0x8a3320); house(-70, 64, 0xfce7f3, 0x7c4a21); house(20, 82, 0xdcfce7, 0x9e3d2c); house(-88, 58, 0xfef9c3, 0x8a3320);
+
+/* --- Halte Bis + Bis Keliling Desa (wahana) --- */
+var busGroup = new THREE.Group();
+(function(){
+  box(5.4, 0.14, 2.4, 0xd6d3cd, 14, 0.07, 45, scene, false);
+  [[-2.4,-1],[2.4,-1],[-2.4,1],[2.4,1]].forEach(function(p){ box(0.16, 2.3, 0.16, 0x0e7a5f, 14 + p[0], 1.15, 45 + p[1], scene); });
+  box(5.8, 0.14, 2.8, 0x0e7a5f, 14, 2.36, 45, scene);
+  box(3.4, 0.1, 0.4, 0x8a5a2b, 14, 0.55, 45.6, scene, false);
+  postSign('Halte Bis', 14, 42.6, Math.PI, {w:2.6, bg:'#0e7a5f', fg:'#ffffff'});
+  addInteractable(14, 45, 6, 'Halte Bis', null, {tour:'bis'});
+  // bis sekolah kuning (grup global: bergerak saat wahana berjalan)
+  box(2.6, 2.0, 8.2, 0xfacc15, 0, 1.45, 0, busGroup);
+  box(2.64, 0.8, 7.6, 0x1e3a5f, 0, 1.95, 0, busGroup, false);
+  box(2.62, 0.5, 8.24, 0x166534, 0, 0.62, 0, busGroup, false);
+  [[-1.25,2.9],[1.25,2.9],[-1.25,-2.9],[1.25,-2.9]].forEach(function(w){
+    var wh = cyl(0.48, 0.48, 0.2, 0x111827, w[0], 0.48, w[1], busGroup, 14); wh.rotation.z = Math.PI/2;
+  });
+  busGroup.position.set(22, 0, 50.5); busGroup.rotation.y = Math.PI/2;
+  scene.add(busGroup);
+  labelAt('Bis Keliling Desa', 22, 3.6, 50.5, 0.6);
+})();
+
+/* --- Landasan helikopter di sudut Lapangan + helikopter wisata (wahana) --- */
+var heliGroup = new THREE.Group(), heliRotor = null;
+(function(){
+  var pad = new THREE.Mesh(new THREE.CylinderGeometry(3.4, 3.4, 0.12, 24), mat(0x64748b));
+  pad.position.set(-82, 0.06, -14); pad.receiveShadow = true; scene.add(pad);
+  var ring2 = new THREE.Mesh(new THREE.RingGeometry(2.9, 3.25, 28), new THREE.MeshBasicMaterial({color:0xfacc15, side:THREE.DoubleSide}));
+  ring2.rotation.x = -Math.PI/2; ring2.position.set(-82, 0.13, -14); scene.add(ring2);
+  var body = new THREE.Mesh(new THREE.SphereGeometry(1.15, 14, 11), mat(0xdc2626));
+  body.scale.set(1, 0.85, 1.5); body.position.set(0, 1.35, 0); body.castShadow = true; heliGroup.add(body);
+  box(1.0, 0.55, 1.1, 0xbae6fd, 0, 1.3, 0.95, heliGroup, false);
+  box(0.28, 0.28, 3.4, 0xb91c1c, 0, 1.5, -2.6, heliGroup);
+  box(1.3, 0.5, 0.14, 0xb91c1c, 0, 1.95, -4.2, heliGroup, false);
+  heliRotor = box(6.4, 0.07, 0.5, 0x1f2937, 0, 2.5, 0, heliGroup, false);
+  box(0.5, 0.07, 6.4, 0x1f2937, 0, 2.5, 0, heliGroup, false).visible = false;
+  box(2.6, 0.09, 0.16, 0x374151, 0, 0.28, 0.9, heliGroup, false); box(2.6, 0.09, 0.16, 0x374151, 0, 0.28, -0.9, heliGroup, false);
+  heliGroup.position.set(-82, 0, -14);
+  scene.add(heliGroup);
+  labelAt('Helikopter', -82, 3.6, -14, 0.6);
+  addInteractable(-82, -14, 6.5, 'Helikopter', null, {tour:'heli'});
+})();
+
+/* --- Bukit & Gunung (bentang alam tepi desa) --- */
+(function(){
+  [[-104, 10, 15, 5.5], [58, 105, 17, 6.5], [-30, 106, 13, 4.5]].forEach(function(h){
+    var hill = new THREE.Mesh(new THREE.SphereGeometry(h[2], 18, 12), mat(0x5db34c));
+    hill.scale.y = h[3] / h[2]; hill.position.set(h[0], 0, h[1]); hill.receiveShadow = true; scene.add(hill);
+  });
+  var gun = new THREE.Mesh(new THREE.ConeGeometry(17, 15, 22), mat(0x7d8aa0));
+  gun.position.set(-102, 7.5, -96); scene.add(gun);
+  var snow = new THREE.Mesh(new THREE.ConeGeometry(6.2, 5.4, 22), mat(0xffffff));
+  snow.position.set(-102, 12.3, -96); scene.add(snow);
+  labelAt('Gunung', -102, 17.5, -96, 0.9);
+  var gun2 = new THREE.Mesh(new THREE.ConeGeometry(13, 11, 20), mat(0x8b98ad));
+  gun2.position.set(88, 5.5, -100); scene.add(gun2);
+  var snow2 = new THREE.Mesh(new THREE.ConeGeometry(4.7, 4, 20), mat(0xffffff));
+  snow2.position.set(88, 9.1, -100); scene.add(snow2);
+})();
 
 /* ================= POHON + AWAN ================= */
 /* Pohon rindang: batang meruncing + 3 lapis tajuk mengecil ke atas — terbaca sebagai pohon */
@@ -2901,6 +3237,14 @@ var zones = [
   {name:'Balai Desa Gerduren',  minX:-92, maxX:-72, minZ:-44, maxZ:-28},
   {name:'Jl. Sawah Glempang',   minX:-110,maxX:110, minZ:47,  maxZ:57},
   {name:'Jalan Menuju Sekolah', minX:-6,  maxX:6,   minZ:17,  maxZ:47},
+  {name:'Kandang & Kolam Sekolah', minX:-30, maxX:21, minZ:-45, maxZ:-34},
+  {name:'Kantor Polsek',           minX:58,  maxX:84, minZ:23,  maxZ:37},
+  {name:'Puskesmas',               minX:57,  maxX:71, minZ:-39, maxZ:-29},
+  {name:'Sungai Gerduren',         minX:93,  maxX:110, minZ:-110,maxZ:110},
+  {name:'Hutan Desa',              minX:-110,maxX:-74, minZ:-92, maxZ:-42},
+  {name:'Dealer Gerduren',         minX:30,  maxX:46, minZ:36,  maxZ:48},
+  {name:'Taman Desa',              minX:-59, maxX:-45, minZ:25,  maxZ:35},
+  {name:'Sawah',                   minX:70,  maxX:98, minZ:70,  maxZ:98},
   {name:'Lingkungan Warga',     minX:-110,maxX:110, minZ:17,  maxZ:110}
 ];
 var currentLoc = '';
@@ -2932,8 +3276,8 @@ function setDeviceMode(mode){
     : 'Joystick kiri untuk berjalan • geser kanan layar untuk memutar kamera';
   var noteEl = document.querySelector('.start-note');
   if(noteEl) noteEl.innerHTML = lap
-    ? 'Kontrol laptop: <b>W A S D</b> untuk berjalan ke segala arah, <b>seret mouse</b> atau <b>tombol panah</b> untuk memutar kamera, <b>Shift</b> untuk lari, <b>E</b> untuk Aksi saat dekat objek, <b>Spasi</b> untuk lompat, dan <b>T</b> untuk membuka chat. Ada <b>sepeda pinjaman</b> terparkir di dekat gerbang — dekati lalu tekan E untuk naik dan menjelajah lebih cepat!'
-    : 'Kontrol ala RPG: <b>joystick di kiri</b> untuk berjalan ke segala arah, <b>geser layar kanan</b> untuk memutar kamera, tombol <b>Aksi</b> menyala saat dekat objek, dan tombol <b>Drone</b> untuk melihat dari atas. Ada <b>sepeda pinjaman</b> terparkir di dekat gerbang — dekati lalu tekan Aksi untuk naik dan menjelajah lebih cepat!';
+    ? '<b>WASD</b> berjalan • <b>seret mouse</b> kamera • <b>Shift</b> lari • <b>E</b> aksi • <b>Spasi</b> lompat • <b>T</b> chat.'
+    : 'Joystick kiri untuk berjalan • geser layar untuk kamera • tombol <b>Aksi</b> saat dekat objek.';
 }
 window.addEventListener('pointerdown', function(e){
   if(e.pointerType === 'touch') setDeviceMode('touch');
@@ -3081,6 +3425,42 @@ actionBtn.addEventListener('click', function(){
       b.addEventListener('click', function(){ hideInfo(); openPos(pid); });
       infoActions.appendChild(b);
     });
+    infoActions.classList.add('show');
+  } else if(t.game){
+    // Permainan kendaraan: dibuka dari kendaraan terparkirnya, bukan dari menu Arena
+    var gd = null;
+    for(var gi = 0; gi < GAMES.length; gi++) if(GAMES[gi].id === t.game) gd = GAMES[gi];
+    var gb = document.createElement('button');
+    gb.type = 'button'; gb.className = 'info-act-btn';
+    if(gd && gameUnlocked(t.game)){
+      gb.textContent = 'Main ' + gd.name;
+      (function(gid){ gb.addEventListener('click', function(){ hideInfo(); openGameAt(gid); }); })(t.game);
+    } else {
+      gb.textContent = 'Masih Tersegel — Minta Admin Membuka Segelnya';
+      gb.addEventListener('click', function(){ AudioSys.sfx('error'); showToast('Permainan ini masih tersegel. Minta Admin / Game Master membukanya dari panel GM.'); });
+    }
+    infoActions.appendChild(gb);
+    infoActions.classList.add('show');
+  } else if(t.act){
+    var ab = document.createElement('button');
+    ab.type = 'button'; ab.className = 'info-act-btn';
+    ab.textContent = 'Mulai Bermain di Sini';
+    (function(kind){ ab.addEventListener('click', function(){ hideInfo(); startActGame(kind); }); })(t.act);
+    infoActions.appendChild(ab);
+    infoActions.classList.add('show');
+  } else if(t.dealer){
+    var db = document.createElement('button');
+    db.type = 'button'; db.className = 'info-act-btn';
+    db.textContent = 'Lihat Katalog — Rumah, Mobil & Motor';
+    db.addEventListener('click', function(){ hideInfo(); openDealer(); });
+    infoActions.appendChild(db);
+    infoActions.classList.add('show');
+  } else if(t.tour){
+    var tb = document.createElement('button');
+    tb.type = 'button'; tb.className = 'info-act-btn';
+    tb.textContent = t.tour === 'bis' ? 'Naik Bis Keliling Desa' : 'Terbang Keliling Desa';
+    (function(kind){ tb.addEventListener('click', function(){ hideInfo(); startTour(kind); }); })(t.tour);
+    infoActions.appendChild(tb);
     infoActions.classList.add('show');
   } else {
     infoActions.classList.remove('show');
@@ -3240,7 +3620,9 @@ var MBG_IDS = ['nasi', 'susu', 'buah']; // isi satu paket MBG (item Kantin TIDAK
 var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, lastUangSaku:0, welcomed:false,
   owned:{}, equippedOutfit:'biru', equippedAcc:{},
   pos:{}, // skor 9 Pos Pramuka per id: {best, stamp, plays} — diisi dari POS_IDS di bawah
-  unsealed:{balap:false, moto:false, polisi:false}, muted:false };
+  unsealed:{balap:false, moto:false, polisi:false}, muted:false,
+  assets:{},  // barang Dealer yang sudah LUNAS: {rumah:true, mobil:true, motor:true}
+  loans:{} }; // cicilan Dealer yang sedang berjalan: {motor:{paid:3, per:150, total:8}, ...}
 ITEM_DEFS.forEach(function(d){ if(eco.inv[d.id] === undefined) eco.inv[d.id] = 0; });
 var POS_IDS = ['kompas','kim','bangga','tanda','ketaqwaan','bumbung','grazy','pbb','pionering'];
 POS_IDS.forEach(function(id){ eco.pos[id] = {best:0, stamp:false, plays:0}; });
@@ -3278,6 +3660,8 @@ function loadEco(){
     if(s.unsealed && typeof s.unsealed === 'object'){
       eco.unsealed.balap = !!s.unsealed.balap; eco.unsealed.moto = !!s.unsealed.moto; eco.unsealed.polisi = !!s.unsealed.polisi;
     }
+    if(s.assets && typeof s.assets === 'object') eco.assets = s.assets;
+    if(s.loans && typeof s.loans === 'object') eco.loans = s.loans;
     eco.muted = !!s.muted;
   }catch(e){ /* simpanan rusak/diabaikan: mulai dari nilai awal */ }
 }
@@ -3671,7 +4055,7 @@ function enterAdminWorld(){
   AudioSys.unlock(); AudioSys.setMuted(eco.muted); syncSndBtn(); AudioSys.startBGM(); AudioSys.sfx('lock');
   setTimeout(function(){ document.getElementById('hint').classList.add('hide'); }, 6000);
   setTimeout(function(){
-    showToast('Selamat datang, Admin! Semua segel Arena terbuka untukmu. Buka panel GM (tombol GM) untuk memberi Kredit & item ke pemain.', 5600);
+    showToast('Selamat datang, Admin! Semua segel permainan terbuka untukmu. Buka panel GM (tombol GM) untuk memberi Kredit & item ke pemain.', 5600);
   }, 500);
   setTimeout(function(){ mpAutoOpenGMSession(); }, 900); // login Admin = sesi multiplayer dibuka OTOMATIS
 }
@@ -3724,7 +4108,7 @@ nameInputEl.addEventListener('blur', function(){ setTimeout(syncStartScreen, 120
 
 /* ================= TOKO, POS PRAMUKA, KENDARAAN, ARENA & GM ================= */
 var shopOpen = false, posOpen = false, arenaOpen = false, gmOpen = false, mapOpen = false;
-function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting; }
+function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting || actOpen || dealerOpen || tourActive; }
 function addKredit(n){
   if(n <= 0) return;
   eco.kredit += n; saveEco(); updateStatsUI();
@@ -3780,7 +4164,7 @@ function renderShop(){
   if(shopMode === 'koperasi'){
     shopTitle.textContent = 'Koperasi Sekolah';
     shopSub.textContent = 'Seragam & perlengkapan sekolah. Beli sekali, jadi milikmu selamanya!';
-    shopNote.innerHTML = 'Seragam &amp; perlengkapan yang sudah dibeli bisa <b>dipakai / dilepas</b> kapan saja di sini — tampilannya langsung berubah pada karaktermu di dunia. Kredit didapat dari <b>jawaban benar</b> Quest &amp; Kuis, Pos Pramuka, Arena, dan <b>Uang Saku harian</b>.';
+    shopNote.innerHTML = 'Seragam &amp; perlengkapan yang sudah dibeli bisa <b>dipakai / dilepas</b> kapan saja di sini — tampilannya langsung berubah pada karaktermu di dunia. Kredit didapat dari <b>jawaban benar</b> Quest &amp; Kuis, Pos Pramuka, permainan seru di desa, dan <b>Uang Saku harian</b>.';
     KOPERASI_ITEMS.forEach(function(it){ shopGrid.appendChild(koperasiCard(it)); });
   } else {
     shopTitle.textContent = 'Kantin Sekolah';
@@ -3818,7 +4202,7 @@ function koperasiCard(it){
   return card;
 }
 function buyKoperasi(it){
-  if(eco.kredit < it.price){ AudioSys.sfx('error'); showToast('Kreditmu belum cukup untuk membeli ' + it.name + '. Kumpulkan Kredit dari Pos Pramuka, Arena, dan Uang Saku harian!'); return; }
+  if(eco.kredit < it.price){ AudioSys.sfx('error'); showToast('Kreditmu belum cukup untuk membeli ' + it.name + '. Kumpulkan Kredit dari Pos Pramuka, permainan seru di desa, dan Uang Saku harian!'); return; }
   eco.kredit -= it.price; eco.owned[it.id] = true;
   if(it.type === 'outfit') eco.equippedOutfit = it.outfit; else eco.equippedAcc[it.id] = true;
   saveEco(); updateStatsUI(); applyAppearance(); renderShop();
@@ -4837,9 +5221,14 @@ function gameIcon(id){
 }
 var arenaOverlay = document.getElementById('arenaOverlay'), arenaList = document.getElementById('arenaList');
 var gameWrap = document.getElementById('gameCanvasWrap'), gameCanvas = document.getElementById('gameCanvas');
-function openArena(){ arenaOpen = true; arenaOverlay.classList.add('on'); stopGame(true); renderArenaList(); AudioSys.sfx('pop'); }
+function gameUnlocked(id){ return adminMode || !!eco.unsealed[id]; }
+function openGameAt(id){
+  // Permainan kendaraan kini dibuka dari kendaraan terparkirnya di dunia
+  arenaOpen = true; arenaOverlay.classList.add('on');
+  AudioSys.sfx('pop');
+  startGame(id);
+}
 function closeArena(){ arenaOpen = false; stopGame(true); arenaOverlay.classList.remove('on'); }
-document.getElementById('arenaBtn').addEventListener('click', openArena);
 document.getElementById('arenaClose').addEventListener('click', function(){ AudioSys.sfx('click'); closeArena(); });
 arenaOverlay.addEventListener('click', function(e){ if(e.target === arenaOverlay) closeArena(); });
 function renderArenaList(){
@@ -4866,6 +5255,7 @@ function renderArenaList(){
 var game = null;
 function startGame(id){
   stopGame(true);
+  arenaOverlay.classList.add('on'); arenaOpen = true;
   arenaList.style.display = 'none';
   gameWrap.classList.add('on');
   game = { id:id, state:'ready', t:0, last:0, px:180, py:400, awarded:false,
@@ -4881,7 +5271,7 @@ function stopGame(silent){
   arenaList.style.display = '';
   if(!silent) renderArenaList();
 }
-document.getElementById('gameBackBtn').addEventListener('click', function(){ AudioSys.sfx('click'); stopGame(false); });
+document.getElementById('gameBackBtn').addEventListener('click', function(){ AudioSys.sfx('click'); closeArena(); });
 document.getElementById('gameAgainBtn').addEventListener('click', function(){ if(game) startGame(game.id); });
 function gamePointer(e){
   var r = gameCanvas.getBoundingClientRect();
@@ -5078,6 +5468,467 @@ function drawOver(g){
   g.fillText('+ ' + (game.resultKredit || 0) + ' Kredit', 180, 232 + lines.length * 24 + 12);
 }
 
+/* ================= PERMAINAN LAPANGAN (canvas): tanam, pancing, bola, sampah, pakan =================
+   Dibuka dari titiknya di dunia: Bedeng Kebun & Petak Sawah (menanam), Sungai (memancing),
+   Lapangan Bola (bola), Tong Sampah halaman (mencari sampah), Kandang & Kolam (beri pakan). */
+var actOpen = false, dealerOpen = false, tourActive = false;
+var ACT_DEFS = {
+  tanamKebun:  {title:'Menanam di Kebun Sekolah', sub:'Ketuk bedeng kosong untuk menanam bibit. Tunggu tumbuh besar, lalu ketuk lagi untuk memanen. Panen 6 tanaman sebelum waktu habis!', target:6, time:45, reward:40},
+  tanamSawah:  {title:'Menanam di Sawah', sub:'Ketuk petak kosong untuk menanam bibit padi. Tunggu padinya menguning, lalu ketuk untuk memanen. Panen 6 petak sebelum waktu habis!', target:6, time:45, reward:40},
+  pancing:     {title:'Memancing di Sungai', sub:'Ikan-ikan berenang di bawah kailmu. Ketuk layar saat ikan tepat di dekat kail untuk menariknya! Tangkap 5 ikan sebelum waktu habis.', target:5, time:45, reward:40},
+  bola:        {title:'Bermain Bola di Lapangan', sub:'Garis bidik bergerak ke kiri-kanan. Ketuk untuk menendang ke arah bidik — hindari kiper! Cetak 3 gol dari 6 tendangan.', target:3, time:99, reward:50},
+  sampah:      {title:'Mencari Sampah di Halaman', sub:'Sampah berserakan di halaman! Ketuk semua sampah untuk memungutnya. Jangan ketuk bunga, ya. Pungut 10 sampah sebelum waktu habis.', target:10, time:40, reward:40},
+  pakanAyam:   {title:'Memberi Makan Ayam', sub:'Ketuk tanah untuk menabur jagung. Ayam akan datang memakannya. Beri makan 5 kali sebelum waktu habis!', target:5, time:40, reward:35, animal:'ayam'},
+  pakanIkan:   {title:'Memberi Makan Ikan', sub:'Ketuk permukaan kolam untuk menabur pelet. Ikan akan berenang memakannya. Beri makan 5 kali sebelum waktu habis!', target:5, time:40, reward:35, animal:'ikan'},
+  pakanKambing:{title:'Memberi Makan Kambing', sub:'Ketuk tanah untuk meletakkan daun hijau. Kambing akan datang memakannya. Beri makan 5 kali sebelum waktu habis!', target:5, time:40, reward:35, animal:'kambing'},
+  pakanSapi:   {title:'Memberi Makan Sapi', sub:'Ketuk tanah untuk meletakkan jerami. Sapi akan datang memakannya. Beri makan 5 kali sebelum waktu habis!', target:5, time:40, reward:35, animal:'sapi'}
+};
+var actOverlay = document.getElementById('actOverlay'), actWrap = document.getElementById('actCanvasWrap'),
+    actCanvas = document.getElementById('actCanvas'), actTitle = document.getElementById('actTitle'), actSub = document.getElementById('actSub');
+var act = null;
+function startActGame(kind){
+  stopActGame(true);
+  var def = ACT_DEFS[kind]; if(!def) return;
+  actOpen = true; actOverlay.classList.add('on'); actWrap.classList.add('on');
+  actTitle.textContent = def.title; actSub.textContent = def.sub;
+  act = { kind:kind, def:def, state:'ready', t:0, last:0, timeLeft:def.time, score:0, awarded:false,
+          plots:[], fishes:[], items:[], pellets:[], ax:180, kicks:0, ball:null, aim:0 };
+  for(var i = 0; i < 9; i++) act.plots.push({stage:0, timer:0});
+  for(var f = 0; f < 5; f++) act.fishes.push({x: 30 + Math.random()*300, y: 215 + (f%3)*55 + Math.random()*14, dir: f%2 ? 1 : -1, sp: 34 + Math.random()*30});
+  var cols = ['#ef4444','#f59e0b','#3b82f6','#a855f7','#ffffff','#84cc16'];
+  for(var s2 = 0; s2 < 10; s2++) act.items.push({x: 35 + Math.random()*290, y: 90 + Math.random()*330, c: cols[s2 % 6], taken:false, flower:false});
+  for(var s3 = 0; s3 < 4; s3++) act.items.push({x: 35 + Math.random()*290, y: 90 + Math.random()*330, c:'#ec4899', taken:false, flower:true});
+  act.raf = requestAnimationFrame(actLoop);
+  AudioSys.sfx('pop');
+}
+function stopActGame(silent){
+  if(act && act.raf) cancelAnimationFrame(act.raf);
+  act = null;
+  if(!silent){ actOpen = false; actOverlay.classList.remove('on'); actWrap.classList.remove('on'); }
+}
+document.getElementById('actClose').addEventListener('click', function(){ AudioSys.sfx('click'); stopActGame(false); });
+document.getElementById('actBackBtn').addEventListener('click', function(){ AudioSys.sfx('click'); stopActGame(false); });
+document.getElementById('actAgainBtn').addEventListener('click', function(){ if(act) startActGame(act.kind); });
+actOverlay.addEventListener('click', function(e){ if(e.target === actOverlay) stopActGame(false); });
+function actPointer(e){
+  var r = actCanvas.getBoundingClientRect();
+  return { x: Math.max(0, Math.min(360, (e.clientX - r.left) * (360 / r.width))),
+           y: Math.max(0, Math.min(500, (e.clientY - r.top) * (500 / r.height))) };
+}
+actCanvas.addEventListener('pointerdown', function(e){
+  e.preventDefault();
+  if(!act) return;
+  var p = actPointer(e);
+  if(act.state === 'ready'){ act.state = 'run'; act.last = performance.now(); AudioSys.sfx('beep'); return; }
+  if(act.state !== 'run') return;
+  if(act.kind === 'tanamKebun' || act.kind === 'tanamSawah'){
+    for(var i = 0; i < 9; i++){
+      var gx = 45 + (i % 3) * 95, gy = 105 + Math.floor(i / 3) * 105;
+      if(Math.abs(p.x - (gx + 40)) < 46 && Math.abs(p.y - (gy + 38)) < 48){
+        var pl = act.plots[i];
+        if(pl.stage === 0){ pl.stage = 1; pl.timer = 0; AudioSys.beep(440, 0.07, 0.04); }
+        else if(pl.stage === 3){ pl.stage = 0; pl.timer = 0; act.score++; AudioSys.sfx('coin'); if(act.score >= act.def.target) actOver(true); }
+        break;
+      }
+    }
+  }
+  else if(act.kind === 'pancing'){
+    for(var f = 0; f < act.fishes.length; f++){
+      var fs = act.fishes[f];
+      if(Math.abs(fs.x - 180) < 36 && Math.abs(fs.y - 235) < 34){
+        act.score++; AudioSys.sfx('coin');
+        fs.x = fs.dir > 0 ? -20 : 380; fs.y = 215 + Math.random() * 150;
+        if(act.score >= act.def.target) actOver(true);
+        return;
+      }
+    }
+    AudioSys.beep(220, 0.08, 0.03);
+  }
+  else if(act.kind === 'bola'){
+    if(!act.ball){
+      act.ball = {x:180, y:425, tx: 180 + act.aim * 115, ty: 118, t:0};
+      act.kicks++;
+      AudioSys.beep(300, 0.08, 0.04);
+    }
+  }
+  else if(act.kind === 'sampah'){
+    for(var s2 = 0; s2 < act.items.length; s2++){
+      var it = act.items[s2];
+      if(!it.taken && Math.hypot(p.x - it.x, p.y - it.y) < 30){
+        it.taken = true;
+        if(it.flower){ act.timeLeft = Math.max(1, act.timeLeft - 3); AudioSys.sfx('error'); showToast('Itu bunga! Waktu berkurang 3 detik.'); }
+        else { act.score++; AudioSys.beep(560, 0.06, 0.04); if(act.score >= act.def.target) actOver(true); }
+        return;
+      }
+    }
+  }
+  else { // pakan: tabur pakan di titik ketuk
+    if(p.y > 120) act.pellets.push({x: p.x, y: act.kind === 'pakanIkan' ? 150 : p.y, fall: act.kind === 'pakanIkan' ? 0 : 1});
+    AudioSys.beep(500, 0.05, 0.03);
+  }
+});
+function actOver(win){
+  if(!act || act.awarded) return;
+  act.state = 'over'; act.awarded = true;
+  var kredit = win ? act.def.reward : Math.min(act.def.reward - 10, act.score * 4);
+  if(kredit > 0) addKredit(kredit);
+  act.resultKredit = kredit; act.win = win;
+  AudioSys.sfx(win ? 'win' : 'crash');
+  showToast((win ? 'Hebat! Target tercapai. ' : 'Waktu habis. ') + 'Kamu dapat +' + kredit + ' Kredit!', 4200);
+}
+function actLoop(now){
+  if(!act) return;
+  act.raf = requestAnimationFrame(actLoop);
+  var g = actCanvas.getContext('2d');
+  var dt = Math.min(0.033, (now - (act.last || now)) / 1000); act.last = now;
+  if(act.state === 'run'){
+    act.t += dt;
+    if(act.kind !== 'bola'){ act.timeLeft -= dt; if(act.timeLeft <= 0){ act.timeLeft = 0; actOver(act.score >= act.def.target); } }
+    if(act.kind === 'tanamKebun' || act.kind === 'tanamSawah'){
+      act.plots.forEach(function(pl){
+        if(pl.stage === 1){ pl.timer += dt; if(pl.timer > 1.4){ pl.stage = 2; pl.timer = 0; } }
+        else if(pl.stage === 2){ pl.timer += dt; if(pl.timer > 2.2){ pl.stage = 3; pl.timer = 0; } }
+      });
+    }
+    if(act.kind === 'pancing'){
+      act.fishes.forEach(function(fs){ fs.x += fs.dir * fs.sp * dt; if(fs.x > 385){ fs.x = -25; } if(fs.x < -25){ fs.x = 385; } });
+    }
+    if(act.kind === 'bola'){
+      act.aim = Math.sin(act.t * 2.3);
+      if(act.ball){
+        var b = act.ball; b.t += dt * 2.1;
+        b.x += (b.tx - b.x) * Math.min(1, dt * 7); b.y += (b.ty - b.y) * Math.min(1, dt * 7);
+        if(b.t >= 1){
+          var keeperX = 180 + Math.sin(act.t * 1.7) * 72;
+          if(Math.abs(b.tx - keeperX) < 32){ AudioSys.sfx('error'); showToast('Ditangkap kiper! Tendangan ke-' + act.kicks + ' gagal.'); }
+          else { act.score++; AudioSys.sfx('coin'); showToast('GOOOL! Gol ke-' + act.score + '!'); }
+          act.ball = null;
+          if(act.score >= act.def.target) actOver(true);
+          else if(act.kicks >= 6) actOver(false);
+        }
+      }
+    }
+    if(act.def.animal){
+      // hewan bergerak menuju pakan terdekat, memakannya, skor bertambah
+      var target = null, bd = 1e9;
+      act.pellets.forEach(function(pe){ var d = Math.abs(pe.x - act.ax); if(d < bd){ bd = d; target = pe; } });
+      if(target){
+        var dir = Math.sign(target.x - act.ax);
+        act.ax += dir * 95 * dt;
+        if(Math.abs(target.x - act.ax) < 16){
+          act.pellets.splice(act.pellets.indexOf(target), 1);
+          act.score++; AudioSys.beep(640, 0.07, 0.04);
+          if(act.score >= act.def.target) actOver(true);
+        }
+      } else {
+        act.ax = 180 + Math.sin(act.t * 0.8) * 105;
+      }
+    }
+  }
+  drawAct(g);
+  if(act.state === 'ready') actDrawReady(g);
+  if(act.state === 'over') actDrawOver(g);
+}
+function actHud(g, label){
+  g.fillStyle = 'rgba(12,74,110,.88)'; g.fillRect(0, 0, 360, 42);
+  g.fillStyle = '#fff'; g.font = '700 16px Nunito, Arial'; g.textAlign = 'left';
+  g.fillText(label + ': ' + act.score + ' / ' + act.def.target, 12, 27);
+  g.textAlign = 'right';
+  g.fillText(act.kind === 'bola' ? ('Tendangan: ' + act.kicks + ' / 6') : ('Waktu: ' + Math.ceil(act.timeLeft) + ' dtk'), 348, 27);
+}
+function drawAct(g){
+  var k = act.kind;
+  if(k === 'tanamKebun' || k === 'tanamSawah'){
+    g.fillStyle = k === 'tanamSawah' ? '#7cc75f' : '#8a6b45'; g.fillRect(0, 0, 360, 500);
+    if(k === 'tanamSawah'){ g.fillStyle = '#4db8e8'; g.fillRect(0, 0, 360, 60); }
+    for(var i = 0; i < 9; i++){
+      var gx = 45 + (i % 3) * 95, gy = 105 + Math.floor(i / 3) * 105, pl = act.plots[i];
+      g.fillStyle = k === 'tanamSawah' ? '#38a8d8' : '#6d4c2f';
+      g.beginPath(); g.roundRect(gx, gy, 80, 76, 10); g.fill();
+      g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 2; g.stroke();
+      var cx = gx + 40, cy = gy + 44;
+      if(pl.stage === 1){ g.fillStyle = '#fde68a'; g.beginPath(); g.arc(cx, cy, 5, 0, Math.PI * 2); g.fill(); }
+      if(pl.stage >= 2){
+        g.strokeStyle = '#16a34a'; g.lineWidth = 4; g.beginPath(); g.moveTo(cx, cy + 8); g.lineTo(cx, cy - 12); g.stroke();
+        g.fillStyle = '#22c55e'; g.beginPath(); g.ellipse(cx - 8, cy - 10, 8, 4.5, -0.6, 0, Math.PI * 2); g.fill();
+        g.beginPath(); g.ellipse(cx + 8, cy - 12, 8, 4.5, 0.6, 0, Math.PI * 2); g.fill();
+      }
+      if(pl.stage === 3){
+        if(k === 'tanamSawah'){ g.strokeStyle = '#eab308'; g.lineWidth = 4; for(var s = -2; s <= 2; s++){ g.beginPath(); g.moveTo(cx + s * 7, cy + 8); g.lineTo(cx + s * 9, cy - 24); g.stroke(); g.fillStyle = '#facc15'; g.beginPath(); g.arc(cx + s * 9, cy - 26, 4, 0, Math.PI * 2); g.fill(); } }
+        else { g.fillStyle = '#ef4444'; g.beginPath(); g.arc(cx - 7, cy - 14, 7, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(cx + 8, cy - 18, 6, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(cx, cy - 6, 6, 0, Math.PI * 2); g.fill(); }
+        g.fillStyle = '#fff'; g.font = '700 12px Nunito, Arial'; g.textAlign = 'center'; g.fillText('PANEN!', cx, gy + 16);
+      }
+    }
+    actHud(g, k === 'tanamSawah' ? 'Panen padi' : 'Panen');
+  }
+  else if(k === 'pancing'){
+    g.fillStyle = '#7ec8f7'; g.fillRect(0, 0, 360, 120);
+    g.fillStyle = '#8a5a2b'; g.fillRect(0, 108, 360, 14);
+    g.fillStyle = '#1d7fb8'; g.fillRect(0, 122, 360, 378);
+    g.fillStyle = 'rgba(255,255,255,.25)'; for(var w = 0; w < 7; w++){ g.fillRect(20 + w * 50, 150 + (w % 3) * 90, 26, 4); }
+    act.fishes.forEach(function(fs){
+      g.save(); g.translate(fs.x, fs.y); if(fs.dir < 0) g.scale(-1, 1);
+      g.fillStyle = '#f97316'; g.beginPath(); g.ellipse(0, 0, 17, 8, 0, 0, Math.PI * 2); g.fill();
+      g.beginPath(); g.moveTo(-15, 0); g.lineTo(-26, -8); g.lineTo(-26, 8); g.closePath(); g.fill();
+      g.fillStyle = '#fff'; g.beginPath(); g.arc(9, -2, 3, 0, Math.PI * 2); g.fill();
+      g.restore();
+    });
+    g.strokeStyle = '#78350f'; g.lineWidth = 5; g.beginPath(); g.moveTo(60, 30); g.lineTo(178, 108); g.stroke();
+    g.strokeStyle = '#f8fafc'; g.lineWidth = 2; g.beginPath(); g.moveTo(178, 108); g.lineTo(180, 228); g.stroke();
+    g.fillStyle = '#dc2626'; g.beginPath(); g.arc(180, 235, 7, 0, Math.PI * 2); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.35)'; g.beginPath(); g.arc(180, 235, 15, 0, Math.PI * 2); g.fill();
+    actHud(g, 'Ikan tertangkap');
+  }
+  else if(k === 'bola'){
+    g.fillStyle = '#4da843'; g.fillRect(0, 0, 360, 500);
+    g.fillStyle = '#5db34c'; for(var s2 = 0; s2 < 5; s2++) g.fillRect(0, s2 * 100, 360, 50);
+    g.strokeStyle = '#fff'; g.lineWidth = 4; g.strokeRect(70, 62, 220, 66);
+    g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(74, 66, 212, 58);
+    var keeperX = 180 + Math.sin(act.t * 1.7) * 72;
+    g.fillStyle = '#1e40af'; g.beginPath(); g.roundRect(keeperX - 17, 84, 34, 42, 8); g.fill();
+    g.fillStyle = '#fcd9b8'; g.beginPath(); g.arc(keeperX, 76, 10, 0, Math.PI * 2); g.fill();
+    var aimX = 180 + act.aim * 115;
+    g.strokeStyle = '#facc15'; g.lineWidth = 3; g.setLineDash([8, 7]);
+    g.beginPath(); g.moveTo(180, 425); g.lineTo(aimX, 128); g.stroke(); g.setLineDash([]);
+    g.fillStyle = '#facc15'; g.beginPath(); g.arc(aimX, 124, 8, 0, Math.PI * 2); g.fill();
+    var bx = act.ball ? act.ball.x : 180, by = act.ball ? act.ball.y : 425;
+    g.fillStyle = '#fff'; g.beginPath(); g.arc(bx, by, 15, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#111827'; g.beginPath(); g.arc(bx - 4, by - 3, 4.5, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(bx + 6, by + 5, 4, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#2563eb'; g.beginPath(); g.roundRect(163, 448, 34, 40, 8); g.fill();
+    g.fillStyle = '#fcd9b8'; g.beginPath(); g.arc(180, 440, 10, 0, Math.PI * 2); g.fill();
+    actHud(g, 'Gol');
+  }
+  else if(k === 'sampah'){
+    g.fillStyle = '#c9ced4'; g.fillRect(0, 0, 360, 500);
+    g.fillStyle = '#b6bcc4'; for(var py = 0; py < 10; py++) g.fillRect(0, py * 50, 360, 2);
+    act.items.forEach(function(it){
+      if(it.taken) return;
+      if(it.flower){
+        g.fillStyle = '#16a34a'; g.fillRect(it.x - 2, it.y, 4, 14);
+        g.fillStyle = it.c; for(var pt = 0; pt < 5; pt++){ var a = pt / 5 * Math.PI * 2; g.beginPath(); g.arc(it.x + Math.cos(a) * 7, it.y - 4 + Math.sin(a) * 7, 5.5, 0, Math.PI * 2); g.fill(); }
+        g.fillStyle = '#facc15'; g.beginPath(); g.arc(it.x, it.y - 4, 4, 0, Math.PI * 2); g.fill();
+      } else {
+        g.save(); g.translate(it.x, it.y); g.rotate(it.x % 2);
+        g.fillStyle = it.c; g.beginPath(); g.roundRect(-9, -13, 18, 26, 4); g.fill();
+        g.fillStyle = 'rgba(255,255,255,.65)'; g.fillRect(-9, -4, 18, 5);
+        g.restore();
+      }
+    });
+    actHud(g, 'Sampah terpungut');
+  }
+  else { // pakan
+    var an = act.def.animal;
+    if(an === 'ikan'){
+      g.fillStyle = '#1d7fb8'; g.fillRect(0, 0, 360, 500);
+      g.fillStyle = 'rgba(255,255,255,.3)'; g.fillRect(0, 138, 360, 5);
+      act.pellets.forEach(function(pe){ g.fillStyle = '#92400e'; g.beginPath(); g.arc(pe.x, 150, 6, 0, Math.PI * 2); g.fill(); });
+      g.save(); g.translate(act.ax, 260);
+      g.fillStyle = '#f97316'; g.beginPath(); g.ellipse(0, 0, 30, 14, 0, 0, Math.PI * 2); g.fill();
+      g.beginPath(); g.moveTo(-27, 0); g.lineTo(-44, -13); g.lineTo(-44, 13); g.closePath(); g.fill();
+      g.fillStyle = '#fff'; g.beginPath(); g.arc(16, -4, 5, 0, Math.PI * 2); g.fill(); g.fillStyle = '#111827'; g.beginPath(); g.arc(17, -4, 2.4, 0, Math.PI * 2); g.fill();
+      g.restore();
+    } else {
+      g.fillStyle = '#86d95e'; g.fillRect(0, 0, 360, 500);
+      g.fillStyle = '#a98a5b'; g.fillRect(0, 392, 360, 108);
+      act.pellets.forEach(function(pe){ g.fillStyle = an === 'ayam' ? '#facc15' : (an === 'kambing' ? '#22c55e' : '#eab308'); g.beginPath(); g.arc(pe.x, 408, 8, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(pe.x + 9, 414, 6, 0, Math.PI * 2); g.fill(); });
+      g.save(); g.translate(act.ax, 372);
+      if(an === 'ayam'){
+        g.fillStyle = '#fff'; g.beginPath(); g.ellipse(0, 0, 17, 13, 0, 0, Math.PI * 2); g.fill();
+        g.beginPath(); g.arc(15, -11, 8.5, 0, Math.PI * 2); g.fill();
+        g.fillStyle = '#f59e0b'; g.beginPath(); g.moveTo(22, -11); g.lineTo(31, -8); g.lineTo(22, -5); g.closePath(); g.fill();
+        g.fillStyle = '#dc2626'; g.beginPath(); g.arc(14, -19, 3.6, 0, Math.PI * 2); g.fill();
+      } else if(an === 'kambing'){
+        g.fillStyle = '#e7e5e4'; g.beginPath(); g.roundRect(-26, -14, 52, 30, 9); g.fill();
+        g.beginPath(); g.roundRect(20, -24, 22, 20, 7); g.fill();
+        g.strokeStyle = '#78716c'; g.lineWidth = 3.4; g.beginPath(); g.moveTo(26, -24); g.lineTo(20, -32); g.stroke(); g.beginPath(); g.moveTo(36, -24); g.lineTo(34, -33); g.stroke();
+        g.fillStyle = '#e7e5e4'; g.fillRect(-18, 14, 7, 16); g.fillRect(12, 14, 7, 16);
+      } else {
+        g.fillStyle = '#f5f5f4'; g.beginPath(); g.roundRect(-38, -20, 76, 42, 11); g.fill();
+        g.fillStyle = '#92400e'; g.beginPath(); g.ellipse(-8, -6, 13, 9, 0.4, 0, Math.PI * 2); g.fill();
+        g.beginPath(); g.roundRect(32, -28, 28, 26, 8); g.fill();
+        g.fillStyle = '#fda4af'; g.beginPath(); g.roundRect(52, -12, 10, 10, 3); g.fill();
+        g.fillStyle = '#f5f5f4'; g.fillRect(-28, 20, 9, 20); g.fillRect(20, 20, 9, 20);
+      }
+      g.restore();
+    }
+    actHud(g, 'Kali makan');
+  }
+}
+function actDrawReady(g){
+  g.fillStyle = 'rgba(10,40,70,.55)'; g.fillRect(0, 150, 360, 170);
+  g.fillStyle = '#fff'; g.textAlign = 'center';
+  g.font = '700 23px Fredoka, Nunito, Arial';
+  g.fillText(act.def.title, 180, 215);
+  g.font = '700 16px Nunito, Arial';
+  g.fillText('Ketuk layar untuk mulai!', 180, 252);
+  g.font = '600 13px Nunito, Arial';
+  g.fillText('Hadiah bila target tercapai: ' + act.def.reward + ' Kredit', 180, 280);
+}
+function actDrawOver(g){
+  g.fillStyle = 'rgba(10,40,70,.62)'; g.fillRect(0, 140, 360, 190);
+  g.fillStyle = '#fff'; g.textAlign = 'center';
+  g.font = '700 22px Fredoka, Nunito, Arial';
+  g.fillText(act.win ? 'Target Tercapai!' : 'Permainan Selesai', 180, 198);
+  g.font = '700 16px Nunito, Arial';
+  g.fillText('Skor kamu: ' + act.score + ' dari target ' + act.def.target, 180, 234);
+  g.font = '700 19px Nunito, Arial'; g.fillStyle = '#fcd34d';
+  g.fillText('+ ' + (act.resultKredit || 0) + ' Kredit', 180, 272);
+}
+
+/* ================= DEALER: BELI RUMAH, MOBIL & MOTOR (TUNAI / KREDIT CICILAN) ================= */
+var DEALER_ITEMS = [
+  {id:'motor', name:'Motor Trail', desc:'Motor trail keren seperti yang terparkir di tepi hutan.', price:1200, per:150, n:8, color:'#b45309', icon:'moto'},
+  {id:'mobil', name:'Mobil Keluarga', desc:'Mobil untuk jalan-jalan bersama keluarga.', price:3000, per:300, n:10, color:'#0284c7', icon:'balap'},
+  {id:'rumah', name:'Rumah di Desa Gerduren', desc:'Rumah bertanda "Rumah Dijual" di tepi Jl. Sawah Glempang — jadi milikmu setelah lunas.', price:5000, per:500, n:10, color:'#16a34a', icon:'rumah'}
+];
+function dealerIcon(it){
+  if(it.icon === 'rumah') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M10 20v-5h4v5"/></svg>';
+  return gameIcon(it.icon);
+}
+var dealerOverlay = document.getElementById('dealerOverlay'), dealerList = document.getElementById('dealerList'),
+    dealerKredit = document.getElementById('dealerKredit');
+function refreshHouseName(){
+  if(eco.assets.rumah && playerHouseIt){
+    playerHouseIt.name = 'Rumah Kamu';
+    playerHouseIt.info = 'Ini rumahmu sendiri di Desa Gerduren — hasil jerih payahmu mengumpulkan Kredit. Selamat, kamu sudah punya rumah!';
+  }
+}
+function openDealer(){ dealerOpen = true; dealerOverlay.classList.add('on'); renderDealer(); AudioSys.sfx('pop'); }
+function closeDealer(){ dealerOpen = false; dealerOverlay.classList.remove('on'); }
+document.getElementById('dealerClose').addEventListener('click', function(){ AudioSys.sfx('click'); closeDealer(); });
+dealerOverlay.addEventListener('click', function(e){ if(e.target === dealerOverlay) closeDealer(); });
+function renderDealer(){
+  dealerKredit.textContent = eco.kredit;
+  dealerList.innerHTML = '';
+  DEALER_ITEMS.forEach(function(it){
+    var owned = !!eco.assets[it.id];
+    var loan = eco.loans[it.id];
+    var row = document.createElement('div'); row.className = 'dealer-row';
+    var meta = '<span class="d-meta"><b>' + it.name + '</b><span>' + it.desc + '</span>';
+    if(owned) meta += '<span style="color:#16a34a;font-weight:800;">Sudah LUNAS — milikmu!</span>';
+    else if(loan) meta += '<span>Cicilan: sudah bayar <b>' + loan.paid + ' dari ' + loan.n + ' kali</b> (' + loan.per + ' Kredit/kali). Sisa ' + ((loan.n - loan.paid) * loan.per) + ' Kredit.</span>' +
+      '<span class="d-prog"><i style="width:' + Math.round(loan.paid / loan.n * 100) + '%"></i></span>';
+    else meta += '<span>Harga: <b>' + it.price + ' Kredit</b> • atau kredit: ' + it.per + ' Kredit × ' + it.n + ' cicilan.</span>';
+    meta += '</span>';
+    row.innerHTML = '<span class="d-ic" style="background:' + it.color + ';">' + dealerIcon(it) + '</span>' + meta;
+    var btns = document.createElement('span'); btns.className = 'd-btns';
+    if(!owned && !loan){
+      var b1 = document.createElement('button'); b1.type = 'button'; b1.textContent = 'Beli Tunai';
+      b1.disabled = eco.kredit < it.price;
+      b1.addEventListener('click', function(){
+        if(eco.kredit < it.price) return;
+        eco.kredit -= it.price; eco.assets[it.id] = true;
+        saveEco(); updateStatsUI(); refreshHouseName(); renderDealer();
+        AudioSys.sfx('buy'); showToast(it.name + ' terbeli TUNAI dan jadi milikmu!', 4200);
+      });
+      var b2 = document.createElement('button'); b2.type = 'button'; b2.className = 'cicil'; b2.textContent = 'Ambil Kredit';
+      b2.addEventListener('click', function(){
+        eco.loans[it.id] = {paid:0, per:it.per, n:it.n};
+        saveEco(); renderDealer();
+        AudioSys.sfx('pop'); showToast('Kredit ' + it.name + ' dimulai! Bayar cicilannya dari Dealer kapan saja: ' + it.per + ' Kredit × ' + it.n + ' kali.', 4600);
+      });
+      btns.appendChild(b1); btns.appendChild(b2);
+    } else if(!owned && loan){
+      var b3 = document.createElement('button'); b3.type = 'button'; b3.className = 'cicil'; b3.textContent = 'Bayar Cicilan ' + loan.per;
+      b3.disabled = eco.kredit < loan.per;
+      if(b3.disabled) b3.textContent = 'Kredit Kurang';
+      b3.addEventListener('click', function(){
+        if(eco.kredit < loan.per) return;
+        eco.kredit -= loan.per; loan.paid++;
+        if(loan.paid >= loan.n){
+          delete eco.loans[it.id]; eco.assets[it.id] = true;
+          AudioSys.sfx('win'); showToast('LUNAS! ' + it.name + ' resmi jadi milikmu. Selamat!', 4600);
+        } else {
+          AudioSys.sfx('coin'); showToast('Cicilan ' + it.name + ' ke-' + loan.paid + ' dari ' + loan.n + ' terbayar. Sisa ' + (loan.n - loan.paid) + ' kali lagi!', 3800);
+        }
+        saveEco(); updateStatsUI(); refreshHouseName(); renderDealer();
+      });
+      btns.appendChild(b3);
+    }
+    row.appendChild(btns);
+    dealerList.appendChild(row);
+  });
+}
+refreshHouseName();
+
+/* ================= WAHANA: BIS KELILING DESA & HELIKOPTER =================
+   Selama wahana berjalan, updateTour (dipanggil dari animate) menggerakkan
+   kendaraan + pemain menyusuri rute; input pemain dikunci lewat uiBlocked. */
+var tour = null;
+function startTour(kind){
+  if(tourActive) return;
+  if(riding) dismountBike();
+  tourActive = true;
+  if(kind === 'bis'){
+    tour = { kind:'bis', i:0, pts:[[22,50.5],[52,50.5],[52,18],[52,50.5],[98,50.5],[52,50.5],[-60,50.5],[-95,50.5],[-60,50.5],[22,50.5]] };
+    showToast('Bis berangkat! Keliling Desa Gerduren lewat jalan raya & jalan timur. Duduk manis, ya!', 4600);
+  } else {
+    tour = { kind:'heli', phase:'up', t:0, ang:-Math.PI/2, cx:0, cz:8, r:64, alt:21 };
+    showToast('Helikopter lepas landas! Terbang berkeliling Desa Gerduren dari udara!', 4600);
+  }
+  AudioSys.sfx('bell');
+}
+function endTour(){
+  tourActive = false; tour = null;
+  if(busGroup){ busGroup.position.set(22, 0, 50.5); busGroup.rotation.y = Math.PI/2; }
+  if(heliGroup){ heliGroup.position.set(-82, 0, -14); }
+  vy = 0; grounded = true;
+  AudioSys.sfx('bell');
+}
+function updateTour(dt){
+  if(!tour) return;
+  if(tour.kind === 'bis'){
+    var bp = busGroup.position;
+    var target = tour.pts[tour.i];
+    if(!target){ // selesai: turun di halte
+      player.position.set(17.5, 0, 47.5); player.rotation.y = Math.PI;
+      endTour();
+      showToast('Bis kembali ke Halte. Terima kasih sudah berkeliling Desa Gerduren!', 4200);
+      return;
+    }
+    var dx = target[0] - bp.x, dz = target[1] - bp.z, dl = Math.hypot(dx, dz);
+    var step = 11.5 * dt;
+    if(dl <= step){ bp.x = target[0]; bp.z = target[1]; tour.i++; }
+    else {
+      bp.x += dx / dl * step; bp.z += dz / dl * step;
+      busGroup.rotation.y = Math.atan2(dx, dz);
+    }
+    player.position.set(bp.x, 0, bp.z);
+    player.rotation.y = busGroup.rotation.y;
+    vy = 0; grounded = true;
+  } else {
+    var hp2 = heliGroup.position;
+    if(heliRotor) heliRotor.rotation.y += dt * 22;
+    tour.t += dt;
+    if(tour.phase === 'up'){
+      hp2.y += 7 * dt;
+      player.position.set(hp2.x, hp2.y, hp2.z);
+      if(hp2.y >= tour.alt){ hp2.y = tour.alt; tour.phase = 'circle'; tour.t = 0; }
+    } else if(tour.phase === 'circle'){
+      tour.ang += dt * 0.30;
+      hp2.x = tour.cx + Math.cos(tour.ang) * tour.r;
+      hp2.z = tour.cz + Math.sin(tour.ang) * tour.r;
+      hp2.y = tour.alt + Math.sin(tour.t * 0.7) * 1.2;
+      heliGroup.rotation.y = tour.ang + Math.PI;
+      player.position.set(hp2.x, hp2.y, hp2.z);
+      player.rotation.y = heliGroup.rotation.y;
+      if(tour.ang >= -Math.PI/2 + Math.PI * 3){ tour.phase = 'down'; }
+    } else { // down: kembali ke landasan
+      var dx2 = -82 - hp2.x, dz2 = -14 - hp2.z, dl2 = Math.hypot(dx2, dz2);
+      if(dl2 > 0.6){ hp2.x += dx2 / dl2 * 13 * dt; hp2.z += dz2 / dl2 * 13 * dt; heliGroup.rotation.y = Math.atan2(dx2, dz2); }
+      else if(hp2.y > 0){ hp2.y = Math.max(0, hp2.y - 7 * dt); }
+      player.position.set(hp2.x, hp2.y, hp2.z);
+      player.rotation.y = heliGroup.rotation.y;
+      if(dl2 <= 0.6 && hp2.y <= 0){
+        player.position.set(-77.5, 0, -14); player.rotation.y = Math.PI/2;
+        endTour();
+        showToast('Helikopter mendarat dengan selamat di Lapangan Gerduren. Pemandangan desanya indah dari atas!', 4600);
+      }
+    }
+    vy = 0; grounded = false;
+  }
+}
+
 /* --- Panel GM --- */
 var gmMode = false;
 var adminMode = false;    // hak Game Master aktif (segel Arena terbuka + panel beri Kredit/item): dari login Admin layar awal ATAU login GM di HUD
@@ -5140,7 +5991,7 @@ function renderSealList(){
     var open = !!eco.unsealed[g.id];
     var row = document.createElement('div'); row.className = 'seal-row';
     row.innerHTML = '<span class="g-ic" style="width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#fff;background:' + g.color + ';">' + gameIcon(g.id) + '</span>' +
-      '<span class="s-meta"><b>' + g.name + '</b><span>' + (open ? 'Segel TERBUKA — siswa bisa bermain di Arena.' : 'Masih TERSEGEL — siswa belum bisa bermain.') + '</span></span>';
+      '<span class="s-meta"><b>' + g.name + '</b><span>' + (open ? 'Segel TERBUKA — siswa bisa bermain dari kendaraan terparkirnya.' : 'Masih TERSEGEL — siswa belum bisa bermain.') + '</span></span>';
     var b = document.createElement('button'); b.type = 'button';
     b.className = 'seal-btn' + (open ? ' open' : '');
     b.textContent = open ? 'Segel Lagi' : 'Buka Segel';
@@ -5269,6 +6120,24 @@ var DESTS = [
   {name:'Pos 8 • PBB', x:-58, z:12, kind:'pos', label:'Pos 8 PBB'},
   {name:'Pos 9 • Pionering', x:-78, z:9, kind:'pos', label:'Pos 9 Pionering'}
 ];
+DESTS.push(
+  {name:'Kantor Polsek', x:66, z:30, kind:'tempat', label:'Polsek'},
+  {name:'Mobil Polisi (Kejar-Kejaran)', x:65, z:34.5, kind:'tempat', label:'Mobil Polisi'},
+  {name:'Mobil Balap (Balapan)', x:-24, z:39.5, kind:'tempat', label:'Mobil Balap'},
+  {name:'Motor Cross (Motocross)', x:-82, z:-47.5, kind:'tempat', label:'Motor Cross'},
+  {name:'Puskesmas', x:64, z:-28.6, kind:'tempat', label:'Puskesmas'},
+  {name:'Sungai Gerduren (Memancing)', x:94, z:26, kind:'tempat', label:'Sungai'},
+  {name:'Hutan Desa', x:-92, z:-62, kind:'tempat', label:'Hutan'},
+  {name:'Kandang Ayam', x:-24, z:-36.5, kind:'tempat', label:'Kandang Ayam'},
+  {name:'Kandang Kambing', x:-11, z:-37.5, kind:'tempat', label:'Kandang Kambing'},
+  {name:'Kandang Sapi', x:3, z:-36.5, kind:'tempat', label:'Kandang Sapi'},
+  {name:'Kolam Ikan', x:16, z:-36.2, kind:'tempat', label:'Kolam Ikan'},
+  {name:'Dealer Gerduren', x:38, z:42, kind:'tempat', label:'Dealer'},
+  {name:'Halte Bis (Naik Bis)', x:14, z:45, kind:'tempat', label:'Halte Bis'},
+  {name:'Helikopter (Terbang)', x:-82, z:-14, kind:'tempat', label:'Helikopter'},
+  {name:'Taman Desa', x:-52, z:30, kind:'tempat', label:'Taman'},
+  {name:'Sawah Baru (Menanam)', x:84, z:69.5, kind:'tempat', label:'Sawah Baru'}
+);
 function mapXY(x, z){ return [(x + 110) * 2, (z + 80) * 2]; }
 var SVGNS = 'http://www.w3.org/2000/svg';
 var mapMarkersEl = document.getElementById('mapMarkers');
@@ -6958,6 +7827,7 @@ function animate(){
         if(player.position.y <= 0){ player.position.y = 0; vy = 0; grounded = true; }
       }
       resolveCollisions(player.position);
+      if(tourActive) updateTour(dt);
       updateLocation();
       updateInteract();
       updateCompass();
