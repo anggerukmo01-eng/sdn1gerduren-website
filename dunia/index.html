@@ -292,6 +292,17 @@
   .dir-chip{border:2px solid #e2e8f0;background:#fff;border-radius:11px;padding:8px 10px;font-weight:800;font-size:13px;color:#475569;display:flex;justify-content:space-between;gap:6px;cursor:pointer;font-family:inherit;text-align:left;}
   .dir-chip b{color:#b45309;font-family:'Fredoka',sans-serif;}
   .dir-chip.on{border-color:#f59e0b;background:#fffbeb;}
+  .materi-wrap{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px;}
+  @media(min-width:560px){.materi-wrap{grid-template-columns:1fr 1fr;}}
+  .materi-card{border:2px solid #bae6fd;border-radius:14px;padding:10px 12px;background:#f0f9ff;text-align:left;}
+  .materi-card h4{margin:0 0 6px;font-family:'Fredoka',sans-serif;font-size:15px;color:#075985;}
+  .materi-card p{margin:0 0 6px;font-size:13px;line-height:1.5;color:#334155;}
+  .rose-wrap{position:relative;width:min(260px,78vw);aspect-ratio:1;margin:12px auto;border:3px solid #d81706;border-radius:50%;background:radial-gradient(circle,#fefce8 0 26%,#fcf986 27% 78%,#fde68a 79% 100%);box-shadow:inset 0 0 0 3px #facc15;}
+  .rose-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:'Fredoka',sans-serif;font-weight:700;font-size:11px;color:#7c2d12;text-align:center;line-height:1.25;pointer-events:none;}
+  .rose-dot{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:2.5px solid #d81706;background:#fff7d6;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;color:#7c2d12;cursor:pointer;padding:0;}
+  .rose-dot.right{border-color:#16a34a;background:#dcfce7;color:#166534;}
+  .rose-dot.wrong{border-color:#dc2626;background:#fee2e2;color:#991b1b;}
+  .rose-dot:disabled{cursor:default;opacity:.94;}
   .pos-result{text-align:center;padding:8px 0 2px;}
   .pos-result .big{font-family:'Fredoka',sans-serif;font-size:46px;font-weight:700;color:#0c4a6e;line-height:1;}
   .pos-result p{font-size:13.5px;font-weight:700;color:#475569;line-height:1.55;margin:8px 0 0;}
@@ -744,6 +755,10 @@
       </div>
     </div>
     <div class="hud-right">
+      <button id="wxBtn" class="hud-mini" type="button" title="Waktu & cuaca Desa Gerduren — ketuk untuk mengganti cuaca (Cerah → Berangin → Hujan)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+        <span id="wxLabel">Cerah • 07:15</span>
+      </button>
       <button id="droneBtn" type="button" aria-pressed="false" title="Ganti kamera drone / ikut pemain">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="5" r="2.2"/><circle cx="19" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M7 7l3.5 3.5M17 7l-3.5 3.5M7 17l3.5-3.5M17 17l-3.5-3.5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>
         <span id="droneLabel">Drone</span>
@@ -995,22 +1010,31 @@
       <svg id="mapSvg" viewBox="0 0 440 380" role="img" aria-label="Denah sekolah dan desa Gerduren">
         <rect x="0" y="0" width="440" height="380" fill="#7cc75f"/>
         <rect x="310" y="106" width="52" height="52" fill="#86d95e" stroke="#65bd45"/>
-        <rect x="78" y="312" width="52" height="52" fill="#86d95e" stroke="#65bd45"/>
-        <rect x="254" y="310" width="52" height="52" fill="#86d95e" stroke="#65bd45"/>
+        <rect x="78" y="326" width="52" height="52" fill="#86d95e" stroke="#65bd45"/>
+        <rect x="254" y="326" width="52" height="52" fill="#86d95e" stroke="#65bd45"/>
+        <rect x="326" y="30" width="52" height="52" fill="#86d95e" stroke="#65bd45"/>
         <text x="336" y="135" font-size="8" font-weight="800" fill="#3f6212" text-anchor="middle">SAWAH</text>
-        <text x="104" y="341" font-size="8" font-weight="800" fill="#3f6212" text-anchor="middle">SAWAH</text>
-        <text x="280" y="339" font-size="8" font-weight="800" fill="#3f6212" text-anchor="middle">SAWAH</text>
+        <text x="104" y="357" font-size="8" font-weight="800" fill="#3f6212" text-anchor="middle">SAWAH</text>
+        <text x="280" y="357" font-size="8" font-weight="800" fill="#3f6212" text-anchor="middle">SAWAH</text>
+        <text x="352" y="59" font-size="8" font-weight="800" fill="#3f6212" text-anchor="middle">SAWAH</text>
         <rect x="0" y="300" width="440" height="8" fill="#4db8e8"/>
         <text x="368" y="296" font-size="8" font-weight="800" fill="#075985">Parit Irigasi</text>
         <rect x="0" y="255" width="440" height="18" fill="#4b5563"/>
         <rect x="211" y="194" width="18" height="61" fill="#4b5563"/>
         <rect x="315" y="174" width="18" height="92" fill="#4b5563"/>
         <text x="24" y="267" font-size="8" font-weight="800" fill="#facc15">Jl. Sawah Glempang</text>
+        <rect x="44" y="16" width="352" height="304" fill="none" stroke="#4b5563" stroke-width="13"/>
+        <rect x="44" y="16" width="352" height="304" fill="none" stroke="#facc15" stroke-width="1.6" stroke-dasharray="7 6"/>
+        <text x="220" y="323" font-size="7.5" font-weight="800" fill="#ffffff" text-anchor="middle">JALAN LINGKAR DESA</text>
+        <rect x="405" y="257" width="30" height="14" fill="#b45309" stroke="#78350f"/>
+        <text x="420" y="251" font-size="7" font-weight="800" fill="#075985" text-anchor="middle">JEMBATAN</text>
+        <rect x="341" y="277" width="22" height="15" fill="#0e7a5f" stroke="#0b5c46"/>
+        <text x="352" y="272" font-size="7" font-weight="800" fill="#0b5c46" text-anchor="middle">TERMINAL</text>
         <rect x="50" y="126" width="76" height="68" fill="#4da843" stroke="#ffffff" stroke-width="1.6"/>
         <text x="88" y="163" font-size="8.6" font-weight="800" fill="#ffffff" text-anchor="middle">LAPANGAN</text>
         <text x="88" y="174" font-size="8.6" font-weight="800" fill="#ffffff" text-anchor="middle">GERDUREN</text>
-        <rect x="42" y="79" width="28" height="18" fill="#fef3c7" stroke="#7c2d12"/>
-        <text x="56" y="74" font-size="8" font-weight="800" fill="#7c2d12" text-anchor="middle">BALAI DESA</text>
+        <rect x="54" y="79" width="28" height="18" fill="#fef3c7" stroke="#7c2d12"/>
+        <text x="68" y="74" font-size="8" font-weight="800" fill="#7c2d12" text-anchor="middle">BALAI DESA</text>
         <rect x="142" y="103" width="156" height="91" fill="#ddd3c0" stroke="#b45309" stroke-width="1.4"/>
         <rect x="144" y="104" width="152" height="16" fill="#f7ebc8" stroke="#2d9cdb"/>
         <text x="220" y="99" font-size="8.4" font-weight="800" fill="#0c4a6e" text-anchor="middle">GEDUNG KELAS 1–6</text>
@@ -1263,7 +1287,8 @@ sun.shadow.camera.left = -70; sun.shadow.camera.right = 70;
 sun.shadow.camera.top = 70; sun.shadow.camera.bottom = -70;
 sun.shadow.camera.far = 180; sun.shadow.bias = -0.0003; sun.shadow.normalBias = 0.2;
 scene.add(sun);
-scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+var amb = new THREE.AmbientLight(0xffffff, 0.25);
+scene.add(amb);
 
 /* ================= HELPERS ================= */
 function mat(c, rough){ return new THREE.MeshLambertMaterial({color:c}); }
@@ -1662,7 +1687,7 @@ for(var i=0;i<6;i++){
    atap limasan merah bata + pintu cokelat + jendela kaca biru muda. Tanpa papan nama
    sampai fungsi ruang dikonfirmasi. --- */
 (function(){
-  var g = new THREE.Group(); g.position.set(33, 0, -6); scene.add(g);
+  var g = new THREE.Group(); g.position.set(33, 0, -8.5); scene.add(g);
   var w = 8, d = 11, h = 4.0;
   box(w, h, d, FYP.eastBuildingWall, 0, h/2, 0, g);
   box(w + 0.14, 0.45, d + 0.14, 0x9aa3ab, 0, 0.22, 0, g, false);            // plint beton abu-abu
@@ -1678,7 +1703,7 @@ for(var i=0;i<6;i++){
   // satu jendela di sisi selatan
   box(1.3, 1.3, 0.12, PAL.winFrame, 1.8, 2.5, d/2 + 0.05, g, false);
   box(1.05, 1.05, 0.06, 0xcfeeff, 1.8, 2.5, d/2 + 0.13, g, false);
-  addCollider(33, -6, w/2 + 0.5, d/2 + 0.5);
+  addCollider(33, -8.5, w/2 + 0.5, d/2 + 0.5);
 })();
 
 /* --- Kanopi parkir motor (barat halaman depan, Lampiran B): tiang oranye, langit-langit
@@ -1705,7 +1730,7 @@ for(var i=0;i<6;i++){
 
 /* --- Kantin (timur selatan): warung terbuka dengan awning garis-garis --- */
 (function(){
-  var g = new THREE.Group(); g.position.set(33, 0, 10); scene.add(g);
+  var g = new THREE.Group(); g.position.set(33, 0, 10.4); scene.add(g);
   box(10, 3.6, 7, PAL.wallYellow, 0, 1.8, 0, g);
   box(10.14, 0.7, 7.14, PAL.trimBlue, 0, 0.35, 0, g, false);
   gableRoof(g, 10, 7, 2.1, 3.6, PAL.roofTile, PAL.roofDark);
@@ -1715,8 +1740,8 @@ for(var i=0;i<6;i++){
   box(1.3,0.9,0.7,0xf59e0b,-2.4,1.85,4.3,g,false); box(1.1,0.7,0.7,0x22c55e,0.6,1.75,4.3,g,false); box(1.2,0.8,0.7,0x3b82f6,3.2,1.8,4.3,g,false); // kotak jajanan warna-warni
   wallSign(g, 'KANTIN', 0, 3.1, 3.56, 3.0, {bg:'#b45309', fg:'#fff7d6', frame:0x92400e});
   scene.add(g);
-  addCollider(33, 10, 5.5, 4.9);   // termasuk meja counter di depan (z lokal 4,3) — pemain berhenti di depan counter, tidak menembusnya
-  addInteractable(33, 10, 8, 'Kantin', null, {shop:'kantin'});
+  addCollider(33, 10.4, 5.5, 4.9);   // termasuk meja counter di depan (z lokal 4,3) — pemain berhenti di depan counter, tidak menembusnya
+  addInteractable(33, 10.4, 8, 'Kantin', null, {shop:'kantin'});
 })();
 
 /* --- Koperasi Sekolah: kios kecil di barat, di antara Perpustakaan dan Kelas 1 ---
@@ -1823,7 +1848,7 @@ var bike = new THREE.Group();
 
 /* --- Balai Desa: atap joglo bertingkat, di tepi BARAT peta sebagai tujuan jauh (Lampiran A.7) --- */
 (function(){
-  var g = new THREE.Group(); g.position.set(-82, 0, -36); g.rotation.y = 0.5; scene.add(g);
+  var g = new THREE.Group(); g.position.set(-76, 0, -36); g.rotation.y = 0.5; scene.add(g);
   var w = 14, d = 9, h = 4.6;
   box(w, h, d, 0xfef3c7, 0, h/2, 0, g);
   box(w + 0.14, 0.7, d + 0.14, 0xb45309, 0, 0.35, 0, g, false);
@@ -1835,8 +1860,8 @@ var bike = new THREE.Group();
   box(w * 0.8, 0.18, 2.6, 0xd6d3cd, 0, 0.09, d/2 + 1.6, g);
   wallSign(g, 'BALAI DESA GERDUREN', 0, 3.6, d/2 + 0.06, 5.8, {bg:'#7c2d12', fg:'#fef3c7', frame:0x7c2d12});
   scene.add(g);
-  addCollider(-82, -36, 8, 5.5);
-  addInteractable(-82, -36, 11, 'Balai Desa');
+  addCollider(-76, -36, 8, 5.5);
+  addInteractable(-76, -36, 11, 'Balai Desa');
 })();
 
 /* --- Rumah warga: lebih kecil, warna dinding & atap bervariasi --- */
@@ -1954,7 +1979,15 @@ addInteractable(-26, 42, 7.5, 'Rumah Warga');
       leaf2.scale.set(1, 0.6, 1); leaf2.position.set(sx + 0.14, 1.08, sz + 0.08); scene.add(leaf2);
     }
   }
-  addCollider(-33,10,7,6);
+  /* Pagar kayu rendah mengelilingi kebun dengan CELAH MASUK di sisi timur:
+     pemain berjalan MASUK ke dalam kebun untuk menanam dari dalam bedeng,
+     bukan lagi hanya berdiri di tepi (blok padat lama diganti pagar tepi). */
+  box(13, 0.5, 0.14, 0x8a5a2b, -33, 0.28, 4.4, scene, false); box(13, 0.5, 0.14, 0x8a5a2b, -33, 0.28, 15.6, scene, false);
+  box(0.14, 0.5, 11.3, 0x8a5a2b, -39.6, 0.28, 10, scene, false);
+  box(0.14, 0.5, 4.2, 0x8a5a2b, -26.4, 0.28, 6.5, scene, false); box(0.14, 0.5, 4.2, 0x8a5a2b, -26.4, 0.28, 13.5, scene, false);
+  addCollider(-33, 4.4, 6.6, 0.5); addCollider(-33, 15.6, 6.6, 0.5);
+  addCollider(-39.6, 10, 0.5, 5.6);
+  addCollider(-26.4, 6.5, 0.5, 2.1); addCollider(-26.4, 13.5, 0.5, 2.1);
   postSign('Kebun Sekolah', -26.5, 15.5, 2.6, {w:3.0});
 })();
 
@@ -2037,16 +2070,25 @@ addInteractable(-26, 42, 7.5, 'Rumah Warga');
 })();
 
 /* ================= SAWAH BERPETAK ================= */
-function riceField(cx, cz){
+function riceField(cx, cz, gapNorth){
   var shades = [0x86d95e,0x74cc4e,0x97e06e,0x65bd45];
   for(var r=0;r<3;r++) for(var cix=0;cix<3;cix++){
     var px = cx + (cix-1)*8.4, pz = cz + (r-1)*8.4;
     box(7.8,0.22,7.8, shades[(r*3+cix)%4], px, 0.11, pz, scene, false).receiveShadow = true;
     box(8.3,0.3,0.5,0xa98a5b, px, 0.15, pz-4.05, scene, false);
   }
-  addCollider(cx,cz,13,13);
+  /* Pematang tepi menjadi pembatas — BUKAN lagi blok padat memenuhi sawah:
+     pemain bisa MASUK ke dalam sawah lewat celah 4 m di sisi yang menghadap
+     desa (utara untuk sawah selatan, selatan untuk sawah lainnya), berjalan
+     di sela petak, dan menanam dari dalam petak. */
+  function edgeH(zc, gap){
+    if(gap){ addCollider(cx - 7.5, zc, 5.5, 0.7); addCollider(cx + 7.5, zc, 5.5, 0.7); }
+    else addCollider(cx, zc, 13, 0.7);
+  }
+  edgeH(cz - 13, !!gapNorth); edgeH(cz + 13, !gapNorth);
+  addCollider(cx - 13, cz, 0.7, 13); addCollider(cx + 13, cz, 0.7, 13);
 }
-riceField(58, -14); riceField(-58, 90); riceField(30, 88);
+riceField(58, -14); riceField(-58, 97, true); riceField(30, 97, true);
 postSign('Sawah', 45, -26, 0.4, {w:2.4});
 
 /* ================= DESA DIPERLUAS: Polsek, Sungai, Hutan, Kandang, Dealer, Wahana =================
@@ -2058,17 +2100,18 @@ INFO['Mobil Polisi'] = 'Mobil polisi terparkir di depan Kantor Polsek. Tekan Aks
 INFO['Mobil Balap'] = 'Mobil balap terparkir di tepi Jl. Sawah Glempang. Tekan Aksi untuk bermain Balapan Kilat dari sini.';
 INFO['Motor Cross'] = 'Motor cross terparkir di tepi Hutan Desa. Tekan Aksi untuk bermain Motocross Lompat dari sini. Kalau kamu sudah membeli Motor Trail di Dealer Gerduren dan lunas, kamu juga bisa MENGENDARAI motor ini keliling desa!';
 INFO['Sungai Gerduren'] = 'Sungai Gerduren di tepi timur desa: airnya jernih dan banyak ikannya. Tekan Aksi untuk memancing!';
+INFO['Jembatan Gerduren'] = 'Jembatan Gerduren: jembatan beton di atas Sungai Gerduren pada Jl. Sawah Glempang. Lewat jembatan inilah kendaraan, mobil warga, dan Bis Keliling Desa menyeberangi sungai menuju tepi timur desa. Di bawahnya mengalir air sungai yang jernih — tempat memancing yang asyik!';
 INFO['Hutan Desa'] = 'Hutan Desa Gerduren: pepohonan rindang di barat laut desa. Di tepinya terparkir motor cross.';
 INFO['Kandang Ayam'] = 'Kandang ayam di belakang sekolah. Ayam-ayamnya suka diberi makan jagung. Tekan Aksi untuk memberi pakan!';
 INFO['Kandang Kambing'] = 'Kandang kambing di belakang sekolah. Kambingnya suka daun hijau segar. Tekan Aksi untuk memberi pakan!';
 INFO['Kandang Sapi'] = 'Kandang sapi di belakang sekolah. Sapinya suka rumput & jerami. Tekan Aksi untuk memberi pakan!';
 INFO['Kolam Ikan'] = 'Kolam ikan di belakang sekolah, di samping kandang. Ikannya suka pelet. Tekan Aksi untuk memberi pakan!';
-INFO['Bedeng Kebun'] = 'Bedeng Kebun Sekolah: ayo menanam! Tanam bibit, tunggu tumbuh, lalu panen. Tekan Aksi untuk bermain Menanam di Kebun.';
-INFO['Petak Sawah'] = 'Petak sawah warga: ayo menanam padi! Tanam bibit, tunggu menguning, lalu panen. Tekan Aksi untuk bermain Menanam di Sawah.';
+INFO['Bedeng Kebun'] = 'Bedeng Kebun Sekolah: masuklah ke dalam kebun lewat celah pagar di sisi timur, lalu tekan Aksi di tengah kebun untuk menanam! Tanam bibit, tunggu tumbuh, lalu panen.';
+INFO['Petak Sawah'] = 'Petak sawah warga: masuklah ke dalam sawah lewat celah pematang, lalu tekan Aksi di tengah petak untuk menanam padi! Tanam bibit, tunggu menguning, lalu panen.';
 INFO['Lapangan Bola'] = 'Tengah Lapangan Gerduren: tempat bermain bola. Tekan Aksi untuk bermain Bola — tendang ke gawang melewati kiper!';
 INFO['Tong Sampah'] = 'Halaman sekolah harus bersih! Tekan Aksi untuk bermain Mencari Sampah. Quest Harian: pungut juga sampah warna-warni berbingkai kuning yang berserakan di halaman sekolah & lingkungan desa — dekati saja, sampahnya terpungut otomatis!';
 INFO['Dealer Gerduren'] = 'Dealer Gerduren: tempat membeli Rumah, Mobil, dan Motor — bisa tunai, bisa kredit (cicilan) memakai Kredit permainanmu. Tekan Aksi untuk melihat katalognya.';
-INFO['Halte Bis'] = 'Halte Bis desa. Tekan Aksi untuk naik Bis Keliling Desa: pilih Kendarai Sendiri untuk menyetir bisnya dengan joystick/tombol WASD, atau Tur Otomatis untuk duduk manis mengikuti rute keliling desa!';
+INFO['Terminal Gerduren'] = 'Terminal Gerduren di perempatan timur desa (persimpangan Jl. Sawah Glempang dan jalan ke Polsek). Dari sini Bis Keliling Desa berangkat! Tekan Aksi untuk naik Bis: pilih Kendarai Sendiri untuk menyetir bisnya dengan joystick/tombol WASD, atau Tur Otomatis untuk duduk manis mengikuti rute keliling desa — melewati Jembatan Sungai Gerduren dan Jalan Lingkar Desa!';
 INFO['Helikopter'] = 'Helikopter wisata di landasan Lapangan Gerduren. Tekan Aksi untuk terbang: pilih Kendarai Sendiri untuk menerbangkannya sendiri (ada tombol Naik & Turun), atau Tur Otomatis untuk berkeliling Desa Gerduren dari udara!';
 INFO['Puskesmas'] = 'Puskesmas Purwojati: pusat kesehatan masyarakat. Kalau sakit, berobatlah ke sini bersama orang tuamu.';
 INFO['Taman Desa'] = 'Taman Desa Gerduren: tempat warga bersantai sore hari di bangku-bangku taman.';
@@ -2180,13 +2223,67 @@ addInteractable(-24, 44, 5.5, 'Mobil Balap', null, {game:'balap'});
   addInteractable(103, 20, 7, 'Sungai Gerduren', null, {act:'pancing'});
 })();
 
-/* --- Sawah baru (tenggara) + titik menanam padi --- */
-riceField(84, 84);
-addInteractable(84, 84, 12, 'Sawah');
-addInteractable(84, 69.5, 6, 'Petak Sawah', null, {act:'tanamSawah'});
+/* --- JEMBATAN GERDUREN: jembatan beton kendaraan di atas Sungai Gerduren ---
+   Tepat pada lintasan Jl. Sawah Glempang (z=52) menyeberangi sungai (x=103):
+   dek beton + gelagar + dua pilar di air + pagar kuning di kedua sisi.
+   Mobil lalu-lalang, mobil buronan, dan Bis Keliling Desa kini menyeberang
+   di atas jembatan ini — bukan lagi menembus galian sungai & airnya. */
+(function(){
+  var g = new THREE.Group(); g.position.set(102, 0, 52); scene.add(g);
+  box(16, 0.35, 11.5, 0x8d99ae, 0, 0.24, 0, g);                              // dek jembatan beton
+  box(16, 0.55, 0.6, 0x64748b, 0, 0.02, -5.5, g, false);                      // gelagar sisi utara
+  box(16, 0.55, 0.6, 0x64748b, 0, 0.02, 5.5, g, false);                       // gelagar sisi selatan
+  [-5.5, 5.5].forEach(function(px){ box(1.1, 1.7, 9.6, 0x64748b, px, -0.55, 0, g); }); // pilar penyangga di air
+  for(var px2 = -7.5; px2 <= 7.5; px2 += 2.5){                               // tiang pagar kuning
+    box(0.18, 1.0, 0.18, 0xfacc15, px2, 0.92, -5.55, g, false);
+    box(0.18, 1.0, 0.18, 0xfacc15, px2, 0.92, 5.55, g, false);
+  }
+  box(16, 0.16, 0.2, 0xfacc15, 0, 1.45, -5.55, g, false); box(16, 0.16, 0.2, 0xfacc15, 0, 1.45, 5.55, g, false); // rel atas pagar
+  box(16, 0.12, 0.16, 0xfacc15, 0, 0.98, -5.55, g, false); box(16, 0.12, 0.16, 0xfacc15, 0, 0.98, 5.55, g, false); // rel tengah pagar
+  scene.add(g);
+  postSign('Jembatan Gerduren', 93.5, 45.4, 2.5, {w:3.6, bg:'#075985', fg:'#ffffff'});
+  labelAt('Jembatan Sungai Gerduren', 102, 3.6, 52, 0.62);
+  addInteractable(102, 52, 8, 'Jembatan Gerduren');
+})();
+
+/* --- JALAN LINGKAR DESA: jalan aspal mengelilingi Desa Gerduren ---
+   Persegi besar x ±88, z -72 (utara) s/d +80 (selatan), lebar 7, bertemu
+   Jl. Sawah Glempang di perempatan barat & timur. Di barat & timur jalan
+   lingkar menyeberangi Parit Irigasi lewat jembatan papan lebar. */
+(function(){
+  var RC = 0x4b5563;
+  flat(183, 7, RC, 0, -72, scene, 0.04);          // sisi utara (di belakang kandang & hutan)
+  flat(183, 7, RC, 0, 80, scene, 0.04);           // sisi selatan (di depan sawah selatan)
+  flat(7, 159, RC, -88, 4, scene, 0.045);         // sisi barat (di luar Lapangan & Balai Desa)
+  flat(7, 159, RC, 88, 4, scene, 0.045);          // sisi timur (di barat tepi Sungai)
+  for(var x = -84; x <= 84; x += 8){              // garis tengah putus-putus kuning
+    box(4, 0.05, 0.4, 0xfacc15, x, 0.07, -72, scene, false);
+    box(4, 0.05, 0.4, 0xfacc15, x, 0.07, 80, scene, false);
+  }
+  for(var z = -64; z <= 72; z += 8){
+    box(0.4, 0.05, 4, 0xfacc15, -88, 0.075, z, scene, false);
+    box(0.4, 0.05, 4, 0xfacc15, 88, 0.075, z, scene, false);
+  }
+  // jembatan papan lebar penyeberang Parit Irigasi untuk jalan lingkar (barat & timur)
+  [-88, 88].forEach(function(bx){
+    box(9, 0.32, 8.8, 0x9a6a42, bx, 0.3, 72, scene, false);
+    box(9.4, 0.16, 0.5, 0x78350f, bx, 0.55, 68, scene, false);
+    box(9.4, 0.16, 0.5, 0x78350f, bx, 0.55, 76, scene, false);
+  });
+  postSign('Jalan Lingkar Desa', -80, -65.5, 2.4, {w:3.8, bg:'#166534', fg:'#ffffff'});
+  postSign('Jalan Lingkar Desa', 81, 73.5, -2.2, {w:3.8, bg:'#166534', fg:'#ffffff'});
+  addInteractable(0, -72, 8, 'Jalan Lingkar Desa');
+  addInteractable(-88, 20, 8, 'Jalan Lingkar Desa');
+})();
+INFO['Jalan Lingkar Desa'] = 'Jalan Lingkar Desa Gerduren: jalan aspal yang mengelilingi seluruh desa — dari belakang kandang sekolah di utara, melewati tepi Hutan dan Lapangan di barat, sawah-sawah di selatan, sampai tepi Sungai di timur. Asyik untuk bersepeda dan jalan-jalan sore!';
+
+/* --- Sawah timur laut (di utara Puskesmas) + titik menanam padi DI DALAM petak --- */
+riceField(66, -52);
+addInteractable(66, -52, 12, 'Sawah');
+addInteractable(66, -52, 6.5, 'Petak Sawah', null, {act:'tanamSawah'});
 
 /* --- Titik permainan lapangan di sekolah & lapangan --- */
-addInteractable(-25.2, 15.2, 4.5, 'Bedeng Kebun', null, {act:'tanamKebun'});
+addInteractable(-33, 10, 5.5, 'Bedeng Kebun', null, {act:'tanamKebun'});
 addInteractable(-60, 8, 5.5, 'Lapangan Bola', null, {act:'bola'});
 (function(){ // tong sampah hijau di halaman + sampah warna-warni berserakan (visual permainan Mencari Sampah)
   cyl(0.42, 0.36, 0.95, 0x16a34a, 10, 0.48, 2, scene, 12);
@@ -2351,17 +2448,38 @@ function exitHome(){
 })();
 
 /* --- Rumah warga tambahan --- */
-house(84, 40, 0xdbeafe, 0x8a3320); house(-70, 64, 0xfce7f3, 0x7c4a21); house(20, 82, 0xdcfce7, 0x9e3d2c); house(-88, 58, 0xfef9c3, 0x8a3320);
+house(79, 40, 0xdbeafe, 0x8a3320); house(-70, 64, 0xfce7f3, 0x7c4a21); house(-1, 64, 0xdcfce7, 0x9e3d2c); house(-79, 58, 0xfef9c3, 0x8a3320);
 
-/* --- Halte Bis + Bis Keliling Desa (wahana) --- */
-var busGroup = new THREE.Group();
+/* --- Sudut istirahat dekat gerbang (bekas Halte Bis lama — bis kini berangkat
+   dari Terminal Gerduren di perempatan timur; halte lama menutupi lajur
+   lalu-lalang jalan raya sehingga dipindah) --- */
 (function(){
   box(5.4, 0.14, 2.4, 0xd6d3cd, 14, 0.07, 45, scene, false);
-  [[-2.4,-1],[2.4,-1],[-2.4,1],[2.4,1]].forEach(function(p){ box(0.16, 2.3, 0.16, 0x0e7a5f, 14 + p[0], 1.15, 45 + p[1], scene); });
-  box(5.8, 0.14, 2.8, 0x0e7a5f, 14, 2.36, 45, scene);
   box(3.4, 0.1, 0.4, 0x8a5a2b, 14, 0.55, 45.6, scene, false);
-  postSign('Halte Bis', 14, 42.6, Math.PI, {w:2.6, bg:'#0e7a5f', fg:'#ffffff'});
-  addInteractable(14, 45, 6, 'Halte Bis', null, {tour:'bis'});
+  box(0.14, 0.55, 0.4, 0x6d4c2f, 12.6, 0.27, 45.6, scene, false); box(0.14, 0.55, 0.4, 0x6d4c2f, 15.4, 0.27, 45.6, scene, false);
+})();
+
+/* --- TERMINAL GERDUREN (BARU) di perempatan timur desa — persimpangan
+   Jl. Sawah Glempang × jalan cabang timur (arah Polsek & Puskesmas).
+   Bis Keliling Desa berangkat, parkir, dan kembali ke sini. --- */
+var busGroup = new THREE.Group();
+(function(){
+  flat(21, 12.5, 0xd6d3cd, 66, 63, scene, 0.045);                    // apron beton terminal
+  var g = new THREE.Group(); g.position.set(66, 0, 66.8); g.rotation.y = Math.PI; scene.add(g); // muka terminal menghadap utara ke jalan raya
+  box(12, 3.4, 4.6, 0xfef9c3, 0, 1.7, 0, g);                          // gedung terminal krem
+  box(12.14, 0.55, 4.74, 0x0e7a5f, 0, 0.28, 0, g, false);             // lis hijau terminal
+  gableRoof(g, 12, 4.6, 1.9, 3.4, PAL.roofTile, PAL.roofDark);
+  wallSign(g, 'TERMINAL GERDUREN', 0, 2.9, 2.36, 5.8, {bg:'#0e7a5f', fg:'#ffffff', frame:0x0b5c46});
+  box(2.2, 1.1, 0.7, 0x92400e, -3.6, 0.55, 3.0, g, false);             // loket karcis
+  box(1.1, 0.8, 0.08, 0xcfeeff, -3.6, 1.75, 2.36, g, false);          // jendela loket
+  [-0.6, 2.4].forEach(function(bx2){                                  // bangku ruang tunggu
+    box(2.4, 0.12, 0.5, 0x8a5a2b, bx2, 0.55, 3.2, g, false);
+    box(0.14, 0.55, 0.45, 0x6d4c2f, bx2 - 1, 0.27, 3.2, g, false); box(0.14, 0.55, 0.45, 0x6d4c2f, bx2 + 1, 0.27, 3.2, g, false);
+  });
+  scene.add(g);
+  addCollider(66, 66.8, 6.5, 2.9);
+  postSign('Terminal Gerduren', 56.5, 58.2, 2.6, {w:3.6, bg:'#0e7a5f', fg:'#ffffff'});
+  addInteractable(66, 62, 7.5, 'Terminal Gerduren', null, {tour:'bis'});
   // bis sekolah kuning (grup global: bergerak saat wahana berjalan)
   box(2.6, 2.0, 8.2, 0xfacc15, 0, 1.45, 0, busGroup);
   box(2.64, 0.8, 7.6, 0x1e3a5f, 0, 1.95, 0, busGroup, false);
@@ -2369,9 +2487,9 @@ var busGroup = new THREE.Group();
   [[-1.25,2.9],[1.25,2.9],[-1.25,-2.9],[1.25,-2.9]].forEach(function(w){
     var wh = cyl(0.48, 0.48, 0.2, 0x111827, w[0], 0.48, w[1], busGroup, 14); wh.rotation.z = Math.PI/2;
   });
-  busGroup.position.set(22, 0, 50.5); busGroup.rotation.y = Math.PI/2;
+  busGroup.position.set(63, 0, 59.8); busGroup.rotation.y = Math.PI/2;
   scene.add(busGroup);
-  labelAt('Bis Keliling Desa', 22, 3.6, 50.5, 0.6);
+  labelAt('Bis Keliling Desa', 63, 3.6, 59.8, 0.6);
 })();
 
 /* --- Landasan helikopter di sudut Lapangan + helikopter wisata (wahana) --- */
@@ -2475,6 +2593,165 @@ function cloud(x,y,z,s){
 }
 cloud(-40,30,-40,1.6); cloud(25,34,-15,2.1); cloud(55,29,25,1.4); cloud(-15,33,55,1.8); cloud(-65,31,10,1.3);
 
+/* ================= SIANG–MALAM & CUACA DESA GERDUREN =================
+   Siklus waktu berjalan terus (1 hari penuh = 5 menit): fajar, pagi, siang
+   terang, senja jingga, lalu malam berbintang dengan lampu desa menyala.
+   Cuaca berganti sendiri tiap ±1 menit: CERAH (panas terik di tengah hari),
+   BERANGIN (awan melaju cepat + daun-daun beterbangan), dan HUJAN (rintik
+   air mengikuti pemain + langit kelabu + kabut menebal). Tombol Cuaca di
+   HUD (kanan atas) mengganti cuaca secara manual. */
+var WX = { hour: 7.25, weather: 'cerah', auto: 55, manualHold: 0, wasNight: false };
+var cloudMul = 1;
+var WX_NAMES = {cerah:'Cerah', berangin:'Berangin', hujan:'Hujan'};
+var skyStops = [
+  {h:0,    sky:0x0c1425, sun:0.14, sunC:0x93b8e8, hemi:0.34, amb:0.14},
+  {h:4.8,  sky:0x0c1425, sun:0.14, sunC:0x93b8e8, hemi:0.34, amb:0.14},
+  {h:6.3,  sky:0xf0a56e, sun:0.75, sunC:0xffc38a, hemi:0.62, amb:0.20},
+  {h:8,    sky:0x7ec8f7, sun:1.90, sunC:0xfff3d6, hemi:1.05, amb:0.25},
+  {h:16.5, sky:0x7ec8f7, sun:1.90, sunC:0xfff3d6, hemi:1.05, amb:0.25},
+  {h:18.1, sky:0xff9e66, sun:0.80, sunC:0xffb37a, hemi:0.66, amb:0.21},
+  {h:19.6, sky:0x0c1425, sun:0.14, sunC:0x93b8e8, hemi:0.34, amb:0.14},
+  {h:24,   sky:0x0c1425, sun:0.14, sunC:0x93b8e8, hemi:0.34, amb:0.14}
+];
+var starMat = new THREE.PointsMaterial({color:0xffffff, size:1.6, sizeAttenuation:false, transparent:true, opacity:0, fog:false});
+(function(){ // taburan bintang di kubah langit (tampak saat malam)
+  var n = 380, pos = new Float32Array(n * 3);
+  for(var i = 0; i < n; i++){
+    var a = Math.random() * Math.PI * 2, e = 0.12 + Math.random() * 1.35, r = 320;
+    pos[i*3] = Math.cos(a) * Math.cos(e) * r; pos[i*3+1] = Math.sin(e) * r; pos[i*3+2] = Math.sin(a) * Math.cos(e) * r;
+  }
+  var geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  scene.add(new THREE.Points(geo, starMat));
+})();
+var moonMesh = new THREE.Mesh(new THREE.SphereGeometry(6, 14, 10), new THREE.MeshBasicMaterial({color:0xf5f0dc, fog:false, transparent:true, opacity:0}));
+moonMesh.position.set(-140, 125, -190); scene.add(moonMesh);
+/* Rintik hujan & daun beterbangan: awan titik (points) yang selalu mengikuti pemain */
+function makeWxPoints(n, col, size, area, hMax){
+  var pos = new Float32Array(n * 3);
+  for(var i = 0; i < n; i++){ pos[i*3] = (Math.random() - 0.5) * area; pos[i*3+1] = Math.random() * hMax; pos[i*3+2] = (Math.random() - 0.5) * area; }
+  var geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  var m = new THREE.PointsMaterial({color:col, size:size, transparent:true, opacity:0});
+  var pts = new THREE.Points(geo, m); pts.visible = false; pts.frustumCulled = false; scene.add(pts);
+  return {pts:pts, geo:geo, mat:m, n:n};
+}
+var rainFx = makeWxPoints(1100, 0xcfe6f5, 0.32, 76, 42);
+var leafFx = makeWxPoints(110, 0x7cc75f, 0.55, 80, 12);
+/* Lampu penerangan jalan: kepala lampu menyala kuning saat malam */
+var lampGlowMat = new THREE.MeshBasicMaterial({color:0x9aa3ab});
+var lampHaloMat = new THREE.MeshBasicMaterial({color:0xffd97a, transparent:true, opacity:0});
+function lampPost(x, z){
+  cyl(0.07, 0.09, 3.8, 0x374151, x, 1.9, z, scene, 8);
+  var head = new THREE.Mesh(new THREE.SphereGeometry(0.24, 10, 8), lampGlowMat); head.position.set(x, 3.95, z); scene.add(head);
+  var halo = new THREE.Mesh(new THREE.SphereGeometry(0.62, 10, 8), lampHaloMat); halo.position.set(x, 3.95, z); scene.add(halo);
+  addCollider(x, z, 0.35, 0.35);
+}
+[-84,-60,-36,-12,12,36,60,84].forEach(function(lx){ lampPost(lx, 46.4); });   // sepanjang Jl. Sawah Glempang
+lampPost(95, 46.2); lampPost(109, 57.8);                                       // kedua ujung Jembatan Gerduren
+lampPost(75, 57.5);                                                            // sudut Terminal Gerduren
+lampPost(-72, -65.5); lampPost(72, -65.5);                                     // Jalan Lingkar sisi utara
+var wxLabel = document.getElementById('wxLabel');
+function wxClockText(){
+  var hh = Math.floor(WX.hour), mm = Math.floor((WX.hour - hh) * 60);
+  return (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
+}
+function setWeather(w, silent){
+  WX.weather = w;
+  rainFx.pts.visible = w === 'hujan';
+  leafFx.pts.visible = w === 'berangin';
+  cloudMul = w === 'berangin' ? 5 : (w === 'hujan' ? 2 : 1);
+  clouds.forEach(function(g){ g.children.forEach(function(m){ if(m.material) m.material.color.setHex(w === 'hujan' ? 0x8fa3b5 : 0xffffff); }); });
+  if(wxLabel) wxLabel.textContent = WX_NAMES[w] + ' • ' + wxClockText();
+  if(!silent) showToast(w === 'hujan' ? 'Cuaca berubah: HUJAN turun di Desa Gerduren. Tetap semangat bermain, ya!' : (w === 'berangin' ? 'Cuaca berubah: angin bertiup kencang — awan dan daun-daun beterbangan!' : 'Cuaca berubah: CERAH dan panas. Hari yang bagus untuk bermain di luar!'), 3600);
+}
+document.getElementById('wxBtn').addEventListener('click', function(){
+  var order = ['cerah','berangin','hujan'];
+  setWeather(order[(order.indexOf(WX.weather) + 1) % 3]);
+  WX.manualHold = 120;
+  AudioSys.sfx('pop');
+});
+var _skyA = new THREE.Color(), _skyB = new THREE.Color(), _sunA = new THREE.Color(), _sunB = new THREE.Color(), _gray = new THREE.Color(0x5b6b7a);
+function updateSkyWeather(dt){
+  WX.hour += dt * (24 / 300); if(WX.hour >= 24) WX.hour -= 24;
+  if(WX.manualHold > 0) WX.manualHold -= dt;
+  else {
+    WX.auto -= dt;
+    if(WX.auto <= 0){ WX.auto = 50 + Math.random() * 45; var rr = Math.random(); setWeather(rr < 0.5 ? 'cerah' : (rr < 0.75 ? 'berangin' : 'hujan'), true); }
+  }
+  var a = skyStops[0], b = skyStops[skyStops.length - 1];
+  for(var i = 0; i < skyStops.length - 1; i++){ if(WX.hour >= skyStops[i].h && WX.hour <= skyStops[i+1].h){ a = skyStops[i]; b = skyStops[i+1]; break; } }
+  var k = b.h > a.h ? (WX.hour - a.h) / (b.h - a.h) : 0;
+  _skyA.setHex(a.sky); _skyB.setHex(b.sky); _skyA.lerp(_skyB, k);
+  _sunA.setHex(a.sunC); _sunB.setHex(b.sunC); _sunA.lerp(_sunB, k);
+  var sunI = a.sun + (b.sun - a.sun) * k, hemiI = a.hemi + (b.hemi - a.hemi) * k, ambI = a.amb + (b.amb - a.amb) * k;
+  var night = 1 - Math.min(1, Math.max(0, (sunI - 0.14) / 0.8));
+  if(WX.weather === 'hujan'){ _skyA.lerp(_gray, 0.55); sunI *= 0.45; hemiI *= 0.85; }
+  if(WX.weather === 'cerah' && WX.hour > 9 && WX.hour < 15) sunI *= 1.08;   // panas terik tengah hari
+  scene.background.copy(_skyA); scene.fog.color.copy(_skyA);
+  scene.fog.near = WX.weather === 'hujan' ? 50 : 90 - night * 20;
+  scene.fog.far = WX.weather === 'hujan' ? 125 : 190 - night * 30;
+  sun.intensity = sunI; sun.color.copy(_sunA); hemi.intensity = hemiI; amb.intensity = ambI;
+  var ang = (WX.hour - 6) / 12 * Math.PI;
+  if(Math.sin(ang) > -0.05) sun.position.set(Math.cos(ang) * 55, 12 + Math.sin(ang) * 55, 30);
+  else sun.position.set(-40, 60, -35);   // malam: cahaya bulan redup kebiruan
+  starMat.opacity = night * (WX.weather === 'hujan' ? 0.15 : 0.9);
+  moonMesh.material.opacity = night * (WX.weather === 'hujan' ? 0.25 : 1);
+  lampGlowMat.color.setHex(night > 0.35 ? 0xffd97a : 0x9aa3ab);
+  lampHaloMat.opacity = night * 0.34;
+  var pp = player.position;
+  if(rainFx.pts.visible){
+    rainFx.pts.position.set(pp.x, 0, pp.z);
+    var arr = rainFx.geo.attributes.position.array;
+    for(var ri = 0; ri < rainFx.n; ri++){ arr[ri*3+1] -= 52 * dt; if(arr[ri*3+1] < 0) arr[ri*3+1] += 42; }
+    rainFx.geo.attributes.position.needsUpdate = true;
+    rainFx.mat.opacity = 0.75;
+  }
+  if(leafFx.pts.visible){
+    leafFx.pts.position.set(pp.x, 0, pp.z);
+    var la = leafFx.geo.attributes.position.array, tt = clock.elapsedTime;
+    for(var li = 0; li < leafFx.n; li++){
+      la[li*3] += 16 * dt; la[li*3+1] += Math.sin(tt * 2 + li) * dt * 1.5;
+      if(la[li*3] > 40) la[li*3] -= 80;
+      if(la[li*3+1] < 0.3) la[li*3+1] = 0.3; if(la[li*3+1] > 12) la[li*3+1] = 12;
+    }
+    leafFx.geo.attributes.position.needsUpdate = true;
+    leafFx.mat.opacity = 0.9;
+  }
+  var lt = WX_NAMES[WX.weather] + ' • ' + wxClockText();
+  if(wxLabel && wxLabel.textContent !== lt) wxLabel.textContent = lt;
+  var isNight = WX.hour >= 18.6 || WX.hour < 5.4;
+  if(isNight !== WX.wasNight){
+    WX.wasNight = isNight;
+    if(playing) showToast(isNight ? 'Hari mulai gelap — lampu-lampu Desa Gerduren menyala. Selamat malam!' : 'Pagi tiba di Desa Gerduren — matahari terbit. Selamat pagi!', 4200);
+  }
+}
+setWeather('cerah', true);
+
+/* --- Hiasan desa: umbul-umbul warna-warni, pohon tambahan & semak bunga ---
+   Menambah kesan ramai, sejuk, asri, dan estetik di titik-titik penting desa. */
+function umbul(x, z, col){
+  cyl(0.05, 0.07, 5.2, 0x9a7b4f, x, 2.6, z, scene, 7);
+  var f1 = box(1.5, 0.85, 0.05, col, x + 0.72, 4.6, z, scene, false); f1.rotation.z = -0.18;
+  var f2 = box(1.1, 0.6, 0.05, 0xffffff, x + 0.55, 3.75, z, scene, false); f2.rotation.z = -0.18;
+  addCollider(x, z, 0.3, 0.3);
+}
+umbul(-6.5, 20.5, 0xdc2626); umbul(6.5, 20.5, 0xf59e0b);       // gerbang sekolah
+umbul(-6.5, 44, 0x2563eb); umbul(6.5, 44, 0x16a34a);           // jalan cabang gerbang
+umbul(58.5, 57.3, 0xdc2626); umbul(73, 57.3, 0xf59e0b);        // terminal gerduren
+umbul(93.5, 57.8, 0x2563eb);                                   // ujung barat jembatan
+umbul(-70, -27.5, 0xdc2626); umbul(-82, -27.5, 0xf59e0b);      // depan balai desa
+tree(-80, -64, 1.05); tree(80, -64, 1.05); tree(0, -64, 1.1);  // peneduh jalan lingkar utara
+tree(-80, 64, 1.0); tree(80, 64, 1.0);                         // peneduh jalan lingkar selatan
+palm(57, 68.5, 0.95); palm(75, 68.5, 0.95);                    // kelapa di sudut apron terminal
+[[-70,58.2],[-45,58.2],[25,58.2],[45,58.2],[80,58.2]].forEach(function(p, i){ // semak bunga tepi selatan jalan raya
+  var bush = new THREE.Mesh(new THREE.SphereGeometry(0.55, 8, 6), mat(0x2f9e44));
+  bush.scale.y = 0.75; bush.position.set(p[0], 0.4, p[1]); bush.castShadow = true; scene.add(bush);
+  var flc = [0xef4444, 0xf59e0b, 0xec4899, 0xffffff, 0xa78bfa];
+  for(var f = 0; f < 3; f++){
+    var fl3 = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6, 5), mat(flc[(i + f) % 5]));
+    fl3.position.set(p[0] + (f - 1) * 0.3, 0.62, p[1] + (f % 2 ? 0.25 : -0.2)); scene.add(fl3);
+  }
+});
+
 /* ================= KEHIDUPAN DESA GERDUREN (Jawa Tengah) =================
    Hiruk pikuk desa: ayam berkeliaran, kambing merumput, kucing di kantin, bebek
    di tepi parit, burung beterbangan, rumput & bunga di mana-mana, pedagang
@@ -2506,7 +2783,7 @@ function villagerStand(x, z, shirt, ry){
 }
 villagerStand(11.9, 43.6, 0x16a34a, 2.7);    // pelanggan menunggu di gerobak bakso
 villagerStand(-79.5, -29.2, 0xb45309, 0.4);  // warga di depan Balai Desa
-villagerStand(-23.6, 38.6, 0x2563eb, -0.8);  // warga di depan rumah
+villagerStand(-23.6, 46.8, 0x2563eb, -0.8);  // warga di depan rumah (sisi teras selatan rumah)
 villagerStand(26.2, 16.8, 0xdb2777, 2.9);    // ibu-ibu mengobrol dekat Kantin & UKS
 
 /* ---------- Ayam berkeliaran (berjalan pelan + mematuk) ---------- */
@@ -2545,8 +2822,8 @@ function makeChicken(x, z){
   });
   return g;
 }
-makeChicken(-24, 37); makeChicken(-31, 47); makeChicken(50, 59);
-makeChicken(61, 40); makeChicken(-56, 61); makeChicken(-47, 44);
+makeChicken(-16, 34); makeChicken(-36, 38); makeChicken(36, 63);
+makeChicken(58, 36); makeChicken(-56, 61); makeChicken(-44, 36);
 
 /* ---------- Kambing merumput ---------- */
 function makeGoat(x, z, col){
@@ -2646,9 +2923,15 @@ makeBird(-20, 20, 30, 16, 0.11, 0); makeBird(30, 0, 38, 19, 0.09, 2.4); makeBird
     if(x > -40 && x < 40 && z > -29.5 && z < 16.5) return true;          // halaman sekolah
     if(x > -86 && x < -46 && z > -18 && z < 18) return true;             // lapangan bola
     if(x > 44 && x < 72 && z > -28 && z < 0) return true;                // sawah timur
-    if(x > -72 && x < -44 && z > 76 && z < 104) return true;             // sawah barat daya (digeser ke selatan parit: tidak lagi menimpa jalan)
-    if(x > 16 && x < 44 && z > 74 && z < 102) return true;               // sawah selatan
-    if(x > -92 && x < -72 && z > -44 && z < -28) return true;            // balai desa
+    if(x > 52 && x < 80 && z > -66 && z < -38) return true;              // sawah timur laut
+    if(x > -72 && x < -44 && z > 83 && z < 110) return true;             // sawah barat daya (selatan jalan lingkar)
+    if(x > 16 && x < 44 && z > 83 && z < 110) return true;               // sawah selatan
+    if(x > -86 && x < -66 && z > -44 && z < -28) return true;            // balai desa
+    if(Math.abs(z + 72) < 5 && x > -95 && x < 95) return true;           // jalan lingkar utara
+    if(Math.abs(z - 80) < 5 && x > -95 && x < 95) return true;           // jalan lingkar selatan
+    if(Math.abs(x + 88) < 5 && z > -76 && z < 84) return true;           // jalan lingkar barat
+    if(Math.abs(x - 88) < 5 && z > -76 && z < 84) return true;           // jalan lingkar timur
+    if(x > 54 && x < 78 && z > 55 && z < 71) return true;                // terminal gerduren
     if(x > 14 && x < 34 && z > 30 && z < 46) return true;                // masjid
     for(var hi = 0; hi < houseSpots.length; hi++){
       if(Math.abs(x - houseSpots[hi][0]) < 5.5 && Math.abs(z - houseSpots[hi][1]) < 4.5) return true;
@@ -2702,9 +2985,8 @@ function makeGerobak(col){
   var h2 = cyl(0.03, 0.03, 1.15, 0x6d4c2f, -1.3, 0.72, 0.3, g, 6); h2.rotation.z = 1.05;
   return g;
 }
-(function(){ // gerobak mangkal di tepi jalan dekat gerbang + pedagangnya
+(function(){ // gerobak mangkal di tepi jalan dekat gerbang + pedagangnya (figur NPC baru di blok NPC)
   var cart = makeGerobak(0x16a34a); cart.position.set(11, 0, 45.2); cart.rotation.y = Math.PI; scene.add(cart);
-  makeVillager(9.4, 45.4, 0xf59e0b, 0xc98a4b, Math.PI / 2);
   addCollider(11, 45.2, 1.3, 0.9);   // gerobak mangkal padat: pemain tidak berjalan menembusnya
   postSign('Bakso Keliling', 14.2, 43.2, Math.PI * 0.92, {w:2.8, bg:'#b45309', fg:'#fff7d6'});
 })();
@@ -3521,19 +3803,25 @@ var zones = [
   {name:'Lapangan Gerduren',   minX:-86, maxX:-46, minZ:-18, maxZ:18},
   {name:'Parit Irigasi',        minX:-110,maxX:110, minZ:67,  maxZ:77},
   {name:'Sawah',                minX:44,  maxX:72,  minZ:-28, maxZ:0},
-  {name:'Sawah',                minX:-72, maxX:-44, minZ:76,  maxZ:104},
-  {name:'Sawah',                minX:16,  maxX:44,  minZ:74,  maxZ:102},
-  {name:'Balai Desa Gerduren',  minX:-92, maxX:-72, minZ:-44, maxZ:-28},
+  {name:'Sawah',                minX:-72, maxX:-44, minZ:83,  maxZ:110},
+  {name:'Sawah',                minX:16,  maxX:44,  minZ:83,  maxZ:110},
+  {name:'Terminal Gerduren',    minX:54,  maxX:78,  minZ:55,  maxZ:71},
+  {name:'Jembatan Gerduren',    minX:93,  maxX:110, minZ:46,  maxZ:58},
+  {name:'Balai Desa Gerduren',  minX:-86, maxX:-66, minZ:-44, maxZ:-28},
   {name:'Jl. Sawah Glempang',   minX:-110,maxX:110, minZ:47,  maxZ:57},
   {name:'Jalan Menuju Sekolah', minX:-6,  maxX:6,   minZ:17,  maxZ:47},
   {name:'Kandang & Kolam Sekolah', minX:-30, maxX:21, minZ:-45, maxZ:-34},
   {name:'Kantor Polsek',           minX:58,  maxX:84, minZ:23,  maxZ:37},
   {name:'Puskesmas',               minX:57,  maxX:71, minZ:-39, maxZ:-29},
   {name:'Sungai Gerduren',         minX:93,  maxX:110, minZ:-110,maxZ:110},
+  {name:'Jalan Lingkar Desa',   minX:-93, maxX:93,  minZ:-76, maxZ:-68},
+  {name:'Jalan Lingkar Desa',   minX:-93, maxX:93,  minZ:76,  maxZ:84},
+  {name:'Jalan Lingkar Desa',   minX:-93, maxX:-83, minZ:-68, maxZ:76},
+  {name:'Jalan Lingkar Desa',   minX:83,  maxX:93,  minZ:-68, maxZ:76},
   {name:'Hutan Desa',              minX:-110,maxX:-74, minZ:-92, maxZ:-42},
   {name:'Dealer Gerduren',         minX:30,  maxX:46, minZ:36,  maxZ:48},
   {name:'Taman Desa',              minX:-59, maxX:-45, minZ:25,  maxZ:35},
-  {name:'Sawah',                   minX:70,  maxX:98, minZ:70,  maxZ:98},
+  {name:'Sawah',                   minX:52,  maxX:80,  minZ:-66, maxZ:-38},
   {name:'Lingkungan Warga',     minX:-110,maxX:110, minZ:17,  maxZ:110}
 ];
 var currentLoc = '';
@@ -4774,10 +5062,10 @@ var POS_DIRS = [
 ];
 var POS_DEFS = [
   {id:'kompas', num:1, name:'Kompas', room:'Ruang Kelas 1', max:80, color:'#0284c7',
-   blurb:'Belajar 8 arah mata angin dan derajatnya, seperti kompas sungguhan.',
-   learnDesc:'Lihat & hafalkan 8 arah mata angin beserta derajatnya, lalu coba 3 soal latihan.',
-   latihanDesc:'10 soal bebas tanpa nilai — salah langsung diberitahu jawaban yang benar.',
-   simDesc:'Seperti lomba: 10 soal, nilai maksimal 80 (tiap benar 8 poin). Nilai Pos menjadi Kredit!'},
+   blurb:'Belajar 8 arah mata angin dan derajatnya — sama seperti media Pos Kompas di website sekolah.',
+   learnDesc:'Materi kompas lengkap dari website sekolah: pengertian, bagian-bagian, cara membaca, trik arah berlawanan + tabel hafalan bersuara.',
+   latihanDesc:'Persis Latihan di website sekolah: Mode A kartu derajat → sebut arahnya, Mode B nama arah → tebak derajatnya. 8 soal, skor /80, dinilai dengan suara!',
+   simDesc:'Simulasi lomba Mode C persis website sekolah: 8 kartu derajat — sebutkan arahnya (5 poin) lalu tempelkan pada gambar arah mata angin TANPA angka (5 poin). Maksimal 80 = Kredit!'},
   {id:'kim', num:2, name:'KIM', room:'Ruang Kelas 2', max:80, color:'#7c3aed',
    blurb:'Pengamatan & daya ingat: amati gambar buah dan bunga, lalu tuliskan namanya dari ingatan.',
    learnDesc:'Lihat daftar 16 nama buah dan 16 nama bunga dari juklak — inilah yang harus dihafalkan.',
@@ -4989,87 +5277,196 @@ function runQuiz(opts){
   renderQ();
 }
 
-/* ================= POS 1: KOMPAS ================= */
-function kompasQuestions(n){
-  var pool = shuffleArr(POS_DIRS), qs = [];
-  for(var k = 0; k < n; k++) qs.push({dir: pool[k % pool.length], type: (k % 2 === 0) ? 'A' : 'B'});
-  return qs;
+/* ================= POS 1: KOMPAS =================
+   Materi & simulasi PERSIS seperti media Pos Kompas di website sekolah
+   (sdn1gerduren.pages.dev/kompas/ — aplikasi Latihan Pramuka Siaga):
+   data 8 arah + petunjuk + cara mengingat yang sama, materi yang sama,
+   Latihan Mode A/B (8 soal, skor /80, penilaian bersuara "Wah hebat, kamu
+   benar!" / "Kamu salah. Jawabannya …"), dan Simulasi Mode C lomba:
+   ambil kartu derajat → sebutkan arahnya (5 poin) → tempelkan kartu pada
+   gambar arah mata angin TANPA angka / kompas buta (5 poin), maks 80. */
+var KOMPAS_DIRS = [
+  {deg:0,   name:'Utara',      short:'U',  hint:'Utara adalah awal hitungan: 0°!', memory:'Awal hitungan — arah pertama (0°)'},
+  {deg:45,  name:'Timur Laut', short:'TL', hint:'Timur Laut ada di tengah-tengah antara Utara (0°) dan Timur (90°).', memory:'Di antara Utara dan Timur'},
+  {deg:90,  name:'Timur',      short:'T',  hint:'Timur adalah tempat matahari terbit di pagi hari: 90°.', memory:'Tempat matahari terbit'},
+  {deg:135, name:'Tenggara',   short:'TG', hint:'Tenggara ada di tengah-tengah antara Timur (90°) dan Selatan (180°).', memory:'Di antara Timur dan Selatan'},
+  {deg:180, name:'Selatan',    short:'S',  hint:'Selatan berlawanan dengan Utara, selisihnya 180°: 0° + 180° = 180°.', memory:'Berlawanan dengan Utara'},
+  {deg:225, name:'Barat Daya', short:'BD', hint:'Barat Daya ada di tengah-tengah antara Selatan (180°) dan Barat (270°).', memory:'Di antara Selatan dan Barat'},
+  {deg:270, name:'Barat',      short:'B',  hint:'Barat adalah tempat matahari terbenam di sore hari: 270°.', memory:'Tempat matahari terbenam'},
+  {deg:315, name:'Barat Laut', short:'BL', hint:'Barat Laut ada di tengah-tengah antara Barat (270°) dan Utara (360°/0°).', memory:'Di antara Barat dan Utara'}
+];
+function kompasSpeak(text){ speakID(text, 1.05, 0.98); }
+function kompasVerdict(ok, t){
+  return ok ? ('Wah hebat, kamu benar! ' + t.deg + ' derajat, ' + t.name + '.')
+            : ('Kamu salah. Jawabannya ' + t.deg + ' derajat, ' + t.name + '.');
 }
-function runKompas(mode){
+function kompasChoices(target){
+  var others = shuffleArr(KOMPAS_DIRS.filter(function(d){ return d.deg !== target.deg; })).slice(0, 3);
+  return shuffleArr([target].concat(others));
+}
+function kompasBelajar(){
   runCleanup();
-  var n = mode === 'belajar' ? 3 : 10;
-  var st = {qs: kompasQuestions(n), idx: 0, correct: 0, answered: false};
+  var chips = '';
+  KOMPAS_DIRS.forEach(function(d, i){ chips += '<button class="dir-chip" type="button" data-i="' + i + '"><span>' + d.name + '</span><b>' + d.deg + '°</b></button>'; });
+  posBody.innerHTML =
+    '<div class="materi-wrap">' +
+    '<div class="materi-card"><h4>Apa Itu Kompas?</h4><p>Kompas adalah <b>alat penunjuk arah mata angin</b>. Dengan kompas, kita bisa tahu di mana Utara, Timur, Selatan, dan Barat — misalnya saat berkemah, hiking, atau bermain di lapangan.</p><p>Di dalam kompas ada jarum magnet kecil yang selalu menunjuk ke <b>Utara</b>. Karena itu kompas bisa menolong kita agar tidak tersesat.</p></div>' +
+    '<div class="materi-card"><h4>Bagian-Bagian Kompas</h4><p>• <b>Jarum penunjuk utara</b> — jarum berwarna merah-putih. Ujung merah selalu menunjuk Utara.<br>• <b>Lingkaran derajat</b> — garis-garis angka derajat di sekeliling kompas, dari 0° sampai 360°.<br>• <b>8 arah mata angin</b> — gambar bintang arah: Utara, Timur Laut, Timur, Tenggara, Selatan, Barat Daya, Barat, Barat Laut.</p><p><b>Di lomba sungguhan</b>, kompas disajikan <b>TANPA ANGKA</b> (buta) — anak mengambil kartu bertuliskan angka derajat, menyebutkan arahnya, lalu menempelkan kartu soal pada gambar arah mata angin. Angkanya hanya ada di kartu derajat. Hafalkan pasangan arah dan derajatnya!</p></div>' +
+    '<div class="materi-card"><h4>Cara Membaca Kompas</h4><p>1. <b>Pegang kompas datar</b> di telapak tangan, jangan miring.<br>2. <b>Tunggu jarum tenang</b> — jangan digoyang, jarum akan berhenti sendiri.<br>3. Lihat ujung jarum yang <b>merah</b>: itulah arah <b>Utara = 0°</b>.<br>4. Putar badanmu sambil melihat roda arah, lalu baca arah lain mengikuti jarum jam: Timur 90°, Selatan 180°, Barat 270°.<br>5. Jauhkan kompas dari benda logam dan magnet supaya jarum tidak salah tunjuk.</p></div>' +
+    '<div class="materi-card"><h4>Trik Memahami Arah</h4><p><b>Arah berlawanan selisih 180°</b> — kalau tahu satu arah, tambah 180 untuk arah sebaliknya:</p><p>Utara 0° ↔ Selatan 180° • Timur 90° ↔ Barat 270°<br>Timur Laut 45° ↔ Barat Daya 225° • Tenggara 135° ↔ Barat Laut 315°</p><p><b>Arah tegak lurus</b> selisihnya 90°. <b>Satu putaran penuh</b> roda kompas adalah 360°. Pola gampangnya: <b>tiap langkah = 45°</b>. Mulai dari <b>Utara 0°</b>, lalu berputar searah jarum jam: <b>Timur 90°, Selatan 180°, Barat 270°</b>.</p></div>' +
+    '</div>' +
+    '<p class="sheet-note" style="margin-top:12px;">Tabel 8 arah mata angin — <b>wajib hafal!</b> Ketuk arahnya: roda akan menyebutkan derajatnya dengan suara, persis seperti roda kompas interaktif di website sekolah.</p>' +
+    '<div class="pos-qcard"><div class="pos-qprog">Arah yang Dipilih</div><div class="pos-qbig" id="belajarBig">Utara • 0°</div><div class="pos-qask" id="belajarAsk">Utara adalah awal hitungan: 0°!</div><div class="pos-qask" id="belajarMem" style="color:#92400e;font-weight:800;">Cara mengingat: Awal hitungan — arah pertama (0°)</div></div>' +
+    '<div class="dir-chart">' + chips + '</div>' +
+    '<button class="pos-next" id="belajarTry" type="button">Lanjut ke Latihan (8 Soal)</button>' + posNavHTML();
+  var chipsEls = posBody.querySelectorAll('.dir-chip');
+  chipsEls.forEach(function(ch){
+    ch.addEventListener('click', function(){
+      chipsEls.forEach(function(c2){ c2.classList.remove('on'); });
+      ch.classList.add('on');
+      var d = KOMPAS_DIRS[+ch.getAttribute('data-i')];
+      document.getElementById('belajarBig').textContent = d.name + ' • ' + d.deg + '°';
+      document.getElementById('belajarAsk').textContent = d.hint;
+      document.getElementById('belajarMem').textContent = 'Cara mengingat: ' + d.memory;
+      kompasSpeak(d.deg + ' derajat, ' + d.name);
+    });
+  });
+  document.getElementById('belajarTry').addEventListener('click', function(){ AudioSys.sfx('click'); runKompasLatihan(); });
+  bindPosMenuBtn();
+}
+/* Latihan: menu Mode A / Mode B seperti kuis interaktif di website sekolah */
+function runKompasLatihan(){
+  runCleanup();
+  posBody.innerHTML =
+    '<div class="pos-qcard"><div class="pos-qprog">Latihan Kompas — Pilih Mode</div>' +
+    '<div class="pos-qask">Satu ronde = <b>8 soal</b>, seperti 8 anak dalam barung. Skor latihan maksimal <b>80</b>. Setiap jawaban dibacakan dengan suara: benar — "Wah hebat, kamu benar!", salah — "Kamu salah."</div></div>' +
+    '<div class="pos-answers">' +
+    '<button class="pos-ans" type="button" id="latModeA">Mode A — Kartu Derajat → Sebut Arahnya</button>' +
+    '<button class="pos-ans" type="button" id="latModeB">Mode B — Nama Arah → Tebak Derajatnya</button>' +
+    '</div>' + posNavHTML();
+  bindPosMenuBtn();
+  document.getElementById('latModeA').addEventListener('click', function(){ AudioSys.sfx('click'); runKompasQuiz('A'); });
+  document.getElementById('latModeB').addEventListener('click', function(){ AudioSys.sfx('click'); runKompasQuiz('B'); });
+}
+function runKompasQuiz(mode){
+  runCleanup();
+  var st = {order: shuffleArr(KOMPAS_DIRS), idx: 0, score: 0, answered: false};
   posState = st;
   function renderQ(){
-    var q = st.qs[st.idx];
-    var big = q.type === 'A' ? (q.dir.deg + '°') : q.dir.name;
-    var ask = q.type === 'A' ? 'Arah mata angin apa ini?' : 'Berapa derajat arah ini?';
+    var t = st.order[st.idx];
+    var choices = kompasChoices(t);
+    var big = mode === 'A' ? (t.deg + '°') : t.name;
+    var ask = mode === 'A' ? 'Kartu derajat menunjukkan angka di atas. Arah mata angin apa itu? Sentuh jawabanmu!' : 'Berapa derajat arah itu? Sentuh jawabanmu!';
     var answers = '';
-    POS_DIRS.forEach(function(d, i){ answers += '<button class="pos-ans" type="button" data-i="' + i + '">' + (q.type === 'A' ? d.name : (d.deg + '°')) + '</button>'; });
+    choices.forEach(function(d){ answers += '<button class="pos-ans" type="button" data-deg="' + d.deg + '">' + (mode === 'A' ? d.name : (d.deg + '°')) + '</button>'; });
     posBody.innerHTML =
-      '<div class="pos-qcard"><div class="pos-qprog">' + (mode === 'simulasi' ? 'Simulasi Lomba' : (mode === 'latihan' ? 'Latihan' : 'Belajar')) + ' • Soal ' + (st.idx + 1) + ' dari ' + st.qs.length + ' • Benar: ' + st.correct + '</div>' +
+      '<div class="pos-qcard"><div class="pos-qprog">Latihan Mode ' + mode + ' • Soal ' + (st.idx + 1) + ' dari 8 • Skor Latihan: ' + st.score + ' / 80</div>' +
       '<div class="pos-qbig">' + big + '</div><div class="pos-qask">' + ask + '</div></div>' +
       '<div class="pos-answers">' + answers + '</div><div class="pos-feed" id="posFeed"></div><div id="posNextWrap"></div>';
     posBody.querySelectorAll('.pos-ans').forEach(function(b){
       b.addEventListener('click', function(){
         if(st.answered) return; st.answered = true;
-        var i = +b.getAttribute('data-i'), rightIdx = POS_DIRS.indexOf(q.dir), ok = i === rightIdx;
-        if(ok) st.correct++;
+        var ok = +b.getAttribute('data-deg') === t.deg;
+        if(ok) st.score += 10;
         posBody.querySelectorAll('.pos-ans').forEach(function(b2){
           b2.disabled = true;
-          if(+b2.getAttribute('data-i') === rightIdx) b2.classList.add('right');
+          if(+b2.getAttribute('data-deg') === t.deg) b2.classList.add('right');
           else if(b2 === b) b2.classList.add('wrong');
         });
         var feed = document.getElementById('posFeed');
         feed.className = 'pos-feed ' + (ok ? 'ok' : 'no');
-        feed.innerHTML = (ok ? 'Betul! ' : 'Belum tepat — yang benar: ') + '<b>' + q.dir.deg + '° = ' + q.dir.name + '</b>.';
+        feed.innerHTML = kompasVerdict(ok, t);
         AudioSys.sfx(ok ? 'correct' : 'wrong');
-        var last = st.idx >= st.qs.length - 1;
+        kompasSpeak(kompasVerdict(ok, t));
+        var last = st.idx >= st.order.length - 1;
         document.getElementById('posNextWrap').innerHTML = '<button class="pos-next" id="posNextBtn" type="button">' + (last ? 'Lihat Hasil' : 'Soal Berikutnya') + '</button>';
         document.getElementById('posNextBtn').addEventListener('click', function(){
           AudioSys.sfx('click');
-          if(last){
-            if(mode === 'simulasi') finishSimulasi(st.correct * 8);
-            else renderLatihanDone(st.correct + ' / ' + st.qs.length, mode === 'belajar' ? 'Bagus! Lanjut ke tahap Latihan (10 soal) atau langsung Simulasi Lomba kalau sudah percaya diri.' : (st.correct >= 8 ? 'Kamu sudah hafal sekali! Berani coba Simulasi Lomba untuk dapat Kredit & stempel?' : 'Terus berlatih sampai hafal, lalu coba Simulasi Lomba!'));
-          } else { st.idx++; st.answered = false; renderQ(); }
+          if(last) renderLatihanDone(st.score + ' / 80', st.score >= 70 ? 'Luar biasa! Kamu sudah hafal 8 arah mata angin dan derajatnya. Berani coba Simulasi Lomba (Mode C) untuk dapat Kredit & stempel Pos?' : 'Terus berlatih sampai hafal, lalu coba Simulasi Lomba (Mode C)!');
+          else { st.idx++; st.answered = false; renderQ(); }
         });
       });
     });
   }
   renderQ();
 }
-function kompasBelajar(){
+/* Simulasi Lomba Mode C: nilai dipecah persis aturan lomba di website sekolah —
+   benar menyebut arah 5 poin + benar menempel kartu pada gambar arah 5 poin. */
+function runKompasSimulasi(){
   runCleanup();
-  var chips = '';
-  POS_DIRS.forEach(function(d, i){ chips += '<button class="dir-chip" type="button" data-i="' + i + '"><span>' + d.name + '</span><b>' + d.deg + '°</b></button>'; });
-  posBody.innerHTML =
-    '<p class="sheet-note" style="margin-top:12px;">Kompas menunjukkan <b>8 arah mata angin</b>. Setiap arah punya angka derajat yang pasti — hafalkan pasangannya! Ketuk arahnya untuk melihatnya besar-besar.</p>' +
-    '<div class="pos-qcard"><div class="pos-qprog">Arah yang Dipilih</div><div class="pos-qbig" id="belajarBig">Utara • 0°</div><div class="pos-qask" id="belajarAsk">Utara adalah arah ke atas peta — matahari tidak pernah berada di utara!</div></div>' +
-    '<div class="dir-chart">' + chips + '</div>' +
-    '<button class="pos-next" id="belajarTry" type="button">Coba 3 Soal Latihan</button>' + posNavHTML();
-  var facts = [
-    'Utara adalah arah ke atas peta — matahari tidak pernah berada di utara!',
-    'Timur Laut ada di antara Utara dan Timur — arah matahari terbit agak ke utara.',
-    'Timur adalah arah matahari terbit setiap pagi!',
-    'Tenggara ada di antara Timur dan Selatan.',
-    'Selatan adalah arah sebaliknya Utara.',
-    'Barat Daya ada di antara Selatan dan Barat.',
-    'Barat adalah arah matahari terbenam setiap sore!',
-    'Barat Laut ada di antara Barat dan Utara — arah angin musim hujan bertiup!'
-  ];
-  var chipsEls = posBody.querySelectorAll('.dir-chip');
-  chipsEls.forEach(function(ch){
-    ch.addEventListener('click', function(){
-      chipsEls.forEach(function(c2){ c2.classList.remove('on'); });
-      ch.classList.add('on');
-      var d = POS_DIRS[+ch.getAttribute('data-i')];
-      document.getElementById('belajarBig').textContent = d.name + ' • ' + d.deg + '°';
-      document.getElementById('belajarAsk').textContent = facts[+ch.getAttribute('data-i')];
-      AudioSys.sfx('beep');
+  var st = {order: shuffleArr(KOMPAS_DIRS), idx: 0, score: 0, answered: false};
+  posState = st;
+  function roseHTML(){
+    var dots = '';
+    KOMPAS_DIRS.forEach(function(d){
+      var rad = (d.deg - 90) * Math.PI / 180;
+      var lx = 50 + Math.cos(rad) * 37, ly = 50 + Math.sin(rad) * 37;
+      dots += '<button class="rose-dot" type="button" data-deg="' + d.deg + '" style="left:' + lx + '%;top:' + ly + '%;">' + d.short + '</button>';
     });
-  });
-  document.getElementById('belajarTry').addEventListener('click', function(){ AudioSys.sfx('click'); runKompas('belajar'); });
-  bindPosMenuBtn();
+    return '<div class="rose-wrap">' + dots + '<div class="rose-center">GAMBAR ARAH<br>MATA ANGIN</div></div>';
+  }
+  function renderQ(){
+    var t = st.order[st.idx];
+    st.answered = false;
+    var choices = kompasChoices(t);
+    var answers = '';
+    choices.forEach(function(d){ answers += '<button class="pos-ans" type="button" data-deg="' + d.deg + '">' + d.name + '</button>'; });
+    posBody.innerHTML =
+      '<div class="pos-qcard"><div class="pos-qprog">Simulasi Lomba (Mode C) • Kartu ' + (st.idx + 1) + ' dari 8 • Skor: ' + st.score + ' / 80</div>' +
+      '<div class="pos-qask">Kamu mengambil kartu derajat:</div><div class="pos-qbig">' + t.deg + '°</div>' +
+      '<div class="pos-qask"><b>Langkah 1 — Sebutkan arahnya</b> (benar = 5 poin)</div></div>' +
+      '<div class="pos-answers">' + answers + '</div><div class="pos-feed" id="posFeed"></div><div id="posNextWrap"></div>';
+    posBody.querySelectorAll('.pos-ans').forEach(function(b){
+      b.addEventListener('click', function(){
+        if(st.answered) return; st.answered = true;
+        var ok = +b.getAttribute('data-deg') === t.deg;
+        if(ok) st.score += 5;
+        posBody.querySelectorAll('.pos-ans').forEach(function(b2){
+          b2.disabled = true;
+          if(+b2.getAttribute('data-deg') === t.deg) b2.classList.add('right');
+          else if(b2 === b) b2.classList.add('wrong');
+        });
+        var feed = document.getElementById('posFeed');
+        feed.className = 'pos-feed ' + (ok ? 'ok' : 'no');
+        feed.innerHTML = ok ? ('Betul, arahnya <b>' + t.name + '</b>! +5 poin. Lanjut langkah 2: tempelkan kartunya!') : ('Belum tepat — arah yang benar: <b>' + t.name + '</b>. Lanjut langkah 2: tempelkan kartunya pada gambar arah mata angin!');
+        AudioSys.sfx(ok ? 'correct' : 'wrong');
+        document.getElementById('posNextWrap').innerHTML = '<button class="pos-next" id="posNextBtn" type="button">Langkah 2 — Tempel Kartu</button>';
+        document.getElementById('posNextBtn').addEventListener('click', function(){ AudioSys.sfx('click'); renderStep2(); });
+      });
+    });
+    function renderStep2(){
+      st.answered = false;
+      posBody.innerHTML =
+        '<div class="pos-qcard"><div class="pos-qprog">Simulasi Lomba (Mode C) • Kartu ' + (st.idx + 1) + ' dari 8 • Skor: ' + st.score + ' / 80</div>' +
+        '<div class="pos-qask"><b>Langkah 2 — Tempelkan kartu ' + t.deg + '°</b> pada gambar arah mata angin yang benar (benar = 5 poin). Ingat: kompas lomba <b>TANPA ANGKA</b> — hanya ada huruf arahnya!</div></div>' +
+        roseHTML() + '<div class="pos-feed" id="posFeed"></div><div id="posNextWrap"></div>';
+      posBody.querySelectorAll('.rose-dot').forEach(function(b){
+        b.addEventListener('click', function(){
+          if(st.answered) return; st.answered = true;
+          var ok = +b.getAttribute('data-deg') === t.deg;
+          if(ok) st.score += 5;
+          posBody.querySelectorAll('.rose-dot').forEach(function(b2){
+            b2.disabled = true;
+            if(+b2.getAttribute('data-deg') === t.deg) b2.classList.add('right');
+            else if(b2 === b) b2.classList.add('wrong');
+          });
+          var feed = document.getElementById('posFeed');
+          feed.className = 'pos-feed ' + (ok ? 'ok' : 'no');
+          feed.innerHTML = ok ? ('Tepat! Kartu ' + t.deg + '° menempel di <b>' + t.name + '</b>. +5 poin.') : ('Belum tepat — posisi yang benar: <b>' + t.name + ' (' + t.short + ')</b>.');
+          AudioSys.sfx(ok ? 'correct' : 'wrong');
+          kompasSpeak(kompasVerdict(ok, t));
+          var last = st.idx >= st.order.length - 1;
+          document.getElementById('posNextWrap').innerHTML = '<button class="pos-next" id="posNextBtn" type="button">' + (last ? 'Lihat Hasil' : 'Kartu Berikutnya') + '</button>';
+          document.getElementById('posNextBtn').addEventListener('click', function(){
+            AudioSys.sfx('click');
+            if(last) finishSimulasi(st.score);
+            else { st.idx++; renderQ(); }
+          });
+        });
+      });
+    }
+  }
+  renderQ();
 }
 
 /* ================= POS 2: KIM (Pengamatan & Daya Ingat) ================= */
@@ -5690,7 +6087,7 @@ function pioneringBelajar(){
 
 /* ---------- Pendaftaran tahap tiap Pos ---------- */
 var POS_IMPL = {
-  kompas:   {belajar: kompasBelajar,   latihan: function(){ runKompas('latihan'); },   simulasi: function(){ runKompas('simulasi'); }},
+  kompas:   {belajar: kompasBelajar,   latihan: function(){ runKompasLatihan(); },   simulasi: function(){ runKompasSimulasi(); }},
   kim:      {belajar: kimBelajar,      latihan: function(){ runKim('latihan'); },      simulasi: function(){ runKim('simulasi'); }},
   bangga:   {belajar: banggaBelajar,   latihan: function(){ runBangga('latihan'); },   simulasi: function(){ runBangga('simulasi'); }},
   tanda:    {belajar: tandaBelajar,    latihan: function(){ runTanda('latihan'); },    simulasi: function(){ runTanda('simulasi'); }},
@@ -6541,6 +6938,40 @@ function ensureNPCDay(){
 }
 function npcState(id){ ensureNPCDay(); return eco.npcQuests.st[id] || 'offer'; }
 function setNPCState(id, st){ ensureNPCDay(); eco.npcQuests.st[id] = st; saveEco(); refreshNPCMarkers(); }
+/* Kunci state quest per NPC: quest 'guru' kini per ORANG (setiap guru kelas
+   memberi quest materinya sendiri tiap hari), peran lain tetap per peran. */
+function npcQuestId(n){ return n.def === 'guru' ? 'guru@' + n.key : n.def; }
+
+/* Ucapan Bahasa Indonesia bersama (dipakai sapaan suara guru & penilaian
+   suara Pos Kompas — pola sama dengan suara sambutan masuk dunia). */
+function speakID(text, pitch, rate){
+  try{
+    if(AudioSys.isMuted() || !('speechSynthesis' in window)) return;
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = 'id-ID'; u.pitch = pitch || 1; u.rate = rate || 1;
+    var vs = window.speechSynthesis.getVoices();
+    for(var i = 0; i < vs.length; i++){ if(vs[i].lang && vs[i].lang.toLowerCase().indexOf('id') === 0){ u.voice = vs[i]; break; } }
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }catch(e){ /* ucapan tidak tersedia di perangkat ini */ }
+}
+/* Warna suara sapaan tiap guru & tendik: nada (pitch) dan kecepatan (rate)
+   berbeda-beda supaya tiap orang terdengar punya suaranya sendiri. */
+var NPC_VOICES = {
+  kepsek:{pitch:0.85, rate:0.92},   // Pak Yudhy — Kepala Sekolah: dalam & berwibawa
+  anggi:{pitch:1.00, rate:1.00},    // Pak Anggi
+  ahmad:{pitch:0.90, rate:0.97},    // Pak Ahmad
+  igun:{pitch:1.06, rate:1.04},     // Pak Igun
+  aenal:{pitch:1.35, rate:1.00},    // Bu Aenal
+  cici:{pitch:1.45, rate:1.02},     // Bu Cici
+  azizah:{pitch:1.28, rate:0.96},   // Bu Azizah
+  linggar:{pitch:0.95, rate:1.08},  // Pak Linggar — PJOK: semangat & cepat
+  nartam:{pitch:0.80, rate:0.90}    // Pak Nartam — Penjaga: berat & pelan
+};
+function speakNPCGreeting(n){
+  var v = NPC_VOICES[n.key]; if(!v) return;
+  speakID('Halo, saya ' + n.name + '.', v.pitch, v.rate);
+}
 
 var batikTexCache = null;
 function getBatikTex(){
@@ -6690,9 +7121,80 @@ function drawQuestMarker(sp, sym){
   sp.userData.tex.needsUpdate = true;
 }
 
+/* ================= BANK SOAL MATERI PELAJARAN (Quest Guru) =================
+   Setiap Guru Kelas memberi quest materi: SISWA MEMILIH SENDIRI mata
+   pelajarannya, lalu menjawab 3 soal acak dari bank mapel itu. Soal dibuat
+   bervariasi, lucu, dan menantang untuk anak SD (Kurikulum Merdeka). */
+var SUBJECT_LIST = [
+  {id:'mtk', name:'Matematika', qs:[
+    {q:'Sebuah bus membawa 24 siswa. Di Terminal Gerduren naik 17 siswa lagi. Berapa semua siswa di dalam bus sekarang?', opts:['41 siswa','40 siswa','31 siswa'], ans:0},
+    {q:'Ibu membeli 5 kantong permen, tiap kantong berisi 6 permen. Permen dibagikan rata kepada 3 anak. Tiap anak mendapat…', opts:['10 permen','6 permen','15 permen'], ans:0},
+    {q:'Ayo berpikir! Angka berapa yang hilang dari pola ini: 7, 14, 21, 28, …?', opts:['35','33','36'], ans:0},
+    {q:'Satu segitiga punya 3 sisi. Kalau ada 6 segitiga, jumlah semua sisinya adalah…', opts:['18','12','24'], ans:0},
+    {q:'Rafi punya 3 koin Rp1.000 dan 2 koin Rp500. Uang Rafi seluruhnya…', opts:['Rp4.000','Rp3.500','Rp5.000'], ans:0},
+    {q:'Jam menunjukkan pukul 07.00. Dua jam 30 menit kemudian, jam menunjukkan pukul…', opts:['09.30','09.00','10.30'], ans:0}
+  ]},
+  {id:'bind', name:'Bahasa Indonesia', qs:[
+    {q:'Lawan kata (antonim) dari "rajin" adalah…', opts:['malas','pandai','cepat'], ans:0},
+    {q:'Kalimat yang penulisannya BENAR adalah…', opts:['Saya pergi ke Purwokerto.','saya pergi ke purwokerto.','Saya pergi ke purwokerto.'], ans:0},
+    {q:'Dalam kalimat "Pak Lurah mempunyai banyak kaki tangan", arti "kaki tangan" adalah…', opts:['pembantu / orang kepercayaan','kaki dan tangan sungguhan','sepatu baru'], ans:0},
+    {q:'Persamaan kata (sinonim) dari "gembira" adalah…', opts:['senang','sedih','marah'], ans:0},
+    {q:'Cerita tentang hewan yang berperilaku seperti manusia dan mengandung pelajaran baik disebut…', opts:['fabel','legenda','mitos'], ans:0},
+    {q:'Tanda baca yang dipakai di akhir kalimat tanya adalah…', opts:['tanda tanya (?)','tanda seru (!)','koma (,)'], ans:0}
+  ]},
+  {id:'bjawa', name:'Bahasa Jawa', qs:[
+    {q:'Angka "telu" dalam Bahasa Jawa artinya…', opts:['tiga','dua','lima'], ans:0},
+    {q:'Bahasa krama dari kata "mangan" (makan) adalah…', opts:['nedha','ngombe','turu'], ans:0},
+    {q:'"Sugeng enjing" artinya…', opts:['Selamat pagi','Selamat malam','Selamat jalan'], ans:0},
+    {q:'Dalam bahasa krama, "bapak" disebut…', opts:['rama','simak','eyang'], ans:0},
+    {q:'Angka "papat" dalam Bahasa Jawa artinya…', opts:['empat','enam','satu'], ans:0},
+    {q:'Anak yang sopan berpamitan pulang dari rumah guru dengan mengucapkan…', opts:['"Nyuwun pamit, Pak."','"Aku mulih ya!"','"Wis, aku bali!"'], ans:0}
+  ]},
+  {id:'pancasila', name:'Pancasila', qs:[
+    {q:'Sila pertama Pancasila berbunyi…', opts:['Ketuhanan Yang Maha Esa','Kemanusiaan yang adil dan beradab','Persatuan Indonesia'], ans:0},
+    {q:'Lambang sila kedua Pancasila adalah…', opts:['rantai emas','pohon beringin','bintang'], ans:0},
+    {q:'Contoh sikap Persatuan Indonesia (sila ketiga) di sekolah adalah…', opts:['bermain dengan semua teman tanpa membeda-bedakan','mengejek teman dari daerah lain','hanya mau bermain dengan teman satu desa'], ans:0},
+    {q:'Musyawarah untuk memilih ketua kelas adalah contoh pengamalan sila ke…', opts:['empat','dua','lima'], ans:0},
+    {q:'Bintang emas adalah lambang sila ke…', opts:['satu','tiga','lima'], ans:0},
+    {q:'Membantu teman yang kesulitan belajar adalah sikap yang sesuai dengan sila ke…', opts:['dua','satu','empat'], ans:0}
+  ]},
+  {id:'ipas', name:'IPAS (Sains & Sosial)', qs:[
+    {q:'Bagian tumbuhan yang bertugas menyerap air dari dalam tanah adalah…', opts:['akar','daun','bunga'], ans:0},
+    {q:'Hewan yang mengalami metamorfosis sempurna (telur → larva → kepompong → dewasa) adalah…', opts:['kupu-kupu','ayam','kucing'], ans:0},
+    {q:'Air di jemuran basah berubah menjadi uap karena…', opts:['panas matahari','cahaya bulan','tiupan kipas'], ans:0},
+    {q:'Sumber energi utama bagi kehidupan di Bumi adalah…', opts:['Matahari','Bulan','api unggun'], ans:0},
+    {q:'Ikan bernapas menggunakan…', opts:['insang','paru-paru','kulit'], ans:0},
+    {q:'Benda yang dapat ditarik oleh magnet adalah…', opts:['paku besi','penghapus karet','daun kering'], ans:0}
+  ]},
+  {id:'pai', name:'PAI & Budi Pekerti', qs:[
+    {q:'Rukun Islam yang pertama adalah…', opts:['syahadat','salat','puasa'], ans:0},
+    {q:'Salat Subuh dikerjakan sebanyak…', opts:['2 rakaat','3 rakaat','4 rakaat'], ans:0},
+    {q:'Sebelum makan, kita dianjurkan membaca…', opts:['basmalah','hamdalah','takbir'], ans:0},
+    {q:'Nabi Muhammad SAW lahir di kota…', opts:['Makkah','Madinah','Thaif'], ans:0},
+    {q:'Kitab suci umat Islam adalah…', opts:['Al-Qur\u2019an','Injil','Taurat'], ans:0},
+    {q:'Berbuat baik dan berbakti kepada orang tua disebut…', opts:['birrul walidain','takabur','riya'], ans:0}
+  ]},
+  {id:'pjok', name:'PJOK (Olahraga)', qs:[
+    {q:'Sebelum berolahraga, kita harus melakukan…', opts:['pemanasan','pendinginan','tidur'], ans:0},
+    {q:'Dalam sepak bola, pemain yang BOLEH memegang bola dengan tangan adalah…', opts:['kiper','penyerang','wasit'], ans:0},
+    {q:'Lari cepat jarak pendek disebut…', opts:['sprint','maraton','joging'], ans:0},
+    {q:'Makanan dan minuman yang baik untuk pertumbuhan tulang adalah yang mengandung kalsium, misalnya…', opts:['susu','permen','minuman bersoda'], ans:0},
+    {q:'Gerakan menggulingkan badan ke depan disebut…', opts:['roll depan','lompat jauh','jalan cepat'], ans:0},
+    {q:'Setelah berolahraga, sebaiknya kita…', opts:['minum air putih dan beristirahat','langsung tidur tanpa mandi','makan permen sebanyak-banyaknya'], ans:0}
+  ]},
+  {id:'seni', name:'Seni Budaya', qs:[
+    {q:'Alat musik tradisional Jawa yang dipukul dan terbuat dari logam adalah…', opts:['gong (gamelan)','angklung','seruling'], ans:0},
+    {q:'Tiga warna primer (warna dasar) adalah…', opts:['merah, kuning, biru','hijau, oranye, ungu','hitam, putih, abu-abu'], ans:0},
+    {q:'Tari tradisional khas Banyumas yang lucu dan lincah adalah tari…', opts:['Lengger','Jaipong','Saman'], ans:0},
+    {q:'Campuran warna biru dan kuning menghasilkan warna…', opts:['hijau','ungu','oranye'], ans:0},
+    {q:'Angklung adalah alat musik tradisional yang berasal dari…', opts:['Jawa Barat','Jawa Tengah','Bali'], ans:0},
+    {q:'Lagu dolanan "Gundul-Gundul Pacul" berasal dari…', opts:['Jawa Tengah','Sumatera Barat','Kalimantan Timur'], ans:0}
+  ]}
+];
+
 var NPC_QUEST_DEFS = {
   kepsek:{questName:'Kuis Kepala Sekolah', reward:120, desc:'Jawab pertanyaan Bapak dengan benar.', quiz:{q:'Ibu kota Kabupaten Banyumas adalah…', opts:['Purwokerto','Cilacap','Purbalingga'], ans:0}, doneText:'Bagus! Kamu anak yang cerdas dan rajin. Pertahankan semangat belajarmu, ya!'},
-  guru:{questName:'Kuis Matematika Pak/Bu Guru', reward:80, desc:'Jawab soal perkalian dari Bapak/Ibu Guru dengan benar.', quiz:{q:'7 × 8 = …', opts:['54','56','48'], ans:1}, doneText:'Pintar! Matematika memang seru kalau rajin berlatih. Besok Bapak/Ibu Guru beri soal baru lagi.'},
+  guru:{questName:'Materi Pelajaran Pilihan', reward:80, desc:'PILIH SENDIRI mata pelajaran favoritmu — Matematika, Bahasa Indonesia, Bahasa Jawa, Pancasila, IPAS, PAI & Budi Pekerti, PJOK, atau Seni Budaya — lalu jawab 3 soal seru dari Bapak/Ibu Guru!', doneText:'Pintar! Belajar itu seru kalau rajin berlatih. Besok Bapak/Ibu Guru beri soal baru lagi — boleh pilih mata pelajaran yang lain!'},
   penjaga:{questName:'Jaga Gerbang Sekolah', reward:60, desc:'Jawab pertanyaan Pak Nartam tentang keamanan sekolah dengan benar.', quiz:{q:'Kalau menemukan benda tajam yang berbahaya di sekolah, kamu harus…', opts:['Membawanya pulang','Melapor ke Pak Penjaga atau Bapak/Ibu Guru','Membuangnya ke sungai'], ans:1}, doneText:'Betul! Anak yang peduli keamanan sekolah itu hebat. Gerbang dan lingkungan sekolah kita aman berkat anak-anak yang tertib.'},
   polisi:{questName:'Patroli Jalan Raya', reward:150, desc:'Kunjungi 3 titik patroli berurutan: Gerbang Sekolah → Lapangan Gerduren → Kantor Polsek. Berdirilah di lingkaran emas pada tiap titik.', doneText:'Patroli yang rapi! Jalan raya aman berkat anak-anak yang tertib dan patuh lampu lalu lintas.'},
   lurah:{questName:'Menyapa Warga Desa', reward:130, desc:'Sapa 3 warga desa: dekati Bu Tini, Pak Darto, dan Bu Wati lalu bicara dengan mereka.', doneText:'Terima kasih sudah menyapa warga. Desa kita rukun karena warganya saling menyapa!'},
@@ -6721,7 +7223,7 @@ function addNPC(inst){
 }
 function refreshNPCMarkers(){
   for(var i = 0; i < NPCS.length; i++){
-    var n = NPCS[i], st = npcState(n.def);
+    var n = NPCS[i], st = npcState(npcQuestId(n));
     n.marker.visible = st !== 'done';
     drawQuestMarker(n.marker, st === 'ready' ? '★' : (st === 'active' ? '?' : '!'));
   }
@@ -6755,7 +7257,7 @@ addNPC({key:'azizah', def:'guru', name:'Bu Azizah', role:'Guru PABP SDN 1 Gerdur
 addNPC({key:'linggar', def:'guru', name:'Pak Linggar', role:'Guru PJOK SDN 1 Gerduren', color:'#ea580c', x:-72, z:-8, ry:0.9, wander:4, speed:0.95,
   greet:'Halo, anak sehat! Saya Pak Linggar, Guru PJOK. Olahraga itu penting — ayo bergerak, main bola di Lapangan, dan jaga badan tetap bugar!',
   fig:{skin:0x8a5a2e, hair:'cap', capCol:0xea580c, shirt:0xfb923c, bottom:0x1c1917, tag:true}});
-addNPC({key:'nartam', def:'penjaga', name:'Pak Nartam', role:'Penjaga Sekolah SDN 1 Gerduren', color:'#78716c', x:5, z:16.5, ry:2.6, wander:2.5,
+addNPC({key:'nartam', def:'penjaga', name:'Pak Nartam', role:'Penjaga Sekolah SDN 1 Gerduren', color:'#78716c', x:5, z:13.8, ry:2.6, wander:1.8,
   greet:'Halo, Nak! Saya Pak Nartam, Penjaga Sekolah. Gerbang dan lingkungan sekolah saya jaga setiap hari — kalau ada apa-apa, lapor ke Bapak, ya.',
   fig:{skin:0xc98a4b, hair:'cap', capCol:0x44403c, shirt:0xa8a29e, bottom:0x44403c, belt:true}});
 addNPC({key:'polisi', def:'polisi', name:'Pak Polisi Budi', role:'Polisi — Kantor Polsek Gerduren', color:'#1e40af', x:61.5, z:23.5, ry:2.7,
@@ -6767,10 +7269,10 @@ addNPC({key:'lurah', def:'lurah', name:'Pak Lurah', role:'Lurah Desa Gerduren �
 addNPC({key:'warga1', def:'warga', name:'Bu Tini', role:'Warga Desa — Taman Desa', color:'#db2777', x:-50, z:27, ry:0.6, wander:3,
   greet:'Eh, ada anak sekolah! Bu Tini lagi santai di Taman Desa. Taman kita makin ramai dan asri, ya.',
   fig:{skin:0xf2c79b, hair:'long', hairColor:0x3b2416, shirt:0xdb2777, bottom:0x7c2d12}});
-addNPC({key:'warga2', def:'warga', name:'Pak Darto', role:'Warga Desa Gerduren', color:'#16a34a', x:-23.5, z:36.5, ry:-0.7, wander:3,
+addNPC({key:'warga2', def:'warga', name:'Pak Darto', role:'Warga Desa Gerduren', color:'#16a34a', x:-21, z:46, ry:-0.7, wander:2,
   greet:'Halo, Nak! Pak Darto baru pulang dari sawah. Cuaca cerah begini enak buat jalan-jalan keliling desa.',
   fig:{skin:0x8a5a2e, hair:'cap', capCol:0x16a34a, shirt:0x65a30d, bottom:0x44403c}});
-addNPC({key:'warga3', def:'warga', name:'Bu Wati', role:'Warga Desa Gerduren', color:'#7c3aed', x:50, z:56.5, ry:2.9, wander:2.5,
+addNPC({key:'warga3', def:'warga', name:'Bu Wati', role:'Warga Desa Gerduren', color:'#7c3aed', x:56, z:59, ry:2.9, wander:1.8,
   greet:'Halo! Bu Wati habis belanja di warung. Nanti kalau lapar, jajan saja di gerobak bakso keliling — enak dan murah!',
   fig:{skin:0xd9a066, hair:'hijab', hijabCol:0x7c3aed, shirt:0xa78bfa, bottom:0x4c1d95}});
 addNPC({key:'siswa1', def:'siswa', name:'Raka', role:'Siswa SDN 1 Gerduren', color:'#dc2626', x:-8, z:7, ry:0.4, wander:5, speed:0.95,
@@ -6782,10 +7284,12 @@ addNPC({key:'siswa2', def:'siswa', name:'Sinta', role:'Siswa SDN 1 Gerduren', co
 addNPC({key:'siswa3', def:'siswa', name:'Bimo', role:'Siswa SDN 1 Gerduren', color:'#2563eb', x:-58, z:6, ry:1.4, wander:6, speed:1.0,
   greet:'Hai! Aku Bimo. Aku suka main bola di Lapangan Gerduren. Tendanganku kencang, lho!',
   fig:{kid:true, skin:0xb07a45, hair:'buzz', shirt:0x2f7fe0, bottom:0x25355e, shorts:true, pack:0xf59e0b}});
-/* Pedagang keliling versi figur baru (menggantikan figur lama di gerobak mangkal) */
+/* Pedagang keliling versi figur baru di gerobak mangkal (figur warga lama di
+   titik yang sama sudah dihapus — dulu dua pedagang berhimpitan di satu gerobak;
+   figur kini berdiri di sisi timur gerobak, di luar badan jalan raya) */
 (function(){
   var f = makeNPCFigure({skin:0xc98a4b, hair:'cap', capCol:0xf59e0b, shirt:0xf59e0b, bottom:0x44403c});
-  f.g.position.set(9.4, 0, 47.6); f.g.rotation.y = Math.PI;
+  f.g.position.set(12.9, 0, 45.6); f.g.rotation.y = -Math.PI / 2;
   scene.add(f.g);
 })();
 
@@ -6832,10 +7336,11 @@ function openNPCDialog(key){
   }
   renderNPCDialog();
   AudioSys.sfx('pop');
+  speakNPCGreeting(n);   // guru & tendik menyapa dengan SUARA: "Halo, saya [nama]"
 }
 function renderNPCDialog(){
   var n = curNPC; if(!n) return;
-  var def = NPC_QUEST_DEFS[n.def], st = npcState(n.def);
+  var def = NPC_QUEST_DEFS[n.def], qid = npcQuestId(n), st = npcState(qid);
   npcAva.textContent = npcInitials(n.name);
   npcAva.style.background = n.color;
   npcName.textContent = n.name;
@@ -6861,7 +7366,7 @@ function renderNPCDialog(){
     addOpt('Klaim Hadiah +' + def.reward + ' Kredit', 'gold', function(){
       addKredit(def.reward);
       AudioSys.sfx('win');
-      setNPCState(n.def, 'done');
+      setNPCState(qid, 'done');
       showToast('Quest "' + def.questName + '" selesai! +' + def.reward + ' Kredit dari ' + n.name + '.', 4400);
       renderNPCDialog();
     });
@@ -6870,6 +7375,33 @@ function renderNPCDialog(){
   }
   if(st === 'active'){
     npcQuestBox.style.display = 'block';
+    if(n.def === 'guru'){
+      // Quest materi guru: soal berjalan dari mata pelajaran PILIHAN siswa
+      var pg = eco.npcQuests.prog[qid];
+      if(!pg || !pg.qs){ setNPCState(qid, 'offer'); renderNPCDialog(); return; }
+      var cq = pg.qs[pg.qi];
+      npcQuestBox.innerHTML = 'Quest <b>"' + def.questName + '"</b> dari ' + n.name + ' — Mata pelajaran: <b>' + pg.subj + '</b> • Soal ' + (pg.qi + 1) + ' dari ' + pg.qs.length + '<br><br><b>Soalnya:</b> ' + cq.q;
+      cq.opts.forEach(function(op, ix){
+        addOpt(op, 'alt', function(){
+          if(ix === cq.ans){
+            pg.qi++; saveEco();
+            AudioSys.sfx('correct');
+            if(pg.qi >= pg.qs.length){
+              setNPCState(qid, 'ready');
+              showToast('Hebat! Semua soal ' + pg.subj + ' terjawab benar! Bicara lagi dengan ' + n.name + ' untuk mengambil hadiahmu.', 3600);
+            } else {
+              showToast('Jawaban BENAR! Lanjut ke soal berikutnya…', 2200);
+            }
+            renderNPCDialog();
+          } else {
+            AudioSys.sfx('wrong');
+            showToast('Belum tepat — pikirkan lagi, lalu jawab lagi.', 2600);
+          }
+        });
+      });
+      addOpt('Tutup', 'alt', closeNPCDialog);
+      return;
+    }
     var progTxt = def.desc;
     if(n.def === 'polisi'){
       var pr = eco.npcQuests.prog.polisi || {step:0};
@@ -6885,7 +7417,7 @@ function renderNPCDialog(){
       def.quiz.opts.forEach(function(op, ix){
         addOpt(op, 'alt', function(){
           if(ix === def.quiz.ans){
-            setNPCState(n.def, 'ready');
+            setNPCState(qid, 'ready');
             AudioSys.sfx('correct');
             showToast('Jawaban BENAR! Bicara lagi untuk mengambil hadiahmu.', 3000);
             renderNPCDialog();
@@ -6899,6 +7431,25 @@ function renderNPCDialog(){
     addOpt('Tutup', 'alt', closeNPCDialog);
     return;
   }
+  if(n.def === 'guru'){
+    // Quest guru dimulai dengan MEMILIH mata pelajaran (tombol mapel di bawah)
+    npcQuestBox.style.display = 'block';
+    npcQuestBox.innerHTML = 'Quest <b>"' + def.questName + '"</b> dari ' + n.name + ' — ' + def.desc + '<br>Hadiah: <b>' + def.reward + ' Kredit</b>. Ayo, pilih mata pelajarannya:';
+    SUBJECT_LIST.forEach(function(sj){
+      addOpt(sj.name, 'alt', function(){
+        ensureNPCDay();
+        var qs = sampleArr(sj.qs, 3).map(function(q){ return {q:q.q, opts:q.opts.slice(), ans:q.ans}; });
+        eco.npcQuests.prog[qid] = {subj:sj.name, qs:qs, qi:0};
+        saveEco();
+        setNPCState(qid, 'active');
+        AudioSys.sfx('pop');
+        showToast('Quest dimulai: "' + def.questName + '" — mata pelajaran ' + sj.name + ' dari ' + n.name + '. Jawab 3 soalnya dengan benar!', 4800);
+        renderNPCDialog();
+      });
+    });
+    addOpt('Nanti Saja', 'alt', closeNPCDialog);
+    return;
+  }
   npcQuestBox.style.display = 'block';
   npcQuestBox.innerHTML = 'Quest <b>"' + def.questName + '"</b> — ' + def.desc + '<br>Hadiah: <b>' + def.reward + ' Kredit</b>.';
   addOpt('Ambil Quest', '', function(){
@@ -6907,7 +7458,7 @@ function renderNPCDialog(){
     if(n.def === 'lurah') eco.npcQuests.prog.lurah = {talked:[]};
     if(n.def === 'warga') eco.npcQuests.prog.warga = {delivered:false};
     if(n.def === 'siswa') eco.npcQuests.prog.siswa = {got:false};
-    setNPCState(n.def, 'active');
+    setNPCState(qid, 'active');
     AudioSys.sfx('pop');
     showToast('Quest dimulai: "' + def.questName + '"! ' + def.desc, 5600);
     renderNPCDialog();
@@ -6927,6 +7478,19 @@ function renderNPCQuestRows(container){
   var icons = {kepsek:'tanam', guru:'tanam', penjaga:'sampah', polisi:'pancing', lurah:'pakan', warga:'pakan', siswa:'bola'};
   order.forEach(function(id){
     var def = NPC_QUEST_DEFS[id], st = npcState(id);
+    if(id === 'guru'){
+      // status gabungan quest materi: satu baris untuk SEMUA guru kelas
+      var gAll = true, gAny = false, gReady = false, gActive = false;
+      NPCS.forEach(function(nn){
+        if(nn.def !== 'guru') return;
+        gAny = true;
+        var s2 = npcState(npcQuestId(nn));
+        if(s2 !== 'done') gAll = false;
+        if(s2 === 'ready') gReady = true;
+        if(s2 === 'active') gActive = true;
+      });
+      st = gReady ? 'ready' : (gAll && gAny ? 'done' : (gActive ? 'active' : 'offer'));
+    }
     var row = document.createElement('div');
     row.className = 'quest-row' + (st === 'done' ? ' done' : '');
     var stat = st === 'done' ? 'Selesai ✓' : (st === 'ready' ? 'Siap Klaim!' : (st === 'active' ? 'Berjalan…' : 'Belum Diambil'));
@@ -7029,7 +7593,7 @@ ensureNPCDay();
 refreshNPCMarkers();
 
 /* --- Lingkungan makin ramai: hewan & tumbuhan tambahan + Pos Ronda --- */
-makeChicken(20, 58); makeChicken(-60, -20);
+makeChicken(24, 62); makeChicken(-60, -20);
 makeDuck(30, 67.6);
 makeCat(-52, 28.5, 0.5);
 makeBird(0, 40, 26, 17, 0.1, 1.2);
@@ -7060,8 +7624,8 @@ function startTour(kind, manual){
       player.rotation.y = tour.heading;
       showToast('Kamu menyetir Bis sendiri! Joystick / W-A-S-D: dorong ke atas = gas, ke bawah = rem & mundur, kiri-kanan = setir. Tekan tombol Aksi untuk turun.', 6200);
     } else {
-      tour = { kind:'bis', i:0, pts:[[22,50.5],[52,50.5],[52,18],[52,50.5],[98,50.5],[52,50.5],[-60,50.5],[-95,50.5],[-60,50.5],[22,50.5]] };
-      showToast('Bis berangkat! Keliling Desa Gerduren lewat jalan raya & jalan timur. Duduk manis, ya!', 4600);
+      tour = { kind:'bis', i:0, pts:[[63,59.8],[57,50.5],[52,50.5],[52,18],[52,50.5],[100,50.5],[52,50.5],[-60,50.5],[-88,50.5],[-60,50.5],[57,50.5],[63,59.8]] };
+      showToast('Bis berangkat dari Terminal! Keliling Desa Gerduren lewat jalan raya, Jembatan Sungai, dan jalan timur. Duduk manis, ya!', 4600);
     }
   } else {
     if(manual){
@@ -7079,7 +7643,7 @@ function startTour(kind, manual){
 function endTour(){
   tourActive = false; tour = null;
   flyUI.classList.remove('on'); flyUp = false; flyDown = false;
-  if(busGroup){ busGroup.position.set(22, 0, 50.5); busGroup.rotation.y = Math.PI/2; }
+  if(busGroup){ busGroup.position.set(63, 0, 59.8); busGroup.rotation.y = Math.PI/2; }
   if(heliGroup){ heliGroup.position.set(-82, 0, -14); heliGroup.rotation.y = 0; }
   vy = 0; grounded = true;
   AudioSys.sfx('bell');
@@ -7110,9 +7674,9 @@ function finishManualTour(){
   if(kind === 'bis') player.position.set(busGroup.position.x + 3, 0, busGroup.position.z);
   else player.position.set(heliGroup.position.x + 3.4, 0, heliGroup.position.z);
   player.position.y = 0;
-  endTour(); // kendaraan kembali ke stasiunnya (Halte Bis / landasan Lapangan)
+  endTour(); // kendaraan kembali ke stasiunnya (Terminal Gerduren / landasan Lapangan)
   showToast(kind === 'bis'
-    ? 'Kamu turun dari Bis. Bis kembali ke Halte — naik lagi kapan saja!'
+    ? 'Kamu turun dari Bis. Bis kembali ke Terminal Gerduren — naik lagi kapan saja!'
     : 'Helikopter mendarat dengan selamat dan kembali ke landasannya. Terbang lagi kapan saja!', 4400);
 }
 function updateTourManual(dt){
@@ -7175,10 +7739,10 @@ function updateTour(dt){
   if(tour.kind === 'bis'){
     var bp = busGroup.position;
     var target = tour.pts[tour.i];
-    if(!target){ // selesai: turun di halte
-      player.position.set(17.5, 0, 47.5); player.rotation.y = Math.PI;
+    if(!target){ // selesai: turun di Terminal
+      player.position.set(58.5, 0, 58.5); player.rotation.y = Math.PI;
       endTour();
-      showToast('Bis kembali ke Halte. Terima kasih sudah berkeliling Desa Gerduren!', 4200);
+      showToast('Bis kembali ke Terminal Gerduren. Terima kasih sudah berkeliling Desa Gerduren!', 4200);
       return;
     }
     var dx = target[0] - bp.x, dz = target[1] - bp.z, dl = Math.hypot(dx, dz);
@@ -7398,9 +7962,9 @@ var DESTS = [
   {name:'Kantin', x:27.2, z:11, kind:'tempat', label:'Kantin'},
   {name:'Ruang UKS', x:28.8, z:3, kind:'tempat', label:'UKS'},
   {name:'Masjid Al-Ikhlas', x:24, z:29.6, kind:'tempat', label:'Masjid'},
-  {name:'Balai Desa', x:-82, z:-29.2, kind:'tempat', label:'Balai Desa'},
+  {name:'Balai Desa', x:-76, z:-29.2, kind:'tempat', label:'Balai Desa'},
   {name:'Lapangan Gerduren', x:-66, z:0, kind:'tempat', label:'Lapangan'},
-  {name:'Kebun Sekolah', x:-25.2, z:10, kind:'tempat', label:'Kebun'},
+  {name:'Kebun Sekolah', x:-27, z:10, kind:'tempat', label:'Kebun'},
   {name:'Tiang Bendera', x:0, z:-7, kind:'tempat', label:'Tiang Bendera'},
   {name:'Sepeda Pinjaman', x:5.5, z:13.5, kind:'tempat', label:'Sepeda'},
   {name:'Sawah', x:44.2, z:-14, kind:'tempat', label:'Sawah'},
@@ -7428,10 +7992,12 @@ DESTS.push(
   {name:'Kandang Sapi', x:3, z:-36.5, kind:'tempat', label:'Kandang Sapi'},
   {name:'Kolam Ikan', x:16, z:-36.2, kind:'tempat', label:'Kolam Ikan'},
   {name:'Dealer Gerduren', x:38, z:42, kind:'tempat', label:'Dealer'},
-  {name:'Halte Bis (Naik Bis)', x:14, z:45, kind:'tempat', label:'Halte Bis'},
+  {name:'Terminal Gerduren (Naik Bis)', x:66, z:62, kind:'tempat', label:'Terminal'},
   {name:'Helikopter (Terbang)', x:-82, z:-14, kind:'tempat', label:'Helikopter'},
   {name:'Taman Desa', x:-52, z:30, kind:'tempat', label:'Taman'},
-  {name:'Sawah Baru (Menanam)', x:84, z:69.5, kind:'tempat', label:'Sawah Baru'}
+  {name:'Petak Sawah (Menanam)', x:66, z:-52, kind:'tempat', label:'Petak Sawah'},
+  {name:'Jembatan Gerduren', x:102, z:52, kind:'tempat', label:'Jembatan'},
+  {name:'Jalan Lingkar Desa', x:0, z:-72, kind:'tempat', label:'Jln. Lingkar'}
 );
 function mapXY(x, z){ return [(x + 110) * 2, (z + 80) * 2]; }
 var SVGNS = 'http://www.w3.org/2000/svg';
@@ -9013,6 +9579,14 @@ function resolveCollisions(p){
       else if(m===dzl) p.z = c.minZ-0.45; else p.z = c.maxZ+0.45;
     }
   }
+  if(p.z > 120){
+    // Di dalam Rumah Kamu (ruang interior terpisah di selatan peta, z 145..155):
+    // penjepit dunia normal (z maks 104) TIDAK berlaku di sini, kalau tidak
+    // pemain akan terlempar keluar rumah pada frame pertama setelah masuk.
+    p.x = Math.max(-5.6, Math.min(5.6, p.x));
+    p.z = Math.max(145.6, Math.min(154.2, p.z));
+    return;
+  }
   p.x = Math.max(-104, Math.min(104, p.x));
   p.z = Math.max(-80, Math.min(104, p.z));
 }
@@ -9021,8 +9595,9 @@ function animate(){
   requestAnimationFrame(animate);
   var dt = Math.min(clock.getDelta(), 0.05);
   try{
-    // awan bergerak pelan
-    for(var ci=0; ci<clouds.length; ci++){ clouds[ci].position.x += dt*0.55; if(clouds[ci].position.x > 120) clouds[ci].position.x = -120; }
+    // awan bergerak pelan (lebih cepat saat cuaca berangin / hujan)
+    for(var ci=0; ci<clouds.length; ci++){ clouds[ci].position.x += dt*0.55*cloudMul; if(clouds[ci].position.x > 120) clouds[ci].position.x = -120; }
+    updateSkyWeather(dt);
     // kehidupan desa tetap bergerak (hewan, kendaraan, pedagang, warga) — juga di balik layar mulai
     updateAmbients(dt);
     updateNPCWorld(dt);
