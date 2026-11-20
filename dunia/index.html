@@ -5607,28 +5607,27 @@ document.getElementById('startBtn').addEventListener('click', function(){
 document.getElementById('nameInput').addEventListener('keydown', function(e){ if(e.key === 'Enter') document.getElementById('nextBtn').click(); e.stopPropagation(); });
 
 /* ---------- Login Admin / Game Master LANGSUNG dari layar awal ---------- */
-/* Kata sandi yang sama dengan panel GM (diverifikasi PBKDF2 — tidak ada teks
-   polos & tidak ada petunjuk apa pun tentang kata sandinya di layar).
+/* Kata sandi yang sama dengan panel GM — diperiksa di SERVER (endpoint
+   /gm-verify di Worker multiplayer), tidak ada teks polos, hash, maupun
+   petunjuk apa pun tentang kata sandinya di halaman ini.
    Berhasil masuk = bermain sebagai karakter khusus Admin: semua segel Arena
    terbuka untuk Admin, panel GM langsung aktif, dan dari panel GM Admin bisa
    memberi Kredit & item langsung ke pemain (siap untuk multiplayer nanti). */
-/* Verifikasi kata sandi GM diperkeras: BUKAN hash SHA-256 polos lagi, melainkan
-   PBKDF2-HMAC-SHA-256 dengan salt acak + 150.000 iterasi. Kata sandinya sendiri
-   berentropi rendah, jadi hash polosnya bisa ditebak habis secara offline dalam
-   hitungan detik; dengan PBKDF2, setiap tebakan berharga 150.000x lipat dan
-   penebakan massal menjadi tidak praktis. Catatan jujur yang tetap berlaku:
-   halaman statis tanpa server tidak bisa memverifikasi kata sandi secara
-   sungguhan aman — ini gerbang lunak untuk menghalangi siswa, bukan pengaman
-   data; yang dijaga hanya fitur permainan lokal di perangkat yang sama. */
-var GM_KDF = { salt:'58cdac0fa0a2c828f54d1086537365d2', iter:150000, key:'c33e549158231f151258a8679f01310391102c7e2cd7c9cca0737fbc16cd2f11' };
-function gmHexToBytes(hex){ var a = new Uint8Array(hex.length / 2); for(var i = 0; i < a.length; i++) a[i] = parseInt(hex.substr(i * 2, 2), 16); return a; }
+/* Verifikasi kata sandi GM dilakukan di server: kata sandi yang diketik
+   dikirim lewat HTTPS ke endpoint /gm-verify dan server menjawab {ok:true}
+   atau {ok:false}. Kata sandi aslinya disimpan sebagai secret Worker —
+   tidak tertanam di halaman ini, jadi tidak bisa ditebak secara offline
+   dari sumber halaman. Bila server tidak terjangkau (offline / gagal
+   jaringan), login ditolak. */
+var GM_VERIFY_URL = 'https://dunia-sdn1gerduren-mp.sdn1gerduren.workers.dev/gm-verify';
 function checkGMPassword(v, done){
-  if(!(window.crypto && crypto.subtle && window.TextEncoder)){ done(false); return; }
-  crypto.subtle.importKey('raw', new TextEncoder().encode(v), 'PBKDF2', false, ['deriveBits']).then(function(key){
-    return crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt:gmHexToBytes(GM_KDF.salt), iterations:GM_KDF.iter}, key, 256);
-  }).then(function(bits){
-    var hex = Array.prototype.map.call(new Uint8Array(bits), function(b){ return ('0' + b.toString(16)).slice(-2); }).join('');
-    done(hex === GM_KDF.key);
+  if(typeof fetch !== 'function'){ done(false); return; }
+  fetch(GM_VERIFY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: v })
+  }).then(function(res){ return res.json(); }).then(function(data){
+    done(!!(data && data.ok === true));
   }).catch(function(){ done(false); });
 }
 function enterAdminWorld(){
@@ -8606,8 +8605,15 @@ addNPC({key:'kepsek', def:'kepsek', name:'Pak Yudhy', role:'Kepala Sekolah SDN 1
    berdiri di depan ruang kelasnya (gedung kelas di z=-24, muka kelas di z±-15,5),
    Bu Azizah (PABP) di dekat Masjid, Pak Linggar (PJOK) di Lapangan Gerduren, dan
    Pak Nartam (Penjaga) di dekat Gerbang. Semua guru berbagi quest harian 'guru';
-   Pak Nartam punya quest 'penjaga' sendiri. */
-addNPC({key:'anggi', def:'guru', name:'Pak Anggi', role:'Guru Kelas 1 & Operator Sekolah', color:'#b45309', x:-32.5, z:-15.5, ry:0.15, wander:1.6,
+   Pak Nartam punya quest 'penjaga' sendiri.
+   PERBAIKAN VISIBILITAS PAK ANGGI (20 Nov 2026): titik lama (-32,5,-15,5) TERTUTUP
+   kios Koperasi Sekolah yang berdiri tepat di depan Kelas 1 (kios di (-33,-14,5),
+   badan x -35,7..-30,3 & z -16,3..-12,7, atap sampai x -29,7) — figur Pak Anggi
+   berada DI DALAM badan kios sehingga tidak terlihat sama sekali di HP. Kini ia
+   berdiri di depan sisi TIMUR Kelas 1 (gedung Kelas 1 membentang x -38..-27),
+   di timur kios: jangkauan wander terjauh ke barat -29,2 tetap di luar atap kios
+   (-29,7), jadi ia selalu terlihat jelas dari halaman. */
+addNPC({key:'anggi', def:'guru', name:'Pak Anggi', role:'Guru Kelas 1 & Operator Sekolah', color:'#b45309', x:-27.6, z:-15.5, ry:0.15, wander:1.6,
   greet:'Halo! Saya Pak Anggi, Guru Kelas 1 sekaligus Operator Sekolah — urusan data Dapodik sekolah kita, saya yang mengurusnya. Semangat belajarnya, ya!',
   fig:{skin:0xd9a066, hair:'peci', shirt:0xc9a26b, bottom:0x35241a, tie:true, tag:true}});
 addNPC({key:'ahmad', def:'guru', name:'Pak Ahmad', role:'Guru Kelas 2 SDN 1 Gerduren', color:'#2563eb', x:-19.5, z:-15.5, ry:-0.15, wander:1.6,
@@ -9167,10 +9173,10 @@ function updateTour(dt){
 var gmMode = false;
 var adminMode = false;    // hak Game Master aktif (segel Arena terbuka + panel beri Kredit/item): dari login Admin layar awal ATAU login GM di HUD
 var adminCharMode = false; // true HANYA bila masuk sebagai karakter Admin dari layar awal: karakter 3D = karakter khusus Admin
-/* Kata sandi GM tidak disimpan sebagai teks polos maupun hash polos di halaman
-   ini — verifikasinya memakai PBKDF2 (lihat GM_KDF & checkGMPassword di bagian
-   login Admin layar awal). Tetap gerbang lunak sisi-klien untuk halaman statis:
-   cukup menghalangi siswa membuka segel & panel, bukan pengaman sungguhan. */
+/* Kata sandi GM tidak disimpan di halaman ini sama sekali — tidak sebagai
+   teks polos, tidak sebagai hash. Verifikasinya dilakukan di server lewat
+   endpoint /gm-verify (lihat checkGMPassword di bagian login Admin layar
+   awal): halaman hanya mengirim kata sandi yang diketik untuk diperiksa. */
 var gmOverlay = document.getElementById('gmOverlay');
 var gmLoginView = document.getElementById('gmLoginView'), gmPanelView = document.getElementById('gmPanelView');
 function openGM(){
@@ -10229,6 +10235,115 @@ function buildRemoteFallback(app){
   return { group: g, bodyG: bg, legL: legL, legR: legR, armL: armL, armR: armR, sy: admin ? 1.10 : 0.89 };
 }
 
+/* ---------- Kendaraan pemain lain (tampilan jarak jauh) ----------
+   PERBAIKAN "pemain tidak bisa melihat kendaraan yang dinaiki pemain lain":
+   pesan gerak ruangan hanya membawa posisi & arah — status kendaraan tidak
+   pernah dikirim, dan model kendaraan di dunia (sepeda, motor cross, mobil
+   polisi, bis, helikopter) adalah model TUNGGAL milik lokal yang hanya
+   mengikuti pemain sendiri. Akibatnya di layar pemain lain, pengendara
+   tampak berjalan kaki meluncur cepat sementara kendaraannya diam terparkir.
+   Obatnya: (1) tiap pemain menyiarkan status kendaraannya lewat jalur chat
+   ruangan berawalan VEH1| — pola yang sama seperti GIVE1| & KPS1|, karena
+   server meneruskan chat apa adanya ke semua pemain, sedangkan pesan
+   "move" diteruskan server hanya dengan x/y/dir; (2) tiap pemain lain
+   diberi MODEL KENDARAAN SENDIRI (klon tampilan, tanpa collider & tanpa
+   titik interaksi) yang mengikuti karakternya selama ia berkendara dan
+   tetap terparkir di tempat ia turun. */
+function mpVehKind(){
+  if(vehDrive) return vehDrive.kind;            // 'moto' | 'polisi'
+  if(tourActive && tour) return tour.kind;       // 'bis' | 'heli'
+  if(riding) return 'sepeda';
+  return null;
+}
+function mpSendVehState(){
+  var vk = mpVehKind();
+  mp.lastVehSent = vk; mp.lastVehSentAt = performance.now();
+  if(mp.joined) mpSendChat('VEH1|' + (vk || '-') + '|' + (Math.round(player.position.y * 10) / 10));
+}
+function buildRemoteVehicle(kind){
+  var g = new THREE.Group();
+  var rotor = null;
+  if(kind === 'sepeda'){
+    [-0.58, 0.58].forEach(function(wz){
+      var w = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.05, 10, 22), mat(0x1f2937));
+      w.position.set(0, 0.36, wz); w.rotation.y = Math.PI/2; w.castShadow = true; g.add(w);
+      var hub = cyl(0.05, 0.05, 0.1, 0x9ca3af, 0, 0.36, wz, g, 8); hub.rotation.x = Math.PI/2;
+    });
+    var bar1 = cyl(0.035, 0.035, 1.05, 0xdc2626, 0, 0.62, -0.05, g, 8); bar1.rotation.x = 1.15;
+    var bar2 = cyl(0.035, 0.035, 0.72, 0xdc2626, 0, 0.78, 0.28, g, 8); bar2.rotation.x = 0.5;
+    var post = cyl(0.03, 0.03, 0.55, 0x374151, 0, 0.95, 0.5, g, 8); post.rotation.x = -0.25;
+    box(0.52, 0.06, 0.06, 0x374151, 0, 1.2, 0.58, g, false);           // setang
+    box(0.3, 0.09, 0.42, 0x111827, 0, 1.02, -0.38, g, false);          // sadel
+    var ped = cyl(0.16, 0.16, 0.07, 0x6b7280, 0, 0.38, 0, g, 12); ped.rotation.x = Math.PI/2;
+  } else if(kind === 'moto'){
+    [-0.85, 0.85].forEach(function(wz){
+      var w = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.11, 10, 20), mat(0x1f2937));
+      w.position.set(0, 0.42, wz); w.rotation.y = Math.PI/2; w.castShadow = true; g.add(w);
+    });
+    var f1 = cyl(0.05, 0.05, 1.3, 0xb45309, 0, 0.75, -0.1, g, 8); f1.rotation.x = 1.1;
+    var f2 = cyl(0.05, 0.05, 0.9, 0xb45309, 0, 0.95, 0.3, g, 8); f2.rotation.x = 0.45;
+    box(0.34, 0.14, 0.85, 0x111827, 0, 1.12, -0.42, g, false);         // jok panjang trail
+    box(0.6, 0.06, 0.06, 0x374151, 0, 1.32, 0.72, g, false);           // setang
+    box(0.4, 0.3, 0.55, 0xd6d3cd, 0, 0.62, 0.05, g, false);            // blok mesin perak
+  } else if(kind === 'polisi'){
+    box(2.0, 0.55, 4.3, 0xf8fafc, 0, 0.58, 0, g);                      // badan
+    box(1.8, 0.52, 2.1, 0xe2e8f0, 0, 1.1, -0.25, g);                   // kabin
+    box(1.84, 0.3, 1.9, 0x1e3a5f, 0, 1.12, -0.25, g, false);           // kaca
+    [[-0.98,1.35],[0.98,1.35],[-0.98,-1.35],[0.98,-1.35]].forEach(function(w){
+      var wh = cyl(0.36, 0.36, 0.18, 0x111827, w[0], 0.36, w[1], g, 12); wh.rotation.z = Math.PI/2;
+    });
+    box(2.04, 0.2, 4.34, 0x1e40af, 0, 0.62, 0, g, false);              // garis biru polisi
+    box(0.5, 0.16, 0.7, 0xdc2626, -0.3, 1.45, -0.25, g, false);        // lampu rotator merah
+    box(0.5, 0.16, 0.7, 0x2563eb, 0.3, 1.45, -0.25, g, false);         // lampu rotator biru
+  } else if(kind === 'bis'){
+    box(2.6, 2.0, 8.2, 0xfacc15, 0, 1.45, 0, g);
+    box(2.64, 0.8, 7.6, 0x1e3a5f, 0, 1.95, 0, g, false);
+    box(2.62, 0.5, 8.24, 0x166534, 0, 0.62, 0, g, false);
+    [[-1.25,2.9],[1.25,2.9],[-1.25,-2.9],[1.25,-2.9]].forEach(function(w){
+      var wh = cyl(0.48, 0.48, 0.2, 0x111827, w[0], 0.48, w[1], g, 14); wh.rotation.z = Math.PI/2;
+    });
+  } else if(kind === 'heli'){
+    var body = new THREE.Mesh(new THREE.SphereGeometry(1.15, 14, 11), mat(0xdc2626));
+    body.scale.set(1, 0.85, 1.5); body.position.set(0, 1.35, 0); body.castShadow = true; g.add(body);
+    box(1.0, 0.55, 1.1, 0xbae6fd, 0, 1.3, 0.95, g, false);
+    box(0.28, 0.28, 3.4, 0xb91c1c, 0, 1.5, -2.6, g);
+    box(1.3, 0.5, 0.14, 0xb91c1c, 0, 1.95, -4.2, g, false);
+    rotor = box(6.4, 0.07, 0.5, 0x1f2937, 0, 2.5, 0, g, false);
+    box(2.6, 0.09, 0.16, 0x374151, 0, 0.28, 0.9, g, false); box(2.6, 0.09, 0.16, 0x374151, 0, 0.28, -0.9, g, false);
+  }
+  g.visible = false;
+  scene.add(g);
+  return {group: g, rotor: rotor};
+}
+function mpApplyRemoteVeh(r){
+  if(!r) return;
+  if(!r.vehGroups) r.vehGroups = {};
+  for(var k in r.vehGroups){
+    if(!r.vehGroups[k]) continue;
+    if(k === r.veh) r.vehGroups[k].group.visible = true;
+    else if(k === 'bis' || k === 'heli') r.vehGroups[k].group.visible = false; // wahana bersama: kendaraannya kembali ke stasiun
+    // sepeda / motor / mobil polisi pribadi: tetap tampil terparkir di tempat pemainnya turun
+  }
+  if(!r.veh) return;
+  if(!r.vehGroups[r.veh]){
+    try{ r.vehGroups[r.veh] = buildRemoteVehicle(r.veh); }catch(e){ r.vehGroups[r.veh] = null; }
+  }
+  var vg = r.vehGroups[r.veh];
+  if(vg){
+    vg.group.visible = true;
+    vg.group.position.set(r.group.position.x, r.veh === 'heli' ? r.group.position.y : 0, r.group.position.z);
+    vg.group.rotation.y = r.group.rotation.y;
+  }
+}
+function mpSetRemoteVeh(id, kind, alt){
+  if(mp.players[id]) mp.players[id].veh = kind || null;
+  var r = mp.remotes[id];
+  if(!r) return; // karakter belum terbuat: status tersimpan di mp.players, diterapkan saat mpAddRemote
+  r.veh = kind || null;
+  r.talt = (kind === 'heli') ? (alt || 0) : 0;
+  mpApplyRemoteVeh(r);
+}
+
 /* ---------- Kelola karakter pemain lain di dunia ---------- */
 function mpAddRemote(p){
   if(!p || p.id === mp.myId || mp.remotes[p.id]) return;
@@ -10252,8 +10367,12 @@ function mpAddRemote(p){
   mp.remotes[p.id] = {
     group: built.group, bodyG: built.bodyG, legL: built.legL, legR: built.legR,
     armL: built.armL, armR: built.armR, sy: built.sy,
-    tx: p.x || 0, tz: p.y || 0, tdir: p.dir || 0, walk: 0, bubble: null, bubbleEnd: 0
+    tx: p.x || 0, tz: p.y || 0, tdir: p.dir || 0, walk: 0, bubble: null, bubbleEnd: 0,
+    veh: null, talt: 0, vehGroups: {}
   };
+  // Status kendaraan terakhir pemain ini (bila sudah diketahui dari siaran
+  // VEH1| sebelum karakternya terbuat) langsung diterapkan.
+  if(p.veh) mpSetRemoteVeh(p.id, p.veh, 0);
 }
 function mpDisposeRemote(id){
   var r = mp.remotes[id];
@@ -10265,6 +10384,21 @@ function mpDisposeRemote(id){
       if(o.material){ if(o.material.map) o.material.map.dispose(); if(o.material.dispose) o.material.dispose(); }
     }
   });
+  if(r.vehGroups){
+    for(var vk in r.vehGroups){
+      var vg = r.vehGroups[vk];
+      if(vg && vg.group){
+        scene.remove(vg.group);
+        vg.group.traverse(function(o){
+          if(o.isMesh){
+            if(o.geometry) o.geometry.dispose();
+            if(o.material && o.material.dispose) o.material.dispose();
+          }
+        });
+      }
+    }
+    r.vehGroups = {};
+  }
   delete mp.remotes[id];
 }
 function mpClearRemotes(){ for(var id in mp.remotes) mpDisposeRemote(id); }
@@ -10471,6 +10605,7 @@ function mpConnect(code, asGM){
       if(msg.you) mp.players[msg.you.id] = msg.you;
       if(!wasRefresh) mpClearRemotes();
       for(var id in mp.players) if(id !== mp.myId) mpAddRemote(mp.players[id]);
+      if(mpVehKind()) mpSendVehState(); // sudah berkendara saat gabung ruangan: beri tahu semua pemain kendaraan kita
       mpStartRefresh(); // jaga pendaftaran diri sendiri di daftar server
       var gmAda = false;
       for(var gid in mp.players){ if(mp.players[gid].isGM){ gmAda = true; break; } }
@@ -10525,6 +10660,7 @@ function mpConnect(code, asGM){
           mpDisposeRemote(p.id);
         }
         mpAddRemote(p);
+        if(mpVehKind()) mpSendVehState(); // pemain baru masuk: kirim ulang status kendaraan kita supaya ia langsung melihatnya
         if(p.isGM && !mp.asGM){
           // GM terdaftar & terlihat: akhiri penantian (bila sedang menunggu)
           // dan pulihkan status — termasuk bila sebelumnya tampil "GM keluar".
@@ -10565,7 +10701,12 @@ function mpConnect(code, asGM){
         r = mp.remotes[msg.id];
         mpUpdateChip(); if(mpOpen) mpRefreshPanel();
       }
-      if(r){ r.tx = msg.x; r.tz = msg.y; r.tdir = msg.dir; }
+      if(r){ r.tx = msg.x; r.tz = msg.y; r.tdir = msg.dir; if(typeof msg.py === 'number' && r.veh === 'heli') r.talt = msg.py; }
+      if(typeof msg.veh === 'string'){
+        // Jalur cadangan: bila server kelak meneruskan status kendaraan di
+        // pesan gerak, terapkan langsung (jalur utama tetap siaran VEH1|).
+        mpSetRemoteVeh(msg.id, msg.veh === '-' ? null : msg.veh, typeof msg.py === 'number' ? msg.py : 0);
+      }
     }
     else if(msg.type === 'player-left'){
       if(mp.players[msg.id]){
@@ -10580,6 +10721,15 @@ function mpConnect(code, asGM){
       mpDisposeRemote(msg.id);
       mpUpdateChip(); if(mpOpen) mpRefreshPanel();
       mpMaybeRefresh();
+    }
+    else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('VEH1|') === 0){
+      /* Siaran status kendaraan pemain lain: BUKAN pesan obrolan — jangan
+         tampilkan di panel chat / gelembung. Pantulan pesan sendiri diabaikan:
+         kendaraan sendiri sudah tampil dari model lokal. */
+      if(msg.id !== mp.myId){
+        var vparts = msg.text.split('|');
+        mpSetRemoteVeh(msg.id, (vparts[1] && vparts[1] !== '-') ? vparts[1] : null, parseFloat(vparts[2]) || 0);
+      }
     }
     else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('GIVE1|') === 0){
       /* Pemberian GM (Kredit/item/pemulihan) lewat jalur chat ruangan:
@@ -10731,6 +10881,7 @@ function mpLeave(silent){
   mp.viaOpen = false; mp.gmSeatTries = 0; mp.seatRecovered = false;
   mp.players = {};
   mp.ownPending = [];
+  mp.lastVehSent = undefined; mp.lastVehSentAt = 0; mp.lastPy = null; // status kendaraan disiarkan ulang dari awal saat gabung lagi
   mpClearRemotes();
   mp.room = null; mp.asGM = false; mp.reconnects = 0;
   mpSetStatus('', 'Belum terhubung. Mode pemain-tunggal tetap jalan seperti biasa.');
@@ -10808,12 +10959,20 @@ function mpTick(dt){
     updateChampionBoard(); // pemain masuk/keluar/poin berubah -> juara di Papan Juara bisa berganti
   }
   if(mp.joined){
+    /* Siaran status kendaraan sendiri (lihat buildRemoteVehicle): kirim
+       SEGERA saat berubah (naik / turun kendaraan); selama berkendara kirim
+       ulang berkala supaya pemain yang baru masuk atau sempat melewatkan
+       pesan tetap melihat kendaraan kita — helikopter lebih sering karena
+       ketinggiannya berubah-ubah. */
+    var myVeh = mpVehKind();
+    var vehEvery = myVeh === 'heli' ? 900 : 4000;
+    if(myVeh !== mp.lastVehSent || (myVeh && performance.now() - (mp.lastVehSentAt || 0) > vehEvery)) mpSendVehState();
     var now = performance.now();
     if(now - mp.lastMoveAt >= 66){ // throttle ~15x/detik
-      var px = player.position.x, pz = player.position.z, pd = player.rotation.y;
-      if(mp.lastX === null || Math.abs(px - mp.lastX) > 0.03 || Math.abs(pz - mp.lastZ) > 0.03 || Math.abs(pd - mp.lastDir) > 0.03){
-        mp.lastMoveAt = now; mp.lastX = px; mp.lastZ = pz; mp.lastDir = pd;
-        mpSend({type: 'move', x: px, y: pz, dir: pd, poin: myPoin()});
+      var px = player.position.x, pz = player.position.z, pd = player.rotation.y, py = player.position.y;
+      if(mp.lastX === null || Math.abs(px - mp.lastX) > 0.03 || Math.abs(pz - mp.lastZ) > 0.03 || Math.abs(pd - mp.lastDir) > 0.03 || Math.abs(py - (mp.lastPy || 0)) > 0.05){
+        mp.lastMoveAt = now; mp.lastX = px; mp.lastZ = pz; mp.lastDir = pd; mp.lastPy = py;
+        mpSend({type: 'move', x: px, y: pz, dir: pd, poin: myPoin(), veh: myVeh || '-', py: Math.round(py * 10) / 10});
       }
     }
   }
@@ -10829,6 +10988,17 @@ function mpTick(dt){
     while(dd > Math.PI) dd -= Math.PI * 2;
     while(dd < -Math.PI) dd += Math.PI * 2;
     r.group.rotation.y += dd * Math.min(1, dt * 12);
+    // Ketinggian target (menerbangkan helikopter): karakter ikut naik ke udara.
+    var talt = r.talt || 0;
+    gp.y += (talt - gp.y) * Math.min(1, dt * 6);
+    if(Math.abs(talt - gp.y) < 0.02) gp.y = talt;
+    // Model kendaraan pemain ini mengikuti karakternya ke mana pun ia pergi.
+    if(r.veh && r.vehGroups && r.vehGroups[r.veh]){
+      var vg2 = r.vehGroups[r.veh];
+      vg2.group.position.set(gp.x, r.veh === 'heli' ? gp.y : 0, gp.z);
+      vg2.group.rotation.y = r.group.rotation.y;
+      if(vg2.rotor) vg2.rotor.rotation.y += dt * 22;
+    }
     var speed = dt > 0 ? Math.min(dist, 3) / dt : 0;
     var targetWalk = speed > 0.4 ? 1 : 0;
     r.walk += (targetWalk - r.walk) * Math.min(1, dt * 8);
@@ -10842,6 +11012,13 @@ function mpTick(dt){
       r.legL.rotation.x *= 0.8; r.legR.rotation.x *= 0.8;
       r.armL.rotation.x *= 0.8; r.armR.rotation.x *= 0.8;
       r.bodyG.position.y *= 0.8;
+    }
+    if(r.veh){
+      // Pose berkendara menimpa animasi jalan: kaki menekuk ke pijakan,
+      // tangan ke depan memegang setang / setir, badan terangkat di sadel.
+      r.legL.rotation.x = -0.9; r.legR.rotation.x = -0.9;
+      r.armL.rotation.x = -0.5; r.armR.rotation.x = -0.5;
+      r.bodyG.position.y = (r.veh === 'polisi' || r.veh === 'bis') ? 0.12 : 0.30;
     }
     if(r.bubble){
       var left = r.bubbleEnd - performance.now();
