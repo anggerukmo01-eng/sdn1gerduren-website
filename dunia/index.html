@@ -1695,6 +1695,7 @@ var INFO = {
   'Rumah Warga': 'Rumah warga Desa Gerduren. Sapalah dengan sopan kalau bertemu tetangga!',
   'Gerbang Sekolah': 'Gerbang SDN 1 Gerduren di Jl. Ki Wargalaksana No. 8 — di sinilah kamu masuk sekolah setiap pagi.',
   'Tiang Bendera': 'Tiang bendera merah-putih: setiap Senin pagi ada upacara bendera di halaman paving sekolah.',
+  'Papan Juara': 'Papan Juara di samping Tiang Bendera: di sini nama karakter/player dengan POIN TERTINGGI ditulis dengan huruf besar agar terlihat jelas oleh semua siswa. Poin adalah Kreditmu — kumpulkan dari Quest Harian, Kuis Guru, dan Pos Pramuka!',
   'Halaman Sekolah': 'Halaman sekolah berlapis paving block: tempat upacara, bermain, dan berkumpul bersama teman-teman.',
   'Lapangan Gerduren': 'Lapangan Gerduren: lapangan rumput besar desa di barat sekolah, tempat berolahraga dan bermain bola.',
   'Kebun Sekolah': 'Kebun sekolah: ada 9 bedeng tanaman yang disiram dan dirawat bersama agar tumbuh subur.',
@@ -2080,6 +2081,64 @@ addInteractable(-26, 42, 7.5, 'Rumah Warga');
   box(2.4,0.88,0.06,0xffffff, 1.24, 8.02, -7, scene, false);
   addCollider(0, -7, 0.85, 0.85);
   postSign('Halaman Sekolah', -8.5, -10, 0.5, {w:3.2, bg:'#1e6fb8', fg:'#ffffff'});
+})();
+
+/* ================= PAPAN JUARA — POIN TERTINGGI DI SAMPING TIANG BENDERA =================
+   Nama karakter/player dengan poin tertinggi ditampilkan di SAMPING BENDERA
+   dengan huruf BESAR dan terlihat jelas: papan fisik besar (5,5 m) berdiri
+   tepat di sisi timur Tiang Bendera (0,-7), menghadap gerbang/halaman depan
+   sehingga terbaca begitu siswa masuk. Isinya digambar ulang oleh
+   updateChampionBoard() (bagian ekonomi & multiplayer) setiap kali juara atau
+   poinnya berubah. Poin = Kredit (angka yang di HUD memang dilabeli "poin");
+   saat Main Bareng, poin pemain lain di ruangan yang sama ikut dibandingkan. */
+var champCanvas = null, champCtx = null, champTex = null;
+function drawChampionFace(name, poin){
+  if(!champCtx) return;
+  var g = champCtx, W = 1024, H = 480;
+  var grad = g.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#0e5a86'); grad.addColorStop(1, '#083a5c');
+  g.fillStyle = grad; g.fillRect(0, 0, W, H);
+  g.lineWidth = 16; g.strokeStyle = '#f59e0b'; g.strokeRect(10, 10, W - 20, H - 20);
+  g.lineWidth = 4; g.strokeStyle = 'rgba(255,255,255,0.9)'; g.strokeRect(30, 30, W - 60, H - 60);
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.shadowColor = 'rgba(0,0,0,0.45)'; g.shadowBlur = 6; g.shadowOffsetY = 3;
+  g.fillStyle = '#facc15'; g.font = '700 56px Fredoka, Nunito, Arial, sans-serif';
+  g.fillText('★ POIN TERTINGGI ★', W / 2, 76);
+  var nm = (name || '—').toUpperCase(), size = 122;
+  g.fillStyle = '#ffffff'; g.font = '700 ' + size + 'px Fredoka, Nunito, Arial, sans-serif';
+  while(g.measureText(nm).width > 920 && size > 50){ size -= 6; g.font = '700 ' + size + 'px Fredoka, Nunito, Arial, sans-serif'; }
+  g.fillText(nm, W / 2, 196);
+  var pts = (poin || 0).toLocaleString('id-ID') + ' POIN', size2 = 106;
+  g.fillStyle = '#fde047'; g.font = '700 ' + size2 + 'px Fredoka, Nunito, Arial, sans-serif';
+  while(g.measureText(pts).width > 920 && size2 > 48){ size2 -= 6; g.font = '700 ' + size2 + 'px Fredoka, Nunito, Arial, sans-serif'; }
+  g.fillText(pts, W / 2, 322);
+  g.shadowBlur = 0; g.shadowOffsetY = 0;
+  g.fillStyle = '#bae6fd'; g.font = '700 33px Nunito, Arial, sans-serif';
+  g.fillText('Kumpulkan poin dari Quest • Kuis • Pos Pramuka', W / 2, 424);
+  if(champTex) champTex.needsUpdate = true;
+}
+(function(){
+  champCanvas = document.createElement('canvas'); champCanvas.width = 1024; champCanvas.height = 480;
+  champCtx = champCanvas.getContext('2d');
+  champTex = new THREE.CanvasTexture(champCanvas); champTex.colorSpace = THREE.SRGBColorSpace; champTex.anisotropy = 4;
+  drawChampionFace('Murid Baru', 0);
+  var g = new THREE.Group(); g.position.set(6.0, 0, -7); scene.add(g);
+  box(0.2, 3.95, 0.2, 0x6d4c2f, -2.45, 1.97, 0, g); box(0.2, 3.95, 0.2, 0x6d4c2f, 2.45, 1.97, 0, g);
+  var backing = new THREE.Mesh(new THREE.BoxGeometry(5.7, 2.78, 0.12), mat(0x6d4c2f));
+  backing.position.set(0, 2.5, 0); backing.castShadow = true; g.add(backing);
+  var faceMat = new THREE.MeshLambertMaterial({map: champTex});
+  var face = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 2.58), faceMat);
+  face.position.set(0, 2.5, 0.075); g.add(face);
+  var faceB = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 2.58), faceMat);
+  faceB.position.set(0, 2.5, -0.075); faceB.rotation.y = Math.PI; g.add(faceB);
+  // bintang emas + bendera kecil Merah Putih di puncak papan
+  var star = new THREE.Mesh(new THREE.SphereGeometry(0.17, 10, 8), mat(0xf59e0b));
+  star.position.set(0, 3.98, 0); g.add(star);
+  cyl(0.045, 0.045, 0.85, 0xf8fafc, 0, 4.3, 0, g, 8);
+  box(0.85, 0.27, 0.04, 0xdc2626, 0.46, 4.58, 0, g, false);
+  box(0.85, 0.27, 0.04, 0xffffff, 0.46, 4.31, 0, g, false);
+  addCollider(6.0, -7, 2.9, 0.45);
+  addInteractable(6.0, -7, 4.2, 'Papan Juara');
 })();
 
 /* ================= PANGGUNG PODIUM RENDAH + MIC STAND (Lampiran B) =================
@@ -4099,6 +4158,10 @@ actionBtn.addEventListener('click', function(){
   infoTarget = t;
   infoTitle.textContent = t.name;
   infoText.textContent = t.info;
+  if(t.name === 'Tiang Bendera' || t.name === 'Papan Juara'){
+    var ch = championData();
+    infoText.textContent += ' Papan Juara di samping bendera: poin tertinggi saat ini dipegang ' + ch.name + ' dengan ' + ch.poin.toLocaleString('id-ID') + ' poin!';
+  }
   if(t.img){ infoImg.src = t.img; infoImg.classList.add('show'); }
   else { infoImg.classList.remove('show'); infoImg.removeAttribute('src'); }
   /* Pintu kelas / area Pos di lapangan: satu tombol per Pos yang tinggal di sini.
@@ -4632,6 +4695,7 @@ function updateStatsUI(){
   statEp.classList.toggle('low', eco.ep <= 25);
   var t = totalItems();
   tasCount.textContent = t; tasCount.classList.toggle('zero', t === 0);
+  updateChampionBoard(); // Papan Juara di samping Tiang Bendera mengikuti poin terbaru
 }
 
 /* ---------- Toast ---------- */
@@ -5083,6 +5147,32 @@ function addKredit(n){
   if(n <= 0) return;
   eco.kredit += n; saveEco(); updateStatsUI();
 }
+
+/* ---------- Papan Juara: player dengan poin tertinggi di samping Bendera ----------
+   Poin yang dibandingkan adalah Kredit — angka yang di HUD dilabeli "poin".
+   Solo: pemain sendiri. Main Bareng: semua pemain di ruangan dibandingkan
+   (poin mereka tiba lewat data join & gerak ruangan — lihat mpSendJoin). */
+function myPoin(){ return eco.kredit; }
+function championData(){
+  var best = {name: playerName, poin: myPoin()};
+  if(typeof mp !== 'undefined' && mp && mp.joined && mp.players){
+    for(var id in mp.players){
+      if(id === mp.myId) continue;
+      var p = mp.players[id];
+      if(p && typeof p.poin === 'number' && p.poin > best.poin) best = {name: p.name || 'Pemain', poin: p.poin};
+    }
+  }
+  return best;
+}
+var champLastKey = '';
+function updateChampionBoard(){
+  if(typeof drawChampionFace !== 'function' || !champTex) return;
+  var c = championData(), key = c.name + '|' + c.poin;
+  if(key === champLastKey) return; // gambar ulang hanya bila juara/poin berubah
+  champLastKey = key;
+  drawChampionFace(c.name, c.poin);
+}
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ champLastKey = ''; updateChampionBoard(); });
 
 /* ---------- TOKO: KOPERASI (seragam & equipable) + KANTIN (jajanan) ---------- */
 function shopIcon(kind){
@@ -9677,7 +9767,7 @@ function mpSend(obj){
 }
 function mpSendJoin(){
   return mpSend({
-    type: 'join', name: playerName, gender: mpGender(), appearance: mpAppearance(),
+    type: 'join', name: playerName, poin: myPoin(), gender: mpGender(), appearance: mpAppearance(),
     x: player.position.x, y: player.position.z, dir: player.rotation.y,
     isGM: mp.asGM, room: mp.room
   });
@@ -9844,6 +9934,7 @@ function mpConnect(code, asGM){
         mpShowErr('');
         AudioSys.sfx('correct');
       }
+      updateChampionBoard();
       mpUpdateChip(); mpRefreshPanel();
     }
     else if(msg.type === 'player-joined'){
@@ -9872,6 +9963,7 @@ function mpConnect(code, asGM){
       }
     }
     else if(msg.type === 'player-moved'){
+      if(typeof msg.poin === 'number' && mp.players[msg.id]) mp.players[msg.id].poin = msg.poin; // poin terbaru untuk Papan Juara
       var r = mp.remotes[msg.id];
       if(!r && mp.players[msg.id]){
         // Pemain ini ada di daftar ruangan tetapi karakternya belum terbuat
@@ -10137,6 +10229,7 @@ function mpTick(dt){
     for(var rid in mp.players){
       if(rid !== mp.myId && !mp.remotes[rid]) mpAddRemote(mp.players[rid]);
     }
+    updateChampionBoard(); // pemain masuk/keluar/poin berubah -> juara di Papan Juara bisa berganti
   }
   if(mp.joined){
     var now = performance.now();
@@ -10144,7 +10237,7 @@ function mpTick(dt){
       var px = player.position.x, pz = player.position.z, pd = player.rotation.y;
       if(mp.lastX === null || Math.abs(px - mp.lastX) > 0.03 || Math.abs(pz - mp.lastZ) > 0.03 || Math.abs(pd - mp.lastDir) > 0.03){
         mp.lastMoveAt = now; mp.lastX = px; mp.lastZ = pz; mp.lastDir = pd;
-        mpSend({type: 'move', x: px, y: pz, dir: pd});
+        mpSend({type: 'move', x: px, y: pz, dir: pd, poin: myPoin()});
       }
     }
   }
