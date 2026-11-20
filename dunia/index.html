@@ -423,32 +423,35 @@
   .dest-chip.pos{border-color:#fecaca;background:#fef2f2;color:#991b1b;}
   .dest-chip.on{border-color:#f59e0b;background:#fef3c7;color:#92400e;}
 
-  /* ---------- Panel Chat (kiri tengah layar) ---------- */
-  #chatPanel{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:min(250px,60vw);pointer-events:auto;background:var(--panel);border:2px solid rgba(23,50,74,.12);border-radius:16px;box-shadow:0 6px 18px rgba(23,50,74,.22);display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(4px);z-index:6;}
+  /* ---------- Panel Chat (pojok kiri bawah layar, semi-transparan) ----------
+     Permintaan Anggi (20 Nov 2026): panel diturunkan sampai pojok bawah dan
+     dibuat tembus pandang — dunia di belakangnya tetap terlihat, sementara
+     teks tetap terbaca karena gelembung pesan & kotak ketik jauh lebih pekat
+     daripada latar panel dan latar panel memakai blur kuat. */
+  #chatPanel{position:absolute;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));width:min(250px,60vw);pointer-events:auto;background:rgba(255,255,255,.48);border:2px solid rgba(23,50,74,.18);border-radius:16px;box-shadow:0 6px 18px rgba(23,50,74,.18);display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(10px) saturate(1.3);-webkit-backdrop-filter:blur(10px) saturate(1.3);z-index:6;}
   .chat-head{display:flex;align-items:center;gap:7px;padding:8px 8px 6px 11px;}
   .chat-title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;color:#0c4a6e;display:flex;align-items:center;gap:6px;}
   .chat-title svg{width:17px;height:17px;color:#0284c7;}
   .chat-head .sp{flex:1;}
-  #chatToggle{flex:none;width:28px;height:28px;min-height:28px;border:none;border-radius:50%;background:#f1f5f9;color:#475569;font-size:17px;font-weight:800;cursor:pointer;line-height:1;}
+  #chatToggle{flex:none;width:28px;height:28px;min-height:28px;border:none;border-radius:50%;background:rgba(241,245,249,.9);color:#475569;font-size:17px;font-weight:800;cursor:pointer;line-height:1;}
   #chatLog{max-height:128px;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:2px 10px 6px;display:flex;flex-direction:column;gap:5px;}
-  .chat-msg{font-size:12.5px;font-weight:600;line-height:1.4;background:#f0f9ff;border:1.5px solid #e0f2fe;border-radius:10px;padding:5px 8px;color:#334155;word-break:break-word;}
+  .chat-msg{font-size:12.5px;font-weight:600;line-height:1.4;background:rgba(240,249,255,.9);border:1.5px solid rgba(186,230,253,.9);border-radius:10px;padding:5px 8px;color:#1e3a4c;word-break:break-word;}
   .chat-msg b{color:#0369a1;font-family:'Fredoka',sans-serif;font-weight:600;}
-  .chat-empty{font-size:11.5px;font-weight:700;color:#94a3b8;line-height:1.5;padding:2px 0 3px;}
-  .chat-input-row{display:flex;gap:6px;padding:8px;border-top:2px solid rgba(23,50,74,.08);}
+  .chat-empty{font-size:11.5px;font-weight:700;color:#52677a;line-height:1.5;padding:2px 0 3px;}
+  .chat-input-row{display:flex;gap:6px;padding:8px;border-top:2px solid rgba(23,50,74,.10);}
   #chatForm{margin:0;}
-  #chatInput{flex:1;min-width:0;height:42px;border:2px solid #cbd5e1;border-radius:11px;padding:0 10px;font-size:14px;font-weight:700;color:var(--ink);outline:none;background:#f8fafc;}
+  #chatInput{flex:1;min-width:0;height:42px;border:2px solid rgba(148,184,210,.85);border-radius:11px;padding:0 10px;font-size:14px;font-weight:700;color:var(--ink);outline:none;background:rgba(248,250,252,.92);}
   #chatInput:focus{border-color:#0284c7;background:#fff;}
   #chatSend{flex:none;height:42px;min-height:42px;padding:0 14px;border:none;border-radius:11px;background:#0284c7;color:#fff;font-family:'Fredoka',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;}
   #chatSend svg{width:16px;height:16px;}
   #chatSend:active{transform:scale(.95);}
   #chatPanel.min #chatLog,#chatPanel.min .chat-input-row{display:none;}
   @media (max-height:640px){
-    #chatPanel{top:auto;bottom:100px;transform:none;}
     #chatLog{max-height:78px;}
   }
 
   /* ---------- Multiplayer M1: Main Bareng (ruangan, daftar pemain, status) ---------- */
-  .chat-msg.sys{background:#fefce8;border-color:#fde68a;color:#854d0e;font-weight:700;}
+  .chat-msg.sys{background:rgba(254,252,232,.92);border-color:rgba(253,230,138,.95);color:#854d0e;font-weight:700;}
   #mpChip{pointer-events:auto;display:none;align-items:center;gap:7px;border:2px solid #16a34a;background:rgba(240,253,244,.96);color:#14532d;border-radius:14px;padding:7px 11px;box-shadow:0 4px 14px rgba(22,163,74,.28);font-size:12.5px;font-weight:800;max-width:100%;cursor:pointer;font-family:inherit;text-align:left;}
   #mpChip.on{display:flex;}
   #mpChip .mp-dot{width:9px;height:9px;border-radius:50%;background:#16a34a;flex:none;}
@@ -712,7 +715,7 @@
       </button>
     </div>
   </div>
-  <!-- Panel Chat: kiri tengah layar (mode lokal + chat ruangan Main Bareng) -->
+  <!-- Panel Chat: pojok kiri bawah layar, semi-transparan (mode lokal + chat ruangan Main Bareng) -->
   <div id="chatPanel">
     <div class="chat-head">
       <span class="chat-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4l2.2-3.1A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4" stroke-width="1.8"/></svg>Chat</span>
@@ -5550,6 +5553,20 @@ var mp = {
      pemulihan kursi GM yang masih diduduki koneksi lama; openPollTimer =
      pemeriksa berkala sesi GM selama panel terbuka. */
   lastMsgAt: 0, viaOpen: false, gmSeatTries: 0, seatRecovered: false, openPollTimer: null,
+  /* Penyembuhan daftar ruangan server (hibernasi Durable Object): server
+     menyimpan daftar pemain di memori yang IKUT TERHAPUS saat objek ruangan
+     berhibernasi, sementara koneksi semua orang tetap hidup — GM hilang dari
+     snapshot pemain baru (dikiranya "sudah keluar") dan gerak/chat GM dibuang
+     server, padahal GM masih tersambung & melihat pemain masuk. Obatnya di
+     klien: join PENYEGAR berkala di koneksi yang sama (refreshTimer /
+     refreshing / lastRefreshAt) mendaftarkan ulang diri sendiri begitu
+     daftar server kosong; balasan "Sudah join" dari server (daftar masih
+     utuh) diabaikan diam-diam. gmWaiting/gmWaitTimer/gmWaitTries = keadaan
+     "gabung lewat sesi GM tetapi GM belum terlihat": menunggu sambil
+     memeriksa /open, bukan langsung memvonis sesi berakhir. */
+  refreshTimer: null, refreshing: false, lastRefreshAt: 0,
+  gmWaiting: false, gmWaitTimer: null, gmWaitTries: 0, gmWaitGone: 0,
+  connectStartedAt: 0, joinWarned: false, // pengawas "menyambung terlalu lama" untuk pesan galat yang jujur
   /* Login langsung multiplayer: autoWait = pemain sudah masuk dunia dan
      sedang menunggu sesi GM (pemeriksa /open berjalan sendiri); autoPollTimer
      = pemeriksa berkala itu — berjalan juga saat panel Main Bareng tertutup,
@@ -6119,24 +6136,97 @@ function mpSend(obj){
   return false;
 }
 function mpSendJoin(){
-  mpSend({
+  return mpSend({
     type: 'join', name: playerName, gender: mpGender(), appearance: mpAppearance(),
     x: player.position.x, y: player.position.z, dir: player.rotation.y,
     isGM: mp.asGM, room: mp.room
   });
 }
+/* Join penyegar di koneksi yang sama: mendaftarkan ulang diri sendiri ke
+   daftar ruangan server. Bila daftar server masih utuh, server membalas
+   error "Sudah join di ruangan ini." (diabaikan di penangan error); bila
+   daftar terhapus hibernasi, join ini memasukkan kita kembali — untuk GM
+   sekaligus menyiarkan player-joined ke pemain lain (karakter GM muncul
+   lagi di HP mereka) dan mendaftarkan ulang sesi terbuka ke Lobby. */
+function mpSendRefreshJoin(){
+  if(!mp.joined || !mp.ws || mp.ws.readyState !== 1) return;
+  mp.refreshing = true; mp.lastRefreshAt = performance.now();
+  if(!mpSendJoin()) mp.refreshing = false;
+}
+/* Ada aktivitas ruangan dari pemain lain (mereka terdaftar di server) —
+   mungkin giliran kita yang terhapus hibernasi: segarkan pendaftaran,
+   dibatasi maksimal sekali per 6 detik supaya tidak banjir. */
+function mpMaybeRefresh(){
+  if(!mp.joined) return;
+  if(performance.now() - (mp.lastRefreshAt || 0) < 6000) return;
+  mpSendRefreshJoin();
+}
+function mpStartRefresh(){
+  if(mp.refreshTimer) return;
+  mp.refreshTimer = setInterval(function(){
+    if(mp.joined && mp.ws && mp.ws.readyState === 1) mpSendRefreshJoin();
+  }, 25000);
+}
+/* ---------- Keadaan "GM belum terlihat" setelah gabung lewat sesi GM ----------
+   Dulu keadaan ini langsung divonis "sesi GM sudah berakhir" — padahal
+   penyebab terseringnya daftar ruangan server terhapus hibernasi dan GM
+   sebenarnya masih tersambung (ia melihat kita masuk!). Sekarang: tunggu
+   sambil memeriksa /open (catatan Lobby tersimpan permanen, tidak ikut
+   terhapus). Sesi masih tercatat terbuka -> tetap menunggu; pendaftaran
+   berkala GM akan memunculkannya sendiri. Vonis berakhir hanya bila /open
+   benar-benar kosong / menunjuk ruangan lain. */
+function mpStartGmWait(){
+  if(mp.gmWaiting) return;
+  mp.gmWaiting = true; mp.gmWaitTries = 0; mp.gmWaitGone = 0;
+  mpSetStatus('busy', 'Kamu masuk ruangan ' + mp.room + '. GM belum terlihat di daftar pemain — menunggu GM tersambung… Bila GM sedang membuka gamenya, karakternya muncul sendiri di sini sebentar lagi, tidak perlu keluar ruangan.');
+  addChatSystem('GM belum terlihat di ruangan ini — menunggu GM tersambung. Tetap di sini dulu; karakter GM muncul otomatis begitu ia tersambung kembali.');
+  if(mp.gmWaitTimer) clearInterval(mp.gmWaitTimer);
+  mp.gmWaitTimer = setInterval(mpGmWaitPoll, 5000);
+  mpGmWaitPoll();
+}
+function mpStopGmWait(){
+  mp.gmWaiting = false; mp.gmWaitTries = 0; mp.gmWaitGone = 0;
+  if(mp.gmWaitTimer){ clearInterval(mp.gmWaitTimer); mp.gmWaitTimer = null; }
+}
+function mpGmWaitPoll(){
+  if(!mp.gmWaiting || !mp.joined || mp.asGM){ if(!mp.joined) mpStopGmWait(); return; }
+  mp.gmWaitTries++;
+  if(mp.gmWaitTries % 3 === 0) mpSendRefreshJoin(); // segarkan pendaftaran sendiri juga
+  fetch(MP_HTTP + '/open').then(function(res){ return res.json(); }).then(function(data){
+    if(!mp.gmWaiting || !mp.joined) return;
+    var open = data && data.open;
+    if(open && open.code === mp.room){
+      // Lobby masih mencatat sesi GM terbuka untuk ruangan INI: GM hampir
+      // pasti masih tersambung / sedang menyambung ulang — terus menunggu.
+      mp.gmWaitGone = 0;
+      if(mp.gmWaitTries === 6) mpSetStatus('busy', 'Sesi GM masih tercatat terbuka di server — tetap menunggu GM muncul di ruangan ' + mp.room + '… Karakternya tampil otomatis begitu pendaftarannya kembali.');
+    } else {
+      // /open kosong atau menunjuk ruangan lain. Jangan vonis pada temuan
+      // pertama — GM bisa sedang menyambung ulang dan Lobby-nya belum
+      // terdaftar lagi; vonis hanya setelah DUA pemeriksaan berurutan.
+      mp.gmWaitGone++;
+      if(mp.gmWaitGone < 2) return;
+      mpStopGmWait();
+      mpSetStatus('err', 'Kamu masuk ruangan ' + mp.room + ', tetapi GM tidak ada di dalam — sesi GM sepertinya sudah berakhir di server. Minta GM membuka sesi lagi, lalu keluar dan gabung ulang lewat Gabung Sesi GM.');
+      addChatSystem('GM tidak terdeteksi di ruangan ini — sesi GM mungkin sudah berakhir. Keluar ruangan, lalu gabung lagi setelah GM membuka sesi.');
+    }
+  }).catch(function(){ /* jaringan gagal sesaat: jangan memvonis; coba lagi di siklus berikut */ });
+}
 function mpStopTimers(){
   if(mp.reconnectTimer){ clearTimeout(mp.reconnectTimer); mp.reconnectTimer = null; }
   if(mp.pingTimer){ clearInterval(mp.pingTimer); mp.pingTimer = null; }
   if(mp.helloTimer){ clearTimeout(mp.helloTimer); mp.helloTimer = null; }
+  if(mp.refreshTimer){ clearInterval(mp.refreshTimer); mp.refreshTimer = null; }
 }
 function mpConnect(code, asGM){
   mpStopAutoWait(); // mulai menyambung = penantian sesi GM selesai (gabung manual / otomatis / sambung ulang)
+  mpStopGmWait(); mp.refreshing = false; // koneksi baru: keadaan tunggu & penyegar dinilai ulang dari snapshot barunya
   mpCleanupSocket();
   mpStopTimers();
   mp.room = code; mp.asGM = !!asGM;
   mp.intentional = false; mp.connecting = true; mp.joined = false;
   mp.lastMsgAt = performance.now();
+  mp.connectStartedAt = performance.now(); mp.joinWarned = false;
   mpSetStatus('busy', 'Menyambung ke ruangan ' + code + '…');
   mpUpdateChip(); mpRefreshPanel();
   var ws;
@@ -6158,37 +6248,69 @@ function mpConnect(code, asGM){
       if(!mp.joined) mpSendJoin();
     }
     else if(msg.type === 'joined'){
+      /* Dua rasa "joined": (a) gabung sungguhan di koneksi baru — daftar
+         dibangun dari nol; (b) balasan join PENYEGAR di koneksi yang sama
+         (daftar server sempat terhapus hibernasi lalu kita mendaftar ulang)
+         — daftar DIGABUNG, bukan dibangun ulang: pemain yang belum sempat
+         mendaftar ulang tidak boleh hilang dari dunia kita, dan tidak ada
+         pesan/suara "masuk ruangan" kedua. */
+      var wasRefresh = mp.joined && mp.refreshing;
+      mp.refreshing = false;
       mp.myId = msg.id; mp.joined = true; mp.connecting = false; mp.reconnects = 0; mp.gmSeatTries = 0;
-      mp.players = {};
-      mp.ownPending = []; // koneksi baru: antrean konfirmasi chat lama tidak berlaku lagi
+      if(!wasRefresh){
+        mp.players = {};
+        mp.ownPending = []; // koneksi baru: antrean konfirmasi chat lama tidak berlaku lagi
+      }
       (msg.players || []).forEach(function(p){ mp.players[p.id] = p; });
       if(msg.you) mp.players[msg.you.id] = msg.you;
-      mpClearRemotes();
+      if(!wasRefresh) mpClearRemotes();
       for(var id in mp.players) if(id !== mp.myId) mpAddRemote(mp.players[id]);
+      mpStartRefresh(); // jaga pendaftaran diri sendiri di daftar server
       var gmAda = false;
       for(var gid in mp.players){ if(mp.players[gid].isGM){ gmAda = true; break; } }
-      if(!mp.asGM && mp.viaOpen && !gmAda){
-        // gabung lewat "Gabung Sesi GM" tetapi GM tidak ada di daftar pemain:
-        // sesi yang diiklankan server sudah berakhir (koneksi GM lama membeku
-        // di server) — jangan pura-pura sukses, beri tahu pemain dengan jujur.
-        mpSetStatus('err', 'Kamu masuk ruangan ' + mp.room + ', tetapi GM tidak ada di dalam — sesi GM sepertinya sudah berakhir di server. Minta GM membuka sesi lagi, lalu keluar dan gabung ulang lewat Gabung Sesi GM.');
-        addChatSystem('GM tidak terdeteksi di ruangan ini — sesi GM mungkin sudah berakhir. Keluar ruangan, lalu gabung lagi setelah GM membuka sesi.');
-      } else if(mp.seatRecovered){
-        mp.seatRecovered = false;
-        mpSetStatus('ok', 'Terhubung ke ruangan BARU ' + mp.room + '. Pemain lain perlu keluar dari ruangan lama, lalu gabung lagi lewat tombol Gabung Sesi GM.');
-        addChatSystem('Ini ruangan baru berkode ' + mp.room + ' — beri tahu pemain lain: keluar ruangan lama, lalu Gabung Sesi GM lagi.');
-      } else {
-        mpSetStatus('ok', 'Terhubung ke ruangan ' + mp.room + ' — ' + mpPlayerCount() + ' pemain di dalam. Selamat bermain bareng!');
+      if(gmAda){
+        if(mp.gmWaiting){
+          // GM akhirnya terlihat (pendaftarannya kembali): keadaan menunggu selesai.
+          mpStopGmWait();
+          mpSetStatus('ok', 'Terhubung ke ruangan ' + mp.room + ' — GM ada di dalam. Selamat bermain bareng!');
+          addChatSystem('GM terdeteksi di ruangan ini — sesi aktif, karakter GM tampil di dunia.');
+        } else if(!wasRefresh){
+          if(mp.seatRecovered){
+            mp.seatRecovered = false;
+            mpSetStatus('ok', 'Terhubung ke ruangan BARU ' + mp.room + '. Pemain lain perlu keluar dari ruangan lama, lalu gabung lagi lewat tombol Gabung Sesi GM.');
+            addChatSystem('Ini ruangan baru berkode ' + mp.room + ' — beri tahu pemain lain: keluar ruangan lama, lalu Gabung Sesi GM lagi.');
+          } else {
+            mpSetStatus('ok', 'Terhubung ke ruangan ' + mp.room + ' — ' + mpPlayerCount() + ' pemain di dalam. Selamat bermain bareng!');
+          }
+        }
+      } else if(!mp.asGM && mp.viaOpen){
+        // Gabung lewat sesi GM tetapi GM belum ada di daftar: JANGAN vonis
+        // sesi berakhir — penyebab terseringnya daftar server terhapus
+        // hibernasi dan GM sebenarnya masih tersambung (ia melihat kita
+        // masuk). Masuk keadaan menunggu; pemeriksa /open yang menilai,
+        // dan karakter GM muncul sendiri begitu pendaftarannya kembali.
+        if(!wasRefresh) mpStartGmWait();
+      } else if(!wasRefresh){
+        if(mp.seatRecovered){
+          mp.seatRecovered = false;
+          mpSetStatus('ok', 'Terhubung ke ruangan BARU ' + mp.room + '. Pemain lain perlu keluar dari ruangan lama, lalu gabung lagi lewat tombol Gabung Sesi GM.');
+          addChatSystem('Ini ruangan baru berkode ' + mp.room + ' — beri tahu pemain lain: keluar ruangan lama, lalu Gabung Sesi GM lagi.');
+        } else {
+          mpSetStatus('ok', 'Terhubung ke ruangan ' + mp.room + ' — ' + mpPlayerCount() + ' pemain di dalam. Selamat bermain bareng!');
+        }
       }
-      addChatSystem('Kamu masuk ruangan ' + mp.room + '. Pemain lain terlihat di dunia dengan papan nama di atas kepala.');
-      mpShowErr('');
+      if(!wasRefresh){
+        addChatSystem('Kamu masuk ruangan ' + mp.room + '. Pemain lain terlihat di dunia dengan papan nama di atas kepala.');
+        mpShowErr('');
+        AudioSys.sfx('correct');
+      }
       mpUpdateChip(); mpRefreshPanel();
-      AudioSys.sfx('correct');
     }
     else if(msg.type === 'player-joined'){
       var p = msg.player;
       if(p && p.id !== mp.myId){
         var wasPlaceholder = !!(mp.players[p.id] && mp.players[p.id].placeholder);
+        var alreadyKnown = !!mp.players[p.id] && !wasPlaceholder;
         mp.players[p.id] = p;
         if(wasPlaceholder && mp.remotes[p.id]){
           // Karakter sementara dari data gerak (lihat player-moved) diganti
@@ -6196,8 +6318,17 @@ function mpConnect(code, asGM){
           mpDisposeRemote(p.id);
         }
         mpAddRemote(p);
-        addChatSystem(p.name + (p.isGM ? ' (Game Master)' : '') + ' masuk ruangan.');
+        if(p.isGM && !mp.asGM){
+          // GM terdaftar & terlihat: akhiri penantian (bila sedang menunggu)
+          // dan pulihkan status — termasuk bila sebelumnya tampil "GM keluar".
+          if(mp.gmWaiting) mpStopGmWait();
+          mpSetStatus('ok', 'Terhubung ke ruangan ' + mp.room + ' — GM ada di dalam. Selamat bermain bareng!');
+        }
+        // Pendaftaran ulang pemain lama (penyembuhan hibernasi) tidak perlu
+        // diumumkan lagi sebagai "masuk ruangan" — riwayat chat banjir.
+        if(!alreadyKnown) addChatSystem(p.name + (p.isGM ? ' (Game Master)' : '') + ' masuk ruangan.');
         mpUpdateChip(); if(mpOpen) mpRefreshPanel();
+        mpMaybeRefresh(); // ruangan terbukti aktif; pastikan pendaftaran kita sendiri juga masih ada
       }
     }
     else if(msg.type === 'player-moved'){
@@ -6240,6 +6371,7 @@ function mpConnect(code, asGM){
       }
       mpDisposeRemote(msg.id);
       mpUpdateChip(); if(mpOpen) mpRefreshPanel();
+      mpMaybeRefresh();
     }
     else if(msg.type === 'chat'){
       if(msg.id === mp.myId && mpConsumeOwnEcho(msg.text)){
@@ -6248,10 +6380,16 @@ function mpConnect(code, asGM){
       } else {
         addChatMessage(msg.name, msg.text);
         if(msg.id === mp.myId) showPlayerBubble(msg.text);
-        else mpShowRemoteBubble(msg.id, msg.text);
+        else { mpShowRemoteBubble(msg.id, msg.text); mpMaybeRefresh(); }
       }
     }
     else if(msg.type === 'error'){
+      if(/sudah join/i.test(msg.message || '')){
+        // Balasan wajar untuk join penyegar di koneksi yang sama saat daftar
+        // ruangan server masih utuh — bukan kesalahan, abaikan diam-diam.
+        mp.refreshing = false;
+        return;
+      }
       if(!mp.joined && mp.asGM && /game master/i.test(msg.message || '')){
         // Kursi GM masih diduduki koneksi lama kita yang membeku di server
         // (kejadian khas HP: halaman GM dibekukan peramban, soket tidak putus
@@ -6303,8 +6441,10 @@ function mpConnect(code, asGM){
   };
   ws.onclose = function(){
     if(mp.ws === ws) mp.ws = null;
+    mp.refreshing = false;
     if(mp.pingTimer){ clearInterval(mp.pingTimer); mp.pingTimer = null; }
     if(mp.helloTimer){ clearTimeout(mp.helloTimer); mp.helloTimer = null; }
+    if(mp.refreshTimer){ clearInterval(mp.refreshTimer); mp.refreshTimer = null; }
     if(mp.intentional) return;
     if(!mp.room) return;
     // putus tak disengaja: sambung ulang dengan backoff 1 dtk, 2 dtk, 5 dtk, lalu join lagi
@@ -6329,6 +6469,7 @@ function mpCleanupSocket(){
   }
   if(mp.pingTimer){ clearInterval(mp.pingTimer); mp.pingTimer = null; }
   if(mp.helloTimer){ clearTimeout(mp.helloTimer); mp.helloTimer = null; }
+  if(mp.refreshTimer){ clearInterval(mp.refreshTimer); mp.refreshTimer = null; }
 }
 function mpConnectFailed(text){
   mp.connecting = false;
@@ -6343,8 +6484,10 @@ function mpForceReconnect(){
   if(!mp.room || mp.intentional) return;
   var old = mp.ws; mp.ws = null;
   if(old){ try{ old.onclose = null; old.onmessage = null; old.onerror = null; old.close(); }catch(e){} }
+  mp.refreshing = false;
   if(mp.pingTimer){ clearInterval(mp.pingTimer); mp.pingTimer = null; }
   if(mp.helloTimer){ clearTimeout(mp.helloTimer); mp.helloTimer = null; }
+  if(mp.refreshTimer){ clearInterval(mp.refreshTimer); mp.refreshTimer = null; }
   var wasJoined = mp.joined;
   mp.joined = false; mp.connecting = true;
   mpSetStatus('busy', 'Koneksi tidak merespons — menyambung ulang…');
@@ -6359,6 +6502,7 @@ function mpForceReconnect(){
 function mpLeave(silent){
   mp.intentional = true;
   mpStopAutoWait(); // keluar ruangan = pemain memilih solo; jangan gabung otomatis lagi
+  mpStopGmWait(); mp.refreshing = false;
   mpStopTimers();
   mpCleanupSocket();
   var wasIn = mp.joined || mp.connecting;
@@ -6420,6 +6564,14 @@ function mpTick(dt){
      dibekukan dan pengawas ini langsung bekerja begitu halaman hidup lagi). */
   if((mp.joined || mp.connecting) && mp.ws && mp.ws.readyState === 1 && mp.lastMsgAt && performance.now() - mp.lastMsgAt > 20000){
     mpForceReconnect();
+  }
+  /* Menyambung terlalu lama tanpa jawaban server: beri tahu dengan jujur
+     sekali per percobaan (bukan vonis "internet mati" — dari dalam aplikasi
+     Muse / VPN / pemblokir, koneksi ke domain server workers.dev bisa
+     terhalang hanya di aplikasi itu sementara browser biasa lancar). */
+  if(mp.connecting && !mp.joined && mp.connectStartedAt && performance.now() - mp.connectStartedAt > 15000 && !mp.joinWarned){
+    mp.joinWarned = true;
+    mpSetStatus('err', 'Sudah 15 detik menyambung ke ruangan ' + (mp.room || '') + ' tetapi server belum menjawab. Game tetap mencoba menyambung ulang sendiri. Bila kamu membuka game dari dalam aplikasi Muse atau memakai VPN/pemblokir, koneksi ke server (domain workers.dev) mungkin terhalang di aplikasi itu — coba buka game ini dari browser biasa (mis. Chrome) di perangkat yang sama.');
   }
   /* Rekonsiliasi karakter (perbaikan "HP 2 tidak melihat HP 1"): tiap 1,5
      detik, pastikan SETIAP pemain di daftar ruangan — GM termasuk — benar-
@@ -6571,7 +6723,7 @@ document.addEventListener('visibilitychange', function(){
   if(document.hidden) return;
   if(mp.joined || mp.connecting){
     if(!mp.ws || mp.ws.readyState !== 1 || (mp.lastMsgAt && performance.now() - mp.lastMsgAt > 12000)) mpForceReconnect();
-    else mpSend({type: 'ping'});
+    else { mpSend({type: 'ping'}); mpSendRefreshJoin(); } // kembali ke aplikasi = segarkan pendaftaran saat itu juga (daftar server bisa terhapus hibernasi selama kita pergi)
   }
   if((mpOpen || mp.autoWait) && !mp.joined && !mp.connecting) mpCheckOpen();
 });
@@ -6596,15 +6748,74 @@ document.getElementById('mpCodeInput').addEventListener('keydown', function(e){
   if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('mpJoinBtn').click(); }
 });
 document.getElementById('mpCodeInput').addEventListener('keyup', function(e){ e.stopPropagation(); });
+/* Kode ruangan buatan klien sendiri — protokol server memang mengizinkannya
+   ("dibuat lewat GET /create ATAU dibuat sendiri oleh klien"; ruangan lahir
+   saat pemain pertama join lewat WebSocket, dan server tetap mengumumkan
+   sesi GM ini ke Lobby /open). Abjad sama seperti server: tanpa I dan O. */
+function mpMakeOwnCode(){
+  var letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  var code = '';
+  for(var i = 0; i < 4; i++) code += letters.charAt(Math.floor(Math.random() * letters.length));
+  return code;
+}
 function mpCreateAndJoinGM(){
-  mpSetStatus('busy', 'Membuat ruangan baru untuk sesi GM…');
-  fetch(MP_HTTP + '/create').then(function(res){ return res.json(); }).then(function(data){
+  mpCreateTry(0);
+}
+/* Minta kode ke server dengan batas waktu 8 detik & percobaan ulang (3x).
+   Kegagalan di sini TIDAK otomatis berarti server mati atau internet putus:
+   dari dalam aplikasi Muse di laptop, permintaan HTTP ke domain server
+   (workers.dev) pernah terblokir padahal servernya sehat dan jalur
+   WebSocket-nya jalan — karena itu kegagalan terakhir dialihkan ke kode
+   buatan sendiri + sambungan WebSocket langsung (lihat mpCreateFailed). */
+function mpCreateTry(attempt){
+  if(mp.joined && mp.asGM) return; // sesi sudah terbuka; jangan buat ruangan lain
+  mpSetStatus('busy', attempt ? ('Membuat ruangan baru untuk sesi GM — percobaan ke-' + (attempt + 1) + '…') : 'Membuat ruangan baru untuk sesi GM…');
+  var done = false, ac = null, killer = null;
+  try{
+    if(typeof AbortController !== 'undefined'){
+      ac = new AbortController();
+      killer = setTimeout(function(){ try{ ac.abort(); }catch(e){} }, 8000);
+    }
+  }catch(e){ ac = null; }
+  fetch(MP_HTTP + '/create', ac ? {signal: ac.signal} : undefined).then(function(res){ return res.json(); }).then(function(data){
+    if(done) return; done = true; if(killer) clearTimeout(killer);
     if(data && data.ok && data.code){ mp.viaOpen = false; mpConnect(data.code, true); }
-    else mpConnectFailed('Server tidak memberi kode ruangan. Coba lagi sebentar.');
-  }).catch(function(){ mpConnectFailed('Tidak bisa menghubungi server untuk membuat ruangan. Periksa koneksi internet.'); });
+    else mpCreateFailed(attempt, 'badreply');
+  }).catch(function(){
+    if(done) return; done = true; if(killer) clearTimeout(killer);
+    mpCreateFailed(attempt, 'network');
+  });
+}
+function mpCreateFailed(attempt, kind){
+  if(mp.joined) return;
+  if(attempt < 2){
+    mpSetStatus('busy', kind === 'badreply'
+      ? 'Server ruangan membalas tanpa kode ruangan — mencoba lagi sebentar…'
+      : 'Server kode ruangan belum terjangkau — mencoba lagi sebentar…');
+    setTimeout(function(){ mpCreateTry(attempt + 1); }, attempt === 0 ? 1500 : 3000);
+    return;
+  }
+  // Tiga kali gagal: bedakan dengan jujur — yang gagal adalah jalur HTTP dari
+  // perangkat/aplikasi INI (server bisa saja sehat; jangan memvonis internet
+  // pengguna). Alihkan ke kode buatan sendiri: sesi tetap dibuka lewat
+  // WebSocket, dan pengawas sambungan di mpTick yang memvonis bila jalur
+  // WebSocket pun benar-benar tidak menjawab.
+  var code = mpMakeOwnCode();
+  mp.viaOpen = false;
+  mpSetStatus('busy', 'Server kode ruangan tidak terjangkau dari aplikasi/perangkat ini setelah 3 percobaan (servernya sendiri mungkin sehat — jalur HTTP-nya yang terhalang di sini). Membuka sesi dengan kode buatan sendiri: ' + code + ' — menyambung langsung ke ruangan…');
+  addChatSystem('Kode ruangan dari server tidak terjangkau di perangkat ini — sesi dibuka dengan kode buatan sendiri: ' + code + '. Beri tahu pemain kode ini bila gabung otomatis mereka belum jalan.');
+  mpConnect(code, true);
 }
 document.getElementById('mpCreateBtn').addEventListener('click', function(){
   AudioSys.unlock();
+  if(mp.joined && mp.asGM){
+    // Sesi SUDAH terbuka: membuat ruangan baru akan membuang sesi ini dan
+    // mengusir semua pemain dari ruangan lama — jangan lakukan diam-diam.
+    mpShowErr('');
+    mpSetStatus('ok', 'Sesi GM sudah terbuka di ruangan ' + mp.room + ' — pemain bisa gabung ke ruangan ini. Bila ingin ruangan baru, tekan Keluar Ruangan dulu.');
+    return;
+  }
+  if(mp.connecting) return; // sedang menyambung/membuat — jangan dobel
   mpShowErr('');
   mp.gmSeatTries = 0; mp.seatRecovered = false;
   mpCreateAndJoinGM();
