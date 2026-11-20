@@ -4064,7 +4064,7 @@ var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, l
   assets:{},  // barang Dealer yang sudah LUNAS: {rumah:true, mobil:true, motor:true, polisi:true}
   loans:{},   // cicilan Dealer yang sedang berjalan: {motor:{paid:3, per:150, total:8}, ...}
   quests:{date:'', sampah:0, fed:{}, tanam:false, pancing:false, bola:false, rewarded:{}, bonus:false}, // progres Quest Harian (reset tiap tanggal baru)
-  npcQuests:{date:'', st:{}, prog:{}} }; // quest dari NPC (Lurah/Warga/Polisi/Guru/Kepsek/Siswa): st per id = offer|active|ready|done, reset tiap tanggal baru
+  npcQuests:{date:'', st:{}, prog:{}} }; // quest dari NPC (Lurah/Warga/Polisi/Guru/Kepsek/Siswa/Penjaga): st per id = offer|active|ready|done, reset tiap tanggal baru
 ITEM_DEFS.forEach(function(d){ if(eco.inv[d.id] === undefined) eco.inv[d.id] = 0; });
 var POS_IDS = ['kompas','kim','bangga','tanda','ketaqwaan','bumbung','grazy','pbb','pionering'];
 POS_IDS.forEach(function(id){ eco.pos[id] = {best:0, stamp:false, plays:0}; });
@@ -6520,7 +6520,12 @@ function startWorldTrashMission(){
    lengan & kaki berayun saat berjalan) — jauh lebih menarik dari figur warga
    lama. Enam peran pemberi quest: Kepala Sekolah, Guru, Polisi, Lurah, Warga,
    dan Siswa. Satu quest per peran per hari, berhadiah Kredit, tersimpan di
-   eco.npcQuests dan reset tiap tanggal baru. */
+   eco.npcQuests dan reset tiap tanggal baru.
+   REVISI 20 Nov 2026: ukuran semua NPC disamakan dengan besar karakter pemain,
+   dan NPC guru kini adalah SEMUA guru & tendik SDN 1 Gerduren yang sebenarnya
+   (Pak Anggi K1+Operator, Pak Ahmad K2, Pak Igun K3, Bu Aenal K5, Bu Cici K6,
+   Bu Azizah PABP, Pak Linggar PJOK — berbagi quest harian 'guru') ditambah
+   Pak Nartam Penjaga Sekolah dengan quest 'penjaga' sendiri. */
 var npcOpen = false, curNPC = null;
 var npcOverlay = document.getElementById('npcOverlay'), npcAva = document.getElementById('npcAva'),
     npcName = document.getElementById('npcName'), npcRole = document.getElementById('npcRole'),
@@ -6555,7 +6560,11 @@ function getBatikTex(){
    torso, kepala bundar berwajah), dengan variasi rambut & atribut peran. */
 function makeNPCFigure(o){
   var g = new THREE.Group();
-  var S = o.kid ? 0.78 : 1.05;
+  /* Ukuran NPC DISAMAKAN dengan besar karakter pemain (revisi Anggi 20 Nov 2026):
+     NPC dewasa S=1,2 -> puncak kepala ±2,24 (karakter Admin pemain ±2,28);
+     NPC siswa S=1,08 -> puncak kepala ±2,02 (karakter murid pemain ±2,10).
+     Sebelumnya dewasa 1,05 / siswa 0,78 sehingga NPC tampak jauh lebih kecil. */
+  var S = o.kid ? 1.08 : 1.2;
   function sph(r, c, x, y, z, parent){
     var m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 11), mat(c));
     m.position.set(x, y, z); m.castShadow = true; (parent || g).add(m); return m;
@@ -6683,7 +6692,8 @@ function drawQuestMarker(sp, sym){
 
 var NPC_QUEST_DEFS = {
   kepsek:{questName:'Kuis Kepala Sekolah', reward:120, desc:'Jawab pertanyaan Bapak dengan benar.', quiz:{q:'Ibu kota Kabupaten Banyumas adalah…', opts:['Purwokerto','Cilacap','Purbalingga'], ans:0}, doneText:'Bagus! Kamu anak yang cerdas dan rajin. Pertahankan semangat belajarmu, ya!'},
-  guru:{questName:'Kuis Matematika Bu Guru', reward:80, desc:'Jawab soal perkalian Ibu dengan benar.', quiz:{q:'7 × 8 = …', opts:['54','56','48'], ans:1}, doneText:'Pintar! Matematika memang seru kalau rajin berlatih. Besok Ibu beri soal baru lagi.'},
+  guru:{questName:'Kuis Matematika Pak/Bu Guru', reward:80, desc:'Jawab soal perkalian dari Bapak/Ibu Guru dengan benar.', quiz:{q:'7 × 8 = …', opts:['54','56','48'], ans:1}, doneText:'Pintar! Matematika memang seru kalau rajin berlatih. Besok Bapak/Ibu Guru beri soal baru lagi.'},
+  penjaga:{questName:'Jaga Gerbang Sekolah', reward:60, desc:'Jawab pertanyaan Pak Nartam tentang keamanan sekolah dengan benar.', quiz:{q:'Kalau menemukan benda tajam yang berbahaya di sekolah, kamu harus…', opts:['Membawanya pulang','Melapor ke Pak Penjaga atau Bapak/Ibu Guru','Membuangnya ke sungai'], ans:1}, doneText:'Betul! Anak yang peduli keamanan sekolah itu hebat. Gerbang dan lingkungan sekolah kita aman berkat anak-anak yang tertib.'},
   polisi:{questName:'Patroli Jalan Raya', reward:150, desc:'Kunjungi 3 titik patroli berurutan: Gerbang Sekolah → Lapangan Gerduren → Kantor Polsek. Berdirilah di lingkaran emas pada tiap titik.', doneText:'Patroli yang rapi! Jalan raya aman berkat anak-anak yang tertib dan patuh lampu lalu lintas.'},
   lurah:{questName:'Menyapa Warga Desa', reward:130, desc:'Sapa 3 warga desa: dekati Bu Tini, Pak Darto, dan Bu Wati lalu bicara dengan mereka.', doneText:'Terima kasih sudah menyapa warga. Desa kita rukun karena warganya saling menyapa!'},
   warga:{questName:'Antar Surat ke Rumah Warga', reward:90, desc:'Antarkan surat ini ke Rumah Warga (rumah kuning di barat desa) — cukup dekati rumahnya sampai surat terkirim, lalu kembali melapor ke warga mana pun.', doneText:'Suratnya sudah sampai dengan selamat. Terima kasih banyak, Nak!'},
@@ -6719,9 +6729,35 @@ function refreshNPCMarkers(){
 addNPC({key:'kepsek', def:'kepsek', name:'Pak Yudhy', role:'Kepala Sekolah SDN 1 Gerduren', color:'#334155', x:28, z:-0.5, ry:-1.1,
   greet:'Selamat datang di SDN 1 Gerduren. Saya Kepala Sekolah di sini — sekolah kita harus bersih, tertib, dan penuh semangat belajar.',
   fig:{skin:0xb07a45, hair:'peci', shirt:0x334155, bottom:0x1f2937, tie:true, tag:true}});
-addNPC({key:'guru', def:'guru', name:'Bu Guru Sari', role:'Guru SDN 1 Gerduren', color:'#0284c7', x:-28, z:-0.5, ry:1.1,
-  greet:'Halo, Nak! Ibu guru di SDN 1 Gerduren. Sudah sarapan? Jangan lupa jaga kesehatan dan rajin belajar, ya.',
-  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x0ea5e9, shirt:0xc9a26b, bottom:0x4a3220, tag:true}});
+/* SEMUA Guru & Tendik SDN 1 Gerduren (revisi Anggi 20 Nov 2026): tiap guru kelas
+   berdiri di depan ruang kelasnya (gedung kelas di z=-24, muka kelas di z±-15,5),
+   Bu Azizah (PABP) di dekat Masjid, Pak Linggar (PJOK) di Lapangan Gerduren, dan
+   Pak Nartam (Penjaga) di dekat Gerbang. Semua guru berbagi quest harian 'guru';
+   Pak Nartam punya quest 'penjaga' sendiri. */
+addNPC({key:'anggi', def:'guru', name:'Pak Anggi', role:'Guru Kelas 1 & Operator Sekolah', color:'#b45309', x:-32.5, z:-15.5, ry:0.15, wander:1.6,
+  greet:'Halo! Saya Pak Anggi, Guru Kelas 1 sekaligus Operator Sekolah — urusan data Dapodik sekolah kita, saya yang mengurusnya. Semangat belajarnya, ya!',
+  fig:{skin:0xd9a066, hair:'peci', shirt:0xc9a26b, bottom:0x35241a, tie:true, tag:true}});
+addNPC({key:'ahmad', def:'guru', name:'Pak Ahmad', role:'Guru Kelas 2 SDN 1 Gerduren', color:'#2563eb', x:-19.5, z:-15.5, ry:-0.15, wander:1.6,
+  greet:'Halo, Nak! Saya Pak Ahmad, Guru Kelas 2. Anak-anak Kelas 2 rajin-rajin semua — kamu juga harus rajin belajar dan membaca, ya.',
+  fig:{skin:0xb07a45, hair:'buzz', shirt:0x2563eb, bottom:0x1f2937, tag:true}});
+addNPC({key:'igun', def:'guru', name:'Pak Igun', role:'Guru Kelas 3 SDN 1 Gerduren', color:'#0d9488', x:-6.5, z:-15.5, ry:0.1, wander:1.6,
+  greet:'Halo! Saya Pak Igun, Guru Kelas 3. Jangan lupa sarapan dan jaga kesehatan supaya kuat belajar seharian di sekolah.',
+  fig:{skin:0xc98a4b, hair:'buzz', hairColor:0x1c1917, shirt:0x0d9488, bottom:0x292524, tag:true}});
+addNPC({key:'aenal', def:'guru', name:'Bu Aenal', role:'Guru Kelas 5 SDN 1 Gerduren', color:'#db2777', x:19.5, z:-15.5, ry:-0.1, wander:1.6,
+  greet:'Halo, Nak! Ibu Aenal, Guru Kelas 5. Kakak-kakak Kelas 5 rajin belajar — tiru semangat mereka dan jangan malas membaca, ya.',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0xdb2777, shirt:0xf9a8d4, bottom:0x831843, tag:true}});
+addNPC({key:'cici', def:'guru', name:'Bu Cici', role:'Guru Kelas 6 SDN 1 Gerduren', color:'#0f766e', x:32.5, z:-15.5, ry:0.15, wander:1.6,
+  greet:'Halo! Ibu Cici, Guru Kelas 6. Anak Kelas 6 adalah kakak tertua di sekolah — jadilah contoh yang baik untuk adik-adik kelasmu.',
+  fig:{skin:0xeec39a, hair:'hijab', hijabCol:0x0f766e, shirt:0x5eead4, bottom:0x134e4a, tag:true}});
+addNPC({key:'azizah', def:'guru', name:'Bu Azizah', role:'Guru PABP SDN 1 Gerduren', color:'#7c3aed', x:20, z:25.5, ry:2.8, wander:2,
+  greet:'Assalamu’alaikum! Ibu Azizah, Guru Pendidikan Agama Islam dan Budi Pekerti. Jangan lupa shalat, berdoa, dan berbuat baik setiap hari, ya.',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x7c3aed, shirt:0xc4b5fd, bottom:0x4c1d95, tag:true}});
+addNPC({key:'linggar', def:'guru', name:'Pak Linggar', role:'Guru PJOK SDN 1 Gerduren', color:'#ea580c', x:-72, z:-8, ry:0.9, wander:4, speed:0.95,
+  greet:'Halo, anak sehat! Saya Pak Linggar, Guru PJOK. Olahraga itu penting — ayo bergerak, main bola di Lapangan, dan jaga badan tetap bugar!',
+  fig:{skin:0x8a5a2e, hair:'cap', capCol:0xea580c, shirt:0xfb923c, bottom:0x1c1917, tag:true}});
+addNPC({key:'nartam', def:'penjaga', name:'Pak Nartam', role:'Penjaga Sekolah SDN 1 Gerduren', color:'#78716c', x:5, z:16.5, ry:2.6, wander:2.5,
+  greet:'Halo, Nak! Saya Pak Nartam, Penjaga Sekolah. Gerbang dan lingkungan sekolah saya jaga setiap hari — kalau ada apa-apa, lapor ke Bapak, ya.',
+  fig:{skin:0xc98a4b, hair:'cap', capCol:0x44403c, shirt:0xa8a29e, bottom:0x44403c, belt:true}});
 addNPC({key:'polisi', def:'polisi', name:'Pak Polisi Budi', role:'Polisi — Kantor Polsek Gerduren', color:'#1e40af', x:61.5, z:23.5, ry:2.7,
   greet:'Selamat pagi! Saya petugas Polsek Gerduren. Di jalan raya semua harus tertib: lampu MERAH berarti BERHENTI, lampu HIJAU berarti jalan. Kendaraan warga di desa kita patuh aturan itu!',
   fig:{skin:0xd9a066, hair:'policap', shirt:0x77685a, bottom:0x3f3a33, badge:true, belt:true}});
@@ -6885,10 +6921,10 @@ function renderNPCQuestRows(container){
   head.textContent = 'Quest dari Warga & Tokoh Desa (NPC)';
   container.appendChild(head);
   ensureNPCDay();
-  var order = ['kepsek','guru','polisi','lurah','warga','siswa'];
-  var names = {kepsek:'Pak Yudhy — Kepala Sekolah', guru:'Bu Guru Sari', polisi:'Pak Polisi Budi', lurah:'Pak Lurah — Balai Desa', warga:'Warga Desa (Bu Tini / Pak Darto / Bu Wati)', siswa:'Siswa SDN 1 Gerduren (Raka / Sinta / Bimo)'};
-  var cols = {kepsek:'#334155', guru:'#0284c7', polisi:'#1e40af', lurah:'#92400e', warga:'#16a34a', siswa:'#dc2626'};
-  var icons = {kepsek:'tanam', guru:'tanam', polisi:'pancing', lurah:'pakan', warga:'pakan', siswa:'bola'};
+  var order = ['kepsek','guru','penjaga','polisi','lurah','warga','siswa'];
+  var names = {kepsek:'Pak Yudhy — Kepala Sekolah', guru:'Guru SDN 1 Gerduren (Pak Anggi / Pak Ahmad / Pak Igun / Bu Aenal / Bu Cici / Bu Azizah / Pak Linggar)', penjaga:'Pak Nartam — Penjaga Sekolah', polisi:'Pak Polisi Budi', lurah:'Pak Lurah — Balai Desa', warga:'Warga Desa (Bu Tini / Pak Darto / Bu Wati)', siswa:'Siswa SDN 1 Gerduren (Raka / Sinta / Bimo)'};
+  var cols = {kepsek:'#334155', guru:'#0284c7', penjaga:'#78716c', polisi:'#1e40af', lurah:'#92400e', warga:'#16a34a', siswa:'#dc2626'};
+  var icons = {kepsek:'tanam', guru:'tanam', penjaga:'sampah', polisi:'pancing', lurah:'pakan', warga:'pakan', siswa:'bola'};
   order.forEach(function(id){
     var def = NPC_QUEST_DEFS[id], st = npcState(id);
     var row = document.createElement('div');
