@@ -12812,13 +12812,46 @@ function resolveCollisions(p){
     }
   }
   if(p.z > 120){
-    // Di dalam ruangan interior (Rumah Kamu z 145..155 dan ruang-ruang interior
-    // baru di zona selatan peta): penjepit dunia normal (z maks 104) TIDAK
-    // berlaku di sini — dipakai batas ruangan aktif (interiorClamp), dengan
-    // bawaan batas Rumah Kamu bila belum ada ruangan aktif yang tercatat.
-    var ib = interiorClamp || {minX:-5.6, maxX:5.6, minZ:145.6, maxZ:154.2};
-    p.x = Math.max(ib.minX, Math.min(ib.maxX, p.x));
-    p.z = Math.max(ib.minZ, Math.min(ib.maxZ, p.z));
+    // Di dalam ruangan interior (Rumah Kamu z 145..155 dan ruang-ruang
+    // interior lain di zona selatan peta): penjepit dunia normal TIDAK
+    // berlaku — dipakai batas ruangan aktif (interiorClamp).
+    if(interiorClamp){
+      p.x = Math.max(interiorClamp.minX, Math.min(interiorClamp.maxX, p.x));
+      p.z = Math.max(interiorClamp.minZ, Math.min(interiorClamp.maxZ, p.z));
+      return;
+    }
+    // Tanpa ruangan aktif tetapi titik ini di dalam tapak ruangan (mis.
+    // baru bangun di Ruang UKS): jepit ke batas ruangan itu, BUKAN ke
+    // bawaan Rumah Kamu.
+    if(typeof insideInterior === 'function' && insideInterior(p.x, p.z)){
+      var ib = {minX:-5.6, maxX:5.6, minZ:145.6, maxZ:154.2};
+      if(typeof ROOMS !== 'undefined'){
+        for(var rid in ROOMS){ var rc = ROOMS[rid] && ROOMS[rid].clamp;
+          if(rc && p.x >= rc.minX - 0.3 && p.x <= rc.maxX + 0.3 && p.z >= rc.minZ - 0.3 && p.z <= rc.maxZ + 0.3){ ib = rc; break; } }
+      }
+      p.x = Math.max(ib.minX, Math.min(ib.maxX, p.x));
+      p.z = Math.max(ib.minZ, Math.min(ib.maxZ, p.z));
+      return;
+    }
+    /* PERBAIKAN BUG PANTAI TAK TERJANGKAU: dulu SEMUA titik z > 120 dianggap
+       "di dalam ruangan" dan dijepit ke batas Rumah Kamu, sedangkan pita
+       z 104..120 dijepit paksa ke z maks 104 — akibatnya pemain yang
+       berjalan kaki TIDAK PERNAH bisa mencapai Pantai Pasir Putih, Dermaga,
+       laut, maupun Pulau Tropis (terbukti empiris: pemain tertahan di
+       z = 104). Kini kawasan selatan TERBUKA (x < 8: pantai, laut, pulau)
+       memakai batas perluasan dunianya sendiri. */
+    if(p.x < 8){
+      p.x = Math.max(-124, Math.min(6, p.x));
+      p.z = Math.min(242, p.z);
+      return;
+    }
+    p.x = Math.max(-104, Math.min(104, p.x));
+    p.z = 104;
+    return;
+  }
+  if(p.z > 104 && p.x < 8){
+    // pita bibir utara kawasan selatan (jalan masuk Pantai Pasir Putih)
+    p.x = Math.max(-124, Math.min(6, p.x));
     return;
   }
   p.x = Math.max(-104, Math.min(104, p.x));
@@ -15111,29 +15144,32 @@ function richText(t){
   s = s.replace(/\u0001/g, '<span class="rt-loc">').replace(/\u0002/g, '</span>');
   return s;
 }
-var infoRichBusy = false, infoRichPlainFor = null;
+/* PERBAIKAN FREEZE kartu info (Sawah, Dealer, Ruang Kelas 3–6, dan semua teks
+   sejenis) — observer dibuat mustahil berputar, dengan dua aturan keras:
+   1) DOM hanya ditulis bila hasil richText() BENAR-BENAR mengandung span
+      warna (class "rt-…"). Bila tidak ada span, DOM tidak disentuh sama
+      sekali — menulis innerHTML yang "kelihatan sama" pun tetap memicu
+      observer lagi. Perbaikan sebelumnya membandingkan rich === t, tetapi
+      rich adalah string HTML yang sudah di-escape (" menjadi &quot;,
+      & menjadi &amp;), jadi teks tanpa span yang mengandung tanda kutip /
+      & / < / > TIDAK PERNAH sama dengan teks asalnya dan observer menulis
+      ulang tanpa henti (loop mikro-task = halaman beku total; terbukti
+      pada teks info Ruang Kelas 3–6 yang memuat "Masuk ke Dalam").
+   2) Setiap teks yang sudah diperiksa dicatat dalam Set, jadi teks yang
+      sama tidak diproses dua kali — menggantikan penanda satu-slot lama
+      yang bisa tertimpa teks lain di tengah jalan. */
+var infoRichDone = new Set();
 if(window.MutationObserver && typeof infoText !== 'undefined' && infoText){
   new MutationObserver(function(){
-    if(infoRichBusy) return;
     var t = infoText.textContent;
     if(!t) return;
     if(infoText.querySelector('.rt-loc,.rt-gold,.rt-food,.rt-vit')) return;   // sudah berwarna: selesai, jangan proses lagi
-    if(t === infoRichPlainFor) return;   // teks ini sudah diperiksa dan memang tidak menghasilkan pewarnaan — lewati selamanya
-    if(!/Kredit|\bHP\b|\bEP\b|MBG|Sawah|Kelas|Polsek|Kantin|Koperasi/.test(t)){ infoRichPlainFor = t; return; }
+    if(infoRichDone.has(t)) return;                                            // teks ini sudah pernah diperiksa — lewati selamanya
+    infoRichDone.add(t);
+    if(!/Kredit|\bHP\b|\bEP\b|MBG|Sawah|Kelas|Polsek|Kantin|Koperasi/.test(t)) return;
     var rich = richText(t);
-    /* PERBAIKAN FREEZE (klik Sawah / Dealer / Papan Tarif Wahana): dulu innerHTML
-       TETAP ditulis walau richText() mengembalikan teks yang identik (tidak ada
-       span warna, mis. teks "Sawah warga Gerduren…" — kata "Sawah" lolos uji
-       pemicu, tetapi daftar lokasi richText hanya mengenal "Sawah Glempang").
-       Penulisan itu memicu MutationObserver lagi (bendera sibuk sudah terlanjur
-       direset karena callback observer berjalan asinkron), kondisinya tetap
-       terpenuhi, lalu menulis lagi — loop mikro-task tanpa henti yang membekukan
-       seluruh halaman. Kini: bila hasil pewarnaan identik dengan teks asal,
-       teks ditandai "polos" dan DOM TIDAK disentuh sama sekali. */
-    if(rich === t){ infoRichPlainFor = t; return; }
-    infoRichBusy = true;
+    if(!/class="rt-/.test(rich)) return;   // tanpa span warna: JANGAN sentuh DOM (aturan 1 — inilah yang memutus loop freeze)
     infoText.innerHTML = rich;
-    infoRichBusy = false;
   }).observe(infoText, {childList:true, characterData:true, subtree:true});
 }
 
@@ -16072,6 +16108,7 @@ function refreshHouseOwners(){ HOUSES.forEach(houseSignRedraw); }
 function dealerBoughtHook(it){
   if(!it || !it.houseNo) return;
   eco.houses[it.houseNo] = true;
+  for(var rk in houseReasserted){ if(rk.indexOf(it.houseNo + '|') === 0) delete houseReasserted[rk]; } // kepemilikan berubah: klaim lama boleh ditegaskan lagi
   if(it.houseNo === 5) eco.assets.rumah = true;
   refreshHouseOwners();
   mpSendHouseState(); // siarkan kunci eksklusif rumah ini ke seluruh ruangan
@@ -16084,12 +16121,25 @@ function mpSendHouseState(){
     if(mpSendChat(txt)) mpTrackOwnChat(txt);
   }
 }
+/* Klaim kepemilikan yang sudah pernah dijawab tidak dijawab lagi: tanpa
+   penanda ini, dua pemain yang sama-sama merasa memiliki rumah yang sama
+   (mis. sama-sama membelinya saat luring) akan saling membalas siaran
+   HOUSE1 tanpa henti begitu bertemu di satu ruangan — banjir pesan chat
+   yang membuat permainan tersendat/beku, terutama terasa di sekitar
+   Dealer & Perumahan. Satu klaim (nomor rumah + nama pengklaim) cukup
+   ditegaskan SEKALI per sesi; kepemilikan baru lewat Dealer menghapus
+   penandanya (lihat dealerBoughtHook) agar klaim berikutnya tetap dijawab. */
+var houseReasserted = {};
 function houseHandleRemote(msg){
   var parts = String(msg.text || '').split('|');
   var no = parseInt(parts[1], 10);
   var name = (parts[2] || '').replace(/[<>&"'`\u0000-\u001f]/g, '').slice(0, 20);
   if(!(no >= 1 && no <= 8) || !name) return;
-  if(houseMine(no)){ mpSendHouseState(); return; } // rumahku — tegaskan kembali kepemilikanku ke ruangan
+  if(houseMine(no)){
+    var rk = no + '|' + name;
+    if(!houseReasserted[rk]){ houseReasserted[rk] = 1; mpSendHouseState(); } // rumahku — tegaskan kembali kepemilikanku ke ruangan (sekali per klaim)
+    return;
+  }
   if(eco.houseOwners[no] === name) return;
   eco.houseOwners[no] = name;
   saveEco(); refreshHouseOwners();
@@ -17749,6 +17799,119 @@ var seaMesh = null;
   zones.push({name:'Pantai Pasir Putih', minX:-112, maxX:-12, minZ:104, maxZ:133});
   zones.push({name:'Laut & Pulau Tropis', minX:-126, maxX:8, minZ:133, maxZ:244});
 })();
+/* ---------- Percantik Laut, Pulau Tropis & Pantai Pasir Putih ----------
+   Visual murni: zona lokasi, deteksi air (inSeaWater), collider langkah
+   pulau & dermaga, dan logika berlayar/berenang TIDAK berubah. Semua
+   ornamen diberi jarak aman dari obyek lama (dermaga, lapangan voli,
+   pohon kelapa, batu karang, papan nama) agar tidak berhimpitan. */
+(function buildSeaBeauty(){
+  /* Kilau matahari di permukaan laut: bidang kecil putih transparan yang
+     berkelip bergantian (fase acak) — pantulan cahaya yang hidup. */
+  var sparkles = [];
+  var sparkleGeo = new THREE.PlaneGeometry(1, 1);
+  for(var si = 0; si < 26; si++){
+    var sx = -122 + Math.random() * 118, sz = 142 + Math.random() * 92;
+    if(Math.hypot(sx + 92, sz - 203) < 22){ si--; continue; }        // jangan di atas Pulau Tropis
+    if(sx > -50 && sx < -42 && sz < 158){ si--; continue; }          // jangan menimpa kawasan dermaga
+    var sm = new THREE.Mesh(sparkleGeo, new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0, depthWrite:false}));
+    sm.rotation.x = -Math.PI / 2; sm.rotation.z = Math.random() * Math.PI;
+    var sc = 0.9 + Math.random() * 1.5; sm.scale.set(sc * 1.8, sc, 1);
+    sm.position.set(sx, -0.14, sz); scene.add(sm);
+    sparkles.push({m:sm, ph:Math.random() * 6.28});
+  }
+  /* Buih ombak di bibir pantai: tiga garis putih yang maju-mundur bergantian */
+  var foams = [];
+  [[135.4, 0], [137.0, 2.1], [138.6, 4.2]].forEach(function(f){
+    var fm = new THREE.Mesh(new THREE.PlaneGeometry(102, 0.55), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.3, depthWrite:false}));
+    fm.rotation.x = -Math.PI / 2; fm.position.set(-58, 0.03, f[0]); scene.add(fm);
+    foams.push({m:fm, z0:f[0], ph:f[1]});
+  });
+  /* Cincin buih mengelilingi Pulau Tropis */
+  var islFoam = new THREE.Mesh(new THREE.RingGeometry(18.1, 19.7, 40), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.3, depthWrite:false, side:THREE.DoubleSide}));
+  islFoam.rotation.x = -Math.PI / 2; islFoam.position.set(-92, -0.04, 203); scene.add(islFoam);
+  /* Garis ombak kecil di tengah laut yang hanyut perlahan ke timur */
+  var crests = [];
+  for(var ci = 0; ci < 6; ci++){
+    var cx = -118 + Math.random() * 105, cz = 148 + Math.random() * 82;
+    if(Math.hypot(cx + 92, cz - 203) < 24){ ci--; continue; }
+    var cm = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 0.4), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.16, depthWrite:false}));
+    cm.rotation.x = -Math.PI / 2; cm.position.set(cx, -0.12, cz); scene.add(cm);
+    crests.push({m:cm, sp:0.25 + Math.random() * 0.4});
+  }
+  ambients.push(function(dt, t){
+    for(var i = 0; i < sparkles.length; i++){
+      var s = sparkles[i], v = Math.sin(t * 1.4 + s.ph);
+      s.m.material.opacity = v > 0.55 ? (v - 0.55) * 0.75 : 0;
+    }
+    for(var j = 0; j < foams.length; j++){
+      var f2 = foams[j], w = Math.sin(t * 0.55 + f2.ph);
+      f2.m.position.z = f2.z0 + w * 0.55;
+      f2.m.material.opacity = 0.16 + 0.2 * (0.5 + 0.5 * w);
+    }
+    islFoam.material.opacity = 0.22 + 0.14 * Math.sin(t * 0.7);
+    var isc = 1 + Math.sin(t * 0.7) * 0.012; islFoam.scale.set(isc, isc, 1);
+    for(var k = 0; k < crests.length; k++){
+      var c2 = crests[k];
+      c2.m.position.x += c2.sp * dt;
+      if(c2.m.position.x > 2) c2.m.position.x = -122;
+    }
+  });
+  /* Landas pasir dangkal mengelilingi pulau: dari atas terlihat sebagai
+     lingkaran air jernih terang — lereng pulau yang alami di bawah air. */
+  cyl(20.8, 22.6, 0.3, 0xe8d9a0, -92, -0.52, 203, scene, 26);
+  /* Pohon kelapa pulau dibangun manual di sini: palm() biasa tertolak
+     validasi natureSpotOK karena collider undakan pulau menutupi seluruh
+     daratan pulau, jadi selama ini pulau tampil gundul. Versi ini duduk
+     tepat di atas tanah pulau (y dasar 0,3) di titik-titik yang berjarak
+     aman dari papan nama, spot memancing, dan sesama pohon. */
+  function islandPalm(x, z, s){
+    for(var seg = 0; seg < 4; seg++)
+      cyl(0.13 * s, 0.17 * s, 1.3 * s, 0x9a7b4f, x + seg * seg * 0.09 * s, 0.3 + (0.65 + seg * 1.22) * s, z, scene, 8);
+    var topX = x + 1.35 * s, topY = 0.3 + 5.3 * s;
+    for(var f = 0; f < 6; f++){
+      var frond = box(2.6 * s, 0.07 * s, 0.42 * s, 0x2f9e44, topX, topY, z, scene, false);
+      frond.rotation.y = f * Math.PI / 3; frond.rotation.z = 0.35;
+      frond.position.x = topX + Math.cos(f * Math.PI / 3) * 0.9 * s;
+      frond.position.z = z - Math.sin(f * Math.PI / 3) * 0.9 * s;
+    }
+    var nut = new THREE.Mesh(new THREE.SphereGeometry(0.3 * s, 8, 7), mat(0x65a30d));
+    nut.position.set(topX, topY - 0.35 * s, z); nut.castShadow = true; scene.add(nut);
+  }
+  [[-99, 196, 0.95], [-85, 197, 0.95], [-98, 210, 0.95], [-86, 211, 0.95], [-103, 203, 0.9], [-81, 203, 0.9]].forEach(function(p){ islandPalm(p[0], p[1], p[2]); });
+  /* semak hijau & bunga warna-warni di atas pulau */
+  [[-95.5, 200, 0.85, 0x2f9e44], [-88.5, 206.5, 0.7, 0x37b24d], [-92, 208.5, 0.6, 0x2f9e44]].forEach(function(b){
+    var bush = sphG(b[2], b[3], b[0], 0.55, b[1], scene); bush.scale.y = 0.72;
+  });
+  [[-90, 199.5, 0xf472b6], [-94.5, 205.5, 0xfacc15], [-89, 202, 0xfb923c]].forEach(function(fl){
+    var fb = sphG(0.16, fl[2], fl[0], 0.5, fl[1], scene); fb.scale.y = 0.7;
+  });
+  /* batu karang kecil di air dangkal sekeliling pulau */
+  [[-72.5, 196.5, 0.8], [-110.5, 211, 1.0], [-94, 222.5, 0.7]].forEach(function(r){
+    var rk = sphG(r[2], 0x8a8d91, r[0], -0.12, r[1], scene); rk.scale.y = 0.62;
+  });
+  /* ---------- Pantai: payung pantai, handuk, bola pantai, bintang laut & kerang ---------- */
+  function beachUmbrella(x, z, col){
+    cyl(0.05, 0.05, 2.3, 0xd6d3cd, x, 1.15, z, scene, 8);
+    var can = new THREE.Mesh(new THREE.ConeGeometry(1.7, 0.6, 10), mat(col));
+    can.position.set(x, 2.42, z); can.castShadow = true; scene.add(can);
+    addCollider(x, z, 0.22, 0.22);
+  }
+  beachUmbrella(-90, 112, 0xef4444);   // merah — jauh dari lapangan voli & kelapa lama
+  beachUmbrella(-56, 124, 0x0284c7);   // biru — di timur lapangan voli, di selatan ujung jalan setapak
+  beachUmbrella(-18, 126, 0xf59e0b);   // kuning — sisi timur pantai
+  flat(2.3, 1.15, 0x38bdf8, -87.6, 112.6, scene, 0.035);   // handuk di samping tiap payung
+  flat(2.3, 1.15, 0xf472b6, -53.6, 124.6, scene, 0.035);
+  flat(2.3, 1.15, 0x4ade80, -15.6, 126.6, scene, 0.035);
+  sphG(0.32, 0xfacc15, -91.8, 0.32, 114.3, scene);         // bola pantai
+  sphG(0.32, 0xef4444, -16.2, 0.32, 124.6, scene);
+  [[-70, 130.5], [-36, 129], [-95, 133], [-14, 131.5], [-64, 133.5]].forEach(function(p){
+    var st = sphG(0.17, 0xfb923c, p[0], 0.05, p[1], scene); st.scale.y = 0.35;   // bintang laut di bibir pantai
+  });
+  [[-48, 128.5], [-78, 127], [-22, 133], [-104, 120]].forEach(function(p){
+    var sh = sphG(0.11, 0xfff7e6, p[0], 0.04, p[1], scene); sh.scale.y = 0.5;   // kerang putih
+  });
+  palm(-108, 124, 1.0); palm(-12, 114, 0.95);   // dua kelapa tambahan di ujung barat & timur pantai
+})();
 function inSeaWater(x, z){
   if(x < -122 || x > 4 || z < 137 || z > 240) return false;
   if(Math.hypot(x + 92, z - 203) < 17.6) return false;          // daratan Pulau Tropis
@@ -17781,6 +17944,40 @@ function refreshSpeedboat(){
   if(eco.owned['speedboat'] && !boatDrive){ speedSpot.x = speedGroup.position.x; speedSpot.z = speedGroup.position.z; }
   if(!eco.owned['speedboat']){ speedSpot.x = -999; speedSpot.z = -999; }
 }
+/* ---------- Percantik Perahu Nelayan & Speedboat (visual murni) ----------
+   Hanya menambah detail pada grup yang sudah ada; titik tumpu, ukuran
+   lambung, titik interaksi, dan logika berlayar tidak berubah. */
+(function buildBoatBeauty(){
+  /* Perahu Nelayan: lis tepi kayu muda, garis cat biru di lambung, layar
+     segitiga krem di tiang, bendera merah kecil, dayung, dan gulungan tali. */
+  box(0.09, 0.09, 5.3, 0xd9b380, -0.92, 0.62, 0, perahuGroup, false);
+  box(0.09, 0.09, 5.3, 0xd9b380, 0.92, 0.62, 0, perahuGroup, false);
+  box(0.03, 0.16, 5.0, 0x2563eb, -0.97, 0.34, 0, perahuGroup, false);
+  box(0.03, 0.16, 5.0, 0x2563eb, 0.97, 0.34, 0, perahuGroup, false);
+  var sailShape = new THREE.Shape();
+  sailShape.moveTo(0, 0); sailShape.lineTo(0, 2.1); sailShape.lineTo(1.45, 0.18); sailShape.lineTo(0, 0);
+  var sail = new THREE.Mesh(new THREE.ShapeGeometry(sailShape), new THREE.MeshLambertMaterial({color:0xfff7e6, side:THREE.DoubleSide}));
+  sail.position.set(0, 0.75, 0.34); sail.rotation.y = Math.PI / 2; sail.castShadow = true; perahuGroup.add(sail);
+  box(0.55, 0.3, 0.03, 0xdc2626, 0.28, 2.88, 0.4, perahuGroup, false);          // bendera di puncak tiang
+  var oar = cyl(0.03, 0.03, 1.7, 0x8a5a2e, 0.35, 0.55, -0.6, perahuGroup, 6); // dayung tergeletak di lantai perahu
+  oar.rotation.z = 1.25; oar.rotation.y = 0.25;
+  var coil = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.07, 6, 14), mat(0xb08968));
+  coil.rotation.x = Math.PI / 2; coil.position.set(-0.5, 0.6, 1.9); perahuGroup.add(coil);
+  /* Speedboat: dua jok + bangku belakang biru tua, kaca depan miring,
+     rel samping perak, bendera buritan, dan buih buritan tipis. */
+  box(0.55, 0.5, 0.5, 0x1e3a8a, -0.45, 0.62, -0.6, speedGroup, false);
+  box(0.55, 0.5, 0.5, 0x1e3a8a, 0.45, 0.62, -0.6, speedGroup, false);
+  box(1.5, 0.45, 0.45, 0x1e3a8a, 0, 0.6, -1.75, speedGroup, false);
+  var shield = box(1.5, 0.52, 0.06, 0xbae6fd, 0, 1.02, 1.42, speedGroup, false); shield.rotation.x = -0.38;
+  [-1.0, 1.0].forEach(function(rx){
+    var rail = cyl(0.03, 0.03, 3.4, 0xd6d3cd, rx, 0.74, -0.3, speedGroup, 6);
+    rail.rotation.x = Math.PI / 2;
+  });
+  cyl(0.025, 0.025, 0.8, 0x6d4c2f, 0.85, 0.95, -2.75, speedGroup, 6);
+  box(0.45, 0.26, 0.03, 0xdc2626, 1.08, 1.28, -2.75, speedGroup, false);
+  var wake = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.2), new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.3, depthWrite:false}));
+  wake.rotation.x = -Math.PI / 2; wake.position.set(0, 0.05, -3.6); speedGroup.add(wake);
+})();
 var boatDrive = null;
 function mountBoat(kind){
   if(tourActive || vehDrive || boatDrive) return;
