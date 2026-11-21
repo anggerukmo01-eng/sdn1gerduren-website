@@ -461,6 +461,7 @@ section{animation:fadeUp .55s ease both}
   .nav-drop{flex:1 1 100%}
   .nav-drop-toggle{display:flex;width:100%}
   .nav-sub{position:static;display:block;box-shadow:none;border:0;background:transparent;padding:2px 0 2px 22px;min-width:0;max-width:none}
+  .nav-sub.collapsed{display:none}
   .nav-sub a{padding:10px 14px;font-size:15px}
   .nav-cta{margin:8px 0 0;text-align:center;justify-content:center}
 }

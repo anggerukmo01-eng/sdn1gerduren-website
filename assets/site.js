@@ -509,8 +509,18 @@
     sub.addEventListener('mouseenter', function(){ clearTimeout(timer); });
     sub.addEventListener('mouseleave', later);
     toggle.addEventListener('click', function(e){
-      if(!desktop()) return;
+      if(!desktop()){
+        // Menu HP (drawer): submenu sudah tampil statis — jadikan akordeon
+        // supaya ketukan pada nama grup memberi umpan balik yang terlihat.
+        var collapsed = sub.classList.toggle('collapsed');
+        toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        return;
+      }
       e.preventDefault();
+      // Jangan langsung menutup bila hover (mouse) atau hover semu (ketukan
+      // sentuh) baru saja membuka submenu — kalau tidak, satu ketukan
+      // membuka lalu langsung menutupnya lagi dan menu tampak tidak merespons.
+      if(sub.classList.contains('open') && drop.matches(':hover')) return;
       if(sub.classList.contains('open')) close(); else open();
     });
     toggle.addEventListener('focus', open);
