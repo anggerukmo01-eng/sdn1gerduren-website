@@ -83,7 +83,7 @@ section h2::after{content:"";display:block;width:56px;height:5px;border-radius:9
 [data-theme="dark"] .status-libur{background:#312E81;color:#C7D2FE}
 
 /* ---------- 2. Navbar glassmorphism, 2 baris ---------- */
-header{position:sticky;top:0;z-index:50;background:var(--header-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:95;background:var(--header-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .topbar{display:flex;align-items:center;gap:14px;padding:12px 0}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);flex:1 1 auto;min-width:0}
 .brand-logos{display:flex;gap:8px;align-items:center;flex:none}
@@ -454,7 +454,7 @@ section{animation:fadeUp .55s ease both}
   .menu-btn{display:inline-flex}
   .topbar{flex-wrap:wrap}
   .drawer-close{display:inline-flex;align-self:flex-end;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg-soft);border-radius:999px;padding:9px 15px;font-weight:700;font-size:14px;cursor:pointer;color:var(--ink);margin-bottom:8px}
-  nav#nav-utama{display:flex;position:fixed;top:0;right:0;bottom:0;z-index:90;width:min(360px,88vw);height:100dvh;background:var(--card);flex-direction:column;align-items:stretch;gap:2px;padding:18px 16px 28px;overflow-y:auto;box-shadow:-18px 0 44px rgba(0,0,0,.22);transform:translateX(105%);visibility:hidden;transition:transform .32s cubic-bezier(.32,.72,.35,1),visibility 0s linear .32s;border-left:1px solid var(--line);border-top:0}
+  nav#nav-utama{display:flex;position:fixed;top:0;right:0;bottom:0;z-index:90;width:min(360px,88vw);height:100dvh;background:var(--card);flex-direction:column;align-items:stretch;gap:2px;padding:18px 16px 64px;overflow-y:auto;box-shadow:-18px 0 44px rgba(0,0,0,.22);transform:translateX(105%);visibility:hidden;transition:transform .32s cubic-bezier(.32,.72,.35,1),visibility 0s linear .32s;border-left:1px solid var(--line);border-top:0}
   nav#nav-utama.open{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.32,.72,.35,1),visibility 0s linear 0s}
   nav#nav-utama .nav-link,nav#nav-utama .nav-drop-toggle{padding:13px 14px;font-size:15.5px;width:100%}
   nav#nav-utama .nav-link.active{border-radius:14px}
