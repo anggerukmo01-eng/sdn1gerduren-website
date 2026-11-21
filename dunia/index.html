@@ -4043,7 +4043,15 @@ var heliGroup = new THREE.Group(), heliRotor = null;
 
 /* --- Bukit & Gunung (bentang alam tepi desa) --- */
 (function(){
-  [[-104, 10, 15, 5.5], [58, 105, 17, 6.5], [-30, 106, 13, 4.5]].forEach(function(h){
+  /* PERBAIKAN VIEW PANTAI & VOLI: bukit ketiga dulu di (-30, 106) — kubah
+     hijau r=13 m, tinggi 4,5 m yang kakinya (x -43..-17, z 93..119) duduk
+     TEPAT di atas hamparan pasir Pantai Pasir Putih (x -110..-6, z 106..132),
+     menelan kelapa pantai (-38, 116) dan menutup pandangan dari pantai &
+     Lapangan Voli Pantai (VOL -70, 120) ke arah timur/laut. Kini dipindah
+     ke barisan latar utara (-38, -104) — sejajar dua gunung kerucut
+     (z -96 & -100), di luar batas jalan pemain (minZ -90): murni pemandangan
+     tepi desa, tidak lagi menghalangi view di pantai maupun lapangan voli. */
+  [[-104, 10, 15, 5.5], [58, 105, 17, 6.5], [-38, -104, 13, 4.5]].forEach(function(h){
     var hill = new THREE.Mesh(new THREE.SphereGeometry(h[2], 18, 12), mat(0x5db34c));
     hill.scale.y = h[3] / h[2]; hill.position.set(h[0], 0, h[1]); hill.receiveShadow = true; scene.add(hill);
   });
