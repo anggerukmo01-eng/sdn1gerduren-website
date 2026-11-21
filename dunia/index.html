@@ -881,9 +881,12 @@
   .passport-ribbon{display:inline-block;background:linear-gradient(90deg,#b45309,#d97706);color:#fff7d6;font-family:'Fredoka',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.08em;padding:5px 14px;border-radius:999px;margin-bottom:8px;box-shadow:0 4px 10px rgba(180,83,9,.35);}
   .drag-hint{font-size:11.5px;font-weight:800;color:#0369a1;margin:2px 0 8px;}
   /* Kartu pilihan gaya rambut dengan ikon SVG */
-  #hairStyleRow .opt-btn{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 4px 6px;}
-  #hairStyleRow .opt-btn svg{width:30px;height:30px;}
-  #outfitRow .opt-btn{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 4px 6px;}
+  #hairStyleRow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  #hairStyleRow .opt-btn{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;padding:9px 4px 8px;white-space:normal;text-align:center;line-height:1.15;font-size:12.5px;}
+  #hairStyleRow .opt-btn svg{width:38px;height:38px;flex:none;}
+  #outfitRow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  #outfitRow .opt-btn{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;padding:9px 4px 8px;white-space:normal;text-align:center;line-height:1.15;font-size:12.5px;}
+  #outfitRow .opt-btn svg{width:38px;height:38px;flex:none;}
   /* Dialog NPC gaya RPG: krem hangat + pita nama berwarna per peran */
   #npcOverlay .sheet{background:#FFFDF7;}
   #npcName{display:inline-block;padding:3px 12px;border-radius:999px;color:#fff;background:#64748b;font-family:'Fredoka',sans-serif;}
@@ -4673,6 +4676,37 @@ function buildPlayer(c){
     back.scale.set(1.02, 1.30, 0.60);
     [-1, 1].forEach(function(s){ kaps(0.065, 0.16, HAIR, HR * 0.98 * s, HY - HR * 0.30, HR * 0.10, bodyG, 0.52); });
   }
+  else if(c.hair === 'pendek'){
+    // Rambut Pendek Rapi: potongan pendek bersih menutup rapi bagian atas kepala
+    hairCap(0.50); fringeBand(0);
+  }
+  else if(c.hair === 'belah'){
+    // Belah Pinggir: poni menyapu miring ke satu sisi (belahan di sisi kiri)
+    hairCap(0.54); fringeBand(-0.38);
+    var sweep = kaps(HR * 0.11, HR * 0.55, HAIR, HR * 0.18, HY + HR * 0.52, HR * 0.72, bodyG, 0.52);
+    sweep.rotation.z = Math.PI/2 - 0.35; sweep.rotation.y = 0.25;
+  }
+  else if(c.hair === 'kuncir'){
+    // Kuncir Kuda: rambut diikat satu di belakang kepala, ekor menjuntai ke punggung
+    hairCap(0.54);
+    sph(0.045, 0xe23b3b, 0, HY + HR * 0.52, -HR * 0.88, bodyG, 0.5);
+    var tail = kaps(HR * 0.17, HR * 0.62, HAIR, 0, HY - HR * 0.28, -HR * 1.02, bodyG, 0.52);
+    tail.rotation.x = 0.38;
+    var tailTip = sph(HR * 0.20, HAIR, 0, HY - HR * 0.78, -HR * 1.22, bodyG, 0.52);
+    tailTip.scale.set(0.9, 1.25, 0.9);
+  }
+  else if(c.hair === 'kepang'){
+    // Kepang Dua: dua kepang menjuntai di kiri-kanan depan bahu, ruas berselang-seling
+    hairCap(0.54); fringeBand(0);
+    [-1, 1].forEach(function(s){
+      sph(0.042, 0xe23b3b, HR * 1.00 * s, HY + HR * 0.30, HR * 0.18, bodyG, 0.5);
+      for(var bi = 0; bi < 4; bi++){
+        var seg = sph(HR * 0.21, HAIR, HR * (1.02 - bi * 0.03) * s, HY - HR * (0.02 + bi * 0.34), HR * (0.30 + bi * 0.015), bodyG, 0.52);
+        seg.scale.set(0.85, 1.05, 0.85); seg.rotation.z = (bi % 2 ? -0.28 : 0.28) * s;
+      }
+      sph(0.036, 0xf59e0b, HR * 0.93 * s, HY - HR * 1.42, HR * 0.36, bodyG, 0.5);
+    });
+  }
   // topi pramuka murid: bagian bawaan seragam pramuka (di atas hijab untuk varian hijabS)
   if(c.outfit === 'pramuka' && !admin){
     var hatY = HY + HR * (hijab ? 1.06 : 0.94);
@@ -5852,18 +5886,20 @@ var HAIR_COLOR_OPTIONS = [
 ];
 var HAIR_STYLE_OPTIONS = {
   L: [
-    {id:'buzz',   name:'Cepak'},
-    {id:'spiky',  name:'Jambul'},
-    {id:'curly',  name:'Keriting'},
-    {id:'bowl',   name:'Mangkuk'},
-    {id:'fringe', name:'Poni Samping'}
+    {id:'pendek', name:'Rambut Pendek Rapi'},
+    {id:'belah',  name:'Belah Pinggir'},
+    {id:'kuncir', name:'Kuncir Kuda'},
+    {id:'kepang', name:'Kepang Dua'},
+    {id:'hijabW', name:'Berjilbab Putih'},
+    {id:'hijabS', name:'Berjilbab Cokelat'}
   ],
   P: [
-    {id:'pigtails', name:'Kuncir Dua'},
-    {id:'long',     name:'Sebahu'},
-    {id:'fringe',   name:'Poni Samping'},
-    {id:'hijabW',   name:'Hijab Putih'},
-    {id:'hijabS',   name:'Hijab Cokelat'}
+    {id:'pendek', name:'Rambut Pendek Rapi'},
+    {id:'belah',  name:'Belah Pinggir'},
+    {id:'kuncir', name:'Kuncir Kuda'},
+    {id:'kepang', name:'Kepang Dua'},
+    {id:'hijabW', name:'Berjilbab Putih'},
+    {id:'hijabS', name:'Berjilbab Cokelat'}
   ]
 };
 var BODY_OPTIONS = [
@@ -10637,6 +10673,33 @@ function buildRemoteChar(app){
     back.scale.set(1.02, 1.30, 0.60);
     [-1, 1].forEach(function(s){ kaps(0.065, 0.16, HAIR, HR * 0.98 * s, HY - HR * 0.30, HR * 0.10, bg, 0.52); });
   }
+  else if(app.hair === 'pendek'){
+    hairCap(0.50); fringeBand(0);
+  }
+  else if(app.hair === 'belah'){
+    hairCap(0.54); fringeBand(-0.38);
+    var sweepR = kaps(HR * 0.11, HR * 0.55, HAIR, HR * 0.18, HY + HR * 0.52, HR * 0.72, bg, 0.52);
+    sweepR.rotation.z = Math.PI / 2 - 0.35; sweepR.rotation.y = 0.25;
+  }
+  else if(app.hair === 'kuncir'){
+    hairCap(0.54);
+    sph(0.045, 0xe23b3b, 0, HY + HR * 0.52, -HR * 0.88, bg, 0.5);
+    var tailR = kaps(HR * 0.17, HR * 0.62, HAIR, 0, HY - HR * 0.28, -HR * 1.02, bg, 0.52);
+    tailR.rotation.x = 0.38;
+    var tailTipR = sph(HR * 0.20, HAIR, 0, HY - HR * 0.78, -HR * 1.22, bg, 0.52);
+    tailTipR.scale.set(0.9, 1.25, 0.9);
+  }
+  else if(app.hair === 'kepang'){
+    hairCap(0.54); fringeBand(0);
+    [-1, 1].forEach(function(s){
+      sph(0.042, 0xe23b3b, HR * 1.00 * s, HY + HR * 0.30, HR * 0.18, bg, 0.5);
+      for(var bi = 0; bi < 4; bi++){
+        var seg = sph(HR * 0.21, HAIR, HR * (1.02 - bi * 0.03) * s, HY - HR * (0.02 + bi * 0.34), HR * (0.30 + bi * 0.015), bg, 0.52);
+        seg.scale.set(0.85, 1.05, 0.85); seg.rotation.z = (bi % 2 ? -0.28 : 0.28) * s;
+      }
+      sph(0.036, 0xf59e0b, HR * 0.93 * s, HY - HR * 1.42, HR * 0.36, bg, 0.5);
+    });
+  }
   else { hairCap(0.42, -HR * 0.02); } // cepak / buzz & bawaan
   if(outfit === 'pramuka' && !admin){
     var hatY = HY + HR * (hijab ? 1.06 : 0.94);
@@ -12193,7 +12256,12 @@ function statHandleRemote(msg){
   var p = null;
   try{ p = JSON.parse(msg.text.slice(6)); }catch(e){ return; }
   if(!p || typeof p.n !== 'string') return;
-  gmStatsMap[msg.id] = {name:p.n.slice(0, 24), answered:p.a|0, correct:p.c|0, missions:p.q|0, badge:String(p.b || 'Siaga Mula').slice(0, 30), level:p.l|0, fase:['A','B','C'].indexOf(p.f) >= 0 ? p.f : 'B', gender:p.g === 'putri' ? 'putri' : 'putra', pb:p.pb|0, pd:p.pd|0, ps:p.ps|0};
+  /* Nama & lencana dikendalikan penuh oleh klien pengirim (STAT1| bisa dibuat
+     klien modifikasi): bersihkan karakter markup/kontrol SEJAK DITERIMA, dan
+     renderGMStats() tetap menampilkannya hanya lewat textContent — jadi
+     payload seperti <img onerror> tidak pernah menjadi HTML di layar GM. */
+  function cleanStatStr(v, max){ return String(v == null ? '' : v).replace(/[<>&"'`\u0000-\u001f\u007f]/g, '').slice(0, max); }
+  gmStatsMap[msg.id] = {name:cleanStatStr(p.n, 24) || 'Pemain', answered:p.a|0, correct:p.c|0, missions:p.q|0, badge:cleanStatStr(p.b || 'Siaga Mula', 30), level:p.l|0, fase:['A','B','C'].indexOf(p.f) >= 0 ? p.f : 'B', gender:p.g === 'putri' ? 'putri' : 'putra', pb:p.pb|0, pd:p.pd|0, ps:p.ps|0};
   renderGMStats(); updateTop5Board();
 }
 setInterval(function(){ if(playing) statBroadcast(false); }, 12000);
@@ -14314,6 +14382,18 @@ function drawAvatarCert(g, cx, cy, r){
       g.fill();
     } else if(ch.hair === 'curly'){
       for(var j = 0; j < 4; j++){ g.beginPath(); g.arc(cx - r * 0.3 + j * r * 0.2, cy - r * 0.36, r * 0.13, 0, Math.PI * 2); g.fill(); }
+    } else if(ch.hair === 'kuncir'){
+      g.fillRect(cx - r * 0.13, cy - r * 0.34, r * 0.26, r * 0.62);
+      g.beginPath(); g.arc(cx, cy - r * 0.14, r * 0.42, Math.PI, Math.PI * 2); g.fill();
+      g.fillStyle = '#dc2626'; g.beginPath(); g.arc(cx, cy - r * 0.3, r * 0.07, 0, Math.PI * 2); g.fill();
+    } else if(ch.hair === 'kepang'){
+      g.beginPath(); g.arc(cx, cy - r * 0.14, r * 0.42, Math.PI, Math.PI * 2); g.fill();
+      [-1, 1].forEach(function(s){
+        for(var k = 0; k < 3; k++){ g.beginPath(); g.arc(cx + s * r * 0.44, cy - r * 0.08 + k * r * 0.17, r * 0.10, 0, Math.PI * 2); g.fill(); }
+      });
+    } else if(ch.hair === 'belah'){
+      g.beginPath(); g.arc(cx, cy - r * 0.14, r * 0.42, Math.PI, Math.PI * 2); g.fill();
+      g.fillStyle = hex(ch.skin); g.beginPath(); g.moveTo(cx - r * 0.4, cy - r * 0.42); g.lineTo(cx - r * 0.05, cy - r * 0.46); g.lineTo(cx - r * 0.4, cy - r * 0.14); g.closePath(); g.fill();
     } else {
       g.beginPath(); g.arc(cx, cy - r * 0.14, r * 0.42, Math.PI, Math.PI * 2); g.fill();
     }
@@ -14708,15 +14788,19 @@ document.querySelectorAll('#outfitRow [data-outfit]').forEach(function(b){
 syncOutfitRow();
 /* Ikon SVG pada kartu pilihan gaya rambut */
 var HAIR_SVG = {
+  pendek:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.2" r="5.8" fill="#f2c79b"/><path d="M6.2 13a5.8 5.8 0 0 1 11.6 0l-.4 1.1H6.6z" fill="#4a3220"/><circle cx="9.9" cy="13.4" r=".85" fill="#17324a"/><circle cx="14.1" cy="13.4" r=".85" fill="#17324a"/><path d="M10.2 16.1a2.3 2.3 0 0 0 3.6 0" stroke="#9c5a44" stroke-width=".8" fill="none" stroke-linecap="round"/></svg>',
+  belah:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.2" r="5.8" fill="#f2c79b"/><path d="M6.2 13.2a5.8 5.8 0 0 1 11.5-1.4L9.4 14l-3 .5z" fill="#4a3220"/><path d="M8.2 8.6l1.2 4.6" stroke="#f2c79b" stroke-width=".9" stroke-linecap="round"/><circle cx="9.9" cy="13.6" r=".85" fill="#17324a"/><circle cx="14.1" cy="13.6" r=".85" fill="#17324a"/><path d="M10.2 16.3a2.3 2.3 0 0 0 3.6 0" stroke="#9c5a44" stroke-width=".8" fill="none" stroke-linecap="round"/></svg>',
+  kuncir:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 6.6c2.3 2.8 2.7 6.8 1.1 10.4l-2.5-1c1.2-3 .9-6-.6-8.2z" fill="#4a3220"/><circle cx="12" cy="13.2" r="5.8" fill="#f2c79b"/><path d="M6.2 13a5.8 5.8 0 0 1 11.6 0l-.4 1.1H6.6z" fill="#4a3220"/><circle cx="16.9" cy="7.4" r="1.25" fill="#e23b3b"/><circle cx="9.9" cy="13.4" r=".85" fill="#17324a"/><circle cx="14.1" cy="13.4" r=".85" fill="#17324a"/><path d="M10.2 16.1a2.3 2.3 0 0 0 3.6 0" stroke="#9c5a44" stroke-width=".8" fill="none" stroke-linecap="round"/></svg>',
+  kepang:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.6" r="5.6" fill="#f2c79b"/><path d="M6.4 12.4a5.6 5.6 0 0 1 11.2 0l-.4 1H6.8z" fill="#4a3220"/><circle cx="5.6" cy="11.4" r="1.5" fill="#4a3220"/><circle cx="5.9" cy="14.2" r="1.35" fill="#4a3220"/><circle cx="5.6" cy="16.9" r="1.2" fill="#4a3220"/><circle cx="18.4" cy="11.4" r="1.5" fill="#4a3220"/><circle cx="18.1" cy="14.2" r="1.35" fill="#4a3220"/><circle cx="18.4" cy="16.9" r="1.2" fill="#4a3220"/><circle cx="5.6" cy="19.2" r=".8" fill="#f59e0b"/><circle cx="18.4" cy="19.2" r=".8" fill="#f59e0b"/><circle cx="9.9" cy="12.8" r=".85" fill="#17324a"/><circle cx="14.1" cy="12.8" r=".85" fill="#17324a"/><path d="M10.2 15.5a2.3 2.3 0 0 0 3.6 0" stroke="#9c5a44" stroke-width=".8" fill="none" stroke-linecap="round"/></svg>',
+  hijabW:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="#f1f5f9" stroke="#cbd5e1" stroke-width=".8"/><circle cx="12" cy="12.6" r="5" fill="#f2c79b"/><circle cx="10.2" cy="12.4" r=".8" fill="#17324a"/><circle cx="13.8" cy="12.4" r=".8" fill="#17324a"/><path d="M10.4 15a2.2 2.2 0 0 0 3.2 0" stroke="#9c5a44" stroke-width=".8" fill="none" stroke-linecap="round"/></svg>',
+  hijabS:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2" fill="#92400e"/><circle cx="12" cy="12.6" r="5" fill="#f2c79b"/><circle cx="10.2" cy="12.4" r=".8" fill="#17324a"/><circle cx="13.8" cy="12.4" r=".8" fill="#17324a"/><path d="M10.4 15a2.2 2.2 0 0 0 3.2 0" stroke="#9c5a44" stroke-width=".8" fill="none" stroke-linecap="round"/></svg>',
   buzz:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="6" fill="#f2c79b"/><path d="M6 12.5a6 6 0 0 1 12 0z" fill="#4a3220"/></svg>',
   spiky:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="5.6" fill="#f2c79b"/><path d="M6.5 13l.8-4 1.8 1.8L10.2 7l1.8 2.6L13.8 7l1.1 3.8L16.7 9l.8 4a5.8 5.8 0 0 0-11 0z" fill="#4a3220"/></svg>',
   curly:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="5.6" fill="#f2c79b"/><circle cx="7.2" cy="9.4" r="2.1" fill="#4a3220"/><circle cx="10" cy="7.8" r="2.3" fill="#4a3220"/><circle cx="13.4" cy="7.8" r="2.3" fill="#4a3220"/><circle cx="16.4" cy="9.4" r="2.1" fill="#4a3220"/></svg>',
   bowl:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="5.8" fill="#f2c79b"/><path d="M5.8 13.2a6.2 6.2 0 0 1 12.4 0z" fill="#4a3220"/></svg>',
   fringe:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="5.8" fill="#f2c79b"/><path d="M6.2 12.6a5.9 5.9 0 0 1 11.6-1.2l-6.8 2.1z" fill="#4a3220"/></svg>',
   pigtails:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="5.6" fill="#f2c79b"/><path d="M6.4 12.4a5.6 5.6 0 0 1 11.2 0z" fill="#4a3220"/><circle cx="4.6" cy="14.6" r="2.3" fill="#4a3220"/><circle cx="19.4" cy="14.6" r="2.3" fill="#4a3220"/></svg>',
-  long:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.6" r="5.4" fill="#f2c79b"/><path d="M6.4 19.6V11a5.6 5.6 0 0 1 11.2 0v8.6h-2.8V12H9.2v7.6z" fill="#4a3220"/></svg>',
-  hijabW:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="#f1f5f9"/><circle cx="12" cy="12.6" r="5" fill="#f2c79b"/></svg>',
-  hijabS:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="#92400e"/><circle cx="12" cy="12.6" r="5" fill="#f2c79b"/></svg>'
+  long:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.6" r="5.4" fill="#f2c79b"/><path d="M6.4 19.6V11a5.6 5.6 0 0 1 11.2 0v8.6h-2.8V12H9.2v7.6z" fill="#4a3220"/></svg>'
 };
 var _origRenderHairStyles = renderHairStyles;
 renderHairStyles = function(){
@@ -14729,6 +14813,16 @@ renderHairStyles = function(){
   });
 };
 renderHairStyles();
+/* Ikon SVG pada kartu pilihan Seragam Awal */
+var OUTFIT_SVG = {
+  biru:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 4.5 4 7l1.8 3.4L8 9.4V20h8V9.4l2.2 1L20 7l-4.5-2.5a3.6 3.6 0 0 1-7 0z" fill="#2f7fe0"/><path d="M9.8 5.2a2.6 2.6 0 0 0 4.4 0L12 7.6z" fill="#f2c79b"/></svg>',
+  mp:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 4.5 4 7l1.8 3.4L8 9.4V13h8V9.4l2.2 1L20 7l-4.5-2.5a3.6 3.6 0 0 1-7 0z" fill="#f8fafc" stroke="#cbd5e1" stroke-width=".7"/><path d="M8 13h8v7H8z" fill="#d92b25"/><path d="M11.2 8.6h1.6l-.8 2.6z" fill="#d92b25"/></svg>',
+  pramuka:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 4.5 4 7l1.8 3.4L8 9.4V20h8V9.4l2.2 1L20 7l-4.5-2.5a3.6 3.6 0 0 1-7 0z" fill="#c9a26b"/><path d="M9.6 7.4 12 12l2.4-4.6L12 9z" fill="#f8fafc"/><path d="M9.6 7.4 12 12l2.4-4.6-1.2-.7L12 9 10.8 6.7z" fill="#d92b25" opacity=".85"/><rect x="8" y="16.4" width="8" height="1.1" fill="#6b4423"/></svg>'
+};
+document.querySelectorAll('#outfitRow [data-outfit]').forEach(function(b){
+  var svg = OUTFIT_SVG[b.getAttribute('data-outfit')];
+  if(svg) b.insertAdjacentHTML('afterbegin', svg);
+});
 /* ---------- Inisialisasi pembaruan ---------- */
 syncFaseUI();
 recomputeProgres(false);
