@@ -1078,6 +1078,104 @@
   #patrolOverlay{z-index:80;}
   #restOverlay{z-index:80;}
   #startScreen{z-index:100;}
+
+  /* ===== LOBI PILIH KARAKTER: MULTI-PROFIL (MAKS 4 SLOT) + STUDIO 3 TAB ===== */
+  /* Layar login selalu satu layar penuh 100dvh: panggung 3D (kiri) + panel (kanan). */
+  #startScreen{height:100dvh;}
+  #lobbyWelcome{position:absolute;left:50%;bottom:76px;transform:translateX(-50%);z-index:3;background:linear-gradient(180deg,rgba(245,158,11,.95),rgba(217,119,6,.95));color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(15px,2.4vw,21px);letter-spacing:.02em;padding:9px 22px;border-radius:999px;border:2px solid rgba(255,255,255,.75);box-shadow:0 10px 26px rgba(154,52,18,.45), inset 0 2px 0 rgba(255,255,255,.5);white-space:nowrap;pointer-events:none;}
+  #lobbyWelcome[hidden]{display:none;}
+  .lobby-sub{margin:2px 0 12px;font-size:13.5px;font-weight:700;color:#475569;line-height:1.5;}
+  #charList{display:flex;flex-direction:column;gap:9px;max-height:46dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px;}
+  #charList .char-card{display:flex;align-items:center;gap:11px;text-align:left;background:rgba(255,255,255,.92);border:2.5px solid #e2e8f0;border-radius:16px;padding:10px 12px;cursor:pointer;transition:border-color .15s, box-shadow .15s, transform .15s;}
+  #charList .char-card:active{transform:scale(.985);}
+  #charList .char-card.sel{border-color:#f59e0b;background:#fffbeb;box-shadow:0 8px 22px rgba(245,158,11,.35), 0 0 0 3px rgba(253,230,138,.55);}
+  .char-ava{width:52px;height:52px;flex:none;border-radius:50%;border:2.5px solid #fff;box-shadow:0 3px 10px rgba(10,52,92,.3);display:grid;place-items:center;overflow:hidden;}
+  .char-ava svg{width:44px;height:44px;}
+  .char-meta{flex:1;min-width:0;}
+  .char-name{font-family:'Fredoka',sans-serif;font-weight:700;font-size:16.5px;color:#0c4a6e;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .char-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+  .char-chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;}
+  .char-chip.g-p{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe;}
+  .char-chip.g-l{background:#fee2e2;color:#b91c1c;border-color:#fecaca;}
+  .char-chip.fase{background:#ede9fe;color:#6d28d9;border-color:#ddd6fe;}
+  .char-chip.cert{background:#fef3c7;color:#92400e;border-color:#fde68a;}
+  .char-stats{margin-top:5px;font-size:12px;font-weight:800;color:#64748b;display:flex;flex-wrap:wrap;gap:4px 10px;}
+  .char-stats b{color:#b45309;}
+  .char-acts{display:flex;flex-direction:column;gap:6px;flex:none;}
+  .char-style-btn{min-height:36px;padding:6px 10px;border-radius:10px;border:2px solid #0ea5e9;background:#f0f9ff;color:#0369a1;font-family:'Fredoka',sans-serif;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;}
+  .char-style-btn:active{transform:scale(.95);}
+  .char-del-btn{width:36px;height:36px;align-self:flex-end;border-radius:10px;border:2px solid #fecaca;background:#fef2f2;font-size:15px;cursor:pointer;display:grid;place-items:center;padding:0;}
+  .char-del-btn:active{transform:scale(.92);}
+  .char-new-card{width:100%;margin-top:10px;min-height:56px;border-radius:16px;border:2.5px dashed #38bdf8;background:rgba(240,249,255,.85);color:#0369a1;font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .char-new-card:active{transform:scale(.985);}
+  .char-new-card.off{border-color:#cbd5e1;background:rgba(241,245,249,.8);color:#94a3b8;cursor:not-allowed;}
+  .lobby-count{margin:8px 0 0;font-size:12px;font-weight:800;color:#94a3b8;}
+  #lobbyEnterBtn{width:100%;margin-top:12px;min-height:56px;border:none;border-radius:15px;background:linear-gradient(180deg,#fbbf24 0%,#f59e0b 34%,#ea580c 100%);border-bottom:5px solid #9a3412;box-shadow:0 10px 22px rgba(234,88,12,.45), inset 0 2px 0 rgba(255,255,255,.55);color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:16.5px;letter-spacing:.02em;cursor:pointer;padding:10px 12px;line-height:1.25;}
+  #lobbyEnterBtn:active{transform:translateY(2px) scale(.99);border-bottom-width:3px;}
+  /* Studio Paspor Petualang 3 tab */
+  .cc-tabs{display:flex;gap:6px;margin:0 0 13px;background:rgba(224,242,254,.75);border:1.5px solid #bae6fd;border-radius:13px;padding:5px;}
+  .cc-tabs[hidden]{display:none;}
+  .cc-tab{flex:1;min-height:42px;border:none;border-radius:9px;background:transparent;color:#0369a1;font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;cursor:pointer;padding:6px 4px;line-height:1.2;}
+  .cc-tab.on{background:#0284c7;color:#fff;box-shadow:0 4px 10px rgba(2,132,199,.35);}
+  #ccBackBtn{width:100%;margin:0 0 11px;min-height:44px;border-radius:12px;border:2px solid #0ea5e9;background:#f0f9ff;color:#0369a1;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14.5px;cursor:pointer;}
+  #ccBackBtn[hidden]{display:none;}
+  #ccBackBtn:active{transform:scale(.98);}
+  /* Konfirmasi hapus karakter dua langkah — di atas layar login (z 100) */
+  #charDelOverlay{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,30,52,.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+  #charDelOverlay.on{display:flex;}
+  .char-del-card{width:100%;max-width:400px;background:#fff;border-radius:22px;padding:24px 20px 18px;text-align:center;box-shadow:0 24px 60px rgba(3,20,40,.55);border:3px solid #fecaca;}
+  .char-del-ico{font-size:44px;line-height:1;}
+  .char-del-card h2{font-family:'Fredoka',sans-serif;font-size:21px;font-weight:700;color:#991b1b;margin:9px 0 6px;}
+  .char-del-card p{font-size:13.5px;font-weight:700;color:#475569;line-height:1.55;margin:0;}
+  .char-del-card p b{color:#991b1b;}
+  .char-del-btns{display:flex;flex-direction:column;gap:8px;margin-top:15px;}
+  .char-del-btns button{min-height:50px;border:none;border-radius:13px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14.5px;cursor:pointer;padding:9px 12px;line-height:1.3;}
+  #charDelStep1{background:#dc2626;color:#fff;box-shadow:0 6px 14px rgba(220,38,38,.35);}
+  #charDelStep2{background:#7f1d1d;color:#fff;box-shadow:0 6px 14px rgba(127,29,29,.45);}
+  #charDelStep2[hidden]{display:none;}
+  #charDelCancel{background:#fff;color:#475569;border:2px solid #cbd5e1 !important;}
+  .char-del-btns button:active{transform:scale(.98);}
+  /* ===== TUTORIAL INTERAKTIF PEMULA (GUIDED ONBOARDING) ===== */
+  #tutOfferOverlay{position:fixed;inset:0;z-index:85;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,30,52,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+  #tutOfferOverlay.on{display:flex;}
+  .tut-offer-card{width:100%;max-width:430px;background:rgba(255,255,255,.97);border-radius:22px;padding:20px;box-shadow:0 24px 60px rgba(3,20,40,.55);border:3px solid #fde68a;}
+  .tut-offer-msg{margin:13px 0 0;font-size:14px;font-weight:700;color:#334155;line-height:1.6;background:#fffbeb;border:2px solid #fde68a;border-radius:14px;padding:12px 13px;}
+  #tutStartBtn{background:#16a34a;color:#fff;box-shadow:0 6px 14px rgba(22,163,74,.35);}
+  #tutSkipOfferBtn{background:#fff;color:#475569;border:2px solid #cbd5e1 !important;}
+  #tutCard{position:fixed;left:50%;bottom:calc(102px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100vw - 20px));z-index:70;background:rgba(255,253,247,.96);border:2.5px solid #f59e0b;border-radius:18px;box-shadow:0 16px 40px rgba(10,52,92,.45), 0 0 22px rgba(245,158,11,.35);padding:13px 15px 14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+  #tutCard[hidden]{display:none;}
+  @media (min-width:861px){ #tutCard{bottom:24px;} }
+  #tutSkip{position:absolute;top:8px;right:10px;border:none;background:transparent;color:#94a3b8;font-family:'Fredoka',sans-serif;font-weight:700;font-size:11.5px;cursor:pointer;padding:4px 6px;}
+  .tut-prog{display:inline-block;background:#fef3c7;color:#92400e;border:1.5px solid #fde68a;font-family:'Fredoka',sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;padding:3px 10px;border-radius:999px;}
+  #tutTitle{font-family:'Fredoka',sans-serif;font-size:17.5px;font-weight:700;color:#0c4a6e;margin:7px 0 4px;line-height:1.25;padding-right:64px;}
+  #tutText{font-size:13.5px;font-weight:700;color:#475569;line-height:1.55;margin:0;}
+  #tutText b{color:#b45309;}
+  #tutNext{width:100%;margin-top:11px;min-height:48px;border:none;border-radius:12px;background:linear-gradient(180deg,#22c55e,#16a34a);border-bottom:4px solid #14532d;color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 7px 16px rgba(22,163,74,.4);}
+  #tutNext[hidden]{display:none;}
+  #tutNext:active{transform:translateY(2px);}
+  #tutQuizBtn{width:100%;margin-top:11px;min-height:46px;border-radius:12px;border:2px solid #0ea5e9;background:#f0f9ff;color:#0369a1;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
+  #tutQuizBtn[hidden]{display:none;}
+  #tutQuiz{margin-top:11px;background:#f0f9ff;border:2px solid #bae6fd;border-radius:13px;padding:11px 12px;}
+  #tutQuiz[hidden]{display:none;}
+  #tutQuizQ{font-size:14px;font-weight:800;color:#075985;margin:0;line-height:1.5;}
+  #tutQuizOpts{display:flex;flex-direction:column;gap:7px;margin-top:9px;}
+  #tutQuizOpts button{min-height:44px;border:2px solid #cbd5e1;background:#fff;border-radius:11px;font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;color:#17324a;cursor:pointer;padding:7px 10px;text-align:left;}
+  #tutQuizOpts button.right{border-color:#16a34a;background:#dcfce7;}
+  #tutQuizOpts button.wrong{border-color:#dc2626;background:#fee2e2;}
+  #tutQuizFb{font-size:12.5px;font-weight:800;color:#0369a1;margin:8px 0 0;min-height:16px;line-height:1.45;}
+  #tutTiles{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px;}
+  #tutTiles[hidden]{display:none;}
+  .tut-tile{background:#fff;border:2px solid #e2e8f0;border-radius:12px;padding:9px 10px;font-size:12px;font-weight:800;color:#334155;line-height:1.4;}
+  .tut-tile span{display:block;font-size:19px;margin-bottom:3px;}
+  #tutSpot{position:fixed;z-index:65;border:3.5px solid #facc15;border-radius:16px;box-shadow:0 0 0 9999px rgba(2,20,40,.42), 0 0 26px rgba(250,204,21,.85);pointer-events:none;transition:left .3s, top .3s, width .3s, height .3s;}
+  #tutSpot[hidden]{display:none;}
+  @keyframes tutSpotPulse{0%,100%{box-shadow:0 0 0 9999px rgba(2,20,40,.42), 0 0 18px rgba(250,204,21,.7);}50%{box-shadow:0 0 0 9999px rgba(2,20,40,.42), 0 0 34px rgba(250,204,21,1);}}
+  #tutSpot{animation:tutSpotPulse 1.4s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ #tutSpot{animation:none;} }
+  @media (max-width:860px){
+    #lobbyWelcome{bottom:auto;top:52px;font-size:14.5px;padding:7px 16px;}
+    #charList{max-height:38dvh;}
+  }
 </style>
 </head>
 <body>
@@ -1173,6 +1271,12 @@
         <button id="gmBtn" class="hud-mini" type="button" title="Login Admin / Game Master">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14.5" r="4.2"/><path d="M11.2 11.3 20 2.5M17 5.5l2.8 2.8M14.2 8.3l2.4 2.4"/></svg>
           <span>GM</span>
+        </button>
+        <button id="switchCharBtn" class="hud-mini" type="button" title="Simpan progres karakter ini, lalu kembali ke Lobi Pilih Karakter">
+          <span>🔄 Ganti Karakter</span>
+        </button>
+        <button id="tutReplayBtn" class="hud-mini" type="button" title="Putar lagi Tutorial Interaktif untuk pemula (4 langkah)">
+          <span>🎓 Ulangi Tutorial</span>
         </button>
         <div class="dr-head" style="margin-top:3px;">EMOTE</div>
         <div id="emoteBar" aria-label="Emote cepat">
@@ -1775,6 +1879,60 @@
   </div>
 </div>
 
+<!-- KONFIRMASI HAPUS KARAKTER: dua kali penekanan agar progres tidak terhapus tanpa sengaja -->
+<div id="charDelOverlay" role="dialog" aria-modal="true" aria-labelledby="charDelTitle">
+  <div class="char-del-card">
+    <div class="char-del-ico" aria-hidden="true">🗑️</div>
+    <h2 id="charDelTitle">Hapus Karakter?</h2>
+    <p id="charDelText">Karakter ini beserta seluruh progresnya akan dihapus dari perangkat ini.</p>
+    <div class="char-del-btns">
+      <button id="charDelStep1" type="button">Ya, Hapus Karakter Ini</button>
+      <button id="charDelStep2" type="button" hidden>⚠️ Yakin? Tekan Sekali Lagi untuk Benar-Benar Menghapus</button>
+      <button id="charDelCancel" type="button">Batal — Jangan Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- TUTORIAL PEMULA: tawaran tur dari Bu Ratna (muncul sekali per karakter baru) -->
+<div id="tutOfferOverlay" role="dialog" aria-modal="true" aria-labelledby="tutOfferTitle">
+  <div class="tut-offer-card">
+    <div class="patrol-head">
+      <div class="patrol-ava" aria-hidden="true">BR</div>
+      <div>
+        <b id="tutOfferTitle">Bu Ratna — Guru &amp; Pojok Baca</b>
+        <span>Pemandu petualanganmu di hari pertama</span>
+      </div>
+    </div>
+    <p class="tut-offer-msg" id="tutOfferMsg">Selamat datang! Ikuti tur singkat bersama Bu Ratna untuk belajar dasar-dasar bermain.</p>
+    <div class="patrol-btns">
+      <button id="tutStartBtn" type="button">🚀 Ikuti Tur Singkat (+100 Kredit)</button>
+      <button id="tutSkipOfferBtn" type="button">⏭️ Lewati Tutorial (Sudah Paham)</button>
+    </div>
+  </div>
+</div>
+
+<!-- KARTU TUTORIAL MELAYANG + SOROTAN UI (SPOTLIGHT) -->
+<div id="tutCard" role="dialog" aria-label="Kartu tutorial pemula" hidden>
+  <button id="tutSkip" type="button" aria-label="Lewati tur tutorial">Lewati Tur ✕</button>
+  <span class="tut-prog" id="tutProg">Langkah 1/4</span>
+  <h3 id="tutTitle">Kontrol Gerak &amp; Kamera</h3>
+  <p id="tutText"></p>
+  <div id="tutTiles" hidden>
+    <div class="tut-tile"><span>🌾</span>Bertani &amp; Beternak ala Harvest Moon di Kebun Praktik</div>
+    <div class="tut-tile"><span>🏠</span>Beli Rumah &amp; Kendaraan di Dealer / Kopdes</div>
+    <div class="tut-tile"><span>⚽</span>Sepak Bola &amp; Wahana di Belakang Sekolah</div>
+    <div class="tut-tile"><span>⛵</span>Berlayar ke Pantai &amp; Memotret dengan Kamera</div>
+  </div>
+  <button id="tutQuizBtn" type="button" hidden>✏️ Buka Soal Latihan Sekarang</button>
+  <div id="tutQuiz" hidden>
+    <p id="tutQuizQ"></p>
+    <div id="tutQuizOpts"></div>
+    <p id="tutQuizFb"></p>
+  </div>
+  <button id="tutNext" type="button" hidden>Lanjut ▶</button>
+</div>
+<div id="tutSpot" hidden aria-hidden="true"></div>
+
 <!-- START: PORTAL PETUALANG NUSANTARA — layar belah: panggung avatar 3D (kiri)
      + panel Paspor Petualang (kanan). Nama & pembuatan karakter kini SATU panel:
      nama wajib valid dulu sebelum tombol MULAI PETUALANGAN aktif. -->
@@ -1786,6 +1944,7 @@
       <span class="stage-badge">PANGGUNG AVATAR</span>
       <p class="stage-hint">Geser panggung ini untuk memutar avatar kamu 360°. Coba juga tombol animasinya!</p>
     </div>
+    <div id="lobbyWelcome" hidden>👋 Selamat Datang Kembali!</div>
     <div class="stage-anims" role="group" aria-label="Uji animasi avatar">
       <button id="pvSapa" type="button">👋 Sapa</button>
       <button id="pvHormat" type="button">🫡 Hormat</button>
@@ -1795,7 +1954,20 @@
   <div class="start-card">
     <div class="passport-ribbon" id="passportRibbon">PASPOR PETUALANG</div>
     <h1 id="startTitle">Portal <span>Petualang Nusantara</span></h1>
-    <p class="start-sub">Isi Paspor Petualangmu, putar avatarmu di panggung, lalu mulai petualangan di sekolah &amp; Desa Gerduren!</p>
+    <p class="start-sub" id="startSub">Isi Paspor Petualangmu, putar avatarmu di panggung, lalu mulai petualangan di sekolah &amp; Desa Gerduren!</p>
+    <button id="ccBackBtn" type="button" hidden>← Kembali ke Daftar Karakter</button>
+    <div class="cc-tabs" id="ccTabs" role="tablist" aria-label="Studio Paspor Petualang — 3 langkah pembuatan karakter">
+      <button class="cc-tab on" type="button" role="tab" data-cc="identitas" aria-selected="true">1 · Identitas</button>
+      <button class="cc-tab" type="button" role="tab" data-cc="penampilan" aria-selected="false">2 · Penampilan</button>
+      <button class="cc-tab" type="button" role="tab" data-cc="seragam" aria-selected="false">3 · Seragam</button>
+    </div>
+    <div id="lobbyPanel" hidden>
+      <p class="lobby-sub">Pilih karaktermu untuk melanjutkan petualangan — avatarmu tampil di panggung sebelah dengan kostum terakhirnya. Setiap karakter punya brankas progres sendiri.</p>
+      <div id="charList" role="listbox" aria-label="Daftar karakter tersimpan"></div>
+      <button id="charNewBtn" type="button" class="char-new-card">➕ Buat Karakter Baru</button>
+      <p class="lobby-count" id="lobbyCount"></p>
+      <button id="lobbyEnterBtn" type="button">🚀 LANJUTKAN PETUALANGAN</button>
+    </div>
     <div class="step" id="stepName">
       <label class="field" for="nameInput">Nama petualang kamu (wajib nama sendiri!)</label>
       <div class="name-wrap">
@@ -2347,7 +2519,9 @@ for(var i=0;i<6;i++){
 /* papan nama biru gedung utama di atas pintu tengah */
 (function(){
   var pg = new THREE.Group(); pg.position.set(0, 0, -20.1); scene.add(pg);
-  wallSign(pg, SCHOOL_UP, 0, 5.1, 0, 7.2, {bg:'#1e6fb8', fg:'#ffffff', frame:0x144e82});
+  /* Papan nama gedung utama: PERMANEN "SDN 1 GERDUREN" (besar, jelas, kontras) —
+     tidak ikut berubah oleh parameter ?sekolah= agar identitas sekolah asli tetap terbaca. */
+  wallSign(pg, 'SDN 1 GERDUREN', 0, 5.1, 0, 8.6, {bg:'#1e6fb8', fg:'#ffffff', frame:0x144e82});
 })();
 
 /* --- Perpustakaan (barat): lebih tinggi, jendela besar --- */
@@ -2552,12 +2726,18 @@ function house(x, z, wall, roof, ry){
   box(1.1, 0.9, 0.06, 0xdff3ff, -2.4, 2.0, 3.41, g, false);
   box(1.1, 0.9, 0.06, 0xdff3ff, 2.4, 2.0, 3.41, g, false);
   box(4.5, 0.16, 1.6, 0xd6d3cd, 0, 0.08, 4.0, g, false);
-  addCollider(x, z, 4.5, 3.8);
+  var swp = ry && Math.abs(Math.sin(ry)) > 0.5;   // rumah diputar 90°: tapak collider ikut bertukar sumbu
+  addCollider(x, z, swp ? 3.8 : 4.5, swp ? 4.5 : 3.8);
   return g;
 }
-house(-26, 42, 0xfde68a, 0xb45309); house(-40, 64, 0xfce7f3, 0x9e3d2c);
-house(48, 62, 0xbbf7d0, 0x8a3320);  house(64, 44, 0xbfdbfe, 0x7c4a21);
-house(56, 16, 0xfed7aa, 0x9a3412);  house(-52, 44, 0xf3e8ff, 0x8a3320);
+/* ORIENTASI RUMAH (audit spasial): pintu + jendela depan + teras (muka lokal +z)
+   wajib menghadap JALAN RAYA terdekat, bukan ke belakang/sungai:
+   - (-26,42), (64,44), (-52,44): muka ke selatan → Jl. Sawah Glempang ✓ bawaan.
+   - (-40,64) = Rumah No. 03 & (48,62) = Rumah No. 08: jalan ada di UTARA → putar π.
+   - (56,16): jalan cabang timur ada di BARAT → putar -π/2 (muka ke barat). */
+house(-26, 42, 0xfde68a, 0xb45309); house(-40, 64, 0xfce7f3, 0x9e3d2c, Math.PI);
+house(48, 62, 0xbbf7d0, 0x8a3320, Math.PI);  house(64, 44, 0xbfdbfe, 0x7c4a21);
+house(56, 16, 0xfed7aa, 0x9a3412, -Math.PI / 2);  house(-52, 44, 0xf3e8ff, 0x8a3320);
 addInteractable(-26, 42, 7.5, 'Rumah Warga', null, {enterRoom:'warga'});
 
 /* ================= GERBANG KUNING-HIJAU + PAGAR + TIANG BENDERA + PODIUM (Lampiran B) =================
@@ -2580,6 +2760,11 @@ addInteractable(-26, 42, 7.5, 'Rumah Warga', null, {enterRoom:'warga'});
   box(8.6, 1.05, 0.08, 0xffffff, 0, 4.95, GZ, scene, false);
   box(8.75, 0.13, 0.13, FYP.gateAccent, 0, 5.53, GZ, scene, false);
   box(8.75, 0.13, 0.13, FYP.gateAccent, 0, 4.37, GZ, scene, false);
+  /* Papan nama gerbang PERMANEN "SDN 1 GERDUREN": papan biru besar berhuruf putih
+     kontras terpasang di muka spanduk, terbaca dari jalan (selatan) maupun halaman (utara). */
+  wallSign(scene, 'SDN 1 GERDUREN', 0, 4.95, GZ + 0.04, 7.6, {bg:'#1e6fb8', fg:'#ffffff', frame:0x144e82});
+  var gateSignBack = new THREE.Group(); gateSignBack.position.set(0, 4.95, GZ - 0.04); gateSignBack.rotation.y = Math.PI; scene.add(gateSignBack);
+  wallSign(gateSignBack, 'SDN 1 GERDUREN', 0, 0, 0, 7.6, {bg:'#1e6fb8', fg:'#ffffff', frame:0x144e82});
   // pintu gerbang besi kuning dua daun, terbuka ke dalam halaman: rangka + jeruji tegak
   function gateDoor(hx, dir){
     var dg = new THREE.Group(); dg.position.set(hx, 0, GZ); dg.rotation.y = dir * 0.95; scene.add(dg);
@@ -3144,19 +3329,20 @@ var playerHouseGroup = null, houseSignGroup = null, homeCarGroup = null, homeBik
   homeMarker.visible = false;
 })();
 
+var HOME_CUT = null;   // bagian atap & dinding interior Rumah Kamu untuk CUTAWAY INDOOR VIEW
 /* --- Bagian dalam Rumah Kamu: ruangan sederhana yang bisa dimasuki setelah rumah LUNAS ---
    Dibangun jauh di selatan peta (z=150, di luar area desa) sebagai ruang interior;
    pemain berpindah ke sini lewat pintu rumah, dan keluar lewat pintu yang sama. */
 (function buildHomeInterior(){
   flat(12, 9, 0xb08968, 0, 150, scene, 0.03);
   flat(4.6, 3.2, 0xdc2626, 0, 150.5, scene, 0.05);                       // karpet merah ruang tengah
-  box(12, 3.2, 0.3, 0xfef3c7, 0, 1.6, 145.6, scene);                     // dinding belakang
-  box(0.3, 3.2, 9, 0xfef3c7, -6, 1.6, 150, scene);                      // dinding kiri
-  box(0.3, 3.2, 9, 0xfef3c7, 6, 1.6, 150, scene);                       // dinding kanan
-  box(4.6, 3.2, 0.3, 0xfef3c7, -3.7, 1.6, 154.4, scene);                 // dinding depan kiri pintu
-  box(4.6, 3.2, 0.3, 0xfef3c7, 3.7, 1.6, 154.4, scene);                  // dinding depan kanan pintu
-  box(2.8, 0.5, 0.3, 0xfef3c7, 0, 2.95, 154.4, scene);                   // ambang di atas pintu (celah pintu 2,8 m × 2,7 m)
-  box(12.6, 0.25, 9.6, 0x9e3d2c, 0, 3.32, 150, scene);                  // plafon/atap interior
+  HOME_CUT = {roofs:[box(12.6, 0.25, 9.6, 0x9e3d2c, 0, 3.32, 150, scene)], walls:[   // plafon/atap interior
+    box(12, 3.2, 0.3, 0xfef3c7, 0, 1.6, 145.6, scene),                     // dinding belakang
+    box(0.3, 3.2, 9, 0xfef3c7, -6, 1.6, 150, scene),                      // dinding kiri
+    box(0.3, 3.2, 9, 0xfef3c7, 6, 1.6, 150, scene),                       // dinding kanan
+    box(4.6, 3.2, 0.3, 0xfef3c7, -3.7, 1.6, 154.4, scene),                 // dinding depan kiri pintu
+    box(4.6, 3.2, 0.3, 0xfef3c7, 3.7, 1.6, 154.4, scene),                  // dinding depan kanan pintu
+    box(2.8, 0.5, 0.3, 0xfef3c7, 0, 2.95, 154.4, scene)]};                 // ambang di atas pintu (celah pintu 2,8 m × 2,7 m)
   // tempat tidur + bantal + selimut
   box(2.2, 0.4, 3.4, 0x7c4a21, -4.2, 0.35, 148, scene);
   box(2.0, 0.25, 3.2, 0xffffff, -4.2, 0.67, 148, scene, false);
@@ -3251,15 +3437,18 @@ function enterHome(no){
   var H = null;
   for(var hi = 0; hi < HOUSES.length; hi++) if(HOUSES[hi].no === no) H = HOUSES[hi];
   homeReturnPos = H ? {x:H.x, z:H.z - 5.4} : {x:-14, z:56.6};
+  activeRoomId = 'home';
   interiorClamp = {minX:-5.6, maxX:5.6, minZ:145.6, maxZ:154.2};
   roomFloorY = 0.15;
   player.position.set(0, 0, 152.8); player.position.y = 0.15; vy = 0; grounded = true;
   player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
+  camPitchT = Math.max(camPitchT, 0.78);   // kamera atas-miring selama di dalam rumah
   AudioSys.sfx('pop');
   showToast('Selamat datang di Rumah No. ' + ('0' + no).slice(-2) + ' — rumahmu! Istirahat yang nyaman — dekati pintu lalu tekan Aksi untuk keluar.', 4600);
 }
 function exitHome(){
   if(poseMode) standPose(true);
+  activeRoomId = null;
   interiorClamp = null; roomFloorY = 0;
   var rp = homeReturnPos || {x:-14, z:56.6}; homeReturnPos = null;
   player.position.set(rp.x, 0, rp.z); player.position.y = 0; vy = 0; grounded = true;
@@ -3317,8 +3506,10 @@ infoAppend('Sungai Gerduren', ' Kamu juga boleh BERENANG di sungai ini: berjalan
 for(var _ci = 1; _ci <= 6; _ci++) infoAppend('Ruang Kelas ' + _ci, '');
 
 /* ---------- Masuk / keluar ruangan interior ---------- */
+var activeRoomId = null;   // id ruangan interior aktif ('home' untuk Rumah Kamu) — penggerak CUTAWAY INDOOR VIEW
 function enterRoom(id){
   var R = ROOMS[id]; if(!R) return;
+  activeRoomId = id;
   if(poseMode) standPose(true);
   roomReturn = {x: player.position.x, z: player.position.z, ry: player.rotation.y};
   interiorClamp = R.clamp;
@@ -3326,11 +3517,13 @@ function enterRoom(id){
   player.position.set(R.cx, 0, R.cz + R.d/2 - 1.7);
   player.position.y = roomFloorY; vy = 0; grounded = true;
   player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
+  camPitchT = Math.max(camPitchT, 0.78);   // kamera atas-miring yang lega selama di dalam ruangan
   AudioSys.sfx('pop');
   showToast('Kamu masuk ke ' + R.name + '. Jelajahi isinya — dekati pintu lalu tekan Aksi untuk keluar.', 4400);
 }
 function exitRoom(){
   if(poseMode) standPose(true);
+  activeRoomId = null;
   var r = roomReturn; roomReturn = null; interiorClamp = null; roomFloorY = 0;
   if(r){ player.position.set(r.x, 0, r.z); player.rotation.y = r.ry; camYawT = r.ry; camYaw = r.ry; }
   player.position.y = 0; vy = 0; grounded = true;
@@ -3372,6 +3565,7 @@ function standPose(silent){
 
 /* ---------- BERENANG: air Sungai Gerduren (x 99.2..106.8), kecuali di atas jembatan ---------- */
 function inRiverWater(x, z){
+  if(typeof inPoolWater === 'function' && inPoolWater(x, z)) return true;   // Kolam Renang Sekolah di belakang sekolah
   if(typeof inSeaWater === 'function' && inSeaWater(x, z)) return true;   // laut dalam di Pantai Pasir Putih & Pulau Tropis
   if(x < 99.2 || x > 106.8) return false;
   if(z < -108 || z > 108) return false;
@@ -3427,14 +3621,19 @@ function buildRoomShell(id, name, cx, cz, w, d, o){
   var g = new THREE.Group(); g.position.set(cx, 0.15, cz); scene.add(g);
   flat(w, d, o.floor, 0, 0, g, 0.03);
   var wall = o.wall;
-  box(w, 3.2, 0.3, wall, 0, 1.6, -d/2, g);                                   // dinding utara
-  box(0.3, 3.2, d, wall, -w/2, 1.6, 0, g);                                  // dinding barat
-  box(0.3, 3.2, d, wall, w/2, 1.6, 0, g);                                   // dinding timur
+  /* Dinding & plafon ditangkap referensinya untuk CUTAWAY INDOOR VIEW:
+     saat pemain di dalam ruangan, plafon disembunyikan & dinding jadi
+     semi-transparan (collider fisiknya TETAP padat, lihat addCollider di bawah). */
+  var cutWalls = [
+    box(w, 3.2, 0.3, wall, 0, 1.6, -d/2, g),                                   // dinding utara
+    box(0.3, 3.2, d, wall, -w/2, 1.6, 0, g),                                  // dinding barat
+    box(0.3, 3.2, d, wall, w/2, 1.6, 0, g),                                   // dinding timur
+  ];
   var seg = (w - 2.2) / 2;
-  box(seg, 3.2, 0.3, wall, -(1.1 + seg/2), 1.6, d/2, g);                    // dinding selatan kiri pintu
-  box(seg, 3.2, 0.3, wall, 1.1 + seg/2, 1.6, d/2, g);                       // dinding selatan kanan pintu
-  box(2.2, 0.5, 0.3, wall, 0, 2.95, d/2, g);                                // ambang di atas pintu (bukaan bebas 2,7 m)
-  box(w + 0.6, 0.25, d + 0.6, 0x9e3d2c, 0, 3.32, 0, g);                     // plafon
+  cutWalls.push(box(seg, 3.2, 0.3, wall, -(1.1 + seg/2), 1.6, d/2, g));       // dinding selatan kiri pintu
+  cutWalls.push(box(seg, 3.2, 0.3, wall, 1.1 + seg/2, 1.6, d/2, g));          // dinding selatan kanan pintu
+  cutWalls.push(box(2.2, 0.5, 0.3, wall, 0, 2.95, d/2, g));                   // ambang di atas pintu (bukaan bebas 2,7 m)
+  var cutRoof = box(w + 0.6, 0.25, d + 0.6, 0x9e3d2c, 0, 3.32, 0, g);        // plafon
   box(0.12, 2.7, 0.12, 0x6d4c2f, -1.1, 1.35, d/2, g, false);                // kusen pintu
   box(0.12, 2.7, 0.12, 0x6d4c2f, 1.1, 1.35, d/2, g, false);
   // pemandu sudut miring (chamfered doorway): papan miring 35° memandu langkah ke tengah celah pintu
@@ -3465,7 +3664,7 @@ function buildRoomShell(id, name, cx, cz, w, d, o){
     var pl = new THREE.PointLight(0xffd9a3, 0.55, 9.5, 1.6);
     pl.position.set(0, 2.55, 0); g.add(pl);
   }
-  ROOMS[id] = {name:name, cx:cx, cz:cz, w:w, d:d, fy:0.15,
+  ROOMS[id] = {name:name, cx:cx, cz:cz, w:w, d:d, fy:0.15, cut:{roofs:[cutRoof], walls:cutWalls},
     clamp:{minX:cx - w/2 + 0.5, maxX:cx + w/2 - 0.5, minZ:cz - d/2 + 0.5, maxZ:cz + d/2 - 0.4}};
   return g;
 }
@@ -5467,9 +5666,24 @@ function updateInteract(){
     if(currentTarget !== WAKE_OFF){ currentTarget = WAKE_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = 'Bangun Tidur'; }
     return;
   }
+  if(typeof wahanaRide !== 'undefined' && wahanaRide && (wahanaRide.type === 'swing' || wahanaRide.type === 'merry')){
+    // sedang naik ayunan / komidi putar: tombol Aksi menjadi Turun Wahana
+    if(currentTarget !== WAHANA_OFF){ currentTarget = WAHANA_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = '⬇ Turun Wahana'; }
+    return;
+  }
+  var tackleTk = (typeof tackleTarget === 'function') ? tackleTarget() : null;
+  if(tackleTk){
+    // lawan di dekatku sedang menggiring bola: tombol Aksi menjadi Rebut Bola
+    if(currentTarget !== tackleTk){ currentTarget = tackleTk; actionBtn.classList.add('ready'); actionLabel.textContent = '⚡ Rebut Bola'; }
+    return;
+  }
   if(typeof soccerNearBall === 'function' && soccerNearBall()){
     // dekat bola sepak: tombol Aksi menjadi Tendang (ketuk = umpan, tahan = tendangan keras)
     if(currentTarget !== SOCCER_TARGET){ currentTarget = SOCCER_TARGET; actionBtn.classList.add('ready'); actionLabel.textContent = '⚽ Tendang'; }
+    return;
+  }
+  if(typeof soccer2NearBall === 'function' && soccer2NearBall()){
+    if(currentTarget !== SOCCER2_TARGET){ currentTarget = SOCCER2_TARGET; actionBtn.classList.add('ready'); actionLabel.textContent = '⚽ Tendang'; }
     return;
   }
   if(typeof volleyNearBall === 'function' && volleyNearBall()){
@@ -5500,6 +5714,10 @@ actionBtn.addEventListener('click', function(){
   if(t.bike){ mountBike(); return; }
   if(t.npc){ openNPCDialog(t.npc); return; }
   if(t.soccer){ soccerTapKick(); return; }
+  if(t.soccer2){ soccer2TapKick(); return; }
+  if(t.tackle){ soccerTackle(t.tackleField); return; }
+  if(t.wahanaOff){ endWahana(); return; }
+  if(t.wahana){ startWahana(t.wahana); return; }
   if(t.hofBoard){ AudioSys.sfx('pop'); openLB(); return; }
   if(t.volley){ volleyHit(); return; }
   if(t.kopdes){ openKopdes(); return; }
@@ -6113,6 +6331,9 @@ var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, l
 ITEM_DEFS.forEach(function(d){ if(eco.inv[d.id] === undefined) eco.inv[d.id] = 0; });
 var POS_IDS = ['kompas','kim','bangga','tanda','ketaqwaan','bumbung','grazy','pbb','pionering'];
 POS_IDS.forEach(function(id){ eco.pos[id] = {best:0, stamp:false, plays:0}; });
+/* Salinan MURNI struktur eco bawaan (sebelum simpanan lama dibaca) — dipakai
+   sistem multi-karakter untuk brankas karakter baru & reset profil. */
+var ECO_DEFAULTS = JSON.parse(JSON.stringify(eco));
 function loadEco(){
   try{
     var raw = localStorage.getItem(SAVE_KEY);
@@ -11624,6 +11845,11 @@ function mpSend(obj){
 function mpSendJoin(){
   return mpSend({
     type: 'join', name: playerName, poin: myPoin(), gender: mpGender(), appearance: mpAppearance(),
+    /* Identitas karakter terpilih (sistem multi-profil): characterId unik +
+       jenjang fase dikirim bersama appearance (kostum terakhir: kulit, rambut/
+       hijab, warna, seragam, wajah, aksesori, badan) agar kepemilikan rumah
+       eksklusif & skor Papan Peringkat terikat akurat pada karakter ini. */
+    characterId: (typeof activeCharId === 'string' && activeCharId) ? activeCharId : null, fase: eco.fase,
     x: player.position.x, y: player.position.z, dir: player.rotation.y,
     isGM: mp.asGM, room: mp.room
   });
@@ -11928,6 +12154,14 @@ function mpConnect(code, asGM){
     else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('GOAL1|') === 0){
       /* Siaran GOL Sepak Bola Mini: skor + pencetak gol — BUKAN pesan obrolan. */
       if(msg.id === mp.myId) mpConsumeOwnEcho(msg.text); else soccerHandleGoal(msg);
+    }
+    else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('BALL2|') === 0){
+      /* Siaran keadaan Bola Sepak DESA (Lapangan Desa Gerduren) — BUKAN pesan obrolan. */
+      if(msg.id === mp.myId) mpConsumeOwnEcho(msg.text); else soccer2HandleBall(msg);
+    }
+    else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('GOAL2|') === 0){
+      /* Siaran GOL Sepak Bola Desa: skor + pencetak gol — BUKAN pesan obrolan. */
+      if(msg.id === mp.myId) mpConsumeOwnEcho(msg.text); else soccer2HandleGoal(msg);
     }
     else if(msg.type === 'chat'){
       if(msg.id === mp.myId && mpConsumeOwnEcho(msg.text)){
@@ -12459,7 +12693,8 @@ var camTarget = new THREE.Vector3();
 /* Tinggi tanah efektif di bawah pemain: air sungai (berenang), lantai
    interior (+0,15 m), atau undakan pematang sawah (+0,3 m, auto-step). */
 function groundLevel(){
-  if(swimOn) return (typeof inSeaWater === 'function' && inSeaWater(player.position.x, player.position.z)) ? -1.15 : -0.5;   // laut dalam (kedalaman > 0,8 m): daya apung permukaan y = -1,15; sungai dangkal tetap -0,5
+  if(swimOn) return (typeof inPoolWater === 'function' && inPoolWater(player.position.x, player.position.z)) ? 0.25
+    : ((typeof inSeaWater === 'function' && inSeaWater(player.position.x, player.position.z)) ? -1.15 : -0.5);   // kolam renang: mengapung di permukaan kolam (lantai keramik 0,12, air 0,75); laut dalam: -1,15; sungai dangkal: -0,5
   if(interiorClamp) return roomFloorY;
   if(vehDrive || riding) return 0;
   return stepHeightAt(player.position.x, player.position.z);
@@ -12542,6 +12777,9 @@ function animate(){
          pemain; selama pose aktif pemain terkunci di tempat duduk / kasurnya. */
       if(poseMode && mLen > 0.35) standPose();
       if(poseMode){ mx = 0; mz = 0; mLen = 0; moving = false; }
+      /* WAHANA taman/kolam: selama naik wahana, input gerak dikunci — posisi
+         diatur penuh oleh wahanaPoseStep (perosotan/ayunan/komidi/papan loncat). */
+      if(typeof wahanaRide !== 'undefined' && wahanaRide){ mx = 0; mz = 0; mLen = 0; moving = false; }
       /* BERENANG di Sungai Gerduren: berjalan masuk ke air sungai (bukan di
          atas jembatan!) mengubah pose jadi renang dan gerak jadi lebih lambat. */
       var wasSwim = swimOn;
@@ -12657,6 +12895,7 @@ function animate(){
       }
       resolveCollisions(player.position);
       if(vehDrive) vehMultiPointCollide();
+      if(typeof wahanaRide !== 'undefined' && wahanaRide && typeof wahanaPoseStep === 'function') wahanaPoseStep(dt);
       if(tourActive) updateTour(dt);
       updateTrashPickups(dt);
       updateLocation();
@@ -12690,9 +12929,13 @@ function animate(){
         setCockpit(ck);
       } else {
         setCockpit(null);
-        var dist = 10.8; // sedikit lebih jauh agar ransel tidak mendominasi layar
-        var back = dist * Math.cos(camPitch);
-        camTarget.set(p.x - Math.sin(camYaw)*back, p.y + 1.6 + dist*Math.sin(camPitch), p.z - Math.cos(camYaw)*back);
+        /* CUTAWAY INDOOR: di dalam ruangan kamera lebih dekat & atas-miring
+           (pitch minimal 0,8) agar seluruh isi ruangan terlihat lega. */
+        var indoorCam = (typeof cutParts !== 'undefined' && !!cutParts);
+        var dist = indoorCam ? 8.4 : 10.8; // di luar ruangan sedikit lebih jauh agar ransel tidak mendominasi layar
+        var pitchUse = indoorCam ? Math.max(camPitch, 0.8) : camPitch;
+        var back = dist * Math.cos(pitchUse);
+        camTarget.set(p.x - Math.sin(camYaw)*back, p.y + 1.6 + dist*Math.sin(pitchUse), p.z - Math.cos(camYaw)*back);
         if(camTarget.y < 1.1) camTarget.y = 1.1;
         camSpringArm(p, camTarget);   // kamera anti-tembus tembok (spring-arm raycast)
         camera.position.lerp(camTarget, Math.min(1, dt*8));
@@ -15526,7 +15769,7 @@ ambients.push(function(dt, t){
    ke ruangan lewat HOUSE1| — rumah yang sudah dimiliki pemain lain
    terkunci di Dealer & di papan depan rumahnya. */
 var HOUSES = [
-  {no:1, x:-79, z:58, sx:-73.2, sz:59.5, sry:Math.PI/2},
+  {no:1, x:-79, z:58, sx:-79, sz:56.9, sry:Math.PI},   // papan di depan rumah menghadap Jl. Sawah Glempang (utara), tepat di luar aspal (tepi 56,5)
   {no:2, x:-70, z:64},
   {no:3, x:-40, z:64},
   {no:4, x:-28, z:63, build:true, wall:0xe0f2fe, roof:0x2563eb},
@@ -15623,7 +15866,7 @@ function openHouseInfo(t){
   infoTimer = setTimeout(hideInfo, 9000);
 }
 HOUSES.forEach(function(H){
-  if(H.build) house(H.x, H.z, H.wall, H.roof);
+  if(H.build) house(H.x, H.z, H.wall, H.roof, Math.PI);   // No. 04 & 07 di z 63: pintu/jendela/teras menghadap utara ke Jl. Sawah Glempang
   houseSignBuild(H);
   glowDoorMat((H.sx !== undefined ? H.sx : H.x), (H.sz !== undefined ? H.sz : H.z - 4.9) + 0.55);
   if(H.no !== 5) addInteractable(H.x, H.z, 7.5, 'Rumah No. ' + ('0' + H.no).slice(-2), null, {houseNo:H.no});
@@ -16177,8 +16420,8 @@ function socIAmOwner(){ return soc.owner === 'me' || soc.owner === socMyKey(); }
     top.rotation.x = Math.PI / 2; top.position.set(0, 1.6, dir * 0.625); g.add(top);
     addCollider(CX, zc + dir * 1.25, 1.9, 0.16);
   }
-  makeGoal(CZ - HL, 1);    // gawang utara (jaring ke selatan, mulut menghadap lapangan)
-  makeGoal(CZ + HL, -1);   // gawang selatan
+  makeGoal(CZ - HL, -1);   // gawang utara: mulut menghadap titik tengah lapangan, jaring menjulur KELUAR ke belakang garis (utara)
+  makeGoal(CZ + HL, 1);    // gawang selatan: mulut menghadap titik tengah lapangan, jaring menjulur KELUAR ke belakang garis (selatan)
   /* papan skor mini di tepi timur lapangan */
   var cv = document.createElement('canvas'); cv.width = 512; cv.height = 256;
   socBoardCtx = cv.getContext('2d');
@@ -16263,8 +16506,12 @@ var kickBarEl = document.createElement('div');
 kickBarEl.style.cssText = 'position:fixed;left:50%;bottom:118px;transform:translateX(-50%);width:170px;height:16px;border-radius:9px;background:rgba(2,20,12,.72);border:2px solid rgba(255,255,255,.75);display:none;z-index:60;pointer-events:none;overflow:hidden;';
 kickBarEl.innerHTML = '<div id="kickBarFill" style="height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#facc15,#ef4444);"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 10px Nunito,Arial,sans-serif;color:#fff;letter-spacing:.08em;">POWER TENDANGAN</div>';
 document.body.appendChild(kickBarEl);
+var socChargeField = 1;   // lapangan aktif untuk Power Bar: 1 = Halaman Sekolah, 2 = Lapangan Desa
 function soccerChargeStart(){
-  if(socCharge || !soccerNearBall()) return;
+  if(socCharge) return;
+  if(soccerNearBall()) socChargeField = 1;
+  else if(typeof soccer2NearBall === 'function' && soccer2NearBall()) socChargeField = 2;
+  else return;
   socCharge = {t: performance.now()};
   kickBarEl.style.display = 'block';
 }
@@ -16272,7 +16519,8 @@ function soccerChargeRelease(){
   if(!socCharge) return;
   var p = Math.min(1, (performance.now() - socCharge.t) / 1000);
   socCharge = null; kickBarEl.style.display = 'none';
-  if(soccerNearBall()) soccerKick(0.25 + p * 0.75);
+  if(socChargeField === 2){ if(typeof soccer2NearBall === 'function' && soccer2NearBall()) soccer2Kick(0.25 + p * 0.75); }
+  else if(soccerNearBall()) soccerKick(0.25 + p * 0.75);
 }
 document.addEventListener('keydown', function(e){
   if(e.code === 'KeyF' && !e.repeat && playing) soccerChargeStart();
@@ -16281,7 +16529,7 @@ document.addEventListener('keyup', function(e){
   if(e.code === 'KeyF' && playing) soccerChargeRelease();
 });
 actionBtn.addEventListener('pointerdown', function(){
-  if(currentTarget && currentTarget.soccer){ soccerChargeStart(); }
+  if(currentTarget && (currentTarget.soccer || currentTarget.soccer2)){ soccerChargeStart(); }
 });
 actionBtn.addEventListener('pointerup', function(){
   if(socCharge){ socSuppressClick = true; soccerChargeRelease(); }
@@ -16774,25 +17022,33 @@ function renderWardrobe(){
 
 
 /* ---------- Gedung Kopdes Merah Putih (simpang Jl. Sawah Glempang) ---------- */
+var KOPDES_CUT = null;   // atap & dinding Kopdes untuk CUTAWAY INDOOR VIEW (bangunan walk-in)
+var KOPDES_RECT = {minX:-19.6, maxX:-9.4, minZ:35.1, maxZ:44.9};
 (function buildKopdes(){
   var CX = -14.5, CZ = 40, wall = 0xf8fafc, red = 0xdc2626, darkred = 0x991b1b;
   box(11, 0.3, 9.5, 0xe7e2d6, CX, 0, CZ, scene, false).receiveShadow = true;      // lantai +0.15 m
   addStepCollider(CX, CZ, 5.5, 4.75);
   box(11.4, 0.5, 9.9, red, CX, 0.32, CZ, scene, false);                            // lis merah keliling dasar
   /* dinding belakang (barat) & samping */
-  box(0.35, 3.1, 9.5, wall, CX - 5, 1.7, CZ, scene); addCollider(CX - 5, CZ, 0.3, 4.85);
-  box(10.4, 3.1, 0.35, wall, CX, 1.7, CZ - 4.75, scene); addCollider(CX, CZ - 4.75, 5.2, 0.3);
-  box(10.4, 3.1, 0.35, wall, CX, 1.7, CZ + 4.75, scene); addCollider(CX, CZ + 4.75, 5.2, 0.3);
-  /* dinding depan (timur) dengan pintu lebar 2.2 m × tinggi 2.7 m */
-  box(0.35, 3.1, 3.6, wall, CX + 5, 1.7, CZ - 2.95, scene); addCollider(CX + 5, CZ - 2.95, 0.3, 1.85);
-  box(0.35, 3.1, 3.6, wall, CX + 5, 1.7, CZ + 2.95, scene);  addCollider(CX + 5, CZ + 2.95, 0.3, 1.85);
-  box(0.35, 0.55, 2.3, wall, CX + 5, 2.98, CZ, scene, false);                      // ambang atas pintu (celah 2.7 m)
+  var kopWalls = [
+    box(0.35, 3.1, 9.5, wall, CX - 5, 1.7, CZ, scene),
+    box(10.4, 3.1, 0.35, wall, CX, 1.7, CZ - 4.75, scene),
+    box(10.4, 3.1, 0.35, wall, CX, 1.7, CZ + 4.75, scene),
+    /* dinding depan (timur) dengan pintu lebar 2.2 m × tinggi 2.7 m */
+    box(0.35, 3.1, 3.6, wall, CX + 5, 1.7, CZ - 2.95, scene),
+    box(0.35, 3.1, 3.6, wall, CX + 5, 1.7, CZ + 2.95, scene),
+    box(0.35, 0.55, 2.3, wall, CX + 5, 2.98, CZ, scene, false)];                     // ambang atas pintu (celah 2.7 m)
+  addCollider(CX - 5, CZ, 0.3, 4.85);
+  addCollider(CX, CZ - 4.75, 5.2, 0.3);
+  addCollider(CX, CZ + 4.75, 5.2, 0.3);
+  addCollider(CX + 5, CZ - 2.95, 0.3, 1.85);
+  addCollider(CX + 5, CZ + 2.95, 0.3, 1.85);
   box(0.4, 0.28, 9.7, red, CX - 5, 3.32, CZ, scene, false);
   box(10.6, 0.28, 0.4, red, CX, 3.32, CZ - 4.75, scene, false);
   box(10.6, 0.28, 0.4, red, CX, 3.32, CZ + 4.75, scene, false);
   /* atap merah + kanopi garis merah-putih di teras timur */
-  box(11.8, 0.16, 10.3, darkred, CX, 3.62, CZ, scene);
-  box(12.0, 0.1, 10.5, 0xf8fafc, CX, 3.5, CZ, scene, false);
+  KOPDES_CUT = {roofs:[box(11.8, 0.16, 10.3, darkred, CX, 3.62, CZ, scene),
+                       box(12.0, 0.1, 10.5, 0xf8fafc, CX, 3.5, CZ, scene, false)], walls:kopWalls};
   for(var s = 0; s < 6; s++) box(1.7, 0.06, 0.62, s % 2 ? 0xf8fafc : red, CX + 5.9, 2.62, CZ - 2.6 + s * 1.04, scene, false).rotation.z = -0.18;
   /* papan nama besar menghadap simpang jalan */
   var sg = new THREE.Group(); sg.position.set(CX + 5.45, 0, CZ); sg.rotation.y = Math.PI / 2; scene.add(sg);
@@ -17086,13 +17342,13 @@ var perahuGroup = (function(){
   box(1.9, 0.55, 5.4, 0x9a6a38, 0, 0.3, 0, g); box(1.5, 0.45, 1.1, 0x8a5a2e, 0, 0.42, 3.1, g, false).rotation.x = -0.35;
   box(1.7, 0.09, 0.5, 0x7c4a21, 0, 0.62, -0.8, g, false); box(1.7, 0.09, 0.5, 0x7c4a21, 0, 0.62, 1.2, g, false);
   cyl(0.05, 0.05, 2.6, 0x6d4c2f, 0, 1.7, 0.4, g, 8);
-  g.position.set(-49.5, 0.02, 149); g.rotation.y = 0.25; scene.add(g); return g;
+  g.position.set(-49.5, 0.02, 149); g.rotation.y = 0; scene.add(g); return g;   // haluan (lokal +z) lurus ke lautan lepas / Pulau Tropis
 })();
 var speedGroup = (function(){
   var g = new THREE.Group();
   box(2.0, 0.5, 5.8, 0xf8fafc, 0, 0.32, 0, g); box(2.04, 0.18, 5.84, 0xdc2626, 0, 0.2, 0, g, false);
   box(1.5, 0.45, 1.4, 0xbae6fd, 0, 0.78, 0.7, g, false); box(0.7, 0.6, 0.4, 0x111827, 0, 0.55, -3.0, g, false);
-  g.position.set(-42.5, 0.02, 149); g.rotation.y = -0.2; g.visible = false; scene.add(g); return g;
+  g.position.set(-42.5, 0.02, 149); g.rotation.y = 0; g.visible = false; scene.add(g); return g;   // haluan lurus ke lautan lepas / Pulau Tropis
 })();
 addInteractable(-49.5, 149, 3.6, 'Perahu Nelayan', null, {boat:'perahu'});
 addInteractable(-999, -999, 3.6, 'Speedboat', null, {boat:'speed'});
@@ -17297,11 +17553,16 @@ var RAZIA_QUIZ = [
   {q:'Saat naik sepeda motor, helm dipakai untuk melindungi…', o:['Tangan','Kepala','Kaki'], a:1, x:'Helm melindungi kepala — bagian tubuh paling penting. Klik tali helm sampai berbunyi "klik"!'},
   {q:'Rambu lingkaran merah dengan angka 40 di tengah berarti…', o:['Jarak 40 km','Kecepatan maksimal 40 km/jam','Ada 40 rumah'], a:1, x:'Rambu larangan: kecepatan kendaraan tidak boleh lebih dari 40 km/jam di jalan itu.'}
 ];
+/* ORIENTASI POS RAZIA (audit spasial): keempat ujung jalan berada di jalan
+   yang membentang timur–barat, jadi palang WAJIB membentang melintang (sumbu z)
+   menutup seluruh lebar jalan di semua pos. `face` = arah hadap 2 polisi ke arah
+   datangnya pengendara (dari dalam desa); `signRy` = arah hadap papan STOP ke
+   pengendara yang mendekat. */
 var RAZIA_POSTS = [
-  {x:-104, z:52, along:'z', label:'Barat'},
-  {x:93, z:52, along:'z', label:'Timur'},
-  {x:0, z:-72, along:'x', label:'Utara'},
-  {x:-88, z:80, along:'x', label:'Selatan'}
+  {x:-104, z:52, along:'z', label:'Barat',  face:Math.PI / 2,  signRy:Math.PI / 2},
+  {x:93,   z:52, along:'z', label:'Timur',  face:-Math.PI / 2, signRy:-Math.PI / 2},
+  {x:0,    z:-72, along:'z', label:'Utara', face:0,            signRy:0},
+  {x:-88,  z:80, along:'z', label:'Selatan', face:Math.PI,     signRy:Math.PI}
 ];
 var raziaLights = [];
 RAZIA_POSTS.forEach(function(P, idx){
@@ -17317,7 +17578,7 @@ RAZIA_POSTS.forEach(function(P, idx){
     cyl(0.02, 0.17, 0.52, 0xf97316, cx, 0.26, cz, g, 10);
   });
   var sx = P.along === 'z' ? P.x + 2.2 : P.x + 5.6, sz = P.along === 'z' ? P.z - 5.6 : P.z + 2.2;
-  postSign('STOP • PEMERIKSAAN LALU LINTAS', sx, sz, P.along === 'z' ? Math.PI / 2 : 0, {w:3.0, bg:'#dc2626', fg:'#ffffff'});
+  postSign('STOP • PEMERIKSAAN LALU LINTAS', sx, sz, P.signRy, {w:3.0, bg:'#dc2626', fg:'#ffffff'});
   /* mobil patroli + lampu rotator */
   var car = new THREE.Group();
   box(1.8, 0.55, 4.0, 0xf8fafc, 0, 0.62, 0, car); box(1.6, 0.5, 2.0, 0x1e3a5f, 0, 1.12, -0.2, car, false);
@@ -17333,6 +17594,7 @@ RAZIA_POSTS.forEach(function(P, idx){
   [[-1.6, 1.2], [1.8, -1.0]].forEach(function(o, k){
     var f = makeNPCFigure({skin: k ? 0xb07a45 : 0xd9a066, hair:'cap', capCol:0x1e3a5f, shirt:0x2b4c7e, bottom:0x111827});
     f.g.position.set(P.x + o[0] * (P.along === 'z' ? 0.5 : 1), 0, P.z + o[1] * (P.along === 'z' ? 1 : 0.5));
+    f.g.rotation.y = P.face || 0;   // polisi menghadap arah datangnya pengendara
     scene.add(f.g);
   });
   labelAt('Pos Razia ' + P.label, P.x, 3.1, P.z, 0.55);
@@ -17900,6 +18162,1135 @@ document.querySelectorAll('.sheet-ovl, #kuisOverlay, #restOverlay, #patrolOverla
 });
 document.querySelectorAll('#hud button').forEach(function(b){
   b.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
+});
+
+/* ================= SISTEM MULTI-KARAKTER: LOBI PILIH KARAKTER (MAKS 4 PROFIL) =================
+   Setiap karakter tersimpan sebagai profil terpisah di localStorage
+   (kunci duniaProfiles-v1): {id (UUID), nama, gender, kulit, warna rambut,
+   gaya rambut/hijab, badan, fase, cert, eco (brankas progres lengkap:
+   Kredit, Poin Bintang lewat stats, rumah, inventaris, kebun, sertifikat),
+   updatedAt}. Berpindah profil = seluruh eco + penampilan diganti utuh dari
+   brankas profil itu, jadi Kredit/rumah/pakaian/posisi antar-karakter TIDAK
+   pernah tertukar (posisi selalu mulai dari Gerbang saat masuk dunia).
+   Simpanan lama satu karakter (dunia-sdn1-save-v2) dimigrasikan otomatis
+   menjadi profil pertama agar progres pemain lama tidak hilang. */
+var PROFILES_KEY = 'duniaProfiles-v1';
+var MAX_PROFILES = 4;
+var charProfiles = [];
+var activeCharId = null;   // characterId yang brankasnya sedang dimuat/dimainkan
+var lobbySelId = null;     // karakter yang sedang dipilih di Lobi
+var lobbyMode = 'create';  // 'lobby' | 'create'
+var editingCharId = null;  // profil yang sedang diedit lewat "👕 Ganti Gaya"
+function genCharId(){
+  if(window.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  return 'char-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10) + '-' + Math.random().toString(36).slice(2, 8);
+}
+function findProfile(id){ for(var i = 0; i < charProfiles.length; i++) if(charProfiles[i].id === id) return charProfiles[i]; return null; }
+function persistProfiles(){ try{ localStorage.setItem(PROFILES_KEY, JSON.stringify(charProfiles)); }catch(e){} }
+function loadProfiles(){
+  try{
+    var raw = localStorage.getItem(PROFILES_KEY);
+    if(!raw) return;
+    var arr = JSON.parse(raw);
+    if(Array.isArray(arr)) charProfiles = arr.filter(function(p){ return p && typeof p.id === 'string' && typeof p.name === 'string'; }).slice(0, MAX_PROFILES);
+  }catch(e){ charProfiles = []; }
+}
+function profNum(n){ return (n | 0).toLocaleString('id-ID'); }
+function pbOfEco(e){
+  if(!e) return 0;
+  var n = 0;
+  if(e.pos && e.pos.kompas && e.pos.kompas.stamp) n++;
+  ['numerasi','ipas','literasi','ppkn'].forEach(function(id){ if(e.eduPos && e.eduPos[id] && e.eduPos[id].done) n++; });
+  return ((e.stats && e.stats.correct) | 0) * 10 + n * 50 + ((e.artefak && e.artefak.length) || 0) * 100;
+}
+function houseLabelOfEco(e){
+  if(!e) return '';
+  var nums = [];
+  if(e.houses) for(var k in e.houses) if(e.houses[k]) nums.push(parseInt(k, 10));
+  if(e.assets && e.assets.rumah && nums.indexOf(5) < 0) nums.push(5);
+  nums = nums.filter(function(n){ return n >= 1 && n <= 8; }).sort(function(a, b){ return a - b; });
+  return nums.length ? 'Rumah No. ' + nums.map(function(n){ return ('0' + n).slice(-2); }).join(', ') : '';
+}
+function snapshotAppearanceInto(p){
+  p.gender = custom.gender; p.skin = custom.skin.v; p.hairColor = custom.hairColor.v;
+  p.hair = custom.hair.id; p.body = custom.body.id; p.fase = eco.fase;
+}
+function makeProfileFromCurrent(name){
+  var p = {id:genCharId(), name:name, cert:false, tutorialCompleted:false, eco:null, updatedAt:Date.now()};
+  snapshotAppearanceInto(p);
+  try{ p.cert = !!certGranted(); }catch(e){ p.cert = false; }
+  p.eco = JSON.parse(JSON.stringify(eco));
+  return p;
+}
+function saveActiveProfile(){
+  if(adminMode || adminCharMode) return;   // sesi Admin tidak menimpa brankas siswa
+  var id = editingCharId || activeCharId;
+  if(!id) return;
+  var p = findProfile(id); if(!p) return;
+  p.name = playerName;
+  snapshotAppearanceInto(p);
+  try{ p.cert = !!certGranted(); }catch(e){}
+  p.eco = JSON.parse(JSON.stringify(eco));
+  p.updatedAt = Date.now();
+  persistProfiles();
+}
+/* Setiap penyimpanan progres ikut menulis brankas profil aktif — progres
+   karakter yang sedang dimainkan selalu terikat pada characterId-nya. */
+var _saveEcoForProfiles = saveEco;
+saveEco = function(){ _saveEcoForProfiles(); saveActiveProfile(); };
+function applyProfile(p){
+  if(!p) return;
+  var snap = null;
+  try{ snap = p.eco ? JSON.parse(JSON.stringify(p.eco)) : null; }catch(e){ snap = null; }
+  if(!snap) snap = JSON.parse(JSON.stringify(ECO_DEFAULTS));
+  for(var k in eco) delete eco[k];
+  for(var k2 in snap) eco[k2] = snap[k2];
+  sanitizePlayerData();
+  custom.gender = (p.gender === 'P') ? 'P' : 'L';
+  custom.genderName = (custom.gender === 'P') ? 'Putri' : 'Putra';
+  document.getElementById('genderL').classList.toggle('on', custom.gender === 'L');
+  document.getElementById('genderP').classList.toggle('on', custom.gender === 'P');
+  custom.skin = SKIN_OPTIONS.filter(function(o){ return o.v === p.skin; })[0] || SKIN_OPTIONS[1];
+  custom.hairColor = HAIR_COLOR_OPTIONS.filter(function(o){ return o.v === p.hairColor; })[0] || HAIR_COLOR_OPTIONS[0];
+  custom.body = BODY_OPTIONS.filter(function(o){ return o.id === p.body; })[0] || BODY_OPTIONS[0];
+  custom.hair = HAIR_STYLE_OPTIONS[custom.gender].filter(function(o){ return o.id === p.hair; })[0] || HAIR_STYLE_OPTIONS[custom.gender][0];
+  playerName = p.name || playerName;
+  if(nameInputEl) nameInputEl.value = p.name || '';
+  activeCharId = p.id;
+  renderSkinRow(); renderHairColorRow(); renderHairStyles(); renderFaceOptions(); renderBodyOptions();
+  syncOutfitRow(); syncFaseUI();
+  try{ recomputeProgres(false); }catch(e){}
+  try{ updateStatsUI(); }catch(e){}
+  try{ renderBag(); }catch(e){}
+  if(typeof updateCertBtn === 'function'){ try{ updateCertBtn(); }catch(e){} }
+  refreshCustom(true);   // panggung menampilkan model + kostum terakhir karakter ini (wrapper memicu emote Sapa)
+  if(typeof validateName === 'function') validateName();
+}
+function applyFreshDefaults(){
+  var snap = JSON.parse(JSON.stringify(ECO_DEFAULTS));
+  for(var k in eco) delete eco[k];
+  for(var k2 in snap) eco[k2] = snap[k2];
+  sanitizePlayerData();
+  custom.gender = 'L'; custom.genderName = 'Putra';
+  document.getElementById('genderL').classList.add('on');
+  document.getElementById('genderP').classList.remove('on');
+  custom.skin = SKIN_OPTIONS[1]; custom.hairColor = HAIR_COLOR_OPTIONS[0];
+  custom.hair = HAIR_STYLE_OPTIONS.L[0]; custom.body = BODY_OPTIONS[0];
+  activeCharId = null;
+  if(nameInputEl) nameInputEl.value = '';
+  renderSkinRow(); renderHairColorRow(); renderHairStyles(); renderFaceOptions(); renderBodyOptions();
+  syncOutfitRow(); syncFaseUI();
+  try{ updateStatsUI(); }catch(e){}
+  refreshCustom(true);
+  if(typeof validateName === 'function') validateName();
+}
+function migrateLegacyProfile(){
+  if(charProfiles.length) return;
+  var nm = '', hasSave = false;
+  try{ nm = (localStorage.getItem('duniaNamaPetualang') || '').trim(); hasSave = !!localStorage.getItem(SAVE_KEY); }catch(e){}
+  var validName = nm.length >= 3 && NAME_BLOCKED.indexOf(nm.toLowerCase()) < 0;
+  if(!hasSave && !validName) return;
+  var p = makeProfileFromCurrent(validName ? nm : 'Petualang');
+  p.tutorialCompleted = true;   // pemain lama hasil migrasi: tidak ditawari tutorial pemula
+  charProfiles.push(p);
+  persistProfiles();
+}
+/* ---------- Kartu karakter di Lobi ---------- */
+function renderCharCards(){
+  var list = document.getElementById('charList');
+  if(!list) return;
+  list.innerHTML = '';
+  charProfiles.forEach(function(p){
+    var e = p.eco || {};
+    var card = document.createElement('div');
+    card.className = 'char-card' + (p.id === lobbySelId ? ' sel' : '');
+    card.setAttribute('role', 'option');
+    card.setAttribute('aria-selected', p.id === lobbySelId ? 'true' : 'false');
+    var ava = document.createElement('div');
+    ava.className = 'char-ava';
+    var sk = SKIN_OPTIONS.filter(function(o){ return o.v === p.skin; })[0];
+    ava.style.background = sk ? sk.css : '#f2c79b';
+    ava.innerHTML = (typeof HAIR_SVG !== 'undefined' && HAIR_SVG[p.hair]) ? HAIR_SVG[p.hair] : '';
+    card.appendChild(ava);
+    var meta = document.createElement('div');
+    meta.className = 'char-meta';
+    var nm = document.createElement('div');
+    nm.className = 'char-name'; nm.textContent = p.name;
+    meta.appendChild(nm);
+    var badges = document.createElement('div');
+    badges.className = 'char-badges';
+    var gChip = document.createElement('span');
+    gChip.className = 'char-chip ' + (p.gender === 'P' ? 'g-p' : 'g-l');
+    gChip.textContent = (p.gender === 'P' ? '● Putri' : '● Putra');
+    badges.appendChild(gChip);
+    var fChip = document.createElement('span');
+    fChip.className = 'char-chip fase';
+    fChip.textContent = 'Fase ' + (p.fase || e.fase || 'B');
+    badges.appendChild(fChip);
+    if(p.cert){
+      var cChip = document.createElement('span');
+      cChip.className = 'char-chip cert'; cChip.textContent = '🏅 Sertifikat';
+      badges.appendChild(cChip);
+    }
+    meta.appendChild(badges);
+    var stats = document.createElement('div');
+    stats.className = 'char-stats';
+    var s1 = document.createElement('span'); s1.innerHTML = '🪙 <b></b> Kredit'; s1.querySelector('b').textContent = profNum(e.kredit);
+    var s2 = document.createElement('span'); s2.innerHTML = '⭐ <b></b> Poin Bintang'; s2.querySelector('b').textContent = profNum(pbOfEco(e));
+    stats.appendChild(s1); stats.appendChild(s2);
+    var hl = houseLabelOfEco(e);
+    if(hl){ var s3 = document.createElement('span'); s3.textContent = '🏠 ' + hl; stats.appendChild(s3); }
+    meta.appendChild(stats);
+    card.appendChild(meta);
+    var acts = document.createElement('div');
+    acts.className = 'char-acts';
+    var styleBtn = document.createElement('button');
+    styleBtn.type = 'button'; styleBtn.className = 'char-style-btn'; styleBtn.textContent = '👕 Ganti Gaya';
+    styleBtn.setAttribute('aria-label', 'Ganti gaya rambut & seragam ' + p.name);
+    styleBtn.addEventListener('click', function(ev){ ev.stopPropagation(); AudioSys.sfx('click'); enterCreateMode(p.id); });
+    var delBtn = document.createElement('button');
+    delBtn.type = 'button'; delBtn.className = 'char-del-btn'; delBtn.textContent = '🗑️';
+    delBtn.setAttribute('aria-label', 'Hapus karakter ' + p.name);
+    delBtn.addEventListener('click', function(ev){ ev.stopPropagation(); AudioSys.sfx('click'); askDeleteProfile(p.id); });
+    acts.appendChild(styleBtn); acts.appendChild(delBtn);
+    card.appendChild(acts);
+    card.addEventListener('click', function(){
+      AudioSys.sfx('click');
+      lobbySelId = p.id;
+      applyProfile(p);
+      renderCharCards();
+    });
+    list.appendChild(card);
+  });
+  var newBtn = document.getElementById('charNewBtn');
+  if(newBtn){
+    var full = charProfiles.length >= MAX_PROFILES;
+    newBtn.classList.toggle('off', full);
+    newBtn.disabled = full;
+    newBtn.textContent = full ? '➕ Buat Karakter Baru (Slot Penuh)' : '➕ Buat Karakter Baru';
+  }
+  var cnt = document.getElementById('lobbyCount');
+  if(cnt) cnt.textContent = 'Slot karakter terpakai: ' + charProfiles.length + ' dari ' + MAX_PROFILES;
+  var enter = document.getElementById('lobbyEnterBtn');
+  var sel = findProfile(lobbySelId);
+  if(enter) enter.textContent = sel ? '🚀 LANJUTKAN PETUALANGAN (' + sel.name + ')' : '🚀 LANJUTKAN PETUALANGAN';
+}
+/* ---------- Mode Lobi vs Mode Buat Karakter ---------- */
+function enterLobbyMode(){
+  lobbyMode = 'lobby'; editingCharId = null;
+  document.getElementById('lobbyPanel').hidden = false;
+  document.getElementById('stepName').style.display = 'none';
+  document.getElementById('stepChar').style.display = 'none';
+  document.getElementById('ccTabs').hidden = true;
+  document.getElementById('ccBackBtn').hidden = true;
+  document.getElementById('lobbyWelcome').hidden = false;
+  var sn = document.querySelector('.start-card .start-note'); if(sn) sn.style.display = 'none';
+  var rb = document.getElementById('passportRibbon'); if(rb) rb.textContent = 'LOBI PILIH KARAKTER';
+  if(!findProfile(lobbySelId)) lobbySelId = charProfiles.length ? charProfiles[0].id : null;
+  if(lobbySelId) applyProfile(findProfile(lobbySelId));
+  renderCharCards();
+}
+function enterCreateMode(editId){
+  lobbyMode = 'create';
+  document.getElementById('lobbyPanel').hidden = true;
+  document.getElementById('lobbyWelcome').hidden = true;
+  document.getElementById('stepChar').style.display = '';
+  document.getElementById('ccTabs').hidden = false;
+  var sn = document.querySelector('.start-card .start-note'); if(sn) sn.style.display = '';
+  var rb = document.getElementById('passportRibbon'); if(rb) rb.textContent = 'PASPOR PETUALANG';
+  document.getElementById('ccBackBtn').hidden = !(charProfiles.length > 0);
+  var sb = document.getElementById('startBtn');
+  if(editId){
+    editingCharId = editId;
+    var p = findProfile(editId);
+    if(p) applyProfile(p);
+    if(sb) sb.textContent = p ? '🚀 LANJUTKAN PETUALANGAN (' + p.name + ')' : '🚀 LANJUTKAN PETUALANGAN';
+    ccShowTab('penampilan');
+  } else {
+    editingCharId = null;
+    applyFreshDefaults();
+    if(sb) sb.textContent = charProfiles.length ? '🚀 MULAI PETUALANGAN BARU' : '🚀 MULAI PETUALANGAN';
+    ccShowTab('identitas');
+  }
+}
+document.getElementById('ccBackBtn').addEventListener('click', function(){
+  AudioSys.sfx('click');
+  if(charProfiles.length) enterLobbyMode();   // batal membuat/mengedit: brankas karakter terpilih dimuat ulang utuh
+});
+document.getElementById('charNewBtn').addEventListener('click', function(){
+  if(charProfiles.length >= MAX_PROFILES){ AudioSys.sfx('error'); showToast('Slot karakter sudah penuh (4 dari 4). Hapus satu karakter dulu bila ingin membuat yang baru.', 4200); return; }
+  AudioSys.sfx('click');
+  enterCreateMode(null);
+});
+document.getElementById('lobbyEnterBtn').addEventListener('click', function(){
+  if(!findProfile(lobbySelId)){ AudioSys.sfx('error'); return; }
+  AudioSys.sfx('click');
+  document.getElementById('startBtn').click();   // jalur masuk dunia yang sama persis (validasi nama, pratinjau, multiplayer otomatis)
+});
+/* ---------- Studio Paspor Petualang 3 Tab ---------- */
+var ccGroups = {identitas:[], penampilan:[], seragam:[]};
+var ccTab = 'identitas';
+function ccCollect(){
+  var stepChar = document.getElementById('stepChar');
+  var genderRow = stepChar.querySelector('.gender-row');
+  var faseRow = stepChar.querySelector('.fase-row');
+  var notes = stepChar.querySelectorAll('.sheet-note');
+  var buatLabel = stepChar.querySelector('label.field');
+  ccGroups.identitas = [document.getElementById('stepName'), buatLabel, genderRow.previousElementSibling, genderRow, faseRow.previousElementSibling, faseRow, notes[0]];
+  ccGroups.penampilan = [stepChar.querySelector('.drag-hint'),
+    document.getElementById('skinLabel'), document.getElementById('skinRow'),
+    document.getElementById('hairColorLabel'), document.getElementById('hairColorRow'),
+    document.getElementById('hairStyleLabel'), document.getElementById('hairStyleRow'),
+    document.getElementById('faceLabel'), document.getElementById('faceRow'),
+    document.getElementById('bodyLabel'), document.getElementById('bodyRow')];
+  ccGroups.seragam = [document.getElementById('outfitLabel'), document.getElementById('outfitRow'),
+    document.getElementById('customSummary'), notes[1], document.getElementById('startBtn'),
+    stepChar.querySelector('.start-or'), document.getElementById('mpStartBtn')];
+}
+function ccShowTab(name){
+  ccTab = name;
+  for(var g in ccGroups) ccGroups[g].forEach(function(el){ if(el) el.style.display = (g === name) ? '' : 'none'; });
+  document.querySelectorAll('#ccTabs .cc-tab').forEach(function(b){
+    var on = b.getAttribute('data-cc') === name;
+    b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('#ccTabs .cc-tab').forEach(function(b){
+  b.addEventListener('click', function(){ AudioSys.sfx('click'); ccShowTab(b.getAttribute('data-cc')); });
+});
+/* Kait masuk dunia: ikat karakter ke profilnya TEPAT saat petualangan dimulai.
+   Listener ini terdaftar setelah handler masuk bawaan, jadi playerName &
+   validasi nama sudah beres; mode menentukan buat-baru vs lanjut vs edit. */
+document.getElementById('startBtn').addEventListener('click', function(){
+  if(adminCharMode) return;
+  if(typeof validateName === 'function' && !validateName()){ ccShowTab('identitas'); return; }
+  if(editingCharId){
+    activeCharId = editingCharId;
+    saveActiveProfile();   // gaya & nama hasil edit tersimpan ke profilnya
+    editingCharId = null;
+  } else if(lobbyMode === 'create'){
+    if(charProfiles.length >= MAX_PROFILES){ activeCharId = lobbySelId; }
+    else {
+      var np = makeProfileFromCurrent(playerName);
+      charProfiles.push(np);
+      activeCharId = np.id;
+      persistProfiles();
+    }
+  } else {
+    activeCharId = lobbySelId;   // mode lobi: lanjutkan karakter terpilih
+  }
+  /* Karakter yang belum menyelesaikan tutorial ditawari Tur Singkat Bu Ratna
+     sesaat setelah berdiri di depan Gerbang Sekolah (per profil/characterId). */
+  setTimeout(function(){ if(typeof maybeOfferTutorial === 'function') maybeOfferTutorial(); }, 1500);
+});
+/* ---------- Hapus karakter: konfirmasi dua kali ---------- */
+var delTargetId = null;
+var charDelOverlay = document.getElementById('charDelOverlay');
+function askDeleteProfile(id){
+  var p = findProfile(id); if(!p) return;
+  delTargetId = id;
+  document.getElementById('charDelStep1').hidden = false;
+  document.getElementById('charDelStep2').hidden = true;
+  document.getElementById('charDelText').textContent = 'Karakter "' + p.name + '" beserta seluruh progresnya — Kredit, Poin Bintang, kepemilikan rumah, inventaris tas, progres kebun, dan status sertifikat — akan dihapus permanen dari perangkat ini.';
+  charDelOverlay.classList.add('on');
+}
+function closeDeleteProfile(){ delTargetId = null; charDelOverlay.classList.remove('on'); }
+document.getElementById('charDelStep1').addEventListener('click', function(){
+  var p = findProfile(delTargetId); if(!p){ closeDeleteProfile(); return; }
+  AudioSys.sfx('error');
+  document.getElementById('charDelStep1').hidden = true;
+  document.getElementById('charDelStep2').hidden = false;
+  document.getElementById('charDelText').textContent = 'Sekali lagi untuk memastikan: progres "' + p.name + '" TIDAK bisa dikembalikan setelah dihapus. Tekan tombol merah tua di bawah bila benar-benar yakin.';
+});
+document.getElementById('charDelStep2').addEventListener('click', function(){
+  if(!delTargetId){ closeDeleteProfile(); return; }
+  var goneId = delTargetId;
+  charProfiles = charProfiles.filter(function(x){ return x.id !== goneId; });
+  if(activeCharId === goneId) activeCharId = null;
+  if(lobbySelId === goneId) lobbySelId = charProfiles.length ? charProfiles[0].id : null;
+  persistProfiles();
+  closeDeleteProfile();
+  AudioSys.sfx('pop');
+  if(!charProfiles.length){ enterCreateMode(null); showToast('Karakter terhapus. Buat karakter barumu untuk mulai berpetualang!', 3800); }
+  else { enterLobbyMode(); showToast('Karakter berhasil dihapus.', 3000); }
+});
+document.getElementById('charDelCancel').addEventListener('click', function(){ AudioSys.sfx('click'); closeDeleteProfile(); });
+charDelOverlay.addEventListener('click', function(e){ if(e.target === charDelOverlay) closeDeleteProfile(); });
+charDelOverlay.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
+/* ---------- Tombol 🔄 Ganti Karakter di laci Menu (dalam game) ---------- */
+function switchCharacterToLobby(){
+  if(!playing) return;
+  try{ exitRide(); }catch(e){}              // turun dari kendaraan/perahu/helikopter dulu
+  saveEco();                                  // progres karakter aktif tersimpan ke brankasnya (wrapper profil)
+  try{ mpLeave(true); }catch(e){}             // putus ruangan multiplayer dengan bersih
+  playing = false;
+  try{ closeMenuDrawer(); }catch(e){}
+  document.querySelectorAll('.sheet-ovl.on').forEach(function(el){ el.classList.remove('on'); });
+  hud.classList.remove('on');
+  startScreenEl.classList.remove('gone');
+  if(typeof syncStartScreen === 'function') syncStartScreen();
+  previewEnter();
+  if(charProfiles.length) enterLobbyMode(); else enterCreateMode(null);
+  showToast('Progresmu tersimpan! Pilih karakter untuk melanjutkan petualangan.', 3600);
+}
+document.getElementById('switchCharBtn').addEventListener('click', switchCharacterToLobby);
+/* ---------- Keputusan awal saat halaman dibuka ---------- */
+ccCollect();
+loadProfiles();
+migrateLegacyProfile();
+if(charProfiles.length){ lobbySelId = charProfiles[0].id; enterLobbyMode(); }
+else enterCreateMode(null);
+
+/* ================= CUTAWAY INDOOR VIEW: ATAP HILANG + DINDING SEMI-TRANSPARAN =================
+   Saat pemain berada di dalam ruangan mana pun (Ruang Kelas 1-6, Perpus, UKS,
+   Kantin, Koperasi, Masjid, Balai Desa, Polsek, Puskesmas, Rumah Warga,
+   interior Rumah Kamu, dan gedung walk-in Kopdes Merah Putih), plafon/atap
+   ruangan itu disembunyikan (visible=false) dan dindingnya menjadi
+   semi-transparan (opacity 0,15) agar isi ruangan terlihat jelas dari kamera
+   atas-miring. Collider fisik dinding TIDAK berubah — tetap padat, pemain
+   tetap tidak bisa menembus tembok. Keluar ruangan = tampilan pulih solid. */
+var cutParts = null;
+function cutSetParts(parts){
+  if(cutParts === parts) return;
+  if(cutParts){
+    cutParts.roofs.forEach(function(m){ m.visible = true; });
+    cutParts.walls.forEach(function(m){ m.material.opacity = 1; m.material.transparent = false; m.material.needsUpdate = true; });
+  }
+  cutParts = parts || null;
+  if(cutParts){
+    cutParts.roofs.forEach(function(m){ m.visible = false; });
+    cutParts.walls.forEach(function(m){ m.material.transparent = true; m.material.opacity = 0.15; m.material.needsUpdate = true; });
+  }
+}
+setInterval(function(){
+  if(!playing){ if(cutParts) cutSetParts(null); return; }
+  var want = null;
+  if(interiorClamp){
+    if(activeRoomId === 'home') want = (typeof HOME_CUT !== 'undefined') ? HOME_CUT : null;
+    else if(activeRoomId && typeof ROOMS !== 'undefined' && ROOMS[activeRoomId]) want = ROOMS[activeRoomId].cut || null;
+  } else if(typeof KOPDES_RECT !== 'undefined' && KOPDES_RECT &&
+      player.position.x > KOPDES_RECT.minX && player.position.x < KOPDES_RECT.maxX &&
+      player.position.z > KOPDES_RECT.minZ && player.position.z < KOPDES_RECT.maxZ){
+    want = (typeof KOPDES_CUT !== 'undefined') ? KOPDES_CUT : null;
+  }
+  cutSetParts(want);
+}, 200);
+
+/* ================= SEPAK BOLA LAPANGAN 2: LAPANGAN DESA GERDUREN =================
+   Arena kedua yang independen dari Lapangan Mini sekolah: lapangan rumput
+   lebih luas (20 × 30 m) di Lapangan Gerduren, garis putih, 2 gawang
+   berjaring (utara & selatan), papan skor sendiri, 1 bola berfisika.
+   Sinkronisasi lewat BALL2| / GOAL2|. Mekanik giring & rebut bola berlaku
+   di KEDUA lapangan (lihat tackleTarget / soccerTackle di bawah). */
+INFO['Lapangan Sepak Bola Desa'] = 'Lapangan Sepak Bola Desa Gerduren: lapangan besar 20×30 m di Lapangan Gerduren! Giring bola dengan berjalan menyentuhnya, rebut bola lawan dengan tombol [⚡ Rebut Bola] saat dekat dengannya, ketuk [⚽ Tendang] / F untuk umpan, atau tahan untuk tendangan keras. Gol = +15 Kredit (maks 150 Kredit per hari, gabungan kedua lapangan).';
+INFO['Bola Sepak Desa'] = 'Bola Sepak Desa: giring dengan berjalan menyentuhnya. Dekati lawan yang menggiring lalu tekan [⚡ Rebut Bola] (tombol Aksi / E) untuk merebut penguasaan bola!';
+var SOC2 = {x:-64, z:0, hw:10, hl:15};
+var soc2 = {x:SOC2.x, z:SOC2.z, vx:0, vz:0, owner:'me', lastId:'me', lastName:'', lastGender:'',
+            pa:0, pi:0, frozenUntil:0, outAt:0, lastSync:0, lastGoalId:0,
+            rx:SOC2.x, rz:SOC2.z, rvx:0, rvz:0, touchFlag:false, ownerTouchAt:0};
+var soc2Ball = null, soc2BoardTex = null, soc2BoardCtx = null;
+var SOCCER2_TARGET = {soccer2:true, name:'Bola Sepak Desa', x:SOC2.x, z:SOC2.z, r:1.8};
+(function buildSoccerField2(){
+  var CX = SOC2.x, CZ = SOC2.z, HW = SOC2.hw, HL = SOC2.hl;
+  flat(HW * 2 + 1.2, HL * 2 + 1.2, 0x5da653, CX, CZ, scene, 0.05).receiveShadow = true;
+  function line(w, d, x, z){ box(w, 0.025, d, 0xffffff, x, 0.07, z, scene, false); }
+  line(HW * 2, 0.2, CX, CZ - HL); line(HW * 2, 0.2, CX, CZ + HL);
+  line(0.2, HL * 2, CX - HW, CZ); line(0.2, HL * 2, CX + HW, CZ);
+  line(HW * 2, 0.16, CX, CZ);
+  var ring = new THREE.Mesh(new THREE.RingGeometry(2.2, 2.42, 40), new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.DoubleSide}));
+  ring.rotation.x = -Math.PI / 2; ring.position.set(CX, 0.07, CZ); scene.add(ring);
+  var dot = new THREE.Mesh(new THREE.CircleGeometry(0.2, 16), new THREE.MeshBasicMaterial({color:0xffffff}));
+  dot.rotation.x = -Math.PI / 2; dot.position.set(CX, 0.07, CZ); scene.add(dot);
+  [-1, 1].forEach(function(s){
+    line(9, 0.16, CX, CZ + s * (HL - 4));
+    line(0.16, 4, CX - 4.5, CZ + s * (HL - 2));
+    line(0.16, 4, CX + 4.5, CZ + s * (HL - 2));
+  });
+  var ncv = document.createElement('canvas'); ncv.width = ncv.height = 64;
+  var ng = ncv.getContext('2d');
+  ng.fillStyle = 'rgba(255,255,255,0.12)'; ng.fillRect(0, 0, 64, 64);
+  ng.strokeStyle = 'rgba(255,255,255,0.85)'; ng.lineWidth = 2;
+  for(var gi = 0; gi <= 64; gi += 8){ ng.beginPath(); ng.moveTo(gi, 0); ng.lineTo(gi, 64); ng.stroke(); ng.beginPath(); ng.moveTo(0, gi); ng.lineTo(64, gi); ng.stroke(); }
+  var netTex = new THREE.CanvasTexture(ncv);
+  netTex.wrapS = netTex.wrapT = THREE.RepeatWrapping; netTex.repeat.set(8, 4);
+  function makeGoal(zc, dir){
+    var g = new THREE.Group(); g.position.set(CX, 0, zc); scene.add(g);
+    [-2.6, 2.6].forEach(function(px){
+      var post = cyl(0.09, 0.09, 2.1, 0xf8fafc, px, 1.05, 0, g, 10); post.castShadow = true;
+      addCollider(CX + px, zc, 0.2, 0.2);
+    });
+    box(5.35, 0.12, 0.12, 0xf8fafc, 0, 2.12, 0, g, false);
+    var netMat = new THREE.MeshBasicMaterial({map:netTex, transparent:true, opacity:0.55, side:THREE.DoubleSide});
+    var back = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 2.1), netMat);
+    back.position.set(0, 1.05, dir * 1.6); g.add(back);
+    [-2.6, 2.6].forEach(function(px){
+      var side = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.1), netMat);
+      side.position.set(px, 1.05, dir * 0.8); side.rotation.y = Math.PI / 2; g.add(side);
+    });
+    var top = new THREE.Mesh(new THREE.PlaneGeometry(5.2, 1.6), netMat);
+    top.rotation.x = Math.PI / 2; top.position.set(0, 2.1, dir * 0.8); g.add(top);
+    addCollider(CX, zc + dir * 1.6, 2.7, 0.18);
+  }
+  makeGoal(CZ - HL, -1);   // gawang utara: mulut menghadap titik tengah, jaring ke luar belakang garis
+  makeGoal(CZ + HL, 1);    // gawang selatan: mulut menghadap titik tengah, jaring ke luar belakang garis
+  var cv = document.createElement('canvas'); cv.width = 512; cv.height = 256;
+  soc2BoardCtx = cv.getContext('2d');
+  soc2BoardTex = new THREE.CanvasTexture(cv); soc2BoardTex.colorSpace = THREE.SRGBColorSpace; soc2BoardTex.anisotropy = 4;
+  var bg = new THREE.Group(); bg.position.set(CX + HW + 1.8, 0, CZ); bg.rotation.y = -Math.PI / 2; scene.add(bg);
+  box(0.14, 1.5, 0.14, 0x374151, -1.2, 0.75, 0, bg); box(0.14, 1.5, 0.14, 0x374151, 1.2, 0.75, 0, bg);
+  var boardBack = new THREE.Mesh(new THREE.BoxGeometry(3.5, 1.75, 0.1), mat(0x14532d));
+  boardBack.position.set(0, 1.85, 0); boardBack.castShadow = true; bg.add(boardBack);
+  var face = new THREE.Mesh(new THREE.PlaneGeometry(3.35, 1.68), new THREE.MeshLambertMaterial({map:soc2BoardTex}));
+  face.position.set(0, 1.85, 0.06); bg.add(face);
+  addCollider(CX + HW + 1.8, CZ, 0.5, 1.9);
+  addInteractable(CX + HW + 1.8, CZ, 3.2, 'Papan Skor Sepak Bola');
+  drawSoc2Board();
+  var bcv = document.createElement('canvas'); bcv.width = 256; bcv.height = 128;
+  var bx2 = bcv.getContext('2d');
+  bx2.fillStyle = '#f8fafc'; bx2.fillRect(0, 0, 256, 128);
+  bx2.fillStyle = '#b91c1c';
+  [[32,32],[96,20],[160,40],[224,24],[64,84],[128,96],[192,84],[240,110],[16,110]].forEach(function(p){
+    bx2.beginPath(); bx2.arc(p[0], p[1], 11, 0, Math.PI * 2); bx2.fill();
+  });
+  var btex = new THREE.CanvasTexture(bcv); btex.colorSpace = THREE.SRGBColorSpace;
+  soc2Ball = new THREE.Mesh(new THREE.SphereGeometry(0.34, 20, 14),
+    new THREE.MeshStandardMaterial({map:btex, roughness:0.5}));
+  soc2Ball.position.set(SOC2.x, 0.34, SOC2.z); soc2Ball.castShadow = true; scene.add(soc2Ball);
+  addInteractable(SOC2.x, SOC2.z, 2.4, 'Lapangan Sepak Bola Desa');
+})();
+function drawSoc2Board(){
+  if(!soc2BoardCtx) return;
+  var g = soc2BoardCtx, W = 512, H = 256;
+  g.fillStyle = '#14532d'; g.fillRect(0, 0, W, H);
+  g.lineWidth = 10; g.strokeStyle = '#facc15'; g.strokeRect(5, 5, W - 10, H - 10);
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = '#facc15'; g.font = '700 38px Fredoka, Nunito, Arial, sans-serif';
+  g.fillText('⚽ SEPAK BOLA DESA ⚽', W / 2, 46);
+  g.fillStyle = '#93c5fd'; g.font = '700 34px Fredoka, Nunito, Arial, sans-serif';
+  g.fillText('PUTRA', 108, 108);
+  g.fillStyle = '#f9a8d4'; g.fillText('PUTRI', W - 108, 108);
+  g.fillStyle = '#ffffff'; g.font = '700 96px Fredoka, Nunito, Arial, sans-serif';
+  g.fillText(soc2.pa + ' — ' + soc2.pi, W / 2, 168);
+  g.fillStyle = '#bbf7d0'; g.font = '600 24px Nunito, Arial, sans-serif';
+  g.fillText('Putra → gawang utara • Putri → gawang selatan', W / 2, 228);
+  soc2BoardTex.needsUpdate = true;
+}
+function soccer2IAmOwner(){ return soc2.owner === 'me' || soc2.owner === socMyKey(); }
+function soccer2NearBall(){
+  if(!playing || !soc2Ball || riding || vehDrive || tourActive || poseMode) return false;
+  if(typeof uiBlocked === 'function' && uiBlocked()) return false;
+  if(performance.now() < soc2.frozenUntil) return false;
+  return Math.hypot(player.position.x - soc2Ball.position.x, player.position.z - soc2Ball.position.z) < 1.8;
+}
+function soccer2SetTouch(){
+  soc2.lastId = socMyKey(); soc2.lastName = playerName; soc2.lastGender = mpGender();
+  soc2.touchAt = performance.now(); soc2.touchFlag = true;
+}
+function soccer2Broadcast(){
+  if(typeof mp === 'undefined' || !mp.joined) return;
+  var txt = 'BALL2|' + JSON.stringify({x:+soc2.x.toFixed(2), z:+soc2.z.toFixed(2),
+    vx:+soc2.vx.toFixed(2), vz:+soc2.vz.toFixed(2), o:soc2.owner, tch:soc2.touchFlag ? 1 : 0,
+    ln:soc2.lastName, lg:soc2.lastGender, sid:mp.myId});
+  soc2.touchFlag = false;
+  if(mpSendChat(txt)) mpTrackOwnChat(txt);
+}
+function soccer2BecomeOwner(){
+  soc2.owner = socMyKey(); soc2.x = soc2Ball.position.x; soc2.z = soc2Ball.position.z;
+  soc2.vx = 0; soc2.vz = 0; soccer2SetTouch();
+}
+function soccer2Kick(power){
+  if(!soc2Ball) return;
+  if(!soccer2IAmOwner()) soccer2BecomeOwner();
+  var ry = player.rotation.y;
+  var sp = 5 + power * 14;
+  soc2.vx = Math.sin(ry) * sp; soc2.vz = Math.cos(ry) * sp;
+  soc2.x = soc2Ball.position.x; soc2.z = soc2Ball.position.z;
+  soccer2SetTouch();
+  AudioSys.sfx('kick');
+  soccer2Broadcast();
+}
+function soccer2TapKick(){ soccer2Kick(0.3); }
+function soccer2ResetBall(){
+  soc2.x = SOC2.x; soc2.z = SOC2.z; soc2.vx = 0; soc2.vz = 0; soc2.outAt = 0;
+  soc2Ball.position.set(SOC2.x, 0.34, SOC2.z);
+}
+function soccer2Goal(team, scorerName, fromRemote, scores){
+  if(fromRemote && scores){ soc2.pa = scores.pa; soc2.pi = scores.pi; }
+  else { if(team === 'pa') soc2.pa++; else soc2.pi++; }
+  drawSoc2Board();
+  var gz = team === 'pa' ? SOC2.z - SOC2.hl : SOC2.z + SOC2.hl;
+  soccerConfetti(SOC2.x, gz);
+  AudioSys.sfx('whistle'); setTimeout(function(){ AudioSys.sfx('goal'); }, 180);
+  showToast('⚽ GOL di Lapangan Desa! ' + (scorerName || 'Pemain') + ' mencetak gol untuk Barung ' + (team === 'pa' ? 'Putra' : 'Putri') + '! Skor ' + soc2.pa + ' — ' + soc2.pi, 5200);
+  if(!fromRemote){
+    var myBarung = mpGender() === 'putri' ? 'pi' : 'pa';
+    if(soc2.lastId === socMyKey() && team === myBarung){
+      var today = new Date().toDateString();
+      if(!eco.soccerDay || eco.soccerDay.date !== today) eco.soccerDay = {date:today, earned:0};
+      if(eco.soccerDay.earned < 150){
+        eco.soccerDay.earned += 15; addKredit(15); saveEco();
+        showToast('Hadiah gol: +15 Kredit! (hari ini ' + eco.soccerDay.earned + '/150)', 3200);
+      }
+    }
+    if(typeof mp !== 'undefined' && mp.joined){
+      var gid = Date.now();
+      soc2.lastGoalId = gid;
+      var txt = 'GOAL2|' + JSON.stringify({team:team, name:scorerName || '', pa:soc2.pa, pi:soc2.pi, gid:gid, sid:mp.myId});
+      if(mpSendChat(txt)) mpTrackOwnChat(txt);
+    }
+    soc2.frozenUntil = performance.now() + 3000;
+    soccer2ResetBall();
+    soccer2Broadcast();
+  }
+}
+function soccer2HandleBall(msg){
+  var d = null;
+  try{ d = JSON.parse(msg.text.slice(6)); }catch(e){ return; }
+  if(!d || d.sid === (typeof mp !== 'undefined' ? mp.myId : '')) return;
+  if(typeof d.x !== 'number' || typeof d.z !== 'number') return;
+  soc2.owner = d.o || soc2.owner;
+  if(d.tch) soc2.ownerTouchAt = performance.now();
+  soc2.rx = d.x; soc2.rz = d.z; soc2.rvx = d.vx || 0; soc2.rvz = d.vz || 0;
+  if(d.ln){ soc2.lastName = String(d.ln).slice(0, 24); soc2.lastId = d.sid || ''; }
+  if(d.lg) soc2.lastGender = d.lg;
+}
+function soccer2HandleGoal(msg){
+  var d = null;
+  try{ d = JSON.parse(msg.text.slice(6)); }catch(e){ return; }
+  if(!d || d.sid === (typeof mp !== 'undefined' ? mp.myId : '')) return;
+  if(d.gid && d.gid === soc2.lastGoalId) return;
+  soc2.lastGoalId = d.gid || 0;
+  soc2.frozenUntil = performance.now() + 3000;
+  soccer2Goal(d.team === 'pi' ? 'pi' : 'pa', String(d.name || 'Pemain').slice(0, 24), true, {pa:d.pa | 0, pi:d.pi | 0});
+  soccer2ResetBall();
+}
+var soc2LastPlayerPos = {x:0, z:0};
+setInterval(function(){
+  if(!soc2Ball) return;
+  var now = performance.now(), dt = 0.033;
+  var pvx = (player.position.x - soc2LastPlayerPos.x) / dt, pvz = (player.position.z - soc2LastPlayerPos.z) / dt;
+  soc2LastPlayerPos.x = player.position.x; soc2LastPlayerPos.z = player.position.z;
+  if(soccer2IAmOwner()){
+    if(now < soc2.frozenUntil){ soc2.vx = 0; soc2.vz = 0; }
+    else {
+      var dMe = Math.hypot(player.position.x - soc2.x, player.position.z - soc2.z);
+      var pSpeed = Math.hypot(pvx, pvz);
+      if(dMe < 1.05 && pSpeed > 0.6){
+        var fx = Math.sin(player.rotation.y), fz = Math.cos(player.rotation.y);
+        soc2.vx = (player.position.x + fx * 0.85 - soc2.x) * 9;
+        soc2.vz = (player.position.z + fz * 0.85 - soc2.z) * 9;
+        soccer2SetTouch();
+      }
+      soc2.x += soc2.vx * dt; soc2.z += soc2.vz * dt;
+      var damp = Math.exp(-1.15 * dt);
+      soc2.vx *= damp; soc2.vz *= damp;
+      if(Math.hypot(soc2.vx, soc2.vz) < 0.06){ soc2.vx = 0; soc2.vz = 0; }
+      [[SOC2.x - 2.6, SOC2.z - SOC2.hl], [SOC2.x + 2.6, SOC2.z - SOC2.hl], [SOC2.x - 2.6, SOC2.z + SOC2.hl], [SOC2.x + 2.6, SOC2.z + SOC2.hl]].forEach(function(pp){
+        var dx = soc2.x - pp[0], dz = soc2.z - pp[1], dd = Math.hypot(dx, dz);
+        if(dd < 0.45 && dd > 0.001){
+          soc2.x = pp[0] + dx / dd * 0.45; soc2.z = pp[1] + dz / dd * 0.45;
+          var dot = soc2.vx * dx / dd + soc2.vz * dz / dd;
+          if(dot < 0){ soc2.vx -= 1.7 * dot * dx / dd; soc2.vz -= 1.7 * dot * dz / dd; AudioSys.sfx('pop'); }
+        }
+      });
+      if(soc2.z < SOC2.z - SOC2.hl - 0.5 && Math.abs(soc2.x - SOC2.x) < 2.6) soccer2Goal('pa', soc2.lastName, false);
+      else if(soc2.z > SOC2.z + SOC2.hl + 0.5 && Math.abs(soc2.x - SOC2.x) < 2.6) soccer2Goal('pi', soc2.lastName, false);
+      if(soc2.x < SOC2.x - 20 || soc2.x > SOC2.x + 20 || soc2.z < SOC2.z - 24 || soc2.z > SOC2.z + 24){
+        if(!soc2.outAt) soc2.outAt = now;
+        else if(now - soc2.outAt > 5000){ soccer2ResetBall(); showToast('Bola Desa keluar lapangan — dikembalikan ke titik tengah.', 2600); }
+      } else soc2.outAt = 0;
+    }
+    soc2Ball.position.set(soc2.x, 0.34, soc2.z);
+    if(Math.abs(soc2.vx) > 0.1 || Math.abs(soc2.vz) > 0.1){
+      soc2Ball.rotation.x += soc2.vz * dt * 0.8; soc2Ball.rotation.z -= soc2.vx * dt * 0.8;
+    }
+    if(typeof mp !== 'undefined' && mp.joined && now - soc2.lastSync > 120){
+      soc2.lastSync = now; soccer2Broadcast();
+    }
+  } else {
+    soc2.rx += soc2.rvx * dt; soc2.rz += soc2.rvz * dt;
+    soc2Ball.position.x += (soc2.rx - soc2Ball.position.x) * 0.4;
+    soc2Ball.position.z += (soc2.rz - soc2Ball.position.z) * 0.4;
+    soc2Ball.position.y = 0.34;
+    var dT = Math.hypot(player.position.x - soc2Ball.position.x, player.position.z - soc2Ball.position.z);
+    if(playing && dT < 0.95 && Math.hypot(pvx, pvz) > 0.6 && now >= soc2.frozenUntil && now - (soc2.ownerTouchAt || 0) > 2000){
+      soccer2BecomeOwner();
+      var fx2 = Math.sin(player.rotation.y), fz2 = Math.cos(player.rotation.y);
+      soc2.vx = pvx * 1.1 + fx2 * 1.4; soc2.vz = pvz * 1.1 + fz2 * 1.4;
+      soccer2Broadcast();
+    }
+    if(typeof mp !== 'undefined' && mp.joined && soc2.owner !== 'me' && !mp.players[soc2.owner] && playing){
+      soccer2BecomeOwner(); soccer2Broadcast();
+    }
+  }
+}, 33);
+/* ---------- REBUT BOLA (TACKLE): berlaku di kedua lapangan ---------- */
+var TACKLE_TARGET = {tackle:true, tackleField:1, name:'Rebut Bola', x:0, z:0, r:1.6};
+var tackleCdUntil = 0;
+function tackleCheckField(S, B, f){
+  if(!B || typeof mp === 'undefined' || !mp.joined || !mp.remotes) return null;
+  if(!S.lastId || S.lastId === socMyKey()) return null;                 // aku sendiri yang menggiring
+  if(performance.now() < S.frozenUntil) return null;
+  var r = mp.remotes[S.lastId];
+  if(!r || !r.group) return null;
+  var rp = r.group.position;
+  if(Math.hypot(B.position.x - rp.x, B.position.z - rp.z) > 1.35) return null;   // bola tidak di kaki lawan
+  if(Math.hypot(player.position.x - rp.x, player.position.z - rp.z) > 1.6) return null;
+  TACKLE_TARGET.tackleField = f; TACKLE_TARGET.x = B.position.x; TACKLE_TARGET.z = B.position.z;
+  return TACKLE_TARGET;
+}
+function tackleTarget(){
+  if(!playing || riding || vehDrive || tourActive || poseMode) return null;
+  if(typeof uiBlocked === 'function' && uiBlocked()) return null;
+  if(performance.now() < tackleCdUntil) return null;
+  return tackleCheckField(soc, socBall, 1) || tackleCheckField(soc2, soc2Ball, 2);
+}
+function soccerTackle(f){
+  var now = performance.now();
+  if(now < tackleCdUntil) return;
+  tackleCdUntil = now + 2000;   // cooldown rebut bola 2 detik
+  AudioSys.sfx('kick');
+  var fx = Math.sin(player.rotation.y), fz = Math.cos(player.rotation.y);
+  if(f === 2){
+    soccer2BecomeOwner();
+    soc2.x = player.position.x + fx * 0.85; soc2.z = player.position.z + fz * 0.85;
+    soc2.vx = fx * 1.2; soc2.vz = fz * 1.2;
+    soccer2Broadcast();
+  } else {
+    soccerBecomeOwner();
+    soc.x = player.position.x + fx * 0.85; soc.z = player.position.z + fz * 0.85;
+    soc.vx = fx * 1.2; soc.vz = fz * 1.2;
+    soccerBroadcast();
+  }
+  showToast('⚡ Bola berhasil direbut! Giring bolanya dan tendang ke gawang lawan!', 2600);
+}
+
+/* ================= TAMAN BERMAIN & KOLAM RENANG DI BELAKANG SEKOLAH =================
+   Zona rekreasi baru di strip belakang sekolah (utara kandang & kolam ikan,
+   z -62..-47): Taman Bermain (Perosotan Pelangi, Ayunan Ganda, Komidi Putar
+   Mini) + Kolam Renang Sekolah (Perosotan Air & Papan Loncat Indah).
+   Semua wahana dimainkan real-time: pemain lain melihat gerakan yang sama
+   lewat sinkronisasi posisi karakter yang sudah ada. */
+INFO['Perosotan Pelangi'] = 'Perosotan Pelangi di Taman Bermain belakang sekolah! Tekan Aksi untuk naik tangga dan meluncur duduk mengikuti lengkung perosotan warna-warni sampai mendarat di bawah.';
+INFO['Ayunan Ganda'] = 'Ayunan Ganda di Taman Bermain: tekan Aksi untuk duduk dan berayun. Tekan tombol Aksi lagi (⬇ Turun Wahana) kapan saja untuk turun.';
+INFO['Komidi Putar Mini'] = 'Komidi Putar Mini: tekan Aksi untuk naik dan berputar mengelilingi taman. Tekan tombol Aksi lagi (⬇ Turun Wahana) untuk turun.';
+INFO['Kolam Renang Sekolah'] = 'Kolam Renang Sekolah berair biru jernih dengan dasar keramik! Masuk lewat tangga di sisi selatan, meluncur lewat Perosotan Air, atau lompat dari Papan Loncat Indah — begitu masuk air, kamu otomatis berenang.';
+INFO['Perosotan Air'] = 'Perosotan Air (Water Slide): tekan Aksi untuk menaiki menara dan meluncur cepat masuk ke Kolam Renang dengan percikan air!';
+INFO['Papan Loncat Indah'] = 'Papan Loncat Indah di tepi Kolam Renang: tekan Aksi untuk berjalan ke ujung papan dan melompat masuk ke air!';
+function inPoolWater(x, z){ return x > 2.6 && x < 17.4 && z > -57.9 && z < -50.1; }
+var POOL_WATER = null;
+var swingGrps = [], merryGrp = null;
+function chuteSegments(S, C, E, colors, sign){
+  var prev = null;
+  for(var i = 0; i <= 7; i++){
+    var u = i / 7, iu = 1 - u;
+    var p = {x:iu*iu*S.x + 2*iu*u*C.x + u*u*E.x, y:iu*iu*S.y + 2*iu*u*C.y + u*u*E.y, z:iu*iu*S.z + 2*iu*u*C.z + u*u*E.z};
+    if(prev){
+      var len = Math.hypot(p.z - prev.z, p.y - prev.y) + 0.24;
+      var m = box(1.15, 0.1, len, colors[i % colors.length], (prev.x + p.x) / 2, (prev.y + p.y) / 2, (prev.z + p.z) / 2, scene, false);
+      m.rotation.x = sign * Math.atan2(Math.abs(prev.y - p.y), Math.abs(p.z - prev.z));
+    }
+    prev = p;
+  }
+}
+(function buildPlaygroundPool(){
+  /* ----- lantai dasar zona (pasir taman & dek kolam): rumput tidak menembus ----- */
+  flat(25, 15.5, 0xf3d9a4, -14, -54, scene, 0.04);
+  flat(21.5, 13, 0xd6d3cd, 10, -54, scene, 0.045);
+  /* ----- Perosotan Pelangi ----- */
+  var RB = [0xef4444, 0xf97316, 0xfacc15, 0x22c55e, 0x3b82f6, 0x8b5cf6, 0xec4899, 0xef4444];
+  [[-23.05,-52.35],[-20.95,-52.35],[-23.05,-50.65],[-20.95,-50.65]].forEach(function(p){
+    box(0.16, 2.3, 0.16, 0x78716c, p[0], 1.15, p[1], scene);
+    addCollider(p[0], p[1], 0.15, 0.15);
+  });
+  box(2.4, 0.14, 2.4, 0x92400e, -22, 2.32, -51.5, scene);
+  box(2.9, 0.08, 2.9, 0xdc2626, -22, 3.62, -51.5, scene, false);
+  box(0.1, 1.25, 0.1, 0x78716c, -23.2, 2.95, -52.3, scene, false); box(0.1, 1.25, 0.1, 0x78716c, -20.8, 2.95, -52.3, scene, false);
+  for(var si = 0; si < 6; si++){
+    var sh = 0.38 * (si + 1);
+    box(1.5, sh, 0.42, RB[si % RB.length], -22, sh / 2, -49.35 - si * 0.37, scene, false);
+  }
+  chuteSegments({x:-22, y:2.25, z:-52.3}, {x:-22, y:1.95, z:-55.6}, {x:-22, y:0.12, z:-59.6}, RB, -1);
+  addInteractable(-22, -48.4, 2.7, 'Perosotan Pelangi', null, {wahana:'slide'});
+  /* ----- Ayunan Ganda ----- */
+  [-15.8, -9.2].forEach(function(px){
+    box(0.14, 2.5, 0.14, 0x0e7a5f, px, 1.25, -52.75, scene); box(0.14, 2.5, 0.14, 0x0e7a5f, px, 1.25, -51.25, scene);
+    addCollider(px, -52, 0.16, 0.95);
+  });
+  box(7.4, 0.14, 0.14, 0x0e7a5f, -12.5, 2.47, -52, scene);
+  [-14, -11].forEach(function(sx, ix){
+    var grp = new THREE.Group(); grp.position.set(sx, 2.4, -52); scene.add(grp);
+    cyl(0.02, 0.02, 1.85, 0x374151, -0.32, -0.95, 0, grp, 6); cyl(0.02, 0.02, 1.85, 0x374151, 0.32, -0.95, 0, grp, 6);
+    box(0.95, 0.07, 0.45, ix ? 0xf59e0b : 0x3b82f6, 0, -1.88, 0, grp);
+    swingGrps.push(grp);
+    addInteractable(sx, -50.3, 2.3, 'Ayunan Ganda', null, {wahana:'swing' + ix});
+  });
+  /* ----- Komidi Putar Mini ----- */
+  merryGrp = new THREE.Group(); merryGrp.position.set(-4.5, 0, -54); scene.add(merryGrp);
+  var disc = cyl(2.3, 2.5, 0.22, 0xdb2777, 0, 0.11, 0, merryGrp, 24); disc.castShadow = true;
+  cyl(0.09, 0.09, 1.15, 0x374151, 0, 0.68, 0, merryGrp, 8);
+  cyl(0.55, 0.55, 0.09, 0xfacc15, 0, 1.28, 0, merryGrp, 16);
+  for(var mi = 0; mi < 4; mi++){
+    var ma = mi * Math.PI / 2;
+    box(0.09, 0.85, 0.09, 0x374151, Math.cos(ma) * 1.6, 0.62, Math.sin(ma) * 1.6, merryGrp, false);
+  }
+  addCollider(-4.5, -54, 0.35, 0.35);
+  addInteractable(-4.5, -51.2, 2.7, 'Komidi Putar Mini', null, {wahana:'merry'});
+  postSign('Taman Bermain', -13, -47.3, 0, {w:3.2, bg:'#db2777', fg:'#ffffff'});
+  /* ----- Kolam Renang Sekolah ----- */
+  var conc = 0x9db8c4;
+  box(7.5, 1.0, 0.6, conc, 5.25, 0.5, -58.7, scene); box(7.5, 1.0, 0.6, conc, 14.75, 0.5, -58.7, scene);
+  addCollider(5.25, -58.7, 3.75, 0.35); addCollider(14.75, -58.7, 3.75, 0.35);
+  box(4, 1.0, 0.6, conc, 3.5, 0.5, -49.3, scene); box(6.5, 1.0, 0.6, conc, 10.75, 0.5, -49.3, scene); box(2.5, 1.0, 0.6, conc, 17.25, 0.5, -49.3, scene);
+  addCollider(3.5, -49.3, 2, 0.35); addCollider(10.75, -49.3, 3.25, 0.35); addCollider(17.25, -49.3, 1.25, 0.35);
+  box(0.6, 1.0, 9.4, conc, 1.8, 0.5, -54, scene); box(0.6, 1.0, 9.4, conc, 18.2, 0.5, -54, scene);
+  addCollider(1.8, -54, 0.35, 4.7); addCollider(18.2, -54, 0.35, 4.7);
+  flat(15.8, 7.6, 0xa5dff5, 10, -54, scene, 0.12);                       // dasar keramik biru muda
+  POOL_WATER = new THREE.Mesh(new THREE.PlaneGeometry(15.8, 7.6),
+    new THREE.MeshLambertMaterial({color:0x38b6e8, transparent:true, opacity:0.78}));
+  POOL_WATER.rotation.x = -Math.PI / 2; POOL_WATER.position.set(10, 0.75, -54); scene.add(POOL_WATER);
+  /* tangga masuk kolam (celah dinding selatan x 5,5..7,5) */
+  box(2, 0.28, 0.8, conc, 6.5, 0.14, -48.45, scene, false);
+  box(2, 0.55, 0.6, conc, 6.5, 0.27, -49.3, scene, false);
+  box(1.8, 0.3, 0.8, conc, 6.5, 0.15, -49.95, scene, false);
+  addStepCollider(6.5, -48.45, 1, 0.45); addStepCollider(6.5, -49.3, 1, 0.35); addStepCollider(6.5, -49.95, 0.95, 0.45);
+  cyl(0.035, 0.035, 1.3, 0x9ca3af, 5.9, 0.65, -49.3, scene, 8); cyl(0.035, 0.035, 1.3, 0x9ca3af, 7.1, 0.65, -49.3, scene, 8);
+  /* Papan Loncat Indah (celah dinding selatan x 14..16) */
+  box(1.6, 0.33, 0.85, conc, 15, 0.16, -48.4, scene, false);
+  box(0.5, 1.0, 0.5, 0x78716c, 15, 0.5, -49.35, scene);
+  box(0.7, 0.09, 2.4, 0xf59e0b, 15, 1.05, -50.3, scene);
+  addStepCollider(15, -48.4, 0.85, 0.45); addStepCollider(15, -50.3, 0.4, 1.2);
+  addInteractable(15, -47.5, 2.6, 'Papan Loncat Indah', null, {wahana:'dive'});
+  /* Menara Perosotan Air di utara kolam */
+  [[8.9,-61.7],[11.1,-61.7],[8.9,-59.9],[11.1,-59.9]].forEach(function(p){
+    box(0.16, 2.6, 0.16, 0x78716c, p[0], 1.3, p[1], scene);
+    addCollider(p[0], p[1], 0.15, 0.15);
+  });
+  box(2.6, 0.14, 2.6, 0x0284c7, 10, 2.62, -60.8, scene);
+  for(var ri = 0; ri < 5; ri++) box(0.06, 0.06, 0.95, 0x9ca3af, 8.72, 0.45 + ri * 0.48, -60.8, scene, false);
+  cyl(0.04, 0.04, 2.6, 0x9ca3af, 8.72, 1.3, -61.28, scene, 6); cyl(0.04, 0.04, 2.6, 0x9ca3af, 8.72, 1.3, -60.32, scene, 6);
+  chuteSegments({x:10, y:2.6, z:-59.9}, {x:10, y:2.15, z:-56.2}, {x:10, y:0.85, z:-51.4}, [0x38bdf8, 0x0ea5e9], 1);
+  addInteractable(8.2, -59.2, 2.7, 'Perosotan Air', null, {wahana:'waterslide'});
+  postSign('Kolam Renang Sekolah', 10, -47.1, 0, {w:3.6, bg:'#0284c7', fg:'#ffffff'});
+  addInteractable(10, -47.6, 3, 'Kolam Renang Sekolah');
+  ambients.push(function(dt, t){
+    if(POOL_WATER) POOL_WATER.position.y = 0.75 + Math.sin(t * 1.8) * 0.02;
+  });
+  zones.push({name:'Taman Bermain Belakang Sekolah', minX:-30, maxX:-1, minZ:-62, maxZ:-47});
+  zones.push({name:'Kolam Renang Sekolah', minX:1, maxX:19.5, minZ:-62, maxZ:-47});
+  DESTS.push({name:'Kolam Renang & Taman Bermain', x:-6, z:-47.2, kind:'tempat', label:'Kolam & Taman'});
+  DESTS.push({name:'Lapangan Sepak Bola Desa', x:-64, z:17.6, kind:'tempat', label:'Bola Desa'});
+})();
+/* ---------- Percikan air (splash) ---------- */
+var splashP = [];
+function splashAt(x, y, z, n){
+  for(var i = 0; i < (n || 22); i++){
+    var m = new THREE.Mesh(new THREE.SphereGeometry(0.05 + Math.random() * 0.055, 6, 5),
+      new THREE.MeshBasicMaterial({color:Math.random() < 0.5 ? 0x7dd3fc : 0xe0f2fe, transparent:true}));
+    m.position.set(x + (Math.random() - 0.5) * 0.8, y, z + (Math.random() - 0.5) * 0.8);
+    scene.add(m);
+    splashP.push({m:m, t:0, vx:(Math.random() - 0.5) * 2.4, vy:2.3 + Math.random() * 2.3, vz:(Math.random() - 0.5) * 2.4});
+  }
+  AudioSys.sfx('pop');
+}
+setInterval(function(){
+  for(var i = splashP.length - 1; i >= 0; i--){
+    var c = splashP[i]; c.t += 0.05; c.vy -= 0.32;
+    c.m.position.x += c.vx * 0.05; c.m.position.y += c.vy * 0.05; c.m.position.z += c.vz * 0.05;
+    if(c.t > 0.55) c.m.material.opacity = Math.max(0, 1 - (c.t - 0.55) / 0.3);
+    if(c.t > 0.85){ scene.remove(c.m); c.m.geometry.dispose(); c.m.material.dispose(); splashP.splice(i, 1); }
+  }
+}, 50);
+/* ---------- Sistem Wahana (perosotan / ayunan / komidi / papan loncat) ---------- */
+var wahanaRide = null;
+var WAHANA_OFF = {wahanaOff:true, name:'Turun Wahana', x:0, z:0, r:0};
+function startWahana(kind){
+  if(wahanaRide || !playing) return;
+  if(poseMode || riding || vehDrive || tourActive || swimOn){ showToast('Selesaikan dulu aktivitasmu sekarang untuk naik wahana.', 2600); return; }
+  AudioSys.sfx('pop');
+  if(kind === 'slide') wahanaRide = {type:'slide', phase:'climb', t:0, face:Math.PI,
+    from:{x:-22, z:-49.0}, top:{x:-22, y:2.3, z:-51.5},
+    S:{x:-22, y:2.25, z:-52.3}, C:{x:-22, y:1.95, z:-55.6}, E:{x:-22, y:0.12, z:-59.6}};
+  else if(kind === 'waterslide') wahanaRide = {type:'waterslide', phase:'climb', t:0, face:0,
+    from:{x:8.2, z:-59.4}, top:{x:10, y:2.68, z:-60.8},
+    S:{x:10, y:2.6, z:-59.9}, C:{x:10, y:2.15, z:-56.2}, E:{x:10, y:0.85, z:-51.4}};
+  else if(kind === 'swing0') wahanaRide = {type:'swing', t:0, x:-14, grp:swingGrps[0]};
+  else if(kind === 'swing1') wahanaRide = {type:'swing', t:0, x:-11, grp:swingGrps[1]};
+  else if(kind === 'merry') wahanaRide = {type:'merry', t:0, ang:Math.PI / 2, grp:merryGrp};
+  else if(kind === 'dive') wahanaRide = {type:'dive', phase:'walk', t:0};
+  if(wahanaRide && (wahanaRide.type === 'swing' || wahanaRide.type === 'merry'))
+    showToast('Kamu naik wahana! Tekan tombol Aksi (⬇ Turun Wahana) kapan saja untuk turun.', 3400);
+}
+function endWahana(silent){
+  if(!wahanaRide) return;
+  var W = wahanaRide; wahanaRide = null;
+  legL.rotation.x = 0; legR.rotation.x = 0; armL.rotation.x = 0; armR.rotation.x = 0;
+  bodyG.position.y = 0; vy = 0; grounded = true;
+  if(W.type === 'swing'){ if(W.grp) W.grp.rotation.x = 0; player.position.set(W.x, 0, -50.1); }
+  if(W.type === 'merry'){ player.position.set(-4.5, 0, -51.3); }
+  if(!silent){ AudioSys.sfx('pop'); showToast('Kamu turun dari wahana. Seru, ya!', 2400); }
+}
+function wahanaPoseStep(dt){
+  var W = wahanaRide; if(!W) return;
+  W.t += dt;
+  if(W.type === 'slide' || W.type === 'waterslide'){
+    if(W.phase === 'climb'){
+      var k = Math.min(1, W.t / 1.5), e = k * k * (3 - 2 * k);
+      player.position.x = W.from.x + (W.top.x - W.from.x) * e;
+      player.position.z = W.from.z + (W.top.z - W.from.z) * e;
+      player.position.y = W.top.y * e;
+      player.rotation.y = W.face;
+      if(k >= 1){ W.phase = 'slide'; W.t = 0; AudioSys.sfx('pop'); }
+    } else {
+      var dur = W.type === 'waterslide' ? 1.05 : 1.35;
+      var u = Math.min(1, W.t / dur), iu = 1 - u, S = W.S, C = W.C, E = W.E;
+      player.position.x = iu*iu*S.x + 2*iu*u*C.x + u*u*E.x;
+      player.position.y = iu*iu*S.y + 2*iu*u*C.y + u*u*E.y;
+      player.position.z = iu*iu*S.z + 2*iu*u*C.z + u*u*E.z;
+      player.rotation.y = W.face;
+      legL.rotation.x = -1.3; legR.rotation.x = -1.3;
+      armL.rotation.x = -0.5; armR.rotation.x = -0.5;
+      bodyG.position.y = -0.3;
+      if(u >= 1){
+        var isWater = W.type === 'waterslide';
+        endWahana(true);
+        if(isWater){
+          splashAt(E.x, 0.8, E.z, 26);
+          player.position.set(E.x, 0.25, E.z - 0.2);
+          showToast('💦 Byur! Kamu meluncur masuk ke Kolam Renang — sekarang kamu berenang!', 3600);
+        } else showToast('🎢 Seru! Kamu meluncur sampai bawah Perosotan Pelangi!', 3000);
+      }
+    }
+  }
+  else if(W.type === 'swing'){
+    var a = Math.sin(W.t * 1.7) * 0.52;
+    if(W.grp) W.grp.rotation.x = a;
+    player.position.set(W.x, 2.4 - 1.78 * Math.cos(a) + 0.1, -52 - 1.78 * Math.sin(a));
+    player.rotation.y = 0;
+    legL.rotation.x = -1.25; legR.rotation.x = -1.25;
+    armL.rotation.x = -0.35; armR.rotation.x = -0.35;
+    bodyG.position.y = -0.3;
+  }
+  else if(W.type === 'merry'){
+    W.ang += dt * 0.85;
+    if(W.grp) W.grp.rotation.y = W.ang;
+    player.position.set(-4.5 + Math.cos(W.ang) * 1.6, 0.3, -54 - Math.sin(W.ang) * 1.6);
+    player.rotation.y = Math.atan2(-Math.sin(W.ang), -Math.cos(W.ang));
+    armL.rotation.x = -0.55; armR.rotation.x = -0.55;
+  }
+  else if(W.type === 'dive'){
+    if(W.phase === 'walk'){
+      var k2 = Math.min(1, W.t / 1.3), e2 = k2 * k2 * (3 - 2 * k2);
+      player.position.x = 15;
+      player.position.z = -47.8 + (-51.1 + 47.8) * e2;
+      player.position.y = 1.1 * Math.min(1, e2 * 1.7);
+      player.rotation.y = Math.PI;
+      if(k2 >= 1){ W.phase = 'jump'; W.t = 0; AudioSys.sfx('jump'); }
+    } else {
+      var u2 = Math.min(1, W.t / 0.75);
+      player.position.x = 15;
+      player.position.z = -51.1 + (-53.0 + 51.1) * u2;
+      player.position.y = 1.1 + (0.3 - 1.1) * u2 + Math.sin(u2 * Math.PI) * 1.15;
+      armL.rotation.x = -2.7; armR.rotation.x = -2.7;
+      legL.rotation.x = 0.15; legR.rotation.x = 0.15;
+      if(u2 >= 1){
+        endWahana(true);
+        splashAt(15, 0.8, -53.0, 26);
+        player.position.set(15, 0.25, -53.0);
+        showToast('💦 Lompatan indah! Kamu masuk ke kolam dan berenang!', 3400);
+      }
+    }
+  }
+}
+
+/* ================= TUTORIAL INTERAKTIF PEMULA (PER PROFIL KARAKTER) =================
+   Status selesai tersimpan di profil (tutorialCompleted per characterId):
+   karakter baru ditawari tur oleh Bu Ratna saat pertama masuk dunia;
+   karakter yang sudah selesai/melewati tidak ditawari lagi, tetapi bisa
+   memutar ulang lewat ☰ Menu → 🎓 Ulangi Tutorial. */
+var tutState = {active:false, step:0, replay:false, ring:null, ringPos:null, spotSel:null, quizShown:false};
+var TUT_IS_TOUCH = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+function tutProfile(){ return (typeof findProfile === 'function' && activeCharId) ? findProfile(activeCharId) : null; }
+function maybeOfferTutorial(){
+  if(!playing || adminMode || adminCharMode) return;
+  var p = tutProfile();
+  if(!p || p.tutorialCompleted) return;
+  document.getElementById('tutOfferMsg').textContent = 'Selamat datang di ' + SCHOOL_NAME + ', ' + playerName + '! Bu Ratna akan menemanimu berkeliling sebentar: belajar kontrol gerak & kamera, mengenal Kredit, HP, EP dan Tas MBG, mencoba satu soal latihan, sampai melihat Peta dan aktivitas seru di desa. Selesaikan tur ini dan dapatkan modal awal +100 Kredit!';
+  document.getElementById('tutOfferOverlay').classList.add('on');
+  AudioSys.sfx('bell');
+}
+document.getElementById('tutStartBtn').addEventListener('click', function(){
+  AudioSys.sfx('click');
+  document.getElementById('tutOfferOverlay').classList.remove('on');
+  startTutorial(false);
+});
+document.getElementById('tutSkipOfferBtn').addEventListener('click', function(){
+  AudioSys.sfx('click');
+  document.getElementById('tutOfferOverlay').classList.remove('on');
+  var p = tutProfile();
+  if(p && !p.tutorialCompleted){ p.tutorialCompleted = true; persistProfiles(); }
+  showToast('Siap! Tutorial dilewati. Kamu bisa memutarnya lagi kapan saja lewat ☰ Menu → 🎓 Ulangi Tutorial.', 4200);
+});
+document.getElementById('tutReplayBtn').addEventListener('click', function(){
+  AudioSys.sfx('click');
+  if(!playing){ showToast('Masuk ke dunia dulu untuk mengikuti tutorial.', 2800); return; }
+  startTutorial(true);
+});
+function startTutorial(replay){
+  if(!playing) return;
+  tutState.active = true; tutState.replay = !!replay; tutState.quizShown = false;
+  tutShowStep(1);
+  showToast('🎓 Tur dimulai! Ikuti kartu panduan di bawah layar.', 3000);
+}
+function tutSetSpot(sel){
+  tutState.spotSel = sel;
+  var spot = document.getElementById('tutSpot');
+  if(!sel){ spot.hidden = true; return; }
+  spot.hidden = false;
+  tutPlaceSpot();
+}
+function tutPlaceSpot(){
+  if(!tutState.spotSel) return;
+  var el = document.querySelector(tutState.spotSel);
+  var spot = document.getElementById('tutSpot');
+  if(!el){ spot.hidden = true; return; }
+  var r = el.getBoundingClientRect();
+  spot.style.left = (r.left - 6) + 'px'; spot.style.top = (r.top - 6) + 'px';
+  spot.style.width = (r.width + 12) + 'px'; spot.style.height = (r.height + 12) + 'px';
+}
+function tutShowStep(n){
+  tutState.step = n;
+  var card = document.getElementById('tutCard');
+  card.hidden = false;
+  document.getElementById('tutProg').textContent = 'Langkah ' + n + '/4';
+  var titleEl = document.getElementById('tutTitle'), textEl = document.getElementById('tutText');
+  var nextBtn = document.getElementById('tutNext'), quizBtn = document.getElementById('tutQuizBtn');
+  nextBtn.hidden = true; quizBtn.hidden = true;
+  document.getElementById('tutQuiz').hidden = true;
+  document.getElementById('tutTiles').hidden = true;
+  if(tutState.ring) tutState.ring.visible = false;
+  tutSetSpot(null);
+  if(n === 1){
+    titleEl.textContent = 'Kontrol Gerak & Kamera';
+    textEl.innerHTML = TUT_IS_TOUCH
+      ? 'Gunakan <b>Joystick melayang</b> di kiri bawah untuk berjalan, dan <b>geser sisi kanan layar</b> untuk memutar kamera. Sekarang, berjalanlah masuk ke <b>CINCIN EMAS</b> di depanmu!'
+      : 'Gunakan tombol <b>W / A / S / D</b> untuk berjalan dan <b>seret mouse</b> (atau tombol panah) untuk memutar kamera. Sekarang, berjalanlah masuk ke <b>CINCIN EMAS</b> di depanmu!';
+    var fx = Math.sin(player.rotation.y), fz = Math.cos(player.rotation.y);
+    tutState.ringPos = {x:player.position.x + fx * 5, z:player.position.z + fz * 5};
+    if(!tutState.ring){
+      var rg = new THREE.Mesh(new THREE.RingGeometry(1.05, 1.42, 40),
+        new THREE.MeshBasicMaterial({color:0xfacc15, side:THREE.DoubleSide, transparent:true, opacity:0.95}));
+      rg.rotation.x = -Math.PI / 2; rg.userData.noCull = true;
+      tutState.ring = rg; scene.add(rg);
+    }
+    tutState.ring.position.set(tutState.ringPos.x, 0.14, tutState.ringPos.z);
+    tutState.ring.visible = true;
+  }
+  else if(n === 2){
+    titleEl.textContent = 'Status: Kredit, HP, EP & Tas MBG';
+    textEl.innerHTML = 'Di <b>Kapsul Status</b> kiri atas ada <b>Kredit</b> (uang belajarmu — didapat dari menjawab soal, misi & bekerja), <b>HP</b> (isi dengan makan; kalau habis kamu pingsan dan bangun di Ruang UKS), dan <b>EP</b> (isi dengan minum susu). Setiap hari ada jatah <b>MBG (Makan Bergizi Gratis)</b> di dalam <b>Tas</b> — buka lewat <b>☰ Menu</b> di kanan atas!';
+    tutSetSpot('.hud-card.stats');
+    nextBtn.hidden = false; nextBtn.textContent = 'Lanjut ▶';
+  }
+  else if(n === 3){
+    titleEl.textContent = 'Interaksi NPC, Tombol Aksi & Kuis';
+    textEl.innerHTML = 'Ikuti <b>panah emas</b> di kiri atas menuju <b>Bu Ratna</b> di halaman sekolah. Di dunia ini, dekati orang / benda lalu tekan tombol <b>[E] Aksi</b> untuk berinteraksi. Sesampainya di sana, satu <b>soal latihan</b> akan muncul di kartu ini — jawab untuk mempraktikkan cara mendapat <b>Kredit & Poin Bintang</b>!';
+    setNavTarget({name:'Bu Ratna — Tutorial', x:-13.4, z:-12.8});
+    tutSetSpot('#actionBtn');
+    quizBtn.hidden = false;
+  }
+  else if(n === 4){
+    titleEl.textContent = 'Peta GPS & Aktivitas Dunia';
+    textEl.innerHTML = 'Terakhir: buka <b>☰ Menu → Peta</b> untuk melihat seluruh dunia dan memakai <b>Navigasi GPS</b> ke tempat mana pun. Ini sebagian aktivitas seru yang menunggumu:';
+    document.getElementById('tutTiles').hidden = false;
+    tutSetSpot('#menuBtn');
+    nextBtn.hidden = false; nextBtn.textContent = '🎉 Selesai — Klaim Hadiah';
+  }
+}
+function tutShowQuiz(){
+  if(tutState.quizShown) return;
+  tutState.quizShown = true;
+  document.getElementById('tutQuizBtn').hidden = true;
+  var qz = document.getElementById('tutQuiz');
+  qz.hidden = false;
+  document.getElementById('tutQuizQ').textContent = 'Soal latihan: Arah mata angin tempat matahari TERBIT adalah…';
+  var opts = document.getElementById('tutQuizOpts');
+  opts.innerHTML = '';
+  document.getElementById('tutQuizFb').textContent = '';
+  ['Barat', 'Timur', 'Selatan'].forEach(function(label, ix){
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = label;
+    b.addEventListener('click', function(){
+      if(ix === 1){
+        b.classList.add('right');
+        document.getElementById('tutQuizFb').textContent = 'Benar! Matahari terbit di timur. Begitulah cara soal di Pos-pos belajar memberimu Kredit & Poin Bintang!';
+        AudioSys.sfx('win');
+        setTimeout(function(){ if(tutState.active && tutState.step === 3) tutShowStep(4); }, 1300);
+      } else {
+        b.classList.add('wrong');
+        document.getElementById('tutQuizFb').textContent = 'Belum tepat — ingat: matahari terbit di TIMUR. Coba lagi!';
+        AudioSys.sfx('error');
+      }
+    });
+    opts.appendChild(b);
+  });
+}
+document.getElementById('tutQuizBtn').addEventListener('click', function(){ AudioSys.sfx('click'); tutShowQuiz(); });
+document.getElementById('tutNext').addEventListener('click', function(){
+  AudioSys.sfx('click');
+  if(tutState.step === 2) tutShowStep(3);
+  else if(tutState.step === 4) finishTutorial();
+});
+document.getElementById('tutSkip').addEventListener('click', function(){ AudioSys.sfx('click'); endTutorial(true); });
+function endTutorial(skipped){
+  tutState.active = false;
+  document.getElementById('tutCard').hidden = true;
+  tutSetSpot(null);
+  if(tutState.ring) tutState.ring.visible = false;
+  try{ clearNav(true); }catch(e){}
+  if(skipped){
+    var p = tutProfile();
+    if(p && !p.tutorialCompleted){ p.tutorialCompleted = true; persistProfiles(); }
+    showToast('Tutorial dilewati. Kamu bisa memutarnya lagi kapan saja lewat ☰ Menu → 🎓 Ulangi Tutorial.', 4200);
+  }
+}
+function finishTutorial(){
+  var wasReplay = tutState.replay;
+  tutState.active = false;
+  document.getElementById('tutCard').hidden = true;
+  tutSetSpot(null);
+  if(tutState.ring) tutState.ring.visible = false;
+  try{ clearNav(true); }catch(e){}
+  confettiBurst(60, true);
+  AudioSys.sfx('win');
+  var p = tutProfile();
+  if(p && !p.tutorialCompleted){
+    p.tutorialCompleted = true; persistProfiles();
+    addKredit(100); saveEco();
+    showToast('🎓 Tutorial selesai! Modal awal +100 Kredit sudah masuk. Selamat berpetualang, ' + playerName + '!', 5400);
+  } else {
+    showToast('🎓 Tur selesai! Kamu sudah mengenal dasar-dasar dunia ini. Selamat berpetualang' + (wasReplay ? ' lagi' : '') + ', ' + playerName + '!', 4600);
+  }
+}
+setInterval(function(){
+  if(!tutState.active) return;
+  if(!playing){ endTutorial(false); return; }
+  if(tutState.step === 1 && tutState.ringPos){
+    if(tutState.ring) tutState.ring.scale.setScalar(1 + Math.sin(performance.now() / 280) * 0.09);
+    if(Math.hypot(player.position.x - tutState.ringPos.x, player.position.z - tutState.ringPos.z) < 1.3){
+      AudioSys.sfx('win');
+      showToast('Hebat! Kamu sudah bisa berjalan & memutar kamera!', 2600);
+      tutShowStep(2);
+    }
+  }
+  if(tutState.step === 3 && !tutState.quizShown){
+    if(Math.hypot(player.position.x + 13.4, player.position.z + 12.8) < 7) tutShowQuiz();
+  }
+  if(tutState.spotSel) tutPlaceSpot();
+}, 400);
+['tutCard', 'tutOfferOverlay'].forEach(function(id){
+  var el = document.getElementById(id);
+  if(el) el.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
 });
 
 /* ---------- Inisialisasi pembaruan ---------- */
