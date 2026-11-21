@@ -1000,6 +1000,84 @@
   .farm-quiz-opts button{min-height:44px;border:2px solid #cbd5e1;background:#fff;border-radius:11px;font-family:'Fredoka',sans-serif;font-size:14px;font-weight:600;color:#17324a;cursor:pointer;padding:7px 10px;text-align:left;}
   .farm-quiz-opts button.right{border-color:#16a34a;background:#dcfce7;}
   .farm-quiz-opts button.wrong{border-color:#dc2626;background:#fee2e2;}
+
+  /* ===== PORTAL PETUALANG NUSANTARA: LOGIN SPLIT-SCREEN + VALIDASI NAMA + PATROLI KESEHATAN ===== */
+  /* Layar belah: kiri = panggung avatar 3D di atas dunia yang hidup (kanvas 3D
+     tampil menembus latar transparan), kanan = panel Paspor Petualang kaca. */
+  #startScreen{background-color:transparent;background-image:linear-gradient(to bottom, rgba(14,80,140,.10) 0%, rgba(14,80,140,.05) 45%, rgba(10,52,92,.30) 100%);padding:14px;justify-content:center;}
+  .start-split{display:flex;gap:16px;width:100%;max-width:1180px;flex:1;min-height:0;margin:0 auto;}
+  .start-stage{flex:1 1 auto;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:10px 8px 16px;touch-action:none;cursor:grab;min-width:0;}
+  .start-stage:active{cursor:grabbing;}
+  .stage-glow{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(430px,80%);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, rgba(255,236,170,.5) 0%, rgba(255,214,90,.22) 42%, rgba(255,214,90,0) 70%);pointer-events:none;}
+  .stage-top{position:absolute;top:8px;left:50%;transform:translateX(-50%);text-align:center;width:100%;pointer-events:none;}
+  .stage-badge{display:inline-block;background:rgba(12,74,110,.82);color:#fde68a;font-family:'Fredoka',sans-serif;font-weight:700;font-size:12px;letter-spacing:.09em;padding:5px 14px;border-radius:999px;border:1.5px solid rgba(253,230,138,.65);box-shadow:0 4px 12px rgba(10,52,92,.35);}
+  .stage-hint{margin:7px auto 0;font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 5px rgba(10,52,92,.75);max-width:340px;line-height:1.4;}
+  .stage-anims{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;position:relative;z-index:2;}
+  .stage-anims button{min-height:46px;padding:9px 16px;border-radius:999px;border:2px solid rgba(255,255,255,.65);background:rgba(12,74,110,.78);color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14.5px;cursor:pointer;box-shadow:0 6px 16px rgba(10,52,92,.4);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+  .stage-anims button:active{transform:scale(.94);background:rgba(180,83,9,.85);}
+  .start-split .start-card{width:min(432px,100%);max-width:432px;flex:none;margin:0;align-self:stretch;overflow-y:auto;-webkit-overflow-scrolling:touch;background:rgba(255,253,247,.86);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border:2.5px solid rgba(245,158,11,.9);box-shadow:0 18px 44px rgba(10,52,92,.38), 0 0 0 4px rgba(255,255,255,.35), 0 0 26px rgba(245,158,11,.35);}
+  /* Validasi nama petualang */
+  .name-wrap{position:relative;}
+  #nameInput{padding-right:44px;}
+  #nameInput.invalid{border-color:#dc2626;background:#fef2f2;}
+  #nameInput.valid{border-color:#16a34a;background:#f0fdf4;}
+  #nameCheck{position:absolute;right:12px;top:50%;transform:translateY(-50%) scale(.4);width:26px;height:26px;border-radius:50%;background:#16a34a;color:#fff;display:grid;place-items:center;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;}
+  #nameCheck svg{width:16px;height:16px;}
+  #nameCheck.on{opacity:1;transform:translateY(-50%) scale(1);}
+  #nameMsg{display:none;margin:8px 0 0;font-size:12.5px;font-weight:800;color:#b91c1c;background:#fef2f2;border:1.5px solid #fecaca;border-radius:11px;padding:8px 11px;line-height:1.45;text-align:left;}
+  #nameMsg.show{display:block;}
+  @keyframes nameShake{0%,100%{transform:translateX(0);}15%{transform:translateX(-8px);}30%{transform:translateX(7px);}45%{transform:translateX(-6px);}60%{transform:translateX(5px);}75%{transform:translateX(-3px);}90%{transform:translateX(2px);}}
+  .shake{animation:nameShake .45s ease;}
+  @media (prefers-reduced-motion: reduce){ .shake{animation:none;} }
+  /* Tombol utama 3D glossy */
+  #startBtn{background:linear-gradient(180deg,#fbbf24 0%,#f59e0b 34%,#ea580c 100%);border-bottom:5px solid #9a3412;box-shadow:0 10px 22px rgba(234,88,12,.45), inset 0 2px 0 rgba(255,255,255,.55), inset 0 -3px 0 rgba(154,52,18,.35);letter-spacing:.02em;}
+  #startBtn:active{transform:translateY(2px) scale(.99);border-bottom-width:3px;}
+  #startBtn.is-disabled{background:linear-gradient(180deg,#cbd5e1,#94a3b8);border-bottom-color:#64748b;box-shadow:0 6px 14px rgba(100,116,139,.35), inset 0 2px 0 rgba(255,255,255,.4);cursor:not-allowed;opacity:.85;}
+  /* Dialog Patroli Kesehatan (Aipda Bima) */
+  #patrolOverlay .sheet{border-top:6px solid #1e40af;}
+  .patrol-head{display:flex;align-items:center;gap:11px;margin-top:12px;background:#eff6ff;border:2px solid #bfdbfe;border-radius:15px;padding:10px 12px;}
+  .patrol-ava{width:52px;height:52px;flex:none;border-radius:50%;background:#1e40af;color:#fff;display:grid;place-items:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:19px;border:2.5px solid #f5c542;}
+  .patrol-head b{font-family:'Fredoka',sans-serif;font-size:16.5px;color:#1e3a8a;display:block;line-height:1.2;}
+  .patrol-head span{font-size:11.5px;font-weight:800;color:#2563eb;display:block;margin-top:1px;}
+  .patrol-msg{margin:13px 0 0;font-size:14.5px;font-weight:700;color:#334155;line-height:1.6;background:#fffbeb;border:2px solid #fde68a;border-radius:14px;padding:12px 13px;}
+  .patrol-btns{display:flex;flex-direction:column;gap:8px;margin-top:13px;}
+  .patrol-btns button{min-height:52px;border:none;border-radius:13px;font-family:'Fredoka',sans-serif;font-weight:700;font-size:15px;cursor:pointer;padding:9px 12px;line-height:1.3;}
+  #patrolRestBtn{background:#dc2626;color:#fff;box-shadow:0 6px 14px rgba(220,38,38,.35);}
+  #patrolLaterBtn{background:#fff;color:#1e40af;border:2px solid #93c5fd !important;}
+  .patrol-btns button:active{transform:scale(.98);}
+  /* Layar istirahat setelah Patroli Kesehatan */
+  #restOverlay{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:18px;background:linear-gradient(180deg,#0b2a52 0%,#164e7e 55%,#2b6ea6 100%);}
+  #restOverlay.on{display:flex;}
+  .rest-card{width:100%;max-width:430px;background:rgba(255,255,255,.96);border-radius:24px;padding:26px 22px 22px;text-align:center;box-shadow:0 24px 60px rgba(3,20,40,.55);border:3px solid #fde68a;}
+  .rest-moon{font-size:52px;line-height:1;}
+  .rest-card h2{font-family:'Fredoka',sans-serif;font-size:25px;font-weight:700;color:#0c4a6e;margin:10px 0 6px;line-height:1.2;}
+  .rest-card p{font-size:14px;font-weight:700;color:#475569;line-height:1.55;margin:0;}
+  .rest-card p b{color:#b45309;}
+  .rest-tips{text-align:left;margin:15px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .rest-tips li{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:12px;padding:9px 12px;font-size:13.5px;font-weight:800;color:#075985;line-height:1.4;}
+  #restResumeBtn{width:100%;margin-top:17px;height:54px;border:none;border-radius:14px;background:linear-gradient(180deg,#22c55e,#16a34a);border-bottom:5px solid #14532d;color:#fff;font-family:'Fredoka',sans-serif;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(22,163,74,.4);}
+  #restResumeBtn:active{transform:translateY(2px);}
+  @media (max-width:860px){
+    #startScreen{padding:10px;}
+    .start-split{flex-direction:column;gap:8px;}
+    .start-stage{flex:none;height:27vh;min-height:178px;padding-bottom:10px;}
+    .stage-glow{top:46%;width:min(300px,74%);}
+    .stage-hint{display:none;}
+    .stage-anims button{min-height:42px;padding:7px 13px;font-size:13.5px;}
+    .start-split .start-card{width:100%;max-width:100%;flex:1;align-self:auto;}
+  }
+  body.kb .start-stage{display:none;}
+  /* Hierarki lapisan resmi: Dunia 3D (1) < Nameplate (10) < HUD & Joystick (20)
+     < Laci Menu & Peta (40) < Dialog NPC & Kuis (60) < Patroli & Istirahat (80)
+     < Layar Login (100). Nameplate adalah sprite 3D (renderOrder di kanvas). */
+  #scene{z-index:1;}
+  #hud{z-index:20;}
+  #menuDrawer{z-index:40;}
+  .sheet-ovl{z-index:60;}
+  #kuisOverlay{z-index:60;}
+  #patrolOverlay{z-index:80;}
+  #restOverlay{z-index:80;}
+  #startScreen{z-index:100;}
 </style>
 </head>
 <body>
@@ -1577,6 +1655,11 @@
         </table></div>
         <button class="gm-go" id="gmStatsRefresh" type="button" style="background:#0284c7;margin-top:10px;">Segarkan Laporan</button>
       </div>
+      <div class="gm-sect">
+        <h4 class="gm-give-title">Patroli Kesehatan — Pengingat 1 Jam Bermain</h4>
+        <p class="sheet-sub" style="margin-top:4px;">Setelah siswa bermain aktif selama <b>1 jam</b>, <b>Aipda Bima (Polisi Sahabat Anak)</b> otomatis datang menghampiri dan mengajaknya beristirahat (hadiah <b>+50 Kredit Disiplin</b> bila memilih istirahat, atau pengingat lagi dalam 15 menit). Gunakan tombol uji ini untuk memanggil patrolinya sekarang juga tanpa menunggu 1 jam.</p>
+        <button class="gm-go" id="gmTestPatrol" type="button" style="background:#1e40af;">⏱️ Tes Patroli 1 Jam</button>
+      </div>
       <button class="gm-go" id="gmLogout" type="button" style="background:#475569;">Keluar Mode GM</button>
     </div>
   </div>
@@ -1654,20 +1737,72 @@
   </div>
 </div>
 
-<!-- START -->
+<!-- PATROLI KESEHATAN: dialog pengingat 1 jam bermain dari Aipda Bima -->
+<div id="patrolOverlay" class="sheet-ovl">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="patrolTitle">
+    <div class="sheet-head">
+      <div>
+        <h2 class="sheet-title" id="patrolTitle">🚓 Patroli Kesehatan</h2>
+        <p class="sheet-sub">Pengingat waktu bermain dari Polisi Sahabat Anak.</p>
+      </div>
+    </div>
+    <div class="patrol-head">
+      <span class="patrol-ava" aria-hidden="true">AB</span>
+      <div><b>Aipda Bima</b><span>Polisi Sahabat Anak • Polsek Gerduren</span></div>
+    </div>
+    <p class="patrol-msg" id="patrolMsg">Halo! Kamu sudah bermain selama 1 Jam penuh.</p>
+    <div class="patrol-btns">
+      <button id="patrolRestBtn" type="button">🛑 Istirahat &amp; Simpan (+50 Kredit Disiplin)</button>
+      <button id="patrolLaterBtn" type="button">⏳ Lanjut 15 Menit Lagi</button>
+    </div>
+    <p class="sheet-note">Istirahat teratur membuat mata sehat, badan segar, dan semangat belajar tetap menyala. Aipda Bima akan datang lagi mengingatkanmu!</p>
+  </div>
+</div>
+
+<!-- LAYAR ISTIRAHAT: tampil setelah memilih Istirahat & Simpan di Patroli Kesehatan -->
+<div id="restOverlay" role="dialog" aria-modal="true" aria-labelledby="restTitle">
+  <div class="rest-card">
+    <div class="rest-moon" aria-hidden="true">🌙</div>
+    <h2 id="restTitle">Selamat Istirahat!</h2>
+    <p id="restText">Progresmu sudah <b>disimpan</b> dan kamu menerima <b>+50 Kredit Disiplin</b>. Kerja bagus hari ini!</p>
+    <ul class="rest-tips">
+      <li>🥤 Minum air putih segelas penuh</li>
+      <li>👀 Lihat benda yang jauh selama 20 detik untuk menyegarkan mata</li>
+      <li>🤸 Regangkan tangan, bahu, dan lehermu perlahan</li>
+      <li>🚶 Berdiri dan berjalan-jalan sebentar di sekitar rumah</li>
+    </ul>
+    <button id="restResumeBtn" type="button">▶ Lanjut Bermain</button>
+  </div>
+</div>
+
+<!-- START: PORTAL PETUALANG NUSANTARA — layar belah: panggung avatar 3D (kiri)
+     + panel Paspor Petualang (kanan). Nama & pembuatan karakter kini SATU panel:
+     nama wajib valid dulu sebelum tombol MULAI PETUALANGAN aktif. -->
 <div id="startScreen">
+  <div class="start-split">
+  <div class="start-stage" id="startStage" aria-label="Panggung avatar 3D — geser untuk memutar karaktermu">
+    <div class="stage-glow" aria-hidden="true"></div>
+    <div class="stage-top">
+      <span class="stage-badge">PANGGUNG AVATAR</span>
+      <p class="stage-hint">Geser panggung ini untuk memutar avatar kamu 360°. Coba juga tombol animasinya!</p>
+    </div>
+    <div class="stage-anims" role="group" aria-label="Uji animasi avatar">
+      <button id="pvSapa" type="button">👋 Sapa</button>
+      <button id="pvHormat" type="button">🫡 Hormat</button>
+      <button id="pvLompat" type="button">🦘 Lompat</button>
+    </div>
+  </div>
   <div class="start-card">
     <div class="passport-ribbon" id="passportRibbon">PASPOR PETUALANG</div>
-    <h1 id="startTitle">Dunia <span>Petualangan Nusantara</span></h1>
-    <p class="start-sub">Jelajahi sekolah &amp; Desa Gerduren. Bermain, belajar, bersenang-senang!</p>
+    <h1 id="startTitle">Portal <span>Petualang Nusantara</span></h1>
+    <p class="start-sub">Isi Paspor Petualangmu, putar avatarmu di panggung, lalu mulai petualangan di sekolah &amp; Desa Gerduren!</p>
     <div class="step" id="stepName">
-      <label class="field" for="nameInput">Nama kamu</label>
-      <input id="nameInput" type="text" maxlength="20" placeholder="Murid Baru" autocomplete="off" enterkeyhint="go" />
-      <button id="nextBtn" type="button">
-        MASUK
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-      <p class="sheet-note" style="text-align:center;margin-top:7px;">Untuk siswa baru: tulis nama, tekan <b>MASUK</b>, lalu buat karaktermu.</p>
+      <label class="field" for="nameInput">Nama petualang kamu (wajib nama sendiri!)</label>
+      <div class="name-wrap">
+        <input id="nameInput" type="text" maxlength="16" placeholder="Tulis nama panggilanmu…" autocomplete="off" enterkeyhint="go" />
+        <span id="nameCheck" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 10 18 19.5 6.5"/></svg></span>
+      </div>
+      <p id="nameMsg" role="alert"></p>
       <div class="start-or" id="gmStartOr">ATAU</div>
       <div class="gm-login-box" id="gmLoginBox">
         <div class="gm-login-head">
@@ -1686,13 +1821,13 @@
         </button>
       </div>
     </div>
-    <div class="step hide" id="stepChar">
+    <div class="step" id="stepChar">
       <label class="field">Buat karaktermu</label>
-      <p class="drag-hint">Geser layar di luar kartu untuk memutar karaktermu 360°!</p>
+      <p class="drag-hint">Avatarmu tampil langsung di panggung sebelah — geser panggungnya untuk memutar 360°!</p>
       <label class="field">Barung kamu (tim Lomba &amp; ruangan Main Bareng)</label>
-      <div class="gender-row" role="group" aria-label="Pilih jenis kelamin">
-        <button class="gender-btn on" id="genderL" type="button">Laki-laki</button>
-        <button class="gender-btn" id="genderP" type="button">Perempuan</button>
+      <div class="gender-row" role="group" aria-label="Pilih barung putra atau putri">
+        <button class="gender-btn on" id="genderL" type="button">Putra</button>
+        <button class="gender-btn" id="genderP" type="button">Putri</button>
       </div>
       <label class="field">Jenjang Kelas (tingkat kesulitan soal)</label>
       <div class="fase-row" role="group" aria-label="Pilih jenjang kelas">
@@ -1719,13 +1854,9 @@
       </div>
       <p class="custom-summary" id="customSummary"></p>
       <p class="sheet-note" style="text-align:center;">Seragam &amp; atribut dibeli nanti di <b>Koperasi Sekolah</b>.</p>
-      <div class="btn-row">
-        <button id="backBtn" type="button">← Nama</button>
-        <button id="startBtn" type="button">
-          MASUK KE DUNIA!
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </div>
+      <button id="startBtn" type="button" class="is-disabled" aria-disabled="true">
+        🚀 MULAI PETUALANGAN
+      </button>
       <div class="start-or">ATAU</div>
       <button id="mpStartBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="17" cy="9.5" r="2.6"/><path d="M16.4 14.6c2.3.2 3.8 1.6 4.3 4"/></svg>
@@ -1734,6 +1865,7 @@
     </div>
     <p class="start-note">Joystick kiri untuk berjalan • geser layar untuk kamera • tombol <b>Aksi</b> saat dekat objek.</p>
   </div>
+  </div><!-- /.start-split -->
   <!-- Gerbang Admin: ikon gambar kecil di pojok bawah halaman masuk.
        Isian kata sandi Admin TIDAK ditampilkan di halaman — baru muncul
        setelah ikon ini diklik. Keterangan di bawahnya adalah kredit pembuat. -->
@@ -5630,7 +5762,12 @@ var AudioSys = (function(){
       if(!AC) return false;
       ctx = new AC();
       master = ctx.createGain(); master.gain.value = muted ? 0 : 0.9;
-      master.connect(ctx.destination);
+      /* Master limiter: SELURUH suara melewati satu kompresor ini sebelum ke
+         speaker, jadi banyak efek yang berbunyi bersamaan tidak pecah/distorsi. */
+      var limiter = ctx.createDynamicsCompressor();
+      limiter.threshold.value = -12; limiter.knee.value = 24; limiter.ratio.value = 8;
+      limiter.attack.value = 0.004; limiter.release.value = 0.18;
+      master.connect(limiter); limiter.connect(ctx.destination);
       /* Bus khusus musik latar — volumenya bisa diturunkan otomatis
          (auto-ducking 15%) saat dialog kuis/lomba/NPC terbuka. */
       bgmBus = ctx.createGain(); bgmBus.gain.value = 1;
@@ -5648,6 +5785,7 @@ var AudioSys = (function(){
     g.gain.exponentialRampToValueAtTime(vol || 0.08, t0 + 0.015);
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(g); g.connect(master);
+    o.onended = function(){ try{ o.disconnect(); g.disconnect(); }catch(e){} };   // node osilator langsung dibersihkan setelah berbunyi
     o.start(t0); o.stop(t0 + dur + 0.05);
   }
   /* Melodi latar: pentatonik ceria, satu putaran 16 langkah, tempo santai */
@@ -5679,6 +5817,7 @@ var AudioSys = (function(){
     g.gain.setValueAtTime(0.0001, t0);
     g.gain.exponentialRampToValueAtTime(vol, t0 + 0.02);
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.onended = function(){ try{ o.disconnect(); g.disconnect(); }catch(e){} };
     o.connect(g); g.connect(bgmBus || master); o.start(t0); o.stop(t0 + dur + 0.05);
   }
   function chirpAt(t0){
@@ -6053,6 +6192,48 @@ function saveEco(){
 }
 loadEco();
 
+/* ---------- PENYELAMAT DATA SIMPANAN (SAVE DATA SANITIZER) ----------
+   Dijalankan setiap kali game dimuat, tepat setelah simpanan dibaca: seluruh
+   bidang eco diperiksa terhadap struktur default terbaru. Bidang yang hilang
+   di simpanan lama (Poin Bintang lewat stats, nomor rumah, status anggota
+   Kopdes, inventaris kebun, dll.) atau bernilai NaN/undefined diisi nilai
+   default yang valid — pemain lama tidak lagi berisiko layar putih. */
+function sanitizePlayerData(){
+  function sNum(v, d){ return (typeof v === 'number' && isFinite(v)) ? v : d; }
+  try{
+    eco.kredit = Math.max(0, Math.floor(sNum(eco.kredit, 0)));
+    eco.hp = Math.min(100, Math.max(0, sNum(eco.hp, 100)));
+    eco.ep = Math.min(100, Math.max(0, sNum(eco.ep, 100)));
+    if(!eco.inv || typeof eco.inv !== 'object') eco.inv = {};
+    ITEM_DEFS.forEach(function(d){ eco.inv[d.id] = Math.max(0, Math.floor(sNum(eco.inv[d.id], 0))); });
+    if(!eco.stats || typeof eco.stats !== 'object') eco.stats = {answered:0, correct:0, missions:0};
+    eco.stats.answered = Math.max(0, Math.floor(sNum(eco.stats.answered, 0)));
+    eco.stats.correct = Math.max(0, Math.floor(sNum(eco.stats.correct, 0)));
+    eco.stats.missions = Math.max(0, Math.floor(sNum(eco.stats.missions, 0)));
+    if(!eco.houses || typeof eco.houses !== 'object') eco.houses = {};
+    if(!eco.houseOwners || typeof eco.houseOwners !== 'object') eco.houseOwners = {};
+    if(!eco.loans || typeof eco.loans !== 'object') eco.loans = {};
+    if(!eco.assets || typeof eco.assets !== 'object') eco.assets = {};
+    if(!eco.owned || typeof eco.owned !== 'object') eco.owned = {};
+    eco.kopdesMember = !!eco.kopdesMember;
+    eco.kopdesSold = Math.max(0, Math.floor(sNum(eco.kopdesSold, 0)));
+    if(!eco.farm || typeof eco.farm !== 'object') eco.farm = {plots:[], ayam:{f:0, r:0}, sapi:{f:0, r:0}};
+    if(!Array.isArray(eco.farm.plots)) eco.farm.plots = [];
+    eco.farm.plots = eco.farm.plots.slice(0, 12).map(function(p){
+      return (p && typeof p === 'object' && typeof p.c === 'string') ? {c:p.c, p:Math.min(1, Math.max(0, sNum(p.p, 0))), w:Math.max(0, sNum(p.w, 0))} : null;
+    });
+    while(eco.farm.plots.length < 12) eco.farm.plots.push(null);
+    if(!eco.farm.ayam || typeof eco.farm.ayam !== 'object') eco.farm.ayam = {f:0, r:0};
+    if(!eco.farm.sapi || typeof eco.farm.sapi !== 'object') eco.farm.sapi = {f:0, r:0};
+    if(!Array.isArray(eco.badges)) eco.badges = [];
+    if(!Array.isArray(eco.artefak)) eco.artefak = [];
+    if(['A','B','C'].indexOf(eco.fase) < 0) eco.fase = 'B';
+    eco.lastMBG = Math.max(0, sNum(eco.lastMBG, 0));
+    eco.lastUangSaku = Math.max(0, sNum(eco.lastUangSaku, 0));
+  }catch(e){ /* sanitizer tidak boleh menjatuhkan permainan */ }
+}
+sanitizePlayerData();
+
 var kreditVal = document.getElementById('kreditVal'),
     hpFill = document.getElementById('hpFill'), hpVal = document.getElementById('hpVal'), statHp = document.getElementById('statHp'),
     epFill = document.getElementById('epFill'), epVal = document.getElementById('epVal'), statEp = document.getElementById('statEp'),
@@ -6247,7 +6428,7 @@ function useItem(d){
   AudioSys.sfx(d.kind === 'minuman' ? 'drink' : 'eat');
   if(window.SoundManager) SoundManager.playEatDrink();   // efek konsumsi ceria (MBG/susu/buah)
   showToast('Nyam! ' + d.name + ' dipakai: ' + gain.join(' dan ') + '.');
-  if(d.id === 'dawetAyu'){ dawetBoostUntil = performance.now() + 60000; showToast('Segarnya Dawet Ayu! Lari +15% lebih cepat selama 60 detik!', 3600); }
+  if(d.id === 'dawetAyu'){ dawetBoostUntil = Date.now() + 60000; showToast('Segarnya Dawet Ayu! Lari +15% lebih cepat selama 60 detik!', 3600); }
 }
 function openBag(){ bagOpen = true; renderBag(); refreshMBG(); bagOverlay.classList.add('on'); }
 function closeBag(){ bagOpen = false; bagOverlay.classList.remove('on'); }
@@ -6309,7 +6490,7 @@ var BODY_OPTIONS = [
   {id:'pendek', name:'Pendek', desc:'Mungil'}
 ];
 var custom = {
-  gender:'L', genderName:'Laki-laki',
+  gender:'L', genderName:'Putra',
   skin:SKIN_OPTIONS[1], hairColor:HAIR_COLOR_OPTIONS[0],
   hair:HAIR_STYLE_OPTIONS.L[0], body:BODY_OPTIONS[0]
 };
@@ -6402,7 +6583,7 @@ function renderHairColorRow(){
 }
 function setGender(g){
   custom.gender = g;
-  custom.genderName = (g === 'L') ? 'Laki-laki' : 'Perempuan';
+  custom.genderName = (g === 'L') ? 'Putra' : 'Putri';
   document.getElementById('genderL').classList.toggle('on', g === 'L');
   document.getElementById('genderP').classList.toggle('on', g === 'P');
   var valid = HAIR_STYLE_OPTIONS[g].some(function(o){ return o.id === custom.hair.id; });
@@ -6414,21 +6595,14 @@ document.getElementById('genderL').addEventListener('click', function(){ setGend
 document.getElementById('genderP').addEventListener('click', function(){ setGender('P'); });
 renderSkinRow(); renderHairColorRow(); renderHairStyles(); renderFaceOptions(); renderBodyOptions(); refreshCustom(false);
 
-document.getElementById('nextBtn').addEventListener('click', function(){
-  AudioSys.unlock(); AudioSys.sfx('click');
-  document.getElementById('nameInput').blur();
-  document.getElementById('stepName').classList.add('hide');
-  document.getElementById('stepChar').classList.remove('hide');
-  document.getElementById('startScreen').scrollTop = 0;
-});
-document.getElementById('backBtn').addEventListener('click', function(){
-  document.getElementById('stepChar').classList.add('hide');
-  document.getElementById('stepName').classList.remove('hide');
-});
-
 document.getElementById('startBtn').addEventListener('click', function(){
-  var v = document.getElementById('nameInput').value.trim();
-  playerName = v ? v : 'Murid Baru';
+  /* GERBANG NAMA WAJIB: nama kosong / generik TIDAK bisa masuk dunia.
+     validateName & shakeNameInput didefinisikan di blok Portal Petualang
+     (hoisting var + function di lingkup yang sama membuatnya tersedia di sini). */
+  var nv = (typeof validateName === 'function') ? validateName() : null;
+  if(!nv){ if(typeof shakeNameInput === 'function') shakeNameInput(); AudioSys.sfx('error'); return; }
+  playerName = nv;
+  try{ localStorage.setItem('duniaNamaPetualang', nv); }catch(e){}
   buildPlayer(currentChar());
   setNameplate(playerName);
   document.getElementById('startScreen').classList.add('gone');
@@ -6440,7 +6614,7 @@ document.getElementById('startBtn').addEventListener('click', function(){
   mpConnectMainRoom(); // multiplayer LANGSUNG otomatis: sambung ke Ruangan Utama tanpa kode & tanpa menunggu GM
   setTimeout(function(){ document.getElementById('hint').classList.add('hide'); }, 6000);
 });
-document.getElementById('nameInput').addEventListener('keydown', function(e){ if(e.key === 'Enter') document.getElementById('nextBtn').click(); e.stopPropagation(); });
+document.getElementById('nameInput').addEventListener('keydown', function(e){ if(e.key === 'Enter') document.getElementById('startBtn').click(); e.stopPropagation(); });
 
 /* ---------- Login Admin / Game Master LANGSUNG dari layar awal ---------- */
 /* Kata sandi yang sama dengan panel GM — diperiksa di SERVER (endpoint
@@ -6467,8 +6641,8 @@ function checkGMPassword(v, done){
   }).catch(function(){ done(false); });
 }
 function enterAdminWorld(){
-  var v = document.getElementById('nameInput').value.trim();
-  playerName = v ? v : 'Game Master';
+  var nv = (typeof validateName === 'function') ? validateName() : null;
+  playerName = nv ? nv : 'Game Master';
   adminMode = true; adminCharMode = true; gmMode = true;
   buildPlayer(adminCharParams());
   setNameplate('★ ' + playerName + ' — ADMIN', true);
@@ -6508,8 +6682,6 @@ function tryGMStartLogin(){
    ditampilkan dan kotak isian kata sandi Admin baru muncul. */
 document.getElementById('adminGate').addEventListener('click', function(){
   AudioSys.unlock(); AudioSys.sfx('click');
-  document.getElementById('stepChar').classList.add('hide');
-  document.getElementById('stepName').classList.remove('hide');
   var box = document.getElementById('gmLoginBox'), or = document.getElementById('gmStartOr');
   var opening = !box.classList.contains('on');
   box.classList.toggle('on', opening);
@@ -6763,6 +6935,7 @@ var bikeSpot = null;
 var activeBike = null, activeBikeSpot = null;   // sepeda yang sedang dipakai (pinjaman / Onthel)
 for(var bi2 = 0; bi2 < interactables.length; bi2++){ if(interactables[bi2].bike) bikeSpot = interactables[bi2]; }
 function mountBike(g, spot){
+  if(swimOn){ showToast('Kamu sedang berenang! Berenanglah ke tepi dulu untuk naik sepeda.', 3200); return; }   // FSM: larang naik kendaraan darat saat berenang
   g = g || bike; spot = spot || bikeSpot;
   riding = true; activeBike = g; activeBikeSpot = spot;
   player.position.x = g.position.x; player.position.z = g.position.z;
@@ -6806,6 +6979,7 @@ function setCockpit(kind){
 }
 function mountVehicle(kind){
   if(tourActive || vehDrive) return;
+  if(swimOn){ showToast('Kamu sedang berenang! Berenanglah ke tepi pantai dulu untuk naik kendaraan darat.', 3400); return; }   // FSM: tidak bisa naik kendaraan darat dari dalam air
   var g = kind === 'polisi' ? policeCarGroup : crossBikeGroup;
   if(!g) return;
   if(riding) dismountBike();
@@ -6831,6 +7005,7 @@ function dismountVehicle(){
   AudioSys.sfx('bell');
   AudioSys.engineStop();
   setCockpit(null);
+  vy = 0; grounded = true;   // FSM: gravitasi & pijakan kaki langsung normal lagi setelah turun kendaraan
   showToast('Kamu turun. Kendaraanmu diparkir di sini — dekati lagi untuk mengendarai atau bermain.');
 }
 
@@ -8970,13 +9145,21 @@ function renderDealer(){
     }
     var row = document.createElement('div'); row.className = 'dealer-row';
     var meta = '<span class="d-meta"><b>' + it.name + '</b><span>' + it.desc + '</span>';
-    if(houseTakenBy) meta += '<span style="color:#dc2626;font-weight:800;">Sudah Dimiliki oleh ' + kpsEsc(houseTakenBy) + ' — pilih unit rumah lain yang masih tersedia!</span>';
+    if(houseTakenBy){ /* nama pemilik rumah (teks bebas dari pemain lain via HOUSE1)
+       TIDAK dimasukkan ke string innerHTML sama sekali — dirender sebagai node
+       teks (textContent) setelah baris dibuat, lihat di bawah. */ }
     else if(owned) meta += '<span style="color:#16a34a;font-weight:800;">Sudah LUNAS — milikmu!</span>';
     else if(loan) meta += '<span>Cicilan: sudah bayar <b>' + loan.paid + ' dari ' + loan.n + ' kali</b> (' + loan.per + ' Kredit/kali). Sisa ' + ((loan.n - loan.paid) * loan.per) + ' Kredit.</span>' +
       '<span class="d-prog"><i style="width:' + Math.round(loan.paid / loan.n * 100) + '%"></i></span>';
     else meta += '<span>Harga: <b>' + it.price + ' Kredit</b> • atau kredit: ' + it.per + ' Kredit × ' + it.n + ' cicilan.</span>';
     meta += '</span>';
     row.innerHTML = '<span class="d-ic" style="background:' + it.color + ';">' + dealerIcon(it) + '</span>' + meta;
+    if(houseTakenBy){
+      var takenSpan = document.createElement('span');
+      takenSpan.style.cssText = 'color:#dc2626;font-weight:800;';
+      takenSpan.textContent = 'Sudah Dimiliki oleh ' + houseTakenBy + ' — pilih unit rumah lain yang masih tersedia!';
+      var metaEl = row.querySelector('.d-meta'); if(metaEl) metaEl.appendChild(takenSpan);
+    }
     var btns = document.createElement('span'); btns.className = 'd-btns';
     if(houseTakenBy){
       var bT = document.createElement('button'); bT.type = 'button'; bT.textContent = 'Sudah Dimiliki'; bT.disabled = true;
@@ -8994,6 +9177,7 @@ function renderDealer(){
       });
       var b2 = document.createElement('button'); b2.type = 'button'; b2.className = 'cicil'; b2.textContent = 'Ambil Kredit';
       b2.addEventListener('click', function(){
+        if(it.houseNo && !houseMine(it.houseNo) && houseOwnerName(it.houseNo)){ AudioSys.sfx('error'); showToast('Rumah ini baru saja dibeli pemain lain — kredit tidak dapat dimulai. Pilih unit lain!', 4200); renderDealer(); return; }   // kunci transaksi: validasi status kepemilikan terbaru sebelum kredit dimulai
         eco.loans[it.id] = {paid:0, per:it.per, n:it.n};
         saveEco(); renderDealer();
         AudioSys.sfx('pop'); showToast('Kredit ' + it.name + ' dimulai! Bayar cicilannya dari Dealer kapan saja: ' + it.per + ' Kredit × ' + it.n + ' kali.', 4600);
@@ -9005,6 +9189,7 @@ function renderDealer(){
       if(b3.disabled) b3.textContent = 'Kredit Kurang';
       b3.addEventListener('click', function(){
         if(eco.kredit < loan.per) return;
+        if(it.houseNo && !houseMine(it.houseNo) && houseOwnerName(it.houseNo)){ AudioSys.sfx('error'); showToast('Rumah No. ' + ('0' + it.houseNo).slice(-2) + ' sudah dimiliki pemain lain — cicilan dihentikan agar Kreditmu tidak terpotong. Pilih unit lain!', 4800); renderDealer(); return; }   // validasi ulang status server/siaran sebelum Kredit dipotong
         eco.kredit -= loan.per; loan.paid++;
         if(loan.paid >= loan.n){
           delete eco.loans[it.id]; eco.assets[it.id] = true;
@@ -11664,7 +11849,7 @@ function mpConnect(code, asGM){
         r = mp.remotes[msg.id];
         mpUpdateChip(); if(mpOpen) mpRefreshPanel();
       }
-      if(r){ r.tx = msg.x; r.tz = msg.y; r.tdir = msg.dir; if(typeof msg.py === 'number' && r.veh === 'heli') r.talt = msg.py; }
+      if(r){ r.tx = msg.x; r.tz = msg.y; r.tdir = msg.dir; r.lastSeenAt = performance.now(); if(typeof msg.py === 'number' && r.veh === 'heli') r.talt = msg.py; }
       if(typeof msg.veh === 'string'){
         // Jalur cadangan: bila server kelak meneruskan status kendaraan di
         // pesan gerak, terapkan langsung (jalur utama tetap siaran VEH1|).
@@ -12274,7 +12459,7 @@ var camTarget = new THREE.Vector3();
 /* Tinggi tanah efektif di bawah pemain: air sungai (berenang), lantai
    interior (+0,15 m), atau undakan pematang sawah (+0,3 m, auto-step). */
 function groundLevel(){
-  if(swimOn) return -0.5;
+  if(swimOn) return (typeof inSeaWater === 'function' && inSeaWater(player.position.x, player.position.z)) ? -1.15 : -0.5;   // laut dalam (kedalaman > 0,8 m): daya apung permukaan y = -1,15; sungai dangkal tetap -0,5
   if(interiorClamp) return roomFloorY;
   if(vehDrive || riding) return 0;
   return stepHeightAt(player.position.x, player.position.z);
@@ -12512,6 +12697,24 @@ function animate(){
         camSpringArm(p, camTarget);   // kamera anti-tembus tembok (spring-arm raycast)
         camera.position.lerp(camTarget, Math.min(1, dt*8));
         camera.lookAt(p.x, p.y + 1.7, p.z);
+      }
+    } else if(previewOn){
+      /* PORTAL: kamera mengelilingi podium avatar perlahan (pencahayaan pagi
+         cerah dari matahari dunia). Pada layar lebar bingkai digeser supaya
+         avatar tampil di PANGGUNG KIRI; pada layar tegak avatar tampil di
+         bagian atas layar, di atas panel Paspor. */
+      var pt3 = clock.elapsedTime * 0.11;
+      var ppx = player.position.x, ppz = player.position.z;
+      var asp = window.innerWidth / Math.max(1, window.innerHeight);
+      if(asp >= 1.02){
+        camera.position.set(ppx + Math.sin(pt3) * 5.6, 2.75, ppz + Math.cos(pt3) * 5.6);
+        var rx = Math.cos(pt3), rz = -Math.sin(pt3);
+        camera.lookAt(ppx + rx * 1.65, 1.3, ppz + rz * 1.65);
+      } else {
+        /* Layar tegak: bidik lebih rendah & lebih dekat supaya avatar tampil
+           UTUH di panggung atas, bukan tenggelam di balik panel Paspor. */
+        camera.position.set(ppx + Math.sin(pt3) * 4.8, 2.35, ppz + Math.cos(pt3) * 4.8);
+        camera.lookAt(ppx, -0.3, ppz);
       }
     } else {
       // kamera pembuka: mengorbit pelan di atas gerbang menghadap sekolah
@@ -13705,7 +13908,11 @@ var SoundManager = (function(){
       var AC = window.AudioContext || window.webkitAudioContext;
       if(!AC) return false;
       ctx = new AC();
-      master = ctx.createGain(); master.gain.value = muted ? 0 : 0.9; master.connect(ctx.destination);
+      master = ctx.createGain(); master.gain.value = muted ? 0 : 0.9;
+      var limiter2 = ctx.createDynamicsCompressor();   // master limiter SoundManager: suara tetap jernih tanpa distorsi
+      limiter2.threshold.value = -12; limiter2.knee.value = 24; limiter2.ratio.value = 8;
+      limiter2.attack.value = 0.004; limiter2.release.value = 0.18;
+      master.connect(limiter2); limiter2.connect(ctx.destination);
       noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
       var d = noiseBuf.getChannelData(0);
       for(var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
@@ -13722,6 +13929,7 @@ var SoundManager = (function(){
     g.gain.setValueAtTime(0.0001, t0);
     g.gain.exponentialRampToValueAtTime(vol || 0.15, t0 + 0.015);
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.onended = function(){ try{ o.disconnect(); g.disconnect(); }catch(e){} };   // bersihkan node osilator setelah selesai berbunyi
     o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + dur + 0.05);
   }
   function noise(delay, dur, fType, f0, f1, vol, q){
@@ -15128,15 +15336,26 @@ function previewExit(){
   player.position.set(0, 0, 26); player.position.y = 0; player.rotation.y = 0;
   player.scale.set(1, 1, 1);
 }
-document.getElementById('nextBtn').addEventListener('click', function(){ setTimeout(previewEnter, 40); });
-document.getElementById('backBtn').addEventListener('click', function(){
-  previewOn = false;
-  if(podiumMesh) podiumMesh.visible = false;
-  document.getElementById('startScreen').classList.remove('live3d');
-});
+/* Portal split-screen: pratinjau avatar LANGSUNG menyala sejak halaman dibuka
+   (panggung di sisi kiri), bukan lagi menunggu langkah kedua. */
+setTimeout(previewEnter, 60);
+/* Putar avatar 360° dengan menggeser PANGGUNG (elemen #startStage) */
+var startStageEl = document.getElementById('startStage');
+if(startStageEl){
+  startStageEl.addEventListener('pointerdown', function(e){
+    if(e.target && e.target.closest && e.target.closest('button')) return;
+    previewDrag = {x:e.clientX, y:e.clientY, ry:player.rotation.y};
+    e.preventDefault();
+  });
+}
 ['startBtn','mpStartBtn','gmStartBtn'].forEach(function(id){
   var b = document.getElementById(id);
-  if(b) b.addEventListener('click', previewExit);
+  if(b) b.addEventListener('click', function(){
+    /* Tombol MULAI dengan nama belum valid TIDAK boleh mematikan pratinjau —
+       pemain tetap di portal sampai namanya benar. */
+    if(id !== 'gmStartBtn' && typeof validateName === 'function' && !validateName()) return;
+    previewExit();
+  });
 });
 var startScreenEl = document.getElementById('startScreen');
 startScreenEl.addEventListener('pointerdown', function(e){
@@ -15147,12 +15366,45 @@ startScreenEl.addEventListener('pointermove', function(e){
   if(previewDrag) player.rotation.y = previewDrag.ry + (e.clientX - previewDrag.x) * 0.012;
 });
 window.addEventListener('pointerup', function(){ previewDrag = null; });
+/* Uji animasi di panggung avatar: Sapa & Hormat memakai pose emote yang sama
+   dengan di dalam dunia; Lompat mengangkat avatar dari podium sebentar. */
+var previewAnim = null, previewHop = -1;
+function previewPlayAnim(id){
+  if(!previewOn) previewEnter();
+  AudioSys.unlock();
+  if(id === 'lompat'){ previewHop = 0; AudioSys.sfx('jump'); return; }
+  previewAnim = {id:id, until:performance.now() + 2300};
+  try{ doEmote(id); }catch(e){}
+  AudioSys.sfx('pop');
+}
+var pvSapaBtn = document.getElementById('pvSapa'), pvHormatBtn = document.getElementById('pvHormat'), pvLompatBtn = document.getElementById('pvLompat');
+if(pvSapaBtn) pvSapaBtn.addEventListener('click', function(){ previewPlayAnim('sapa'); });
+if(pvHormatBtn) pvHormatBtn.addEventListener('click', function(){ previewPlayAnim('hormat'); });
+if(pvLompatBtn) pvLompatBtn.addEventListener('click', function(){ previewPlayAnim('lompat'); });
 setInterval(function(){
-  if(previewOn && !previewDrag) player.rotation.y += 0.01;
+  if(previewOn && !previewDrag && !previewAnim) player.rotation.y += 0.01;
   if(previewPulse > 0){
     previewPulse = Math.max(0, previewPulse - 0.07);
     var s = 1 + Math.sin(previewPulse * Math.PI) * 0.05;
     player.scale.set(s, s, s);
+  }
+  if(previewOn && previewAnim){
+    if(performance.now() > previewAnim.until){ previewAnim = null; if(armL) armL.rotation.x = 0; if(armR) armR.rotation.x = 0; }
+    else {
+      var pt2 = clock.elapsedTime;
+      if(previewAnim.id === 'sapa' && armR) armR.rotation.x = -2.3 + Math.sin(pt2 * 9) * 0.45;
+      else if(previewAnim.id === 'hormat'){ if(armR) armR.rotation.x = -2.55; if(armL) armL.rotation.x = 0.1; }
+    }
+  }
+  if(previewOn && previewHop >= 0){
+    previewHop += 0.09;
+    if(previewHop >= 1){ previewHop = -1; player.position.y = 0.22; if(legL) legL.rotation.x = 0; if(legR) legR.rotation.x = 0; }
+    else {
+      player.position.y = 0.22 + Math.sin(previewHop * Math.PI) * 0.55;
+      if(legL) legL.rotation.x = -0.55; if(legR) legR.rotation.x = 0.3;
+      if(armL) armL.rotation.x = -0.7; if(armR) armR.rotation.x = -0.7;
+    }
+    if(previewHop < 0){ if(armL) armL.rotation.x = 0; if(armR) armR.rotation.x = 0; }
   }
 }, 50);
 var _origRefreshCustom = refreshCustom;
@@ -15502,14 +15754,21 @@ function farmPlotRefresh(i){
   it.name = st.p >= 1 ? (C.name + ' Siap Panen!') : ('Petak ' + C.name + ' — ' + Math.floor(st.p * 100) + '%');
 }
 for(var fpi = 0; fpi < 12; fpi++) farmPlotRefresh(fpi);
+var farmLastTick = Date.now();
 setInterval(function(){ // mesin pertumbuhan: hanya tumbuh saat tanah basah (sudah disiram)
+  /* Selisih waktu memakai stempel Date.now() (bukan hitungan tick): pertumbuhan
+     tetap akurat walau tab sempat diminimalkan / interval ter-throttle. */
+  var nowF = Date.now();
+  var el = Math.min(3600, Math.max(0, (nowF - farmLastTick) / 1000)); farmLastTick = nowF;
+  if(el <= 0) return;
   var changed = false;
   for(var i = 0; i < 12; i++){
     var st = eco.farm.plots[i];
     if(st && CROPS[st.c] && st.w > 0 && st.p < 1){
-      st.w -= 1; st.p = Math.min(1, st.p + 1 / CROPS[st.c].grow);
+      var wasP = st.p, useW = Math.min(st.w, el);
+      st.w -= useW; st.p = Math.min(1, st.p + useW / CROPS[st.c].grow);
       changed = true; farmPlotRefresh(i);
-      if(st.p >= 1 && playing) showToast('Tanaman ' + CROPS[st.c].name + ' di Kebun Praktik sudah MATANG — panen sekarang!', 4200);
+      if(wasP < 1 && st.p >= 1 && playing) showToast('Tanaman ' + CROPS[st.c].name + ' di Kebun Praktik sudah MATANG — panen sekarang!', 4200);
     }
   }
   if(changed) saveEco();
@@ -15972,12 +16231,14 @@ function soccerNearBall(){
 }
 function soccerSetTouch(){
   soc.lastId = socMyKey(); soc.lastName = playerName; soc.lastGender = mpGender();
+  soc.touchAt = performance.now(); soc.touchFlag = true;   // otoritas simulasi: penyentuh terakhir memegang bola selama 2 detik
 }
 function soccerBroadcast(){
   if(typeof mp === 'undefined' || !mp.joined) return;
   var txt = 'BALL1|' + JSON.stringify({x:+soc.x.toFixed(2), z:+soc.z.toFixed(2),
-    vx:+soc.vx.toFixed(2), vz:+soc.vz.toFixed(2), o:soc.owner,
+    vx:+soc.vx.toFixed(2), vz:+soc.vz.toFixed(2), o:soc.owner, tch:soc.touchFlag ? 1 : 0,
     ln:soc.lastName, lg:soc.lastGender, sid:mp.myId});
+  soc.touchFlag = false;
   if(mpSendChat(txt)) mpTrackOwnChat(txt);
 }
 function soccerBecomeOwner(){
@@ -16092,6 +16353,7 @@ function soccerHandleBall(msg){
   if(!d || d.sid === (typeof mp !== 'undefined' ? mp.myId : '')) return;
   if(typeof d.x !== 'number' || typeof d.z !== 'number') return;
   soc.owner = d.o || soc.owner;
+  if(d.tch) soc.ownerTouchAt = performance.now();   // pemilik baru saja menyentuh bola: otoritasnya berlaku 2 detik
   soc.rx = d.x; soc.rz = d.z; soc.rvx = d.vx || 0; soc.rvz = d.vz || 0;
   if(d.ln){ soc.lastName = String(d.ln).slice(0, 24); soc.lastId = d.sid || ''; }
   if(d.lg) soc.lastGender = d.lg;
@@ -16164,7 +16426,7 @@ setInterval(function(){
     socBall.position.y = 0.32;
     /* rebut kepemilikan simulasi saat menyentuh bola */
     var dT = Math.hypot(player.position.x - socBall.position.x, player.position.z - socBall.position.z);
-    if(playing && dT < 0.95 && Math.hypot(pvx, pvz) > 0.6 && now >= soc.frozenUntil){
+    if(playing && dT < 0.95 && Math.hypot(pvx, pvz) > 0.6 && now >= soc.frozenUntil && now - (soc.ownerTouchAt || 0) > 2000){
       soccerBecomeOwner();
       var fx2 = Math.sin(player.rotation.y), fz2 = Math.cos(player.rotation.y);
       soc.vx = pvx * 1.1 + fx2 * 1.4; soc.vz = pvz * 1.1 + fz2 * 1.4;
@@ -16195,7 +16457,7 @@ function footBoostMul(){
   if(riding || vehDrive || tourActive) return 1;
   var m = 1;
   if(eco.equippedAcc && eco.equippedAcc.sepatuLari) m *= 1.15;      // Sepatu Lari Merah Putih +15%
-  if(performance.now() < dawetBoostUntil) m *= 1.15;                 // Dawet Ayu Segar +15% (60 detik)
+  if(Date.now() < dawetBoostUntil) m *= 1.15;                       // Dawet Ayu Segar +15% (60 detik, dihitung dari stempel Date.now())
   return m;
 }
 /* ---------- gaya tambahan untuk panel & HUD baru ---------- */
@@ -16874,6 +17136,7 @@ function dismountBoat(){
 }
 setInterval(function(){
   if(!boatDrive) return;
+  if(typeof patrolBusy !== 'undefined' && (patrolBusy || patrolOpen)) return; // Patroli Kesehatan: perahu berhenti halus di tempat
   var dt = 0.033, g = boatDrive.group;
   var ix = joy.x * joy.mag, iy = joy.y * joy.mag;
   if(!joy.active){ if(keys['KeyW']) iy -= 1; if(keys['KeyS']) iy += 1; if(keys['KeyA']) ix -= 1; if(keys['KeyD']) ix += 1; }
@@ -16905,13 +17168,13 @@ var VOL = {x:-70, z:120};
 var volleyBall = (function(){
   var m = sphG(0.27, 0xf97316, VOL.x - 3, 0.27, VOL.z, scene); m.castShadow = true; return m;
 })();
-var vol = {vx:0, vy:0, vz:0, owner:false, remote:false, lastSide:0, rest:true, lastTx:0};
+var vol = {vx:0, vy:0, vz:0, owner:false, remote:false, lastSide:0, rest:true, lastTx:0, lastTouchAt:0};
 var VOLLEY_TARGET = {volley:true, name:'Voli Pantai', label:'🏐 Voli!'};
 function volleyNearBall(){ return Math.hypot(player.position.x - volleyBall.position.x, player.position.z - volleyBall.position.z) < 1.9 && Math.abs(player.position.x - VOL.x) < 8 && Math.abs(player.position.z - VOL.z) < 6; }
 function volleyHit(){
   var b = volleyBall.position;
   var side = b.x < VOL.x ? 1 : -1;                       // pukul ke sisi seberang net
-  vol.owner = true; vol.remote = false; vol.rest = false; vol.lastSide = -side;
+  vol.owner = true; vol.remote = false; vol.rest = false; vol.lastSide = -side; vol.lastTouchAt = performance.now();
   vol.vx = side * (4.6 + Math.random() * 1.6); vol.vy = 6.8; vol.vz = (VOL.z - b.z) * 0.55 + (Math.random() * 1.2 - 0.6);
   AudioSys.sfx('pop');
   volleySend();
@@ -17340,11 +17603,304 @@ function volleyHandleBall(msg){
   try {
     var s = JSON.parse(msg.text.slice(6));
     if(vol.owner) return;                       // pemilik simulasi mengabaikan gema pemain lain
+    if(vol.lastTouchAt && performance.now() - vol.lastTouchAt < 2000) return;   // otoritas penyentuh terakhir berlaku 2 detik
+    if(!vol.remote){ volleyBall.position.set(s.x, s.y, s.z); }
+    else {   // interpolasi halus (lerp) menuju posisi siaran agar bola tidak bergetar di layar pemain lain
+      volleyBall.position.x += (s.x - volleyBall.position.x) * 0.4;
+      volleyBall.position.y += (s.y - volleyBall.position.y) * 0.4;
+      volleyBall.position.z += (s.z - volleyBall.position.z) * 0.4;
+    }
     vol.remote = true; vol.rest = false;
-    volleyBall.position.set(s.x, s.y, s.z);
     vol.vx = s.vx; vol.vy = s.vy; vol.vz = s.vz;
   } catch(e){}
 }
+
+/* ================= PORTAL PETUALANG NUSANTARA: VALIDASI NAMA & PATROLI KESEHATAN ================= */
+
+/* ---------- Partikel cahaya lembut melayang (latar hidup portal & dunia) ---------- */
+(function(){
+  var PN = 130, ppos = new Float32Array(PN * 3), pseed = [];
+  for(var i = 0; i < PN; i++){
+    ppos[i * 3] = -70 + Math.random() * 140;
+    ppos[i * 3 + 1] = 0.6 + Math.random() * 9;
+    ppos[i * 3 + 2] = -60 + Math.random() * 170;
+    pseed.push(Math.random() * 10);
+  }
+  var pgeo = new THREE.BufferGeometry();
+  pgeo.setAttribute('position', new THREE.BufferAttribute(ppos, 3));
+  var ppts = new THREE.Points(pgeo, new THREE.PointsMaterial({color:0xffe9a8, size:0.32, transparent:true, opacity:0.55, depthWrite:false}));
+  ppts.frustumCulled = false;
+  scene.add(ppts);
+  ambients.push(function(dt, t){
+    var a = pgeo.attributes.position.array;
+    for(var j = 0; j < PN; j++){
+      a[j * 3 + 1] += dt * 0.22;
+      a[j * 3] += Math.sin(t * 0.7 + pseed[j]) * dt * 0.3;
+      if(a[j * 3 + 1] > 10.5) a[j * 3 + 1] = 0.5;
+    }
+    pgeo.attributes.position.needsUpdate = true;
+  });
+})();
+
+/* ---------- VALIDASI NAMA PETUALANG (WAJIB NAMA SENDIRI) ----------
+   Kosong / hanya spasi / kurang dari 3 huruf / lebih dari 16 karakter /
+   nama generik bawaan -> tombol MULAI PETUALANGAN nonaktif, kolom bergetar
+   bertepi merah, dan pesan ramah tampil. Nama valid -> centang hijau +
+   tersimpan otomatis untuk kunjungan berikutnya. */
+var NAME_BLOCKED = ['murid baru','siswa baru','murid','siswa','player','pemain','guest','tamu','anonim','user','nama','tes','test','123'];
+var NAME_HINT = "Petualang hebat wajib punya nama sendiri! Tulis nama panggilanmu ya (tidak boleh kosong atau 'Murid Baru').";
+var nameMsgEl = document.getElementById('nameMsg');
+var nameCheckEl = document.getElementById('nameCheck');
+var startBtnEl = document.getElementById('startBtn');
+var lastBlockedShake = '';
+function shakeNameInput(){
+  nameInputEl.classList.remove('shake');
+  void nameInputEl.offsetWidth;
+  nameInputEl.classList.add('shake');
+}
+function validateName(){
+  var v = (nameInputEl.value || '').trim().replace(/\s+/g, ' ');
+  var low = v.toLowerCase();
+  var ok = v.length >= 3 && v.length <= 16 && NAME_BLOCKED.indexOf(low) < 0;
+  nameInputEl.classList.toggle('invalid', !ok);
+  nameInputEl.classList.toggle('valid', ok);
+  if(nameCheckEl) nameCheckEl.classList.toggle('on', ok);
+  if(nameMsgEl){ nameMsgEl.textContent = ok ? '' : NAME_HINT; nameMsgEl.classList.toggle('show', !ok); }
+  if(startBtnEl){ startBtnEl.classList.toggle('is-disabled', !ok); startBtnEl.setAttribute('aria-disabled', ok ? 'false' : 'true'); }
+  if(ok){ try{ localStorage.setItem('duniaNamaPetualang', v); }catch(e){} }
+  else if(v && NAME_BLOCKED.indexOf(low) >= 0 && lastBlockedShake !== low){ lastBlockedShake = low; shakeNameInput(); }
+  return ok ? v : null;
+}
+nameInputEl.addEventListener('input', validateName);
+nameInputEl.addEventListener('blur', function(){ if(!validateName()) shakeNameInput(); });
+try{ var savedPetualangName = localStorage.getItem('duniaNamaPetualang'); if(savedPetualangName && !nameInputEl.value) nameInputEl.value = savedPetualangName; }catch(e){}
+validateName();
+
+/* ---------- PATROLI KESEHATAN: PENGINGAT OTOMATIS 1 JAM BERMAIN ----------
+   Timer waktu bermain aktif berjalan selama pemain di dalam dunia. Tepat di
+   3.600 detik (lalu tiap +15 menit bila memilih lanjut), Aipda Bima datang
+   menghampiri pemain — berjalan di darat, atau naik Perahu Polisi di laut —
+   dan membuka dialog istirahat. Bila panel kuis sedang terbuka, kedatangan
+   ditunda sampai panel tertutup agar tidak mengganggu. */
+var patrolOpen = false, restOpen = false, patrolBusy = false;
+var patrolSecs = 0, patrolNextAt = 3600, patrolPending = false, patrolWasPlaying = false, patrolFirstDone = false;
+var patrolState = null;
+var patrolOverlayEl = document.getElementById('patrolOverlay');
+var _uiBlockedForPatrol = uiBlocked;
+uiBlocked = function(){ return _uiBlockedForPatrol() || patrolOpen || restOpen || patrolBusy; };
+var patrolLastTick = Date.now();
+setInterval(function(){
+  /* Penghitung waktu bermain memakai selisih stempel Date.now() (bukan tick
+     frame), jadi tetap akurat walau tab sempat diminimalkan; waktu hanya
+     bertambah saat tab terlihat dan pemain benar-benar di dalam dunia. */
+  var nowMs = Date.now();
+  var dMs = nowMs - patrolLastTick; patrolLastTick = nowMs;
+  if(playing && !patrolWasPlaying){ patrolSecs = 0; patrolNextAt = 3600; patrolPending = false; patrolFirstDone = false; }
+  patrolWasPlaying = playing;
+  if(typeof computePlayerState === 'function') playerState = computePlayerState();
+  if(!playing || restOpen || patrolOpen || patrolBusy) return;
+  if(!document.hidden) patrolSecs += dMs / 1000;
+  if(patrolSecs >= patrolNextAt) patrolPending = true;
+  if(patrolPending){
+    /* FSM: polisi hanya muncul saat pemain WALKING di darat, SWIMMING/BOATING
+       di laut, atau DRIVING (kendaraan dihentikan halus oleh startPatrol).
+       Saat IN_MODAL (Kuis/Peta/Kamera/dialog), FLYING, atau PARACHUTING,
+       kemunculan DITUNDA beberapa detik sampai status aman. */
+    var pst = (typeof computePlayerState === 'function') ? computePlayerState() : 'WALKING';
+    if(pst === 'WALKING' || pst === 'SWIMMING' || pst === 'BOATING' || pst === 'DRIVING'){ patrolPending = false; startPatrol(); }
+  }
+}, 1000);
+function startPatrol(){
+  if(!playing || patrolBusy || patrolOpen) return;
+  patrolBusy = true;
+  AudioSys.sfx('whistle');   // peluit ramah tanda polisi datang
+  var atSea = false;
+  try{ atSea = (typeof inSeaWater === 'function' && inSeaWater(player.position.x, player.position.z)) || !!boatDrive; }catch(e){}
+  if(!atSea){ try{ exitRide(); }catch(e){} }   // kendaraan/wahana berhenti halus: pemain turun di tempat
+  // bila di laut: pemain tetap di perahunya — interval perahu berhenti selama patrolBusy
+  var fx = Math.sin(player.rotation.y), fz = Math.cos(player.rotation.y);
+  var sx = player.position.x + fx * 7, sz = player.position.z + fz * 7;
+  if(!atSea && ((typeof inSeaWater === 'function' && inSeaWater(sx, sz)) || sx < -100 || sx > 100 || sz < -76 || sz > 100)){
+    sx = player.position.x - fx * 7; sz = player.position.z - fz * 7;
+  }
+  var fig = makeNPCFigure({skin:0xd9a066, hair:'policap', shirt:0x77685a, bottom:0x3f3a33, badge:true, belt:true});
+  var lb = makeLabel('Aipda Bima', 0.5); lb.position.set(0, atSea ? 2.5 : 2.9, 0); fig.g.add(lb);
+  var root;
+  if(atSea){
+    root = new THREE.Group();
+    box(2.0, 0.5, 5.6, 0x1e40af, 0, 0.25, 0, root);
+    box(2.06, 0.16, 5.66, 0xf8fafc, 0, 0.52, 0, root, false);
+    box(1.4, 0.5, 1.2, 0xf8fafc, 0, 0.75, 1.4, root, false);
+    var bl2 = makeLabel('PERAHU POLISI', 0.55); bl2.position.set(0, 2.3, 0); root.add(bl2);
+    fig.g.position.set(0, 0.55, -0.9);
+    root.add(fig.g);
+    root.position.set(sx, 0.05, sz);
+    scene.add(root);
+  } else {
+    root = fig.g;
+    root.position.set(sx, 0, sz);
+    scene.add(root);
+  }
+  root.rotation.y = Math.atan2(player.position.x - sx, player.position.z - sz);
+  patrolState = {fig:fig, root:root, sea:atSea, mode:'approach', awayX:0, awayZ:0, leaveD:0};
+}
+function patrolLeave(){
+  if(!patrolState){ patrolBusy = false; return; }
+  var st = patrolState;
+  var dx = st.root.position.x - player.position.x, dz = st.root.position.z - player.position.z;
+  var d = Math.hypot(dx, dz) || 1;
+  st.awayX = dx / d; st.awayZ = dz / d; st.mode = 'leave'; st.leaveD = 0;
+  st.root.rotation.y = Math.atan2(st.awayX, st.awayZ);
+}
+function openPatrolDialog(){
+  if(!patrolState) return;
+  patrolOpen = true;
+  var nm = playerName || 'Petualang';
+  document.getElementById('patrolMsg').textContent = !patrolFirstDone
+    ? 'Halo ' + nm + '! Hebat sekali semangat belajarmu hari ini! Tidak terasa kamu sudah bermain selama 1 Jam penuh. Yuk istirahatkan matamu sejenak, minum air putih, dan regangkan badanmu dulu ya!'
+    : 'Halo ' + nm + '! Hebat sekali semangat belajarmu hari ini! Tidak terasa sudah 15 menit lagi berlalu sejak pengingat terakhir. Yuk istirahatkan matamu sejenak, minum air putih, dan regangkan badanmu dulu ya!';
+  patrolFirstDone = true;
+  player.rotation.y = Math.atan2(patrolState.root.position.x - player.position.x, patrolState.root.position.z - player.position.z);
+  patrolOverlayEl.classList.add('on');
+  AudioSys.sfx('bell');
+}
+function closePatrolDialog(){
+  patrolOpen = false;
+  patrolOverlayEl.classList.remove('on');
+  if(patrolState && patrolState.mode === 'talk') patrolLeave();
+}
+ambients.push(function(dt, t){
+  if(!patrolState) return;
+  var st = patrolState, root = st.root, fig = st.fig;
+  var dx = player.position.x - root.position.x, dz = player.position.z - root.position.z;
+  var dist = Math.hypot(dx, dz);
+  if(st.mode === 'approach'){
+    var stopD = st.sea ? 3.4 : 1.8;
+    if(dist <= stopD){ st.mode = 'talk'; fig.legL.rotation.x = 0; fig.legR.rotation.x = 0; openPatrolDialog(); }
+    else {
+      var sp = st.sea ? 3.6 : 4.4, vx = dx / dist, vz = dz / dist;
+      root.position.x += vx * sp * dt; root.position.z += vz * sp * dt;
+      root.rotation.y = Math.atan2(vx, vz);
+      var sw = Math.sin(t * 11) * 0.6;
+      fig.legL.rotation.x = sw; fig.legR.rotation.x = -sw;
+      fig.armR.rotation.x = -2.35 + Math.sin(t * 7.5) * 0.45;   // melambai sambil menghampiri
+      fig.armL.rotation.x = -sw * 0.7;
+      if(st.sea) root.position.y = 0.05 + Math.sin(t * 2.2) * 0.05;
+    }
+  } else if(st.mode === 'talk'){
+    root.rotation.y = Math.atan2(dx, dz);
+    fig.armL.rotation.x = 0;
+    fig.armR.rotation.x = -2.35 + Math.sin(t * 5.5) * 0.4;      // tetap melambai ramah selama dialog
+    if(st.sea) root.position.y = 0.05 + Math.sin(t * 2.2) * 0.05;
+  } else if(st.mode === 'leave'){
+    root.position.x += st.awayX * 4.4 * dt; root.position.z += st.awayZ * 4.4 * dt;
+    var sw2 = Math.sin(t * 11) * 0.6;
+    fig.legL.rotation.x = sw2; fig.legR.rotation.x = -sw2;
+    fig.armR.rotation.x = -sw2 * 0.7; fig.armL.rotation.x = sw2 * 0.7;
+    st.leaveD += 4.4 * dt;
+    if(st.leaveD > 13){ scene.remove(root); patrolState = null; patrolBusy = false; }
+  }
+});
+document.getElementById('patrolLaterBtn').addEventListener('click', function(){
+  AudioSys.sfx('click');
+  patrolNextAt = patrolSecs + 900;   // pengingat berikutnya 15 menit lagi
+  closePatrolDialog();
+  showToast('Siap! Aipda Bima akan mengingatkanmu lagi 15 menit lagi. Tetap semangat belajarnya!', 4200);
+});
+document.getElementById('patrolRestBtn').addEventListener('click', function(){
+  AudioSys.sfx('win');
+  addKredit(50);                     // +50 Kredit Disiplin
+  saveEco();                         // seluruh progres tersimpan
+  try{ localStorage.setItem('duniaNamaPetualang', playerName); }catch(e){}
+  closePatrolDialog();
+  var rn = (playerName || 'Petualang').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  document.getElementById('restText').innerHTML = 'Hebat, <b>' + rn + '</b>! Progresmu sudah <b>disimpan</b> dan kamu menerima <b>+50 Kredit Disiplin</b>. Istirahatlah sebentar — dunia petualangan menunggumu kembali dengan badan segar.';
+  restOpen = true;
+  document.getElementById('restOverlay').classList.add('on');
+  patrolNextAt = patrolSecs + 3600;  // setelah istirahat, pengingat berikutnya 1 jam lagi
+});
+document.getElementById('restResumeBtn').addEventListener('click', function(){
+  AudioSys.sfx('pop');
+  restOpen = false;
+  document.getElementById('restOverlay').classList.remove('on');
+  showToast('Selamat datang kembali, ' + playerName + '! Badan segar, mata segar — ayo lanjut berpetualang!', 4200);
+});
+/* Tombol uji cepat di Panel Admin / Game Master */
+var gmTestPatrolBtn = document.getElementById('gmTestPatrol');
+if(gmTestPatrolBtn) gmTestPatrolBtn.addEventListener('click', function(){
+  AudioSys.sfx('click');
+  closeGM();
+  if(!playing){ showToast('Masuk ke dunia dulu untuk menguji Patroli 1 Jam.', 3200); return; }
+  patrolPending = false;
+  setTimeout(function(){ startPatrol(); }, 350);
+});
+
+/* ================= STABILISASI ARSITEKTUR =================
+   1) FSM status karakter terpusat — satu sumber kebenaran untuk animasi,
+      fisika, dan HUD, agar status tidak saling bertabrakan.
+   2) Void respawn y < -15.  3) Anti-ghost multiplayer (heartbeat 10 detik +
+      beforeunload).  4) Penanganan webglcontextlost (renderer WebGL tunggal
+      sudah dipakai untuk Login & bermain; pixel ratio dibatasi maks 1.5).
+   5) Anti-tembus UI: sentuhan pada dialog/modal tidak merembes ke joystick
+      atau rotasi kamera di belakangnya. */
+var playerState = 'WALKING';
+function computePlayerState(){
+  if(patrolOpen || restOpen || _uiBlockedForPatrol()) return 'IN_MODAL';
+  if(typeof paraActive !== 'undefined' && paraActive) return 'PARACHUTING';
+  if(tourActive && typeof tour !== 'undefined' && tour && tour.kind === 'heli') return 'FLYING';
+  if(typeof boatDrive !== 'undefined' && boatDrive) return 'BOATING';
+  if(vehDrive || riding || tourActive) return 'DRIVING';
+  if(swimOn) return 'SWIMMING';
+  return 'WALKING';
+}
+/* Void respawn: karakter yang jatuh ke luar dunia (y < -15 — cukup dalam
+   agar tidak mengganggu perenang di permukaan y = -1,15) dikembalikan ke
+   Gerbang Sekolah dengan gravitasi & kamera normal. */
+setInterval(function(){
+  if(playing && player.position.y < -15){
+    try{ if(typeof paraActive !== 'undefined' && paraActive){ paraActive = false; if(typeof paraMesh !== 'undefined' && paraMesh) paraMesh.visible = false; } }catch(e){}
+    try{ if(typeof boatDrive !== 'undefined' && boatDrive) boatDrive = null; }catch(e){}
+    player.position.set(0, 0, 26); player.rotation.y = Math.PI;
+    vy = 0; grounded = true;
+    showToast('Kamu terjatuh ke luar area permainan — kembali ke Gerbang Sekolah!', 3800);
+  }
+}, 500);
+/* Anti-ghost: menutup browser / kehilangan sinyal = avatar langsung hilang.
+   beforeunload menutup soket (server menyiarkan player-left); pengawas
+   berkala membuang karakter sisa yang sudah dinyatakan keluar oleh server
+   dan tidak mengirim detak gerak apa pun selama 10 detik (heartbeat). */
+window.addEventListener('beforeunload', function(){
+  try{ if(typeof mp !== 'undefined' && mp.joined && mp.ws) mp.ws.close(); }catch(e){}
+});
+setInterval(function(){
+  if(typeof mp === 'undefined' || !mp.joined || !mp.remotes) return;
+  var nowP = performance.now();
+  for(var rid in mp.remotes){
+    var rr = mp.remotes[rid];
+    if(!mp.players[rid] && (!rr.lastSeenAt || nowP - rr.lastSeenAt > 10000)) mpDisposeRemote(rid);
+  }
+}, 5000);
+/* WebGL: satu renderer utama untuk Login & bermain (sudah sejak awal); bila
+   konteks grafis hilang di HP/Chromebook, tampilkan pesan jujur + muat ulang
+   otomatis saat konteks pulih, bukan layar beku tanpa penjelasan. */
+try{
+  renderer.domElement.addEventListener('webglcontextlost', function(e){
+    e.preventDefault();
+    errBox.style.display = 'block';
+    errBox.textContent = 'Koneksi grafis 3D terputus (memori GPU penuh). Halaman akan dimuat ulang otomatis saat grafis pulih — atau muat ulang manual sekarang.';
+  });
+  renderer.domElement.addEventListener('webglcontextrestored', function(){ location.reload(); });
+}catch(e){}
+/* Anti-tembus UI: seluruh permukaan dialog/modal & tombol HUD menghentikan
+   rambatan sentuhan; selama modal terbuka uiBlocked() sudah mematikan
+   joystick & rotasi kamera, jadi karakter tidak bergerak sendiri. */
+document.querySelectorAll('.sheet-ovl, #kuisOverlay, #restOverlay, #patrolOverlay').forEach(function(el){
+  el.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
+  el.addEventListener('touchstart', function(e){ e.stopPropagation(); }, {passive:true});
+});
+document.querySelectorAll('#hud button').forEach(function(b){
+  b.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
+});
 
 /* ---------- Inisialisasi pembaruan ---------- */
 syncFaseUI();
