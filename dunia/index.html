@@ -2893,19 +2893,17 @@ function drawChampionFace(name, poin){
 /* ================= LAPANGAN GERDUREN (barat sekolah, Lampiran A.3) ================= */
 (function(){
   flat(38, 34, 0x4da843, -66, 0, scene, 0.04);                       // lapangan rumput besar
-  flat(10, 7, 0xa98a5b, -60, 6, scene, 0.09);                        // bercak tanah aus
-  flat(7, 5, 0xa98a5b, -74, -6, scene, 0.09);
-  var c = 0xffffff;                                                   // garis lapangan bola
-  box(34,0.06,0.35,c,-66,0.07,-15,scene,false); box(34,0.06,0.35,c,-66,0.07,15,scene,false);
-  box(0.35,0.06,30,c,-83,0.07,0,scene,false); box(0.35,0.06,30,c,-49,0.07,0,scene,false);
-  box(0.35,0.06,30,c,-66,0.07,0,scene,false);
-  var ring = new THREE.Mesh(new THREE.RingGeometry(3.0,3.35,28), new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.DoubleSide}));
-  ring.rotation.x = -Math.PI/2; ring.position.set(-66,0.08,0); scene.add(ring);
-  // dua gawang sederhana
-  [-82, -50].forEach(function(gx){
-    box(0.22,3.0,0.22,0xf8fafc, gx, 1.5, -3.4, scene, false); box(0.22,3.0,0.22,0xf8fafc, gx, 1.5, 3.4, scene, false);
-    box(0.22,0.22,7.0,0xf8fafc, gx, 3.0, 0, scene, false);
-  });
+  /* Bercak tanah aus DIPINDAH ke tepi barat & timur lapangan, di LUAR area
+     lapangan Sepak Bola Desa (x -74..-54, z -15..15) agar tidak menimpa garis. */
+  flat(10, 7, 0xa98a5b, -80, 10, scene, 0.09);                       // bercak tanah aus (tepi barat)
+  flat(7, 5, 0xa98a5b, -49, -12, scene, 0.09);                       // bercak tanah aus (tepi timur)
+  /* PERBAIKAN GARIS BERGANDA (audit spasial): gambar lapangan bola LAMA di
+     sini (garis batas timur-barat, lingkaran tengah r 3,0-3,35 di (-66,0),
+     dan 2 gawang sederhana di x -82 & -50) DIHAPUS. Satu-satunya lapangan
+     resmi di Lapangan Gerduren sekarang adalah Lapangan Sepak Bola Desa
+     (buildSoccerField2, SOC2 di (-64,0), 20x30 m utara-selatan) — garis,
+     lingkaran tengah, kotak penalti, gawang berjaring & papan skor hanya
+     dari sana, jadi tidak ada lagi garis ganda / 4 gawang bertumpuk. */
   postSign('Lapangan Gerduren', -50, 13, 2.2, {w:3.8, bg:'#166534', fg:'#ffffff'});
 })();
 
@@ -3054,7 +3052,7 @@ INFO['Kandang Sapi'] = 'Kandang sapi di belakang sekolah. Sapinya suka rumput & 
 INFO['Kolam Ikan'] = 'Kolam ikan di belakang sekolah, di samping kandang. Ikannya suka pelet. Tekan Aksi untuk memberi pakan!';
 INFO['Bedeng Kebun'] = 'Bedeng Kebun Sekolah: masuklah ke dalam kebun lewat celah pagar di sisi timur, lalu tekan Aksi di tengah kebun untuk menanam! Tanam bibit, tunggu tumbuh, lalu panen.';
 INFO['Petak Sawah'] = 'Petak sawah warga: masuklah ke dalam sawah lewat celah pematang, lalu tekan Aksi di tengah petak untuk menanam padi! Tanam bibit, tunggu menguning, lalu panen.';
-INFO['Lapangan Bola'] = 'Tengah Lapangan Gerduren: tempat bermain bola. Tekan Aksi untuk bermain Bola — tendang ke gawang melewati kiper!';
+INFO['Lapangan Bola'] = 'Tepi timur Lapangan Gerduren (di luar garis Lapangan Sepak Bola Desa): tempat bermain Bola mini. Tekan Aksi untuk bermain Bola — tendang ke gawang melewati kiper!';
 INFO['Tong Sampah'] = 'Halaman sekolah harus bersih! Tekan Aksi untuk bermain Mencari Sampah. Quest Harian: pungut juga sampah warna-warni berbingkai kuning yang berserakan di halaman sekolah & lingkungan desa — dekati saja, sampahnya terpungut otomatis!';
 INFO['Dealer Gerduren'] = 'Dealer Gerduren: tempat membeli Rumah, Mobil, dan Motor — bisa tunai, bisa kredit (cicilan) memakai Kredit permainanmu. Tekan Aksi untuk melihat katalognya.';
 INFO['Terminal Gerduren'] = 'Terminal Gerduren di perempatan timur desa (persimpangan Jl. Sawah Glempang dan jalan ke Polsek). Dari sini Bis Keliling Desa berangkat! Tekan Aksi untuk naik Bis: pilih Kendarai Sendiri untuk menyetir bisnya dengan joystick/tombol WASD, atau Tur Otomatis untuk duduk manis mengikuti rute keliling desa — melewati Jembatan Sungai Gerduren dan Jalan Lingkar Desa!';
@@ -3225,20 +3223,25 @@ INFO['Jalan Lingkar Desa'] = 'Jalan Lingkar Desa Gerduren: jalan aspal yang meng
 
 /* --- Sawah timur laut (di utara Puskesmas) + titik menanam padi DI DALAM petak --- */
 riceField(66, -52);
-addInteractable(66, -52, 12, 'Sawah');
+addInteractable(59, -52, 9, 'Sawah');   // titik info Sawah di tepi barat petak — DIPISAH dari titik aksi Petak Sawah di pusat (66,-52) agar dua interactable tidak menumpuk di titik yang sama
 addInteractable(66, -52, 6.5, 'Petak Sawah', null, {act:'tanamSawah'});
 
 /* --- Titik permainan lapangan di sekolah & lapangan --- */
 addInteractable(-33, 10, 5.5, 'Bedeng Kebun', null, {act:'tanamKebun'});
-addInteractable(-60, 8, 5.5, 'Lapangan Bola', null, {act:'bola'});
+addInteractable(-51, 8, 5.5, 'Lapangan Bola', null, {act:'bola'});   // titik mini-game Bola DIPINDAH ke tepi timur, di luar garis Lapangan Sepak Bola Desa (dulu di (-60,8) = di dalam lapangan)
 (function(){ // tong sampah hijau di halaman + sampah warna-warni berserakan (visual permainan Mencari Sampah)
-  cyl(0.42, 0.36, 0.95, 0x16a34a, 10, 0.48, 2, scene, 12);
-  cyl(0.45, 0.45, 0.1, 0x14532d, 10, 1.0, 2, scene, 12);
-  addCollider(10, 2, 0.6, 0.6);
-  [[6,-3],[13,-5],[4,5],[15,4],[8,-8],[12,8]].forEach(function(p, i){
+  /* PERBAIKAN TATA LETAK (audit spasial): tong sampah & sampah berserakan
+     DIPINDAH keluar dari Lapangan Sepak Bola Mini halaman sekolah
+     (x 5,5..18,5, z -7..14) — posisi lama (10,2) persis di tengah lapangan
+     sehingga tong (ber-collider!) dan sampah menghalangi permainan bola.
+     Posisi baru: sisi barat halaman, di luar garis lapangan. */
+  cyl(0.42, 0.36, 0.95, 0x16a34a, -3, 0.48, 13, scene, 12);
+  cyl(0.45, 0.45, 0.1, 0x14532d, -3, 1.0, 13, scene, 12);
+  addCollider(-3, 13, 0.6, 0.6);
+  [[-2,-2],[3,-5],[-4,5],[4,12],[-6,-8],[1,8]].forEach(function(p, i){
     box(0.34, 0.14, 0.26, [0xef4444, 0xf59e0b, 0x3b82f6, 0xec4899, 0xffffff, 0x84cc16][i], p[0], 0.12, p[1], scene, false);
   });
-  addInteractable(10, 2, 5, 'Tong Sampah', null, {trashBin:true});
+  addInteractable(-3, 13, 5, 'Tong Sampah', null, {trashBin:true});
 })();
 
 /* --- Kandang ternak + kolam ikan di BELAKANG sekolah (utara gedung kelas) --- */
@@ -3563,8 +3566,29 @@ function standPose(silent){
   if(!silent) AudioSys.sfx('pop');
 }
 
+/* ---------- ZONA INTERIOR BUKAN AIR (perbaikan "berenang di dalam ruangan") ----------
+   Seluruh ruangan interior teleport (Kelas 1-6, Perpus, UKS, Kantin,
+   Koperasi, Masjid, Balai Desa, Polsek, Puskesmas, Rumah Warga) dan Rumah
+   Kamu secara koordinat diletakkan di zona selatan peta (z 145..267) yang
+   TUMPANG TINDIH dengan persegi deteksi laut inSeaWater (x -122..4,
+   z 137..240). Akibatnya Kelas 1/2/3/6, Perpus, UKS, Masjid, Balai Desa &
+   Rumah Kamu terbaca sebagai "laut dalam" dan karakter berenang di dalam
+   ruangan. Aturan baku: titik di dalam ruangan mana pun TIDAK PERNAH air —
+   deteksi ruangan selalu menang atas deteksi air. */
+function insideInterior(x, z){
+  if(typeof ROOMS !== 'undefined'){
+    for(var rid in ROOMS){
+      var c = ROOMS[rid] && ROOMS[rid].clamp;
+      if(c && x >= c.minX - 0.3 && x <= c.maxX + 0.3 && z >= c.minZ - 0.3 && z <= c.maxZ + 0.3) return true;
+    }
+  }
+  if(x >= -6.2 && x <= 6.2 && z >= 145 && z <= 155) return true;   // interior Rumah Kamu
+  return false;
+}
+
 /* ---------- BERENANG: air Sungai Gerduren (x 99.2..106.8), kecuali di atas jembatan ---------- */
 function inRiverWater(x, z){
+  if(insideInterior(x, z)) return false;   // di dalam ruangan = lantai kering, bukan air
   if(typeof inPoolWater === 'function' && inPoolWater(x, z)) return true;   // Kolam Renang Sekolah di belakang sekolah
   if(typeof inSeaWater === 'function' && inSeaWater(x, z)) return true;   // laut dalam di Pantai Pasir Putih & Pulau Tropis
   if(x < 99.2 || x > 106.8) return false;
@@ -4792,6 +4816,13 @@ var BODY_SCALE = {
   kurus:  [0.86, 1.02, 0.87],
   pendek: [1.04, 0.91, 1.00]
 };
+/* SKALA KARAKTER GLOBAL (permintaan Anggi): model karakter diperkecil
+   seragam (pemain, pemain lain, figur Hall of Fame & NPC) agar ruangan
+   terasa lebih besar dan lega. Hanya VISUAL model yang mengecil — posisi,
+   collider, kecepatan & titik interaksi tidak berubah, dan 0,86 tetap
+   proporsional terhadap pintu (2,2 m), perabot, kendaraan & dunia luar:
+   puncak kepala murid ±1,81 m, dewasa/Admin ±1,96 m. */
+var CHAR_SCALE = 0.86;
 bodyG = new THREE.Group(); player.add(bodyG);
 player.position.set(0, 0, 26);
 scene.add(player);
@@ -5023,8 +5054,8 @@ function buildPlayer(c){
     shoulderX:0.316, shoulderY:1.34, neckY:1.42, HY:1.75, HR:0.345, armR:0.092, plate:0.89
   };
   var bs = admin ? [1.05, 1, 1] : (BODY_SCALE[c.body] || BODY_SCALE.normal);
-  bodyG.scale.set(bs[0], bs[1], bs[2]);
-  currentBodySy = L.plate * bs[1];
+  bodyG.scale.set(bs[0] * CHAR_SCALE, bs[1] * CHAR_SCALE, bs[2] * CHAR_SCALE);
+  currentBodySy = L.plate * bs[1] * CHAR_SCALE;
   var HY = L.HY, HR = L.HR, TF = L.torsoR * L.torsoSZ;
 
   /* ===== Kaki: proporsi lebih panjang & ramping, sepatu berbentuk ===== */
@@ -7164,7 +7195,7 @@ function mountBike(g, spot){
   player.position.x = g.position.x; player.position.z = g.position.z;
   player.rotation.y = g.rotation.y;
   AudioSys.sfx('bell');
-  showToast('Kamu naik sepeda! Kendali baru: KIRI = pedal GAS MAJU & REM•MUNDUR, KANAN = pad arah (Depan/Kiri/Kanan/Belakang). Tekan Turun untuk turun.', 5200);
+  showToast('Kamu naik sepeda! Kendali baru: KIRI = pedal GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk belok (lepas jari = lurus). Tekan Turun untuk turun.', 5200);
 }
 function dismountBike(){
   riding = false; vehSpeed = 0; vehUTurn = null;
@@ -7216,8 +7247,8 @@ function mountVehicle(kind){
   AudioSys.sfx('bell');
   AudioSys.engineStart(kind === 'polisi' ? 'mobil' : 'motor');   // suara mesin kendaraan menyala
   showToast(kind === 'polisi'
-    ? 'Kamu mengendarai Mobil Polisi milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah (◀ ▶ setir, ▲ lurus, ▼ putar balik). Tekan Turun untuk turun.'
-    : 'Kamu mengendarai Motor Trail milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah (◀ ▶ setir, ▲ lurus, ▼ putar balik). Tekan Turun untuk turun.', 5600);
+    ? 'Kamu mengendarai Mobil Polisi milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk setir (▲ lurus, ▼ putar balik). Tekan Turun untuk turun.'
+    : 'Kamu mengendarai Motor Trail milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk setir (▲ lurus, ▼ putar balik). Tekan Turun untuk turun.', 5600);
 }
 function dismountVehicle(){
   if(!vehDrive) return;
@@ -9669,7 +9700,7 @@ function makeNPCFigure(o){
      NPC dewasa S=1,2 -> puncak kepala ±2,24 (karakter Admin pemain ±2,28);
      NPC siswa S=1,08 -> puncak kepala ±2,02 (karakter murid pemain ±2,10).
      Sebelumnya dewasa 1,05 / siswa 0,78 sehingga NPC tampak jauh lebih kecil. */
-  var S = o.kid ? 1.08 : 1.2;
+  var S = (o.kid ? 1.08 : 1.2) * CHAR_SCALE;   // NPC ikut skala karakter global agar proporsinya tetap sama dengan pemain
   function sph(r, c, x, y, z, parent){
     var m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 11), mat(c));
     m.position.set(x, y, z); m.castShadow = true; (parent || g).add(m); return m;
@@ -10311,7 +10342,7 @@ function startTour(kind, manual){
       tour = { kind:'bis', manual:true, heading: busGroup.rotation.y, speed:0 };
       player.position.set(busGroup.position.x, 0, busGroup.position.z);
       player.rotation.y = tour.heading;
-      showToast('Kamu menyetir Bis sendiri! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah (◀ ▶ setir, ▲ lurus, ▼ putar balik). Di laptop: W/S gas/mundur, A/D setir. Tekan Turun untuk turun.', 6200);
+      showToast('Kamu menyetir Bis sendiri! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk setir (▲ lurus, ▼ putar balik). Di laptop: W/S gas/mundur, A/D setir. Tekan Turun untuk turun.', 6200);
     } else {
       tour = { kind:'bis', i:0, pts:[[63,59.8],[57,50.5],[52,50.5],[52,18],[52,50.5],[100,50.5],[52,50.5],[-60,50.5],[-88,50.5],[-60,50.5],[57,50.5],[63,59.8]] };
       showToast('Bis berangkat dari Terminal! Keliling Desa Gerduren lewat jalan raya, Jembatan Sungai, dan jalan timur. Duduk manis, ya!', 4600);
@@ -10321,7 +10352,7 @@ function startTour(kind, manual){
       tour = { kind:'heli', manual:true, alt: heliGroup.position.y, landing:false, hspeed:0 };
       player.position.set(heliGroup.position.x, heliGroup.position.y, heliGroup.position.z);
       flyUI.classList.add('on');
-      showToast('Kamu menerbangkan Helikopter sendiri! Kendali: KANAN = pad arah (hadap helikopter), KIRI = GAS MAJU & REM•MUNDUR untuk melaju/mundur, tombol Naik & Turun (di laptop: Spasi & C) untuk ketinggian. Tekan Turun untuk mendarat & turun.', 6200);
+      showToast('Kamu menerbangkan Helikopter sendiri! Kendali: KANAN = GESER ◀ ▶ untuk arah hadap helikopter, KIRI = GAS MAJU & REM•MUNDUR untuk melaju/mundur, tombol Naik & Turun (di laptop: Spasi & C) untuk ketinggian. Tekan Turun untuk mendarat & turun.', 6200);
     } else {
       tour = { kind:'heli', phase:'up', t:0, ang:-Math.PI/2, cx:0, cz:8, r:64, alt:21 };
       showToast('Helikopter lepas landas! Terbang berkeliling Desa Gerduren dari udara!', 4600);
@@ -11262,8 +11293,8 @@ function buildRemoteChar(app){
     shoulderX:0.316, shoulderY:1.34, neckY:1.42, HY:1.75, HR:0.345, armR:0.092, plate:0.89
   };
   var bs = admin ? [1.05, 1, 1] : (BODY_SCALE[app.body] || BODY_SCALE.normal);
-  bg.scale.set(bs[0], bs[1], bs[2]);
-  var sy = L.plate * bs[1];
+  bg.scale.set(bs[0] * CHAR_SCALE, bs[1] * CHAR_SCALE, bs[2] * CHAR_SCALE);
+  var sy = L.plate * bs[1] * CHAR_SCALE;
   var HY = L.HY, HR = L.HR, TF = L.torsoR * L.torsoSZ;
 
   function leg(side){
@@ -11589,7 +11620,9 @@ function buildRemoteFallback(app){
     g.add(ring);
   }
   g.traverse(function(o){ if(o.isMesh) o.castShadow = !o.userData.noShadow; });
-  return { group: g, bodyG: bg, legL: legL, legR: legR, armL: armL, armR: armR, sy: admin ? 1.10 : 0.89 };
+  var fbs = admin ? [1.05, 1, 1] : (BODY_SCALE[app.body] || BODY_SCALE.normal);
+  bg.scale.set(fbs[0] * CHAR_SCALE, fbs[1] * CHAR_SCALE, fbs[2] * CHAR_SCALE);
+  return { group: g, bodyG: bg, legL: legL, legR: legR, armL: armL, armR: armR, sy: (admin ? 1.10 : 0.89) * fbs[1] * CHAR_SCALE };
 }
 
 /* ---------- Kendaraan pemain lain (tampilan jarak jauh) ----------
@@ -11609,13 +11642,24 @@ function buildRemoteFallback(app){
 function mpVehKind(){
   if(vehDrive) return vehDrive.kind;            // 'moto' | 'polisi'
   if(tourActive && tour) return tour.kind;       // 'bis' | 'heli'
+  if(typeof boatDrive !== 'undefined' && boatDrive) return boatDrive.kind === 'speed' ? 'speedboat' : 'perahu';
   if(riding) return 'sepeda';
   return null;
 }
+/* Keadaan animasi khusus yang WAJIB terlihat pemain lain (selain jalan &
+   emote yang sudah tersinkron): berenang & berparasut. Dikirim sebagai
+   field ke-4 pesan VEH1| agar satu jalur siaran membawa kendaraan +
+   animasi; klien lama mengabaikan field tambahan ini dengan aman. */
+function mpAnimState(){
+  if(typeof swimOn !== 'undefined' && swimOn) return 'swim';
+  if(typeof paraActive !== 'undefined' && paraActive) return 'para';
+  return '-';
+}
 function mpSendVehState(){
   var vk = mpVehKind();
-  mp.lastVehSent = vk; mp.lastVehSentAt = performance.now();
-  if(mp.joined) mpSendChat('VEH1|' + (vk || '-') + '|' + (Math.round(player.position.y * 10) / 10));
+  var an = mpAnimState();
+  mp.lastVehSent = vk; mp.lastVehSentAt = performance.now(); mp.lastAnimSent = an;
+  if(mp.joined) mpSendChat('VEH1|' + (vk || '-') + '|' + (Math.round(player.position.y * 10) / 10) + '|' + an);
 }
 function buildRemoteVehicle(kind){
   var g = new THREE.Group();
@@ -11667,6 +11711,17 @@ function buildRemoteVehicle(kind){
     box(1.3, 0.5, 0.14, 0xb91c1c, 0, 1.95, -4.2, g, false);
     rotor = box(6.4, 0.07, 0.5, 0x1f2937, 0, 2.5, 0, g, false);
     box(2.6, 0.09, 0.16, 0x374151, 0, 0.28, 0.9, g, false); box(2.6, 0.09, 0.16, 0x374151, 0, 0.28, -0.9, g, false);
+  } else if(kind === 'perahu'){
+    box(1.9, 0.55, 5.4, 0x9a6a38, 0, 0.3, 0, g);                        // lambung kayu
+    var bow = box(1.5, 0.45, 1.1, 0x8a5a2e, 0, 0.42, 3.1, g, false); bow.rotation.x = -0.35;   // haluan
+    box(1.7, 0.09, 0.5, 0x7c4a21, 0, 0.62, -0.8, g, false);             // bangku dayung
+    box(1.7, 0.09, 0.5, 0x7c4a21, 0, 0.62, 1.2, g, false);
+    cyl(0.05, 0.05, 2.6, 0x6d4c2f, 0, 1.7, 0.4, g, 8);                  // tiang layar
+  } else if(kind === 'speedboat'){
+    box(2.0, 0.5, 5.8, 0xf8fafc, 0, 0.32, 0, g);                        // lambung putih
+    box(2.04, 0.18, 5.84, 0xdc2626, 0, 0.2, 0, g, false);               // garis merah
+    box(1.5, 0.45, 1.4, 0xbae6fd, 0, 0.78, 0.7, g, false);              // kaca depan
+    box(0.7, 0.6, 0.4, 0x111827, 0, 0.55, -3.0, g, false);              // mesin tempel
   }
   g.visible = false;
   scene.add(g);
@@ -11697,8 +11752,26 @@ function mpSetRemoteVeh(id, kind, alt){
   var r = mp.remotes[id];
   if(!r) return; // karakter belum terbuat: status tersimpan di mp.players, diterapkan saat mpAddRemote
   r.veh = kind || null;
-  r.talt = (kind === 'heli') ? (alt || 0) : 0;
+  r.talt = (kind === 'heli' || kind === 'perahu' || kind === 'speedboat') ? (alt || 0) : 0;
   mpApplyRemoteVeh(r);
+}
+function mpSetRemoteAnim(id, anim){
+  var a = (anim === 'swim' || anim === 'para') ? anim : '-';
+  if(mp.players[id]) mp.players[id].anim = a;
+  var r = mp.remotes[id];
+  if(r) r.anim = a;
+}
+/* Kanopi parasut sederhana untuk pemain lain yang sedang melayang turun
+   dari helikopter — dibuat sekali per karakter, tampil hanya saat 'para'. */
+function buildRemoteParachute(){
+  var g = new THREE.Group();
+  var can = new THREE.Mesh(new THREE.SphereGeometry(1.15, 14, 10), mat(0xf97316));
+  can.scale.set(1, 0.45, 1); can.castShadow = true; g.add(can);
+  box(0.04, 1.3, 0.04, 0x78350f, -0.7, -0.75, 0, g, false);
+  box(0.04, 1.3, 0.04, 0x78350f, 0.7, -0.75, 0, g, false);
+  g.position.set(0, 2.9, 0);
+  g.visible = false;
+  return g;
 }
 
 /* ---------- Kelola karakter pemain lain di dunia ---------- */
@@ -11729,7 +11802,7 @@ function mpAddRemote(p){
     armL: built.armL, armR: built.armR, sy: built.sy,
     plate: plateSprite, plateKey: plateKey, pname: p.name, pgender: p.gender, pisGM: !!p.isGM,
     tx: p.x || 0, tz: p.y || 0, tdir: p.dir || 0, walk: 0, bubble: null, bubbleEnd: 0,
-    veh: null, talt: 0, vehGroups: {}
+    veh: null, talt: 0, vehGroups: {}, anim: p.anim || '-', paraMesh: null
   };
   // Status kendaraan terakhir pemain ini (bila sudah diketahui dari siaran
   // VEH1| sebelum karakternya terbuat) langsung diterapkan.
@@ -12097,6 +12170,7 @@ function mpConnect(code, asGM){
       if(msg.id !== mp.myId){
         var vparts = msg.text.split('|');
         mpSetRemoteVeh(msg.id, (vparts[1] && vparts[1] !== '-') ? vparts[1] : null, parseFloat(vparts[2]) || 0);
+        mpSetRemoteAnim(msg.id, vparts[3] || '-');   // animasi renang / parasut pemain ini
       }
     }
     else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('GIVE1|') === 0){
@@ -12123,6 +12197,13 @@ function mpConnect(code, asGM){
     }
     else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('STAT1|') === 0){
       if(msg.id === mp.myId) mpConsumeOwnEcho(msg.text); else statHandleRemote(msg);
+    }
+    else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('HOF1|') === 0){
+      /* Siaran registri Hall of Fame (rekor Poin Bintang sepanjang masa):
+         BUKAN pesan obrolan — dilebur ke registri lokal agar Hall of Fame
+         menampilkan pemain terbaik dari SELURUH pemain yang pernah masuk,
+         identik di semua layar. */
+      if(msg.id === mp.myId) mpConsumeOwnEcho(msg.text); else hofHandleRemote(msg);
     }
     else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('CERT1|') === 0){
       /* Hadiah Sertifikat Digital dari GM untuk siswa bernama tertentu:
@@ -12378,8 +12459,9 @@ function mpTick(dt){
        pesan tetap melihat kendaraan kita — helikopter lebih sering karena
        ketinggiannya berubah-ubah. */
     var myVeh = mpVehKind();
+    var myAnim = mpAnimState();
     var vehEvery = myVeh === 'heli' ? 900 : 4000;
-    if(myVeh !== mp.lastVehSent || (myVeh && performance.now() - (mp.lastVehSentAt || 0) > vehEvery)) mpSendVehState();
+    if(myVeh !== mp.lastVehSent || myAnim !== (mp.lastAnimSent || '-') || (myVeh && performance.now() - (mp.lastVehSentAt || 0) > vehEvery)) mpSendVehState();
     var now = performance.now();
     if(now - mp.lastMoveAt >= 66){ // throttle ~15x/detik
       var px = player.position.x, pz = player.position.z, pd = player.rotation.y, py = player.position.y;
@@ -12401,8 +12483,9 @@ function mpTick(dt){
     while(dd > Math.PI) dd -= Math.PI * 2;
     while(dd < -Math.PI) dd += Math.PI * 2;
     r.group.rotation.y += dd * Math.min(1, dt * 12);
-    // Ketinggian target (menerbangkan helikopter): karakter ikut naik ke udara.
-    var talt = r.talt || 0;
+    // Ketinggian target: helikopter/perahu mengikuti talt; berenang = -0,42
+    // (badan di permukaan air, sama seperti tampilan renang lokal).
+    var talt = r.anim === 'swim' ? -0.42 : (r.talt || 0);
     gp.y += (talt - gp.y) * Math.min(1, dt * 6);
     if(Math.abs(talt - gp.y) < 0.02) gp.y = talt;
     // Model kendaraan pemain ini mengikuti karakternya ke mana pun ia pergi.
@@ -12439,6 +12522,30 @@ function mpTick(dt){
       r.legL.rotation.x = -0.9; r.legR.rotation.x = -0.9;
       r.armL.rotation.x = -0.5; r.armR.rotation.x = -0.5;
       r.bodyG.position.y = (r.veh === 'polisi' || r.veh === 'bis') ? 0.12 : 0.30;
+    }
+    if(r.anim === 'swim'){
+      // BERENANG (terlihat pemain lain): badan mendatar di permukaan air,
+      // tangan mengayuh bergantian, kaki menendang kecil — pose yang sama
+      // persis dengan animasi renang lokal.
+      var swt = clock.elapsedTime;
+      r.bodyG.rotation.x += (1.08 - r.bodyG.rotation.x) * Math.min(1, dt * 6);
+      r.bodyG.position.y = 0.52 + Math.sin(swt * 2.6) * 0.05;
+      r.armL.rotation.x = Math.sin(swt * 6.2) * 1.05 - 0.25;
+      r.armR.rotation.x = Math.sin(swt * 6.2 + Math.PI) * 1.05 - 0.25;
+      r.legL.rotation.x = Math.sin(swt * 9.5) * 0.32;
+      r.legR.rotation.x = Math.sin(swt * 9.5 + Math.PI) * 0.32;
+      if(r.paraMesh) r.paraMesh.visible = false;
+    } else if(r.anim === 'para'){
+      // PARASUT: kanopi oranye terbuka di atas kepala, tangan memegang tali,
+      // kaki sedikit menekuk — melayang turun terlihat jelas dari jauh.
+      r.bodyG.rotation.x *= 0.8;
+      r.armL.rotation.x = -2.9; r.armR.rotation.x = -2.9;
+      r.legL.rotation.x = -0.35; r.legR.rotation.x = -0.35;
+      if(!r.paraMesh){ try{ r.paraMesh = buildRemoteParachute(); r.group.add(r.paraMesh); }catch(e){} }
+      if(r.paraMesh) r.paraMesh.visible = true;
+    } else {
+      r.bodyG.rotation.x *= 0.8;   // kembali tegak setelah renang/parasut
+      if(r.paraMesh) r.paraMesh.visible = false;
     }
     if(r.emote && performance.now() < r.emote.until){
       var et = clock.elapsedTime;
@@ -12687,9 +12794,9 @@ var camTarget = new THREE.Vector3();
 /* Tinggi tanah efektif di bawah pemain: air sungai (berenang), lantai
    interior (+0,15 m), atau undakan pematang sawah (+0,3 m, auto-step). */
 function groundLevel(){
+  if(interiorClamp) return roomFloorY;   // di dalam ruangan: selalu lantai ruangan (tidak pernah permukaan air)
   if(swimOn) return (typeof inPoolWater === 'function' && inPoolWater(player.position.x, player.position.z)) ? 0.25
     : ((typeof inSeaWater === 'function' && inSeaWater(player.position.x, player.position.z)) ? -1.15 : -0.5);   // kolam renang: mengapung di permukaan kolam (lantai keramik 0,12, air 0,75); laut dalam: -1,15; sungai dangkal: -0,5
-  if(interiorClamp) return roomFloorY;
   if(vehDrive || riding) return 0;
   return stepHeightAt(player.position.x, player.position.z);
 }
@@ -12777,7 +12884,10 @@ function animate(){
       /* BERENANG di Sungai Gerduren: berjalan masuk ke air sungai (bukan di
          atas jembatan!) mengubah pose jadi renang dan gerak jadi lebih lambat. */
       var wasSwim = swimOn;
-      swimOn = !poseMode && !riding && !vehDrive && !tourActive && inRiverWater(player.position.x, player.position.z);
+      swimOn = !poseMode && !riding && !vehDrive && !tourActive && !interiorClamp && !(typeof boatDrive !== 'undefined' && boatDrive) && !(typeof paraActive !== 'undefined' && paraActive) && inRiverWater(player.position.x, player.position.z);
+      /* !interiorClamp + !boatDrive + !paraActive: mode renang HANYA di air
+         sungguhan (laut/sungai/kolam) saat berjalan kaki — tidak pernah di
+         dalam ruangan, tidak saat berperahu, tidak saat berparasut. */
       if(swimOn && !wasSwim){ AudioSys.sfx('pop'); if(swimMsgCd <= 0){ showToast('Kamu BERENANG di Sungai Gerduren! Airnya sejuk dan jernih. Berenanglah ke tepi barat untuk naik lagi ke darat.', 4600); swimMsgCd = 30; } }
       if(!swimOn && wasSwim){ player.position.y = 0; vy = 0; grounded = true; bodyG.rotation.x = 0; }
       if(swimMsgCd > 0) swimMsgCd -= dt;
@@ -13122,12 +13232,122 @@ document.getElementById('progChip').addEventListener('click', function(){
 
 /* ---------- Siaran statistik belajar ke ruangan (untuk Laporan GM & Top 5) ---------- */
 var gmStatsMap = {}, lastStatSent = 0;
+
+/* ================= HALL OF FAME: REGISTRI POIN BINTANG SEPANJANG MASA =================
+   Hall of Fame & Papan Peringkat menampilkan pemain dengan Poin Bintang
+   TERTINGGI dari SELURUH pemain yang PERNAH masuk — bukan hanya yang
+   sedang online. Agar akurat dan tampilannya IDENTIK di semua layar:
+   1) Tiap klien menyimpan registri persisten (localStorage) berisi rekor
+      terbaik tiap karakter (kunci characterId; cadangan nama+fase+barung).
+   2) Rekor menyebar & menyatu LEWAT SERVER Main Bareng (ruangan yang sama
+      untuk semua pemain): STAT1 menyiarkan skor + characterId tiap pemain,
+      dan HOF1 menyiarkan rekor-rekor terbaik yang diketahui tiap klien
+      (satu pesan per rekor) — jadi rekor pemain yang sudah pulang tetap
+      sampai ke pemain yang baru masuk.
+   3) Aturan gabung deterministik di semua klien: per karakter diambil
+      Poin Bintang TERBESAR; urutan tampil Poin Bintang menurun lalu nama
+      A-Z (lbSortPb). Siaran yang sama + aturan yang sama = papan yang sama
+      persis di setiap perangkat. */
+var HOF_DB_KEY = 'duniaHofDB1';
+var hofDB = {};
+try{ hofDB = JSON.parse(localStorage.getItem(HOF_DB_KEY) || '{}') || {}; }catch(e){ hofDB = {}; }
+var hofSaveT = 0;
+function hofSave(){
+  var now = performance.now();
+  if(now - hofSaveT < 1500) return;
+  hofSaveT = now;
+  try{
+    var keys = Object.keys(hofDB).sort(function(a, b){ return (hofDB[b].pb | 0) - (hofDB[a].pb | 0); });
+    if(keys.length > 60){ var cut = {}; keys.slice(0, 60).forEach(function(k){ cut[k] = hofDB[k]; }); hofDB = cut; }
+    localStorage.setItem(HOF_DB_KEY, JSON.stringify(hofDB));
+  }catch(e){}
+}
+function hofKeyFor(cid, name, fase, gender){
+  if(cid) return 'c:' + cid;
+  return 'n:' + String(name || '').toLowerCase() + '|' + (fase || 'B') + '|' + (gender || 'putra');
+}
+function hofMergeRecord(rec){
+  if(!rec || !rec.name) return;
+  var key = hofKeyFor(rec.cid, rec.name, rec.fase, rec.gender);
+  var ex = hofDB[key], today = questTodayStr();
+  if(!ex){
+    hofDB[key] = {n:rec.name, f:rec.fase || 'B', g:rec.gender || 'putra', b:rec.badge || '', pb:rec.pb | 0, pd:(rec.pdDate === today ? rec.pd | 0 : 0), pdate:today, m:rec.misi | 0, ts:Date.now()};
+  } else {
+    if((rec.pb | 0) >= (ex.pb | 0)){ ex.pb = rec.pb | 0; if(rec.badge) ex.b = rec.badge; }
+    if(rec.pdDate === today && (rec.pd | 0) > (ex.pd | 0)){ ex.pd = rec.pd | 0; ex.pdate = today; }
+    if((rec.misi | 0) > (ex.m | 0)) ex.m = rec.misi | 0;
+    ex.n = rec.name; ex.f = rec.fase || ex.f; ex.g = rec.gender || ex.g; ex.ts = Date.now();
+  }
+  /* Karakter yang sama bisa tercatat dua kali (kunci characterId dari
+     klien baru + kunci nama dari klien lama): lebur entri nama yang
+     identitasnya sama persis ke entri characterId agar tidak ganda. */
+  if(rec.cid){
+    var nk = hofKeyFor(null, rec.name, rec.fase, rec.gender);
+    if(nk !== key && hofDB[nk]){
+      var o = hofDB[nk], t = hofDB[key];
+      if((o.pb | 0) > (t.pb | 0)){ t.pb = o.pb | 0; if(o.b) t.b = o.b; }
+      if(o.pdate === today && (o.pd | 0) > (t.pd | 0)) t.pd = o.pd | 0;
+      if((o.m | 0) > (t.m | 0)) t.m = o.m | 0;
+      delete hofDB[nk];
+    }
+  }
+  hofSave();
+}
+function hofMyRecord(){
+  return {cid:(typeof activeCharId === 'string' && activeCharId) ? activeCharId : null,
+    name:playerName, fase:eco.fase, gender:mpGender(), badge:highestBadge(),
+    pb:poinBintang(), pd:bintangHariIni(), pdDate:questTodayStr(), misi:eco.stats.missions | 0};
+}
+function hofCleanField(s, max){ return String(s == null ? '' : s).replace(/[\^|<>]/g, '').slice(0, max); }
+function lbSortPb(a, b){
+  var d = (b.pb | 0) - (a.pb | 0);
+  if(d) return d;
+  var an = String(a.name || a.n || '').toLowerCase(), bn = String(b.name || b.n || '').toLowerCase();
+  return an < bn ? -1 : (an > bn ? 1 : 0);
+}
+var hofQueue = [], hofLastRound = 0, hofJoinSent = false;
+function hofBroadcast(force){
+  if(typeof mp === 'undefined' || !mp.joined) return;
+  var now = performance.now();
+  if(!force && now - hofLastRound < 45000) return;
+  if(hofQueue.length) return;
+  hofLastRound = now;
+  hofMergeRecord(hofMyRecord());
+  var recs = Object.keys(hofDB).map(function(k){ return {k:k, r:hofDB[k]}; }).sort(function(a, b){ return lbSortPb(a.r, b.r); }).slice(0, 8);
+  recs.forEach(function(it){
+    var cid = it.k.indexOf('c:') === 0 ? it.k.slice(2) : '-';
+    hofQueue.push('HOF1|' + cid + '^' + hofCleanField(it.r.n, 20) + '^' + (it.r.pb | 0) + '^' + (it.r.f || 'B') + '^' + (it.r.g || 'putra') + '^' + hofCleanField(it.r.b, 26) + '^' + (it.r.m | 0));
+  });
+}
+setInterval(function(){
+  if(typeof mp !== 'undefined' && mp.joined && !hofJoinSent){
+    hofJoinSent = true;
+    setTimeout(function(){ hofBroadcast(true); }, 2500);   // baru masuk ruangan: kirim registri agar semua layar segera sama
+  }
+  if(typeof mp !== 'undefined' && !mp.joined) hofJoinSent = false;
+  if(hofQueue.length && typeof mp !== 'undefined' && mp.joined){
+    var txt = hofQueue.shift();
+    if(txt.length < 195 && mpSendChat(txt)) mpTrackOwnChat(txt);
+  }
+}, 800);
+setInterval(function(){
+  if(playing && typeof mp !== 'undefined' && mp.joined){ hofMergeRecord(hofMyRecord()); hofBroadcast(false); }
+}, 30000);
+function hofHandleRemote(msg){
+  var parts = String(msg.text).slice(5).split('^');
+  if(parts.length < 6) return;
+  var cid = (parts[0] && parts[0] !== '-' && /^[a-zA-Z0-9-]{8,40}$/.test(parts[0])) ? parts[0] : null;
+  hofMergeRecord({cid:cid, name:hofCleanField(parts[1], 24) || 'Pemain', pb:parseInt(parts[2], 10) || 0,
+    fase:['A','B','C'].indexOf(parts[3]) >= 0 ? parts[3] : 'B', gender:parts[4] === 'putri' ? 'putri' : 'putra',
+    badge:hofCleanField(parts[5], 30), misi:parseInt(parts[6], 10) || 0, pd:0, pdDate:''});
+}
 function statBroadcast(force){
   if(typeof mp === 'undefined' || !mp.joined) return;
   var now = performance.now();
   if(!force && now - lastStatSent < 5000) return;
   lastStatSent = now;
-  var payload = {n:playerName, a:eco.stats.answered, c:eco.stats.correct, q:eco.stats.missions, b:highestBadge(), l:playerLevel(), f:eco.fase, g:mpGender(), pb:poinBintang(), pd:bintangHariIni(), ps:posIlmuDone()};
+  hofMergeRecord(hofMyRecord());
+  var payload = {n:playerName, a:eco.stats.answered, c:eco.stats.correct, q:eco.stats.missions, b:highestBadge(), l:playerLevel(), f:eco.fase, g:mpGender(), pb:poinBintang(), pd:bintangHariIni(), ps:posIlmuDone(), cid:(typeof activeCharId === 'string' && activeCharId) ? activeCharId : ''};
   var txt = 'STAT1|' + JSON.stringify(payload);
   if(txt.length < 195 && mpSendChat(txt)) mpTrackOwnChat(txt);
 }
@@ -13140,7 +13360,10 @@ function statHandleRemote(msg){
      renderGMStats() tetap menampilkannya hanya lewat textContent — jadi
      payload seperti <img onerror> tidak pernah menjadi HTML di layar GM. */
   function cleanStatStr(v, max){ return String(v == null ? '' : v).replace(/[<>&"'`\u0000-\u001f\u007f]/g, '').slice(0, max); }
-  gmStatsMap[msg.id] = {name:cleanStatStr(p.n, 24) || 'Pemain', answered:p.a|0, correct:p.c|0, missions:p.q|0, badge:cleanStatStr(p.b || 'Siaga Mula', 30), level:p.l|0, fase:['A','B','C'].indexOf(p.f) >= 0 ? p.f : 'B', gender:p.g === 'putri' ? 'putri' : 'putra', pb:p.pb|0, pd:p.pd|0, ps:p.ps|0};
+  gmStatsMap[msg.id] = {name:cleanStatStr(p.n, 24) || 'Pemain', answered:p.a|0, correct:p.c|0, missions:p.q|0, badge:cleanStatStr(p.b || 'Siaga Mula', 30), level:p.l|0, fase:['A','B','C'].indexOf(p.f) >= 0 ? p.f : 'B', gender:p.g === 'putri' ? 'putri' : 'putra', pb:p.pb|0, pd:p.pd|0, ps:p.ps|0, cid:(typeof p.cid === 'string' && /^[a-zA-Z0-9-]{8,40}$/.test(p.cid)) ? p.cid : null};
+  /* Rekor pemain ini masuk registri Hall of Fame sepanjang masa (tetap
+     tercatat & tampil di podium walau pemainnya sudah keluar ruangan). */
+  hofMergeRecord({cid:gmStatsMap[msg.id].cid, name:gmStatsMap[msg.id].name, fase:gmStatsMap[msg.id].fase, gender:gmStatsMap[msg.id].gender, badge:gmStatsMap[msg.id].badge, pb:p.pb|0, pd:p.pd|0, pdDate:questTodayStr(), misi:p.q|0});
   renderGMStats(); updateTop5Board();
 }
 setInterval(function(){ if(playing) statBroadcast(false); }, 12000);
@@ -14076,9 +14299,10 @@ function updateGotongRoyong(dt){
 /* ================= PAPAN TOP 5 SISWA TELADAN (Halaman Sekolah) ================= */
 var top5Canvas = null, top5Ctx = null, top5Tex = null, top5LastKey = '';
 function top5Entries(){
-  var list = [{name:playerName, misi:eco.stats.missions, badge:highestBadge()}];
-  for(var id in gmStatsMap){ var s = gmStatsMap[id]; list.push({name:s.name, misi:s.missions, badge:s.badge}); }
-  list.sort(function(a, b){ return b.misi - a.misi; });
+  /* Top 5 Teladan kini juga berbasis registri sepanjang masa (lbEntries),
+     bukan hanya pemain yang sedang online. */
+  var list = lbEntries().map(function(e){ return {name:e.name, misi:e.misi | 0, badge:e.badge}; });
+  list.sort(function(a, b){ return (b.misi - a.misi) || (String(a.name).toLowerCase() < String(b.name).toLowerCase() ? -1 : 1); });
   return list.slice(0, 5);
 }
 function top5SummaryText(){
@@ -15403,14 +15627,31 @@ lbOverlay.innerHTML = '<div class="sheet" role="dialog" aria-modal="true">' +
   '<button class="pos-next" id="lbCloseBtn" type="button" style="background:#fff;color:#475569;border:2px solid #cbd5e1;">Tutup</button></div>';
 document.body.appendChild(lbOverlay);
 function lbEntries(){
-  var list = [{name:playerName, fase:eco.fase, gender:mpGender(), pb:poinBintang(), pd:bintangHariIni(), badge:highestBadge(), me:true}];
-  var seen = {}; seen[playerName] = true;
+  /* Daftar peringkat = gabungan (1) registri Hall of Fame sepanjang masa —
+     SELURUH pemain yang pernah masuk, rekornya tersimpan & tersinkron
+     lewat server Main Bareng — (2) statistik live ruangan, (3) data diri
+     terbaru. Digabung per identitas (nama+fase+barung) dengan Poin
+     Bintang TERBESAR, jadi akurat dan sama persis di semua layar. */
+  var byId = {}, list = [];
+  function put(e){
+    var k = String(e.name || '').toLowerCase() + '|' + (e.fase || 'B') + '|' + (e.gender || 'putra');
+    var ex = byId[k];
+    if(!ex){ byId[k] = e; list.push(e); return; }
+    if((e.pb | 0) > (ex.pb | 0)){ ex.pb = e.pb | 0; if(e.badge) ex.badge = e.badge; }
+    if((e.pd | 0) > (ex.pd | 0)) ex.pd = e.pd | 0;
+    if((e.misi | 0) > (ex.misi | 0)) ex.misi = e.misi | 0;
+    if(e.me) ex.me = true;
+  }
+  var today = questTodayStr();
+  for(var k in hofDB){
+    var r = hofDB[k];
+    put({name:r.n, fase:r.f, gender:r.g, pb:r.pb | 0, pd:(r.pdate === today ? r.pd | 0 : 0), badge:r.b, misi:r.m | 0, me:false});
+  }
   for(var id in gmStatsMap){
     var s = gmStatsMap[id];
-    if(seen[s.name]) continue;
-    seen[s.name] = true;
-    list.push({name:s.name, fase:s.fase, gender:s.gender, pb:s.pb | 0, pd:s.pd | 0, badge:s.badge, me:false});
+    put({name:s.name, fase:s.fase, gender:s.gender, pb:s.pb | 0, pd:s.pd | 0, badge:s.badge, misi:s.missions | 0, me:false});
   }
+  put({name:playerName, fase:eco.fase, gender:mpGender(), pb:poinBintang(), pd:bintangHariIni(), badge:highestBadge(), misi:eco.stats.missions | 0, me:true});
   return list;
 }
 function lbRow(e, i, val){
@@ -15425,11 +15666,11 @@ function renderLB(){
   document.getElementById('lbSelf').innerHTML = 'Poin Bintangmu: <b>' + poinBintang() + '</b> (tidak berkurang saat dibelanjakan) • Hari ini: <b>' + bintangHariIni() + '</b> • Rumus: jawaban benar ×10 + Pos selesai ×50 + Artefak ×100.';
   var list = lbEntries(), html = '';
   if(lbState.tab === 'jenjang'){
-    var f = list.filter(function(e){ return e.fase === lbState.fase; }).sort(function(a, b){ return b.pb - a.pb; });
+    var f = list.filter(function(e){ return e.fase === lbState.fase; }).sort(lbSortPb);
     html = f.map(function(e, i){ return lbRow(e, i, e.pb); }).join('');
     if(f.length <= 1) html += '<p class="sheet-note" style="margin-top:9px;">Baru kamu di jenjang ini. Ajak teman sekelas Main Bareng agar peringkat terisi!</p>';
   } else if(lbState.tab === 'hari'){
-    var h = list.slice().sort(function(a, b){ return b.pd - a.pd; });
+    var h = list.slice().sort(function(a, b){ return (b.pd - a.pd) || lbSortPb(a, b); });
     html = h.map(function(e, i){ return lbRow(e, i, e.pd); }).join('') + '<p class="sheet-note" style="margin-top:9px;">Peringkat harian direset otomatis setiap pergantian tanggal.</p>';
   } else {
     var pa = 0, pi = 0;
@@ -15437,12 +15678,12 @@ function renderLB(){
     var tot = Math.max(1, pa + pi);
     html = '<div class="lb-vs"><div class="side pa"><div class="nm">BARUNG PUTRA</div><div class="sc">' + pa + '</div></div><div class="side pi"><div class="nm">BARUNG PUTRI</div><div class="sc">' + pi + '</div></div></div>' +
       '<div class="lb-bar"><i style="background:#2563eb;width:' + Math.round(pa / tot * 100) + '%;"></i><i style="background:#db2777;width:' + Math.round(pi / tot * 100) + '%;"></i></div>' +
-      '<p class="sheet-note" style="margin-top:9px;">Total akumulasi Poin Bintang seluruh pemain yang terhubung di ruangan ini.' + (list.length === 1 ? ' Baru kamu yang terhubung — ajak teman Main Bareng!' : '') + '</p>';
+      '<p class="sheet-note" style="margin-top:9px;">Total akumulasi Poin Bintang seluruh pemain yang pernah bermain (tersimpan & tersinkron lewat server Main Bareng).' + (list.length === 1 ? ' Baru kamu yang tercatat — ajak teman Main Bareng!' : '') + '</p>';
   }
   document.getElementById('lbList').innerHTML = html;
   document.getElementById('lbCertBtn').textContent = certGranted() ? 'Lihat & Unduh Sertifikat Digital' : 'Sertifikat Digital (Progres ' + posIlmuDone() + '/5 Pos)';
 }
-function openLB(){ lbState.fase = eco.fase; renderLB(); lbOverlay.classList.add('on'); AudioSys.sfx('pop'); }
+function openLB(){ lbState.fase = eco.fase; try{ hofBroadcast(true); }catch(e){} renderLB(); lbOverlay.classList.add('on'); AudioSys.sfx('pop'); }
 lbOverlay.querySelectorAll('[data-tab]').forEach(function(b){ b.addEventListener('click', function(){ lbState.tab = b.getAttribute('data-tab'); AudioSys.sfx('click'); renderLB(); }); });
 lbOverlay.querySelectorAll('#lbSub [data-fase]').forEach(function(b){ b.addEventListener('click', function(){ lbState.fase = b.getAttribute('data-fase'); AudioSys.sfx('click'); renderLB(); }); });
 lbOverlay.querySelector('#lbCloseBtn').addEventListener('click', function(){ AudioSys.sfx('click'); lbOverlay.classList.remove('on'); });
@@ -15462,7 +15703,7 @@ var madingCtx = madingCanvas.getContext('2d');
 var madingTex = new THREE.CanvasTexture(madingCanvas); madingTex.colorSpace = THREE.SRGBColorSpace; madingTex.anisotropy = 4;
 var madingLastKey = '';
 function drawMading(){
-  var entries = lbEntries().slice().sort(function(a, b){ return b.pb - a.pb; }).slice(0, 3);
+  var entries = lbEntries().slice().sort(lbSortPb).slice(0, 3);
   var key = JSON.stringify(entries);
   if(key === madingLastKey) return;
   madingLastKey = key;
@@ -16231,7 +16472,7 @@ function renderFarmAnimalPanel(){
    Kehormatan Top 3 Poin Bintang (figur 3D sesuai penampilan pemain) +
    papan klasemen digital interaktif di dinding belakang. */
 INFO['Hall of Fame SDN 1 Gerduren'] = 'Hall of Fame SDN 1 Gerduren: pendopo kehormatan di taman tepi halaman, samping Gerbang Utama. Di dalamnya berdiri 3 Podium Kehormatan untuk 3 siswa dengan Poin Bintang tertinggi — lengkap dengan potret karakter 3D, nama, lencana tertinggi, dan skornya. Dekati papan di dinding belakang untuk melihat klasemen lengkap!';
-INFO['Papan Klasemen Hall of Fame'] = 'Papan Klasemen Digital Hall of Fame: menampilkan peringkat Poin Bintang seluruh siswa yang terhubung. Tekan Aksi untuk membuka Klasemen Lengkap!';
+INFO['Papan Klasemen Hall of Fame'] = 'Papan Klasemen Digital Hall of Fame: menampilkan peringkat Poin Bintang tertinggi dari SELURUH siswa yang pernah bermain — datanya tersimpan dan tersinkron lewat server Main Bareng, jadi sama persis di semua layar. Tekan Aksi untuk membuka Klasemen Lengkap!';
 INFO['Podium Kehormatan'] = 'Podium Kehormatan Hall of Fame: Juara 1 di tengah (tertinggi), Juara 2 di kiri, Juara 3 di kanan. Terus kumpulkan Poin Bintang dari jawaban benar, Pos Ilmu, dan Artefak agar potret karaktermu berdiri di sini!';
 var HOF = {x:-16.5, z:10.5};
 var hofFigs = [null, null, null], hofKeys = ['', '', ''], hofFrames = [];
@@ -16349,7 +16590,7 @@ function hofAppearanceFor(entry){
 }
 function hofRefresh(){
   if(!hofFrames.length) return;
-  var list = lbEntries().slice().sort(function(a, b){ return b.pb - a.pb; }).slice(0, 3);
+  var list = lbEntries().slice().sort(lbSortPb).slice(0, 3);
   for(var s = 0; s < 3; s++){
     var e = list[s] || null, fr = hofFrames[s];
     var key = e ? (e.name + '|' + e.pb + '|' + e.badge) : 'kosong';
@@ -16760,6 +17001,13 @@ function footBoostMul(){
   '.pedal.held{filter:brightness(1.35);transform:scale(.96);}' +
   '#dashPadWrap{position:absolute;right:10px;bottom:calc(14px + env(safe-area-inset-bottom));width:172px;display:flex;flex-direction:column;gap:6px;pointer-events:auto;}' +
   '#dashPad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:rgba(10,25,43,.72);border:1.5px solid rgba(255,255,255,.3);border-radius:18px;padding:7px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}' +
+  '#dashSwipe{position:relative;height:104px;border-radius:18px;border:1.5px solid rgba(255,255,255,.35);background:rgba(10,25,43,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden;cursor:grab;}' +
+  '#dashSwipe.on{border-color:#38bdf8;background:rgba(2,90,140,.55);cursor:grabbing;}' +
+  '#dashSwipeArrow{font-size:34px;line-height:1;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5);transition:transform .05s linear;pointer-events:none;}' +
+  '#dashSwipe small{font-family:Nunito,sans-serif;font-size:10px;font-weight:800;color:#bae6fd;text-align:center;line-height:1.25;pointer-events:none;padding:0 8px;}' +
+  '.dash-minirow{display:flex;gap:6px;}' +
+  '.pad-mini{flex:1;border:1.5px solid rgba(255,255,255,.35);background:rgba(10,25,43,.8);color:#fff;border-radius:11px;font-family:Fredoka,sans-serif;font-weight:700;font-size:11.5px;padding:7px 2px;cursor:pointer;min-height:38px;touch-action:none;user-select:none;-webkit-user-select:none;}' +
+  '.pad-mini.held{background:#0284c7;transform:scale(.95);}' +
   '.pad-btn{border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;border-radius:13px;font-family:Fredoka,sans-serif;font-weight:700;font-size:17px;padding:5px 2px 4px;cursor:pointer;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;touch-action:none;user-select:none;-webkit-user-select:none;}' +
   '.pad-btn small{font-family:Nunito,sans-serif;font-size:9.5px;font-weight:800;opacity:.9;}' +
   '.pad-btn.held{background:#0284c7;transform:scale(.94);}' +
@@ -17142,11 +17390,11 @@ var homeDecor = {};
   box(1.5, 1.9, 0.36, 0x7c4a21, 0, 0.95, 0, g);
   [0.55, 1.1, 1.65].forEach(function(y){ cyl(0.07, 0.1, 0.3, 0xd4a017, -0.4, y, 0.24, g, 10); cyl(0.07, 0.1, 0.3, 0xd4a017, 0.35, y, 0.24, g, 10); });
   g.position.set(3.9, 0.15, 145.95); scene.add(g); homeDecor.rakPiala = g;
-  g = new THREE.Group(); // Gitar Akustik bersandar di dinding selatan
+  g = new THREE.Group(); // Gitar Akustik bersandar di dinding TIMUR (DIPINDAH dari dinding selatan: titik interaksinya dulu hanya 0,86 m dari Kursi Makan (2.2,152.6) sehingga kedua target berhimpitan & ambigu saat pemain berdiri di meja makan)
   var gb = sphG(0.3, 0xb45309, 0, 0.32, 0, g); gb.scale.set(1, 1.25, 0.45);
   var gn = box(0.09, 0.85, 0.06, 0x7c4a21, 0.12, 0.95, 0, g, false); gn.rotation.z = -0.22;
-  g.position.set(2.9, 0.15, 153.9); g.rotation.y = 0.5; scene.add(g); homeDecor.gitar = g;
-  addInteractable(2.9, 153.1, 2.3, 'Gitar Akustik', null, {gitar:true});
+  g.position.set(4.6, 0.15, 149.5); g.rotation.y = -1.1; scene.add(g); homeDecor.gitar = g;
+  addInteractable(4.3, 149.5, 2.3, 'Gitar Akustik', null, {gitar:true});
   /* Cermin Lemari Pakaian di dinding selatan interior rumah */
   box(1.15, 1.55, 0.08, 0x7c4a21, -3.0, 1.45, 154.22, scene, false);
   var mir = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 1.35), new THREE.MeshBasicMaterial({color:0xbae6fd}));
@@ -17230,14 +17478,11 @@ dashEl.innerHTML =
   '<div id="dashSpeedBox"><div id="dashSpeed"><b>0</b> <span>km/j</span></div><div id="dashGear">Gigi: N</div><div id="dashVehName"></div></div>' +
   '<button class="pedal gas" id="dashGas" type="button"><span class="ped-arrow">▲</span>GAS MAJU<small>tahan untuk ngegas</small></button>' +
   '<button class="pedal brk" id="dashRev" type="button"><span class="ped-arrow">▼</span>REM • MUNDUR<small>tahan: rem, lalu mundur</small></button></div>' +
-  '<div id="dashPadWrap"><div class="dash-cap">ARAH • KANAN ▶</div>' +
-  '<div id="dashPad">' +
-  '<span class="pad-empty"></span><button class="pad-btn" id="padUp" type="button">▲<small>Depan</small></button><span class="pad-empty"></span>' +
-  '<button class="pad-btn" id="padLeft" type="button">◀<small>Kiri</small></button><span class="pad-hub">🧭</span><button class="pad-btn" id="padRight" type="button">▶<small>Kanan</small></button>' +
-  '<span class="pad-empty"></span><button class="pad-btn" id="padDown" type="button">▼<small>Belakang</small></button><span class="pad-empty"></span>' +
-  '</div>' +
+  '<div id="dashPadWrap"><div class="dash-cap">ARAH • GESER ⇆</div>' +
+  '<div id="dashSwipe" role="slider" aria-label="Geser untuk membelokkan kendaraan"><div id="dashSwipeArrow">⇆</div><small>GESER ◀ ▶ untuk belok<br>makin jauh gesernya, makin tajam beloknya<br>lepas jari = kembali lurus</small></div>' +
+  '<div class="dash-minirow"><button class="pad-mini" id="padUp" type="button">▲ Lurus</button><button class="pad-mini" id="padDown" type="button">▼ Putar Balik</button></div>' +
   '<div class="dash-row2"><button class="dash-btn" id="dashHorn" type="button">🔔 Klakson</button><button class="dash-btn exit" id="dashExit" type="button">🚪 Turun</button></div>' +
-  '<div class="dash-kbd">W = Gas Maju • S = Rem/Mundur<br>A/D = Arah Kiri/Kanan</div></div>';
+  '<div class="dash-kbd">W = Gas Maju • S = Rem/Mundur<br>A/D = Belok Kiri/Kanan</div></div>';
 document.getElementById('hud').appendChild(dashEl);
 /* ================= KENDALI KENDARAAN: PEDAL KIRI + PAD ARAH KANAN =================
    Logika baku untuk SEMUA kendaraan (sepeda, motor, mobil polisi, bis manual,
@@ -17246,14 +17491,22 @@ document.getElementById('hud').appendChild(dashEl);
      dulu sampai berhenti, baru maju); REM•MUNDUR mengerem saat melaju ke
      depan, dan mundur saat sudah berhenti/diam. Tanpa pedal = meluncur
      berhenti perlahan (gesekan).
-   • KANAN = pad arah 4 penjuru (Depan/Kiri/Kanan/Belakang, bisa diagonal):
+   • KANAN = area GESER (swipe) untuk arah: geser jari ke kanan = belok
+     kanan, geser ke kiri = belok kiri; besar belok mengikuti jarak geser
+     (dx/64, maksimal penuh pada ±64 px) dan arah kembali LURUS begitu jari
+     diangkat. Area swipe hanya ada di Dashboard Kendali (hanya tampil &
+     aktif saat berkendara) dan menelan semua sentuhannya sendiri
+     (stopPropagation + pointer capture) — tidak menembus ke joystick,
+     kamera, atau tombol Aksi. Tombol kecil ▲ Lurus & ▼ Putar Balik tetap
+     tersedia di bawah area geser; keyboard A/D tetap berfungsi digital.
      - Kendaraan kamera luar (sepeda, perahu, helikopter): arah dihitung
        relatif ke kamera/layar — hidung kendaraan berbelok mulus (laju putar
-       dibatasi) menuju arah yang ditunjuk pad.
-     - Kendaraan kokpit (motor, mobil polisi, bis): ◀ ▶ = setir belok
-       (makin terasa saat berjalan; saat mundur arah setir terbalik seperti
-       mobil sungguhan), ▲ Depan = setir lurus, ▼ Belakang = putar balik
-       180° menuju target yang dikunci saat tombol mulai ditekan. */
+       dibatasi) menuju arah yang ditunjuk geseran.
+     - Kendaraan kokpit (motor, mobil polisi, bis): geseran = setir belok
+       analog (makin terasa saat berjalan; saat mundur arah setir terbalik
+       seperti mobil sungguhan), ▲ Lurus = setir lurus, ▼ Putar Balik =
+       putar balik 180° menuju target yang dikunci saat tombol mulai
+       ditekan. */
 var vehPedal = {gas:false, rev:false};
 var vehPad = {up:false, down:false, left:false, right:false};
 var vehSpeed = 0;    // kecepatan bertanda (+ maju / − mundur) sepeda & kendaraan milik sendiri
@@ -17262,13 +17515,15 @@ function vehWrapAngle(a){ while(a > Math.PI) a -= Math.PI * 2; while(a < -Math.P
 function vehApproach(v, target, step){ return v < target ? Math.min(target, v + step) : Math.max(target, v - step); }
 function vehTurnToward(cur, want, maxStep){ var d = vehWrapAngle(want - cur); return cur + Math.max(-maxStep, Math.min(maxStep, d)); }
 function vehReadInput(blocked){
-  if(blocked) return {throttle:0, up:false, down:false, left:false, right:false};
+  if(blocked) return {throttle:0, up:false, down:false, left:false, right:false, sx:0};
   var gas = vehPedal.gas || !!keys['KeyW'], rev = vehPedal.rev || !!keys['KeyS'];
   return {throttle:(gas ? 1 : 0) - (rev ? 1 : 0), up:vehPad.up, down:vehPad.down,
-    left:vehPad.left || !!keys['KeyA'], right:vehPad.right || !!keys['KeyD']};
+    left:vehPad.left || !!keys['KeyA'], right:vehPad.right || !!keys['KeyD'],
+    sx:(typeof vehSwipe !== 'undefined') ? vehSwipe.steer : 0};
 }
 function vehPadWant(camRef, inp){
-  var ix = (inp.right ? 1 : 0) - (inp.left ? 1 : 0), iy = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
+  var ix = (inp.right ? 1 : 0) - (inp.left ? 1 : 0) + (inp.sx || 0), iy = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
+  ix = Math.max(-1.6, Math.min(1.6, ix));
   if(!ix && !iy) return null;
   var mx = Math.sin(camRef) * (-iy) + (-Math.cos(camRef)) * ix;
   var mz = Math.cos(camRef) * (-iy) + (Math.sin(camRef)) * ix;
@@ -17284,7 +17539,8 @@ function vehCockpitSteer(heading, inp, spd, turnRate, dt){
     if(Math.abs(vehWrapAngle(vehUTurn - heading)) < 0.04 || !inp.down) vehUTurn = null;
     return heading;
   }
-  var st = (inp.left ? 1 : 0) - (inp.right ? 1 : 0);
+  var st = (inp.left ? 1 : 0) - (inp.right ? 1 : 0) - (inp.sx || 0);   // geser kanan (sx>0) = setir kanan, analog mengikuti jarak geser
+  st = Math.max(-1.6, Math.min(1.6, st));
   if(st && Math.abs(spd) > 0.12)
     heading += st * turnRate * dt * (0.3 + 0.7 * Math.min(1, Math.abs(spd) / 6)) * (spd < 0 ? -1 : 1);
   return heading;
@@ -17321,8 +17577,45 @@ function bindVehHold(id, obj, prop){
 }
 bindVehHold('dashGas', vehPedal, 'gas'); bindVehHold('dashRev', vehPedal, 'rev');
 bindVehHold('padUp', vehPad, 'up'); bindVehHold('padDown', vehPad, 'down');
-bindVehHold('padLeft', vehPad, 'left'); bindVehHold('padRight', vehPad, 'right');
-window.addEventListener('blur', function(){ vehPedal.gas = vehPedal.rev = false; vehPad.up = vehPad.down = vehPad.left = vehPad.right = false; vehUTurn = null; });
+/* ---------- KEMUDI GESER (SWIPE) di sisi kanan Dashboard ----------
+   Menggantikan pad arah ◀ ▶: sentuh area #dashSwipe lalu geser jari —
+   dx positif (ke kanan) = belok kanan, dx negatif = belok kiri; steer
+   analog = dx/64 terpotong [-1, 1]. Jari diangkat / sentuhan batal =
+   steer kembali 0 (kendaraan lurus). Area ini hanya ada di dalam
+   Dashboard Kendali yang tampil saat berkendara, dan semua handler-nya
+   stopPropagation + pointer capture, jadi gestur tidak pernah bocor ke
+   joystick karakter, putar kamera, atau tombol Aksi. */
+var vehSwipe = {id:null, startX:0, steer:0};
+var swipeEl = document.getElementById('dashSwipe');
+var swipeArrowEl = document.getElementById('dashSwipeArrow');
+function vehSwipeReset(){
+  vehSwipe.id = null; vehSwipe.steer = 0;
+  if(swipeArrowEl){ swipeArrowEl.style.transform = 'translateX(0px)'; swipeArrowEl.textContent = '⇆'; }
+  if(swipeEl) swipeEl.classList.remove('on');
+}
+if(swipeEl){
+  swipeEl.addEventListener('pointerdown', function(e){
+    e.preventDefault(); e.stopPropagation();
+    vehSwipe.id = e.pointerId; vehSwipe.startX = e.clientX; vehSwipe.steer = 0;
+    swipeEl.classList.add('on');
+    try{ swipeEl.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  swipeEl.addEventListener('pointermove', function(e){
+    if(vehSwipe.id !== e.pointerId) return;
+    e.preventDefault(); e.stopPropagation();
+    var dx = e.clientX - vehSwipe.startX;
+    vehSwipe.steer = Math.max(-1, Math.min(1, dx / 64));
+    if(swipeArrowEl){
+      swipeArrowEl.style.transform = 'translateX(' + Math.max(-34, Math.min(34, Math.round(dx * 0.5))) + 'px)';
+      swipeArrowEl.textContent = vehSwipe.steer < -0.25 ? '⬅' : (vehSwipe.steer > 0.25 ? '➡' : '⇆');
+    }
+  });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function(ev){
+    swipeEl.addEventListener(ev, function(){ vehSwipeReset(); });
+  });
+  swipeEl.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+}
+window.addEventListener('blur', function(){ vehPedal.gas = vehPedal.rev = false; vehPad.up = vehPad.down = vehPad.left = vehPad.right = false; vehUTurn = null; vehSwipeReset(); });
 var exitRideBtn = document.createElement('button');
 exitRideBtn.id = 'exitRideBtn'; exitRideBtn.type = 'button'; exitRideBtn.textContent = '🚪 Turun';
 exitRideBtn.style.pointerEvents = 'auto';
@@ -19097,7 +19390,10 @@ function chuteSegments(S, C, E, colors, sign){
     box(0.5, 0.07, 0.36, 0x92400e, hx, 0.82, hz, merryGrp, false);
   });
   addInteractable(-4.5, -51.2, 2.7, 'Komidi Putar Mini', null, {wahana:'merry'});
-  postSign('Taman Bermain', -13, -47.3, 0, {w:3.2, bg:'#db2777', fg:'#ffffff'});
+  /* Papan nama lama 'Taman Bermain' di (-13,-47.3) DIHAPUS: berhimpitan
+     hanya 1,1 m dari papan gerbang 'Karnaval Pesta Rakyat' di (-13,-46.2)
+     (dua papan nama bertumpuk di mulut area yang sama). Satu papan gerbang
+     resmi: Karnaval Pesta Rakyat. */
   /* ================= KARNAVAL / PESTA RAKYAT =================
      Taman Bermain diperluas jadi suasana karnaval: tenda warna-warni, stan
      permainan, lampu hias & umbul-umbul, Istana Balon, dan Kereta Karnaval. */
