@@ -1342,12 +1342,14 @@
         <line x1="238" y1="176" x2="256" y2="160" stroke="#f87171" stroke-width="4" stroke-linecap="round"/>
         <circle cx="562" cy="176" r="30" fill="#14171c" stroke="#4b5563" stroke-width="3"/>
         <line x1="562" y1="176" x2="548" y2="158" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
+        <g id="cockpitWheel">
         <circle cx="400" cy="212" r="64" fill="none" stroke="#101216" stroke-width="17"/>
         <circle cx="400" cy="212" r="64" fill="none" stroke="#2e333b" stroke-width="9"/>
         <line x1="342" y1="196" x2="458" y2="196" stroke="#2e333b" stroke-width="11" stroke-linecap="round"/>
         <line x1="400" y1="200" x2="400" y2="252" stroke="#2e333b" stroke-width="11" stroke-linecap="round"/>
         <circle cx="400" cy="200" r="17" fill="#1d2126" stroke="#4b5563" stroke-width="2.5"/>
         <circle cx="400" cy="200" r="6" fill="#f59e0b"/>
+        </g>
       </svg>
     </div>
     <div id="cockpitMoto">
@@ -3334,41 +3336,43 @@ var playerHouseGroup = null, houseSignGroup = null, homeCarGroup = null, homeBik
 
 var HOME_CUT = null;   // bagian atap & dinding interior Rumah Kamu untuk CUTAWAY INDOOR VIEW
 /* --- Bagian dalam Rumah Kamu: ruangan sederhana yang bisa dimasuki setelah rumah LUNAS ---
-   Dibangun jauh di selatan peta (z=150, di luar area desa) sebagai ruang interior;
-   pemain berpindah ke sini lewat pintu rumah, dan keluar lewat pintu yang sama. */
+   Dibangun jauh di selatan peta (z=280, di SELATAN kawasan laut — dulu di z=150
+   yang kini tertutup laut sehingga bangunannya tampak berdiri di tengah laut)
+   sebagai ruang interior; pemain berpindah ke sini lewat pintu rumah, dan
+   keluar lewat pintu yang sama. */
 (function buildHomeInterior(){
-  flat(12, 9, 0xb08968, 0, 150, scene, 0.03);
-  flat(4.6, 3.2, 0xdc2626, 0, 150.5, scene, 0.05);                       // karpet merah ruang tengah
-  HOME_CUT = {roofs:[box(12.6, 0.25, 9.6, 0x9e3d2c, 0, 3.32, 150, scene)], walls:[   // plafon/atap interior
-    box(12, 3.2, 0.3, 0xfef3c7, 0, 1.6, 145.6, scene),                     // dinding belakang
-    box(0.3, 3.2, 9, 0xfef3c7, -6, 1.6, 150, scene),                      // dinding kiri
-    box(0.3, 3.2, 9, 0xfef3c7, 6, 1.6, 150, scene),                       // dinding kanan
-    box(4.6, 3.2, 0.3, 0xfef3c7, -3.7, 1.6, 154.4, scene),                 // dinding depan kiri pintu
-    box(4.6, 3.2, 0.3, 0xfef3c7, 3.7, 1.6, 154.4, scene),                  // dinding depan kanan pintu
-    box(2.8, 0.5, 0.3, 0xfef3c7, 0, 2.95, 154.4, scene)]};                 // ambang di atas pintu (celah pintu 2,8 m × 2,7 m)
+  flat(12, 9, 0xb08968, 0, 280, scene, 0.03);
+  flat(4.6, 3.2, 0xdc2626, 0, 280.5, scene, 0.05);                       // karpet merah ruang tengah
+  HOME_CUT = {roofs:[box(12.6, 0.25, 9.6, 0x9e3d2c, 0, 3.32, 280, scene)], walls:[   // plafon/atap interior
+    box(12, 3.2, 0.3, 0xfef3c7, 0, 1.6, 275.6, scene),                     // dinding belakang
+    box(0.3, 3.2, 9, 0xfef3c7, -6, 1.6, 280, scene),                      // dinding kiri
+    box(0.3, 3.2, 9, 0xfef3c7, 6, 1.6, 280, scene),                       // dinding kanan
+    box(4.6, 3.2, 0.3, 0xfef3c7, -3.7, 1.6, 284.4, scene),                 // dinding depan kiri pintu
+    box(4.6, 3.2, 0.3, 0xfef3c7, 3.7, 1.6, 284.4, scene),                  // dinding depan kanan pintu
+    box(2.8, 0.5, 0.3, 0xfef3c7, 0, 2.95, 284.4, scene)]};                 // ambang di atas pintu (celah pintu 2,8 m × 2,7 m)
   // tempat tidur + bantal + selimut
-  box(2.2, 0.4, 3.4, 0x7c4a21, -4.2, 0.35, 148, scene);
-  box(2.0, 0.25, 3.2, 0xffffff, -4.2, 0.67, 148, scene, false);
-  box(1.1, 0.16, 0.7, 0xfef9c3, -4.2, 0.85, 146.9, scene, false);
-  box(2.0, 0.14, 1.7, 0x2563eb, -4.2, 0.82, 149.2, scene, false);
+  box(2.2, 0.4, 3.4, 0x7c4a21, -4.2, 0.35, 278, scene);
+  box(2.0, 0.25, 3.2, 0xffffff, -4.2, 0.67, 278, scene, false);
+  box(1.1, 0.16, 0.7, 0xfef9c3, -4.2, 0.85, 276.9, scene, false);
+  box(2.0, 0.14, 1.7, 0x2563eb, -4.2, 0.82, 279.2, scene, false);
   // meja + dua kursi + buku di atasnya
-  box(2.4, 0.14, 1.3, 0x8a5a2b, 3.4, 0.95, 150.5, scene);
-  [[2.4,149.9],[4.4,149.9],[2.4,151.1],[4.4,151.1]].forEach(function(p){ box(0.12, 0.95, 0.12, 0x6d4c2f, p[0], 0.48, p[1], scene, false); });
-  box(0.7, 0.5, 0.7, 0xb45309, 2.2, 0.25, 152.6, scene, false);
-  box(0.7, 0.5, 0.7, 0xb45309, 4.6, 0.25, 152.6, scene, false);
-  box(0.55, 0.09, 0.4, 0xdc2626, 3.2, 1.06, 150.4, scene, false);
-  box(0.5, 0.07, 0.36, 0x2563eb, 3.75, 1.05, 150.7, scene, false);
+  box(2.4, 0.14, 1.3, 0x8a5a2b, 3.4, 0.95, 280.5, scene);
+  [[2.4,279.9],[4.4,279.9],[2.4,281.1],[4.4,281.1]].forEach(function(p){ box(0.12, 0.95, 0.12, 0x6d4c2f, p[0], 0.48, p[1], scene, false); });
+  box(0.7, 0.5, 0.7, 0xb45309, 2.2, 0.25, 282.6, scene, false);
+  box(0.7, 0.5, 0.7, 0xb45309, 4.6, 0.25, 282.6, scene, false);
+  box(0.55, 0.09, 0.4, 0xdc2626, 3.2, 1.06, 280.4, scene, false);
+  box(0.5, 0.07, 0.36, 0x2563eb, 3.75, 1.05, 280.7, scene, false);
   // TV di dinding belakang + meja TV
-  box(2.6, 0.5, 0.5, 0x6d4c2f, 0, 0.25, 146.1, scene);
-  box(2.2, 1.25, 0.09, 0x111827, 0, 1.45, 146.05, scene, false);
-  box(1.95, 1.0, 0.04, 0x38bdf8, 0, 1.45, 146.12, scene, false);
+  box(2.6, 0.5, 0.5, 0x6d4c2f, 0, 0.25, 276.1, scene);
+  box(2.2, 1.25, 0.09, 0x111827, 0, 1.45, 276.05, scene, false);
+  box(1.95, 1.0, 0.04, 0x38bdf8, 0, 1.45, 276.12, scene, false);
   // lemari + pot tanaman + lampu gantung
-  box(1.6, 2.4, 0.6, 0x92400e, 5.1, 1.2, 146.2, scene);
-  cyl(0.22, 0.16, 0.4, 0xb45309, -1.9, 0.2, 146.8, scene, 10);
-  var plantTop = new THREE.Mesh(new THREE.SphereGeometry(0.42, 9, 8), mat(0x2f9e44)); plantTop.position.set(-1.9, 0.75, 146.8); scene.add(plantTop);
-  cyl(0.03, 0.03, 0.5, 0x374151, 0, 3.05, 150, scene, 6);
-  var lamp = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 9), new THREE.MeshBasicMaterial({color:0xfde68a})); lamp.position.set(0, 2.72, 150); scene.add(lamp);
-  wallSign(scene, 'RUMAH KAMU', 0, 2.3, 145.78, 3.4, {bg:'#b45309', fg:'#fff7d6'});
+  box(1.6, 2.4, 0.6, 0x92400e, 5.1, 1.2, 276.2, scene);
+  cyl(0.22, 0.16, 0.4, 0xb45309, -1.9, 0.2, 276.8, scene, 10);
+  var plantTop = new THREE.Mesh(new THREE.SphereGeometry(0.42, 9, 8), mat(0x2f9e44)); plantTop.position.set(-1.9, 0.75, 276.8); scene.add(plantTop);
+  cyl(0.03, 0.03, 0.5, 0x374151, 0, 3.05, 280, scene, 6);
+  var lamp = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 9), new THREE.MeshBasicMaterial({color:0xfde68a})); lamp.position.set(0, 2.72, 280); scene.add(lamp);
+  wallSign(scene, 'RUMAH KAMU', 0, 2.3, 275.78, 3.4, {bg:'#b45309', fg:'#fff7d6'});
   /* ===== Perabot khas rumah Indonesia (perluasan interior Rumah Kamu) =====
      DAPUR di dinding timur: meja dapur + kompor 2 tungku + panci + magic com
      (rice cooker) + wastafel cuci piring + kulkas. KAMAR MANDI di sudut barat
@@ -3376,61 +3380,61 @@ var HOME_CUT = null;   // bagian atap & dinding interior Rumah Kamu untuk CUTAWA
      dispenser galon, kipas angin berdiri, sofa, foto keluarga, kalender,
      dan jam dinding — seperti rumah-rumah di perumahan Indonesia. */
   // --- Dapur (dinding timur, selatan lemari) ---
-  box(1.05, 0.88, 3.6, 0xd6d3cd, 5.32, 0.44, 150.2, scene);                    // meja dapur beton
-  box(1.15, 0.06, 3.7, 0x9ca3af, 5.32, 0.91, 150.2, scene, false);            // permukaan meja dapur
-  box(0.7, 0.07, 0.55, 0x1f2937, 5.32, 0.97, 149.0, scene, false);            // kompor gas 2 tungku
-  cyl(0.1, 0.1, 0.03, 0x374151, 5.18, 1.01, 149.0, scene, 10); cyl(0.1, 0.1, 0.03, 0x374151, 5.47, 1.01, 149.0, scene, 10);
-  cyl(0.17, 0.15, 0.19, 0x9ca3af, 5.32, 1.1, 149.0, scene, 12);               // panci di atas kompor
-  cyl(0.17, 0.17, 0.03, 0x6b7280, 5.32, 1.21, 149.0, scene, 12);              // tutup panci
-  cyl(0.19, 0.16, 0.25, 0xf8fafc, 5.32, 1.06, 150.15, scene, 12);             // magic com / rice cooker
-  cyl(0.19, 0.19, 0.04, 0xe5e7eb, 5.32, 1.2, 150.15, scene, 12);
-  box(0.62, 0.14, 0.52, 0xe5e7eb, 5.32, 0.96, 151.45, scene, false);          // wastafel cuci piring
-  cyl(0.025, 0.025, 0.3, 0x9ca3af, 5.55, 1.15, 151.45, scene, 6);             // keran wastafel
-  box(0.3, 0.04, 0.04, 0x9ca3af, 5.42, 1.3, 151.45, scene, false);
-  cyl(0.14, 0.14, 0.1, 0xffffff, 5.25, 1.0, 150.85, scene, 12);               // tumpukan piring
-  box(0.95, 1.85, 0.85, 0xe2e8f0, 5.35, 0.93, 147.55, scene);                 // kulkas
-  box(0.06, 0.5, 0.08, 0x9ca3af, 4.85, 1.25, 147.55, scene, false);           // gagang kulkas
-  box(0.97, 0.05, 0.87, 0x94a3b8, 5.35, 1.42, 147.55, scene, false);          // garis pintu freezer
-  labelAt('Dapur', 4.9, 2.7, 150.2, 0.42);
-  addCollider(5.32, 150.2, 0.62, 1.9); addCollider(5.35, 147.55, 0.55, 0.5);
+  box(1.05, 0.88, 3.6, 0xd6d3cd, 5.32, 0.44, 280.2, scene);                    // meja dapur beton
+  box(1.15, 0.06, 3.7, 0x9ca3af, 5.32, 0.91, 280.2, scene, false);            // permukaan meja dapur
+  box(0.7, 0.07, 0.55, 0x1f2937, 5.32, 0.97, 279, scene, false);            // kompor gas 2 tungku
+  cyl(0.1, 0.1, 0.03, 0x374151, 5.18, 1.01, 279, scene, 10); cyl(0.1, 0.1, 0.03, 0x374151, 5.47, 1.01, 279, scene, 10);
+  cyl(0.17, 0.15, 0.19, 0x9ca3af, 5.32, 1.1, 279, scene, 12);               // panci di atas kompor
+  cyl(0.17, 0.17, 0.03, 0x6b7280, 5.32, 1.21, 279, scene, 12);              // tutup panci
+  cyl(0.19, 0.16, 0.25, 0xf8fafc, 5.32, 1.06, 280.15, scene, 12);             // magic com / rice cooker
+  cyl(0.19, 0.19, 0.04, 0xe5e7eb, 5.32, 1.2, 280.15, scene, 12);
+  box(0.62, 0.14, 0.52, 0xe5e7eb, 5.32, 0.96, 281.45, scene, false);          // wastafel cuci piring
+  cyl(0.025, 0.025, 0.3, 0x9ca3af, 5.55, 1.15, 281.45, scene, 6);             // keran wastafel
+  box(0.3, 0.04, 0.04, 0x9ca3af, 5.42, 1.3, 281.45, scene, false);
+  cyl(0.14, 0.14, 0.1, 0xffffff, 5.25, 1.0, 280.85, scene, 12);               // tumpukan piring
+  box(0.95, 1.85, 0.85, 0xe2e8f0, 5.35, 0.93, 277.55, scene);                 // kulkas
+  box(0.06, 0.5, 0.08, 0x9ca3af, 4.85, 1.25, 277.55, scene, false);           // gagang kulkas
+  box(0.97, 0.05, 0.87, 0x94a3b8, 5.35, 1.42, 277.55, scene, false);          // garis pintu freezer
+  labelAt('Dapur', 4.9, 2.7, 280.2, 0.42);
+  addCollider(5.32, 280.2, 0.62, 1.9); addCollider(5.35, 277.55, 0.55, 0.5);
   // --- Kamar mandi (sudut barat daya, bersekat, pintu masuk celah di utara) ---
-  box(0.15, 2.2, 1.9, 0xfef3c7, -3.35, 1.1, 153.45, scene);                   // sekat timur kamar mandi
-  box(1.25, 2.2, 0.15, 0xfef3c7, -5.38, 1.1, 152.55, scene);                  // sekat utara (celah pintu 1,25 m di antaranya)
-  box(1.15, 0.62, 0.85, 0xdbeafe, -5.3, 0.31, 153.95, scene);                 // bak mandi
-  box(1.0, 0.05, 0.7, 0x38bdf8, -5.3, 0.6, 153.95, scene, false);             // air di bak mandi
-  box(0.22, 0.12, 0.22, 0xf97316, -4.82, 0.68, 153.75, scene, false);         // gayung oranye
-  box(0.5, 0.38, 0.62, 0xffffff, -4.48, 0.19, 153.3, scene);                  // kloset duduk
-  box(0.52, 0.06, 0.5, 0xe5e7eb, -4.48, 0.42, 153.22, scene, false);          // tutup kloset
-  box(0.5, 0.55, 0.18, 0xffffff, -4.48, 0.78, 152.92, scene, false);          // tangki air kloset
-  cyl(0.19, 0.15, 0.3, 0x2563eb, -5.72, 0.15, 153.0, scene, 10);              // ember biru
-  labelAt('Kamar Mandi', -5.0, 2.55, 153.5, 0.42);
-  addCollider(-3.35, 153.45, 0.15, 1.0); addCollider(-5.38, 152.55, 0.62, 0.15);
+  box(0.15, 2.2, 1.9, 0xfef3c7, -3.35, 1.1, 283.45, scene);                   // sekat timur kamar mandi
+  box(1.25, 2.2, 0.15, 0xfef3c7, -5.38, 1.1, 282.55, scene);                  // sekat utara (celah pintu 1,25 m di antaranya)
+  box(1.15, 0.62, 0.85, 0xdbeafe, -5.3, 0.31, 283.95, scene);                 // bak mandi
+  box(1.0, 0.05, 0.7, 0x38bdf8, -5.3, 0.6, 283.95, scene, false);             // air di bak mandi
+  box(0.22, 0.12, 0.22, 0xf97316, -4.82, 0.68, 283.75, scene, false);         // gayung oranye
+  box(0.5, 0.38, 0.62, 0xffffff, -4.48, 0.19, 283.3, scene);                  // kloset duduk
+  box(0.52, 0.06, 0.5, 0xe5e7eb, -4.48, 0.42, 283.22, scene, false);          // tutup kloset
+  box(0.5, 0.55, 0.18, 0xffffff, -4.48, 0.78, 282.92, scene, false);          // tangki air kloset
+  cyl(0.19, 0.15, 0.3, 0x2563eb, -5.72, 0.15, 283, scene, 10);              // ember biru
+  labelAt('Kamar Mandi', -5.0, 2.55, 283.5, 0.42);
+  addCollider(-3.35, 283.45, 0.15, 1.0); addCollider(-5.38, 282.55, 0.62, 0.15);
   // --- Dispenser galon + kipas angin + sofa + hiasan dinding ---
-  box(0.42, 1.05, 0.42, 0xf1f5f9, 1.9, 0.53, 153.9, scene);                   // dispenser
-  cyl(0.16, 0.16, 0.42, 0x2563eb, 1.9, 1.27, 153.9, scene, 10);               // galon air biru
-  box(0.07, 0.07, 0.05, 0xdc2626, 1.78, 0.82, 154.12, scene, false);          // keran panas
-  box(0.07, 0.07, 0.05, 0x2563eb, 2.02, 0.82, 154.12, scene, false);          // keran dingin
-  cyl(0.2, 0.24, 0.05, 0x374151, -5.55, 0.03, 150.6, scene, 10);              // kaki kipas angin
-  cyl(0.03, 0.03, 1.25, 0x374151, -5.55, 0.65, 150.6, scene, 6);              // tiang kipas angin
-  var fanHead = cyl(0.27, 0.27, 0.13, 0x9ca3af, -5.55, 1.38, 150.6, scene, 14); fanHead.rotation.z = Math.PI/2; // kepala kipas
-  box(0.8, 0.32, 1.9, 0x8a5a2b, -5.35, 0.35, 151.6, scene);                   // sofa cokelat: dudukan
-  box(0.22, 0.78, 1.9, 0x8a5a2b, -5.78, 0.6, 151.6, scene);                    // sofa: sandaran punggung
-  box(0.55, 0.16, 0.55, 0xdc2626, -5.3, 0.58, 151.15, scene, false);          // bantal sofa merah
-  box(0.55, 0.16, 0.55, 0xf59e0b, -5.3, 0.58, 152.05, scene, false);          // bantal sofa kuning
-  addCollider(-5.45, 151.6, 0.5, 1.0);
-  box(0.95, 0.75, 0.05, 0x6d4c2f, -2.6, 2.0, 145.79, scene, false);           // foto keluarga: bingkai
-  box(0.8, 0.6, 0.02, 0xfbbf24, -2.6, 2.0, 145.83, scene, false);             // foto keluarga: isi
-  box(0.95, 0.75, 0.05, 0x6d4c2f, 3.0, 2.05, 145.79, scene, false);           // foto liburan: bingkai
-  box(0.8, 0.6, 0.02, 0x38bdf8, 3.0, 2.05, 145.83, scene, false);             // foto liburan: isi
-  var wallClock = cyl(0.3, 0.3, 0.05, 0xffffff, 0, 2.72, 145.8, scene, 16); wallClock.rotation.x = Math.PI/2; // jam dinding
-  box(0.62, 0.85, 0.04, 0xffffff, -3.4, 1.95, 154.22, scene, false);          // kalender dinding
-  box(0.62, 0.2, 0.045, 0xdc2626, -3.4, 2.28, 154.22, scene, false);
-  addCollider(0, 145.4, 6.2, 0.5); addCollider(-6.2, 150, 0.5, 4.7); addCollider(6.2, 150, 0.5, 4.7);
-  addCollider(-3.7, 154.6, 2.4, 0.5); addCollider(3.7, 154.6, 2.4, 0.5);
+  box(0.42, 1.05, 0.42, 0xf1f5f9, 1.9, 0.53, 283.9, scene);                   // dispenser
+  cyl(0.16, 0.16, 0.42, 0x2563eb, 1.9, 1.27, 283.9, scene, 10);               // galon air biru
+  box(0.07, 0.07, 0.05, 0xdc2626, 1.78, 0.82, 284.12, scene, false);          // keran panas
+  box(0.07, 0.07, 0.05, 0x2563eb, 2.02, 0.82, 284.12, scene, false);          // keran dingin
+  cyl(0.2, 0.24, 0.05, 0x374151, -5.55, 0.03, 280.6, scene, 10);              // kaki kipas angin
+  cyl(0.03, 0.03, 1.25, 0x374151, -5.55, 0.65, 280.6, scene, 6);              // tiang kipas angin
+  var fanHead = cyl(0.27, 0.27, 0.13, 0x9ca3af, -5.55, 1.38, 280.6, scene, 14); fanHead.rotation.z = Math.PI/2; // kepala kipas
+  box(0.8, 0.32, 1.9, 0x8a5a2b, -5.35, 0.35, 281.6, scene);                   // sofa cokelat: dudukan
+  box(0.22, 0.78, 1.9, 0x8a5a2b, -5.78, 0.6, 281.6, scene);                    // sofa: sandaran punggung
+  box(0.55, 0.16, 0.55, 0xdc2626, -5.3, 0.58, 281.15, scene, false);          // bantal sofa merah
+  box(0.55, 0.16, 0.55, 0xf59e0b, -5.3, 0.58, 282.05, scene, false);          // bantal sofa kuning
+  addCollider(-5.45, 281.6, 0.5, 1.0);
+  box(0.95, 0.75, 0.05, 0x6d4c2f, -2.6, 2.0, 275.79, scene, false);           // foto keluarga: bingkai
+  box(0.8, 0.6, 0.02, 0xfbbf24, -2.6, 2.0, 275.83, scene, false);             // foto keluarga: isi
+  box(0.95, 0.75, 0.05, 0x6d4c2f, 3.0, 2.05, 275.79, scene, false);           // foto liburan: bingkai
+  box(0.8, 0.6, 0.02, 0x38bdf8, 3.0, 2.05, 275.83, scene, false);             // foto liburan: isi
+  var wallClock = cyl(0.3, 0.3, 0.05, 0xffffff, 0, 2.72, 275.8, scene, 16); wallClock.rotation.x = Math.PI/2; // jam dinding
+  box(0.62, 0.85, 0.04, 0xffffff, -3.4, 1.95, 284.22, scene, false);          // kalender dinding
+  box(0.62, 0.2, 0.045, 0xdc2626, -3.4, 2.28, 284.22, scene, false);
+  addCollider(0, 275.4, 6.2, 0.5); addCollider(-6.2, 280, 0.5, 4.7); addCollider(6.2, 280, 0.5, 4.7);
+  addCollider(-3.7, 284.6, 2.4, 0.5); addCollider(3.7, 284.6, 2.4, 0.5);
   // Kasur bisa dipakai TIDUR (pulihkan HP & EP) dan kursi makan bisa dipakai DUDUK
-  addInteractable(-4.2, 148, 2.9, 'Kasur Rumah Kamu', null, {bed:true});
-  addInteractable(2.2, 152.6, 1.7, 'Kursi Makan', null, {sitSpot:true, sitX:2.2, sitZ:152.6, sitRy:Math.PI, sitDy:-0.34});
-  addInteractable(0, 153.4, 2.8, 'Pintu Rumah', null, {homeExit:true});
+  addInteractable(-4.2, 278, 2.9, 'Kasur Rumah Kamu', null, {bed:true});
+  addInteractable(2.2, 282.6, 1.7, 'Kursi Makan', null, {sitSpot:true, sitX:2.2, sitZ:282.6, sitRy:Math.PI, sitDy:-0.34});
+  addInteractable(0, 283.4, 2.8, 'Pintu Rumah', null, {homeExit:true});
 })();
 var homeReturnPos = null; // titik kembali di depan rumah Perumahan yang dimasuki {x, z}
 function enterHome(no){
@@ -3441,9 +3445,9 @@ function enterHome(no){
   for(var hi = 0; hi < HOUSES.length; hi++) if(HOUSES[hi].no === no) H = HOUSES[hi];
   homeReturnPos = H ? {x:H.x, z:H.z - 5.4} : {x:-14, z:56.6};
   activeRoomId = 'home';
-  interiorClamp = {minX:-5.6, maxX:5.6, minZ:145.6, maxZ:154.2};
+  interiorClamp = {minX:-5.6, maxX:5.6, minZ:275.6, maxZ:284.2};
   roomFloorY = 0.15;
-  player.position.set(0, 0, 152.8); player.position.y = 0.15; vy = 0; grounded = true;
+  player.position.set(0, 0, 282.8); player.position.y = 0.15; vy = 0; grounded = true;
   player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
   camPitchT = Math.max(camPitchT, 0.78);   // kamera atas-miring selama di dalam rumah
   AudioSys.sfx('pop');
@@ -3464,8 +3468,8 @@ function exitHome(){
    Setiap ruangan yang ada di dunia kini punya INTERIOR yang bisa dimasuki:
    Ruang Kelas 1-6, Perpustakaan, Ruang UKS, Kantin, Koperasi, Masjid,
    Balai Desa, Kantor Polsek, Puskesmas, dan Rumah Warga. Seperti Rumah Kamu,
-   interior dibangun sebagai ruangan terpisah di zona selatan peta (z > 160,
-   di luar area desa); pemain masuk lewat pintu bangunan (tombol Aksi ->
+   interior dibangun sebagai ruangan terpisah di strip selatan peta (z > 270,
+   di selatan kawasan laut); pemain masuk lewat pintu bangunan (tombol Aksi ->
    "Masuk ke Dalam") dan keluar lewat Pintu Keluar di dalam ruangan.
    Karakter juga bisa DUDUK (di bangku/kursi bertanda), TIDUR (di kasur
    Rumah Kamu — HP & EP pulih penuh dan hari menjadi pagi), dan BERENANG
@@ -3546,7 +3550,7 @@ function startSit(t){
 }
 function startSleep(){
   poseMode = 'sleep'; poseSit = null;
-  player.position.set(-4.2, 0, 149.2);
+  player.position.set(-4.2, 0, 279.2);
   player.position.y = 0.15; vy = 0; grounded = true;
   player.rotation.y = 0; camYawT = Math.PI; camYaw = Math.PI;
   AudioSys.sfx('pop');
@@ -3569,12 +3573,12 @@ function standPose(silent){
 /* ---------- ZONA INTERIOR BUKAN AIR (perbaikan "berenang di dalam ruangan") ----------
    Seluruh ruangan interior teleport (Kelas 1-6, Perpus, UKS, Kantin,
    Koperasi, Masjid, Balai Desa, Polsek, Puskesmas, Rumah Warga) dan Rumah
-   Kamu secara koordinat diletakkan di zona selatan peta (z 145..267) yang
-   TUMPANG TINDIH dengan persegi deteksi laut inSeaWater (x -122..4,
-   z 137..240). Akibatnya Kelas 1/2/3/6, Perpus, UKS, Masjid, Balai Desa &
-   Rumah Kamu terbaca sebagai "laut dalam" dan karakter berenang di dalam
-   ruangan. Aturan baku: titik di dalam ruangan mana pun TIDAK PERNAH air —
-   deteksi ruangan selalu menang atas deteksi air. */
+   Kamu kini diletakkan di strip interior selatan peta (z 275..397), JAUH di
+   selatan kawasan laut (z 133..244) — dulu strip ini berada di z 145..267
+   yang tertutup laut, sehingga bangunan-bangunan interior tampak berdiri
+   di tengah laut. Aturan baku tetap berlaku sebagai pengaman: titik di
+   dalam ruangan mana pun TIDAK PERNAH air — deteksi ruangan selalu menang
+   atas deteksi air. */
 function insideInterior(x, z){
   if(typeof ROOMS !== 'undefined'){
     for(var rid in ROOMS){
@@ -3582,7 +3586,7 @@ function insideInterior(x, z){
       if(c && x >= c.minX - 0.3 && x <= c.maxX + 0.3 && z >= c.minZ - 0.3 && z <= c.maxZ + 0.3) return true;
     }
   }
-  if(x >= -6.2 && x <= 6.2 && z >= 145 && z <= 155) return true;   // interior Rumah Kamu
+  if(x >= -6.2 && x <= 6.2 && z >= 275 && z <= 285) return true;   // interior Rumah Kamu
   return false;
 }
 
@@ -3722,12 +3726,12 @@ function buildClassroom(n, cx, cz){
   box(0.85, 0.3, 0.03, 0xffffff, 7.32, 2.02, -3.2, g, false);
   addInteractable(cx, cz + 2.55, 1.7, 'Bangku Kelas', null, {sitSpot:true, sitX:cx, sitZ:cz + 2.55, sitRy:Math.PI, sitDy:-0.34});
 }
-buildClassroom(1, -64, 180); buildClassroom(2, -32, 180); buildClassroom(3, 0, 180);
-buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 206);
+buildClassroom(1, -64, 310); buildClassroom(2, -32, 310); buildClassroom(3, 0, 310);
+buildClassroom(4, 32, 310); buildClassroom(5, 64, 310); buildClassroom(6, -64, 336);
 
 /* ----- Perpustakaan: rak-rak buku, meja baca, karpet, globe ----- */
 (function(){
-  var cx = -32, cz = 206;
+  var cx = -32, cz = 336;
   var g = buildRoomShell('perpus', 'Perpustakaan', cx, cz, 15, 11,
     {wall:0xe0f2fe, floor:0xc9a877, sign:'PERPUSTAKAAN', signBg:'#1e6fb8'});
   flat(5.2, 3.6, 0x7c2d1e, 3.2, 0.9, g, 0.05);                              // karpet baca merah
@@ -3750,7 +3754,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Ruang UKS: tempat tidur periksa, lemari obat, meja perawat, timbangan ----- */
 (function(){
-  var cx = 0, cz = 206;
+  var cx = 0, cz = 336;
   var g = buildRoomShell('uks', 'Ruang UKS', cx, cz, 13, 10,
     {wall:0xf8fafc, floor:0xdbeafe, sign:'RUANG UKS', signBg:'#dc2626'});
   furnBed(g, -3.9, -3.1, Math.PI/2, 0xdc2626);                              // tempat tidur periksa
@@ -3775,7 +3779,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Kantin: etalase jajanan, dapur, meja makan + bangku ----- */
 (function(){
-  var cx = 32, cz = 206;
+  var cx = 32, cz = 336;
   var g = buildRoomShell('kantin', 'Kantin Sekolah', cx, cz, 15, 11,
     {wall:0xfef9c3, floor:0xe7d8b7, sign:'KANTIN', signBg:'#b45309'});
   box(7.5, 1.0, 0.9, 0x92400e, 0, 0.5, -4.2, g);                             // etalase / meja saji
@@ -3802,7 +3806,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Koperasi: rak barang, meja kasir, etalase, tumpukan seragam ----- */
 (function(){
-  var cx = 64, cz = 206;
+  var cx = 64, cz = 336;
   var g = buildRoomShell('koperasi', 'Koperasi Sekolah', cx, cz, 13, 10,
     {wall:0xfef9c3, floor:0xd6c7a8, sign:'KOPERASI', signBg:'#15803d'});
   furnShelf(g, -3.2, -4.55, 0, 5.6); furnShelf(g, 3.6, -4.55, 0, 4.4);      // rak barang
@@ -3825,7 +3829,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Masjid Al-Ikhlas: karpet sajadah, mihrab, mimbar, rak Al-Qur'an ----- */
 (function(){
-  var cx = -52, cz = 234;
+  var cx = -52, cz = 364;
   var g = buildRoomShell('masjid', 'Masjid Al-Ikhlas', cx, cz, 18, 12,
     {wall:0xf3f7ee, floor:0xe8e3d3, sign:'MASJID AL-IKHLAS', signBg:'#0e7a5f'});
   flat(15, 8.6, 0x14532d, 0, -0.6, g, 0.045);                               // karpet besar hijau
@@ -3853,7 +3857,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Balai Desa: meja rapat panjang, podium, papan pengumuman, bendera ----- */
 (function(){
-  var cx = -16, cz = 234;
+  var cx = -16, cz = 364;
   var g = buildRoomShell('balai', 'Balai Desa Gerduren', cx, cz, 15, 11,
     {wall:0xfef3c7, floor:0xd6c7a8, sign:'BALAI DESA', signBg:'#7c2d1e'});
   box(6.2, 0.1, 1.5, 0x8a5a2b, 0, 0.78, -0.8, g);                            // meja rapat panjang
@@ -3882,7 +3886,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Kantor Polsek: meja piket + komputer, sel tahanan berjeruji, rak berkas ----- */
 (function(){
-  var cx = 18, cz = 234;
+  var cx = 18, cz = 364;
   var g = buildRoomShell('polsek', 'Kantor Polsek', cx, cz, 14, 10,
     {wall:0xe0e7ff, floor:0xcbd5e1, sign:'POLSEK PURWOJATI', signBg:'#1e3a5f'});
   box(2.4, 0.1, 1.0, 0x374151, 0, 0.78, -3.4, g);                            // meja piket
@@ -3908,7 +3912,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Puskesmas: 2 tempat tidur periksa bertirai, meja dokter, lemari obat, kursi tunggu ----- */
 (function(){
-  var cx = 50, cz = 234;
+  var cx = 50, cz = 364;
   var g = buildRoomShell('puskesmas', 'Puskesmas Gerduren', cx, cz, 15, 11,
     {wall:0xf0fdf4, floor:0xdbeafe, sign:'PUSKESMAS', signBg:'#0e7a5f'});
   furnBed(g, -4.6, -3.6, Math.PI/2, 0xffffff);
@@ -3931,7 +3935,7 @@ buildClassroom(4, 32, 180); buildClassroom(5, 64, 180); buildClassroom(6, -64, 2
 
 /* ----- Rumah Warga: kasur, meja + kursi, TV, lemari, dapur mini, tikar ----- */
 (function(){
-  var cx = -16, cz = 262;
+  var cx = -16, cz = 392;
   var g = buildRoomShell('warga', 'Rumah Warga', cx, cz, 13, 10,
     {wall:0xfce7f3, floor:0xd6c7a8, sign:'RUMAH WARGA', signBg:'#9d174d'});
   furnBed(g, -4.4, -3.0, 0, 0x16a34a);                                      // kasur berselimut hijau
@@ -5487,22 +5491,22 @@ addInteractable(30, 88, 12, 'Sawah');
 
 /* ================= ZONA LOKASI ================= */
 var zones = [
-  {name:'Rumah Kamu (Dalam)',   minX:-6.5, maxX:6.5, minZ:145, maxZ:155},
-  {name:'Ruang Kelas 1 (Dalam)', minX:-71.5, maxX:-56.5, minZ:174.5, maxZ:185.5},
-  {name:'Ruang Kelas 2 (Dalam)', minX:-39.5, maxX:-24.5, minZ:174.5, maxZ:185.5},
-  {name:'Ruang Kelas 3 (Dalam)', minX:-7.5, maxX:7.5, minZ:174.5, maxZ:185.5},
-  {name:'Ruang Kelas 4 (Dalam)', minX:24.5, maxX:39.5, minZ:174.5, maxZ:185.5},
-  {name:'Ruang Kelas 5 (Dalam)', minX:56.5, maxX:71.5, minZ:174.5, maxZ:185.5},
-  {name:'Ruang Kelas 6 (Dalam)', minX:-71.5, maxX:-56.5, minZ:200.5, maxZ:211.5},
-  {name:'Perpustakaan (Dalam)', minX:-39.5, maxX:-24.5, minZ:200.5, maxZ:211.5},
-  {name:'Ruang UKS (Dalam)',    minX:-6.5, maxX:6.5, minZ:201, maxZ:211},
-  {name:'Kantin (Dalam)',       minX:24.5, maxX:39.5, minZ:200.5, maxZ:211.5},
-  {name:'Koperasi (Dalam)',     minX:57.5, maxX:70.5, minZ:201, maxZ:211},
-  {name:'Masjid Al-Ikhlas (Dalam)', minX:-61, maxX:-43, minZ:228, maxZ:240},
-  {name:'Balai Desa (Dalam)',   minX:-23.5, maxX:-8.5, minZ:228.5, maxZ:239.5},
-  {name:'Kantor Polsek (Dalam)', minX:11, maxX:25, minZ:229, maxZ:239},
-  {name:'Puskesmas (Dalam)',    minX:42.5, maxX:57.5, minZ:228.5, maxZ:239.5},
-  {name:'Rumah Warga (Dalam)',  minX:-22.5, maxX:-9.5, minZ:257, maxZ:267},
+  {name:'Rumah Kamu (Dalam)',   minX:-6.5, maxX:6.5, minZ:275, maxZ:285},
+  {name:'Ruang Kelas 1 (Dalam)', minX:-71.5, maxX:-56.5, minZ:304.5, maxZ:315.5},
+  {name:'Ruang Kelas 2 (Dalam)', minX:-39.5, maxX:-24.5, minZ:304.5, maxZ:315.5},
+  {name:'Ruang Kelas 3 (Dalam)', minX:-7.5, maxX:7.5, minZ:304.5, maxZ:315.5},
+  {name:'Ruang Kelas 4 (Dalam)', minX:24.5, maxX:39.5, minZ:304.5, maxZ:315.5},
+  {name:'Ruang Kelas 5 (Dalam)', minX:56.5, maxX:71.5, minZ:304.5, maxZ:315.5},
+  {name:'Ruang Kelas 6 (Dalam)', minX:-71.5, maxX:-56.5, minZ:330.5, maxZ:341.5},
+  {name:'Perpustakaan (Dalam)', minX:-39.5, maxX:-24.5, minZ:330.5, maxZ:341.5},
+  {name:'Ruang UKS (Dalam)',    minX:-6.5, maxX:6.5, minZ:331, maxZ:341},
+  {name:'Kantin (Dalam)',       minX:24.5, maxX:39.5, minZ:330.5, maxZ:341.5},
+  {name:'Koperasi (Dalam)',     minX:57.5, maxX:70.5, minZ:331, maxZ:341},
+  {name:'Masjid Al-Ikhlas (Dalam)', minX:-61, maxX:-43, minZ:358, maxZ:370},
+  {name:'Balai Desa (Dalam)',   minX:-23.5, maxX:-8.5, minZ:358.5, maxZ:369.5},
+  {name:'Kantor Polsek (Dalam)', minX:11, maxX:25, minZ:359, maxZ:369},
+  {name:'Puskesmas (Dalam)',    minX:42.5, maxX:57.5, minZ:358.5, maxZ:369.5},
+  {name:'Rumah Warga (Dalam)',  minX:-22.5, maxX:-9.5, minZ:387, maxZ:397},
   {name:'Kebun Sekolah',        minX:-41, maxX:-25, minZ:3,   maxZ:17},
   {name:'Perpustakaan',         minX:-40, maxX:-26, minZ:-12, maxZ:0},
   {name:'Ruang UKS',            minX:29.5,maxX:36.5, minZ:0,   maxZ:6.2},
@@ -7199,14 +7203,14 @@ function mountBike(g, spot){
   if(swimOn){ showToast('Kamu sedang berenang! Berenanglah ke tepi dulu untuk naik sepeda.', 3200); return; }   // FSM: larang naik kendaraan darat saat berenang
   g = g || bike; spot = spot || bikeSpot;
   riding = true; activeBike = g; activeBikeSpot = spot;
-  vehSpeed = 0; vehUTurn = null;
+  vehSpeed = 0; vehSteerVis = 0;
   player.position.x = g.position.x; player.position.z = g.position.z;
   player.rotation.y = g.rotation.y;
   AudioSys.sfx('bell');
-  showToast('Kamu naik sepeda! Kendali baru: KIRI = pedal GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk belok (lepas jari = lurus). Tekan Turun untuk turun.', 5200);
+  showToast('Kamu naik sepeda! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju. Tekan Turun untuk turun.', 5200);
 }
 function dismountBike(){
-  riding = false; vehSpeed = 0; vehUTurn = null;
+  riding = false; vehSpeed = 0; vehSteerVis = 0;
   // sepeda tetap di tempat turun; titik interaksinya ikut pindah
   var g = activeBike || bike, sp = activeBikeSpot || bikeSpot;
   if(sp && g){ sp.x = g.position.x; sp.z = g.position.z; }
@@ -7248,15 +7252,15 @@ function mountVehicle(kind){
   var spot = null;
   for(var i = 0; i < interactables.length; i++){ if(interactables[i].game === kind) spot = interactables[i]; }
   vehDrive = {kind:kind, group:g, mul: kind === 'polisi' ? 3.0 : 2.4, spot:spot};
-  vehSpeed = 0; vehUTurn = null;
+  vehSpeed = 0; vehSteerVis = 0;
   driveColSkip = g.userData.col || null;
   player.position.x = g.position.x; player.position.z = g.position.z;
   player.rotation.y = g.rotation.y;
   AudioSys.sfx('bell');
   AudioSys.engineStart(kind === 'polisi' ? 'mobil' : 'motor');   // suara mesin kendaraan menyala
   showToast(kind === 'polisi'
-    ? 'Kamu mengendarai Mobil Polisi milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk setir (▲ lurus, ▼ putar balik). Tekan Turun untuk turun.'
-    : 'Kamu mengendarai Motor Trail milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk setir (▲ lurus, ▼ putar balik). Tekan Turun untuk turun.', 5600);
+    ? 'Kamu mengendarai Mobil Polisi milikmu! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju — bedanya hanya tampilan dashboard & setirnya. Tekan Turun untuk turun.'
+    : 'Kamu mengendarai Motor Trail milikmu! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju — bedanya hanya tampilan dashboard & stangnya. Tekan Turun untuk turun.', 5600);
 }
 function dismountVehicle(){
   if(!vehDrive) return;
@@ -7264,7 +7268,7 @@ function dismountVehicle(){
   // kendaraan tetap di tempat turun; titik interaksinya (arena + kendarai) ikut pindah
   if(vehDrive.spot){ vehDrive.spot.x = g.position.x; vehDrive.spot.z = g.position.z; }
   driveColSkip = null;
-  vehDrive = null; vehSpeed = 0; vehUTurn = null;
+  vehDrive = null; vehSpeed = 0; vehSteerVis = 0;
   AudioSys.sfx('bell');
   AudioSys.engineStop();
   setCockpit(null);
@@ -10350,7 +10354,7 @@ function startTour(kind, manual){
       tour = { kind:'bis', manual:true, heading: busGroup.rotation.y, speed:0 };
       player.position.set(busGroup.position.x, 0, busGroup.position.z);
       player.rotation.y = tour.heading;
-      showToast('Kamu menyetir Bis sendiri! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = GESER ◀ ▶ untuk setir (▲ lurus, ▼ putar balik). Di laptop: W/S gas/mundur, A/D setir. Tekan Turun untuk turun.', 6200);
+      showToast('Kamu menyetir Bis sendiri! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju — bedanya hanya tampilan dashboard & setirnya. Tekan Turun untuk turun.', 6200);
     } else {
       tour = { kind:'bis', i:0, pts:[[63,59.8],[57,50.5],[52,50.5],[52,18],[52,50.5],[100,50.5],[52,50.5],[-60,50.5],[-88,50.5],[-60,50.5],[57,50.5],[63,59.8]] };
       showToast('Bis berangkat dari Terminal! Keliling Desa Gerduren lewat jalan raya, Jembatan Sungai, dan jalan timur. Duduk manis, ya!', 4600);
@@ -10360,7 +10364,7 @@ function startTour(kind, manual){
       tour = { kind:'heli', manual:true, alt: heliGroup.position.y, landing:false, hspeed:0 };
       player.position.set(heliGroup.position.x, heliGroup.position.y, heliGroup.position.z);
       flyUI.classList.add('on');
-      showToast('Kamu menerbangkan Helikopter sendiri! Kendali: KANAN = GESER ◀ ▶ untuk arah hadap helikopter, KIRI = GAS MAJU & REM•MUNDUR untuk melaju/mundur, tombol Naik & Turun (di laptop: Spasi & C) untuk ketinggian. Tekan Turun untuk mendarat & turun.', 6200);
+      showToast('Kamu menerbangkan Helikopter sendiri! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju; tombol Naik & Turun (di laptop: Spasi & C) untuk ketinggian. Tekan Turun untuk mendarat & turun.', 6200);
     } else {
       tour = { kind:'heli', phase:'up', t:0, ang:-Math.PI/2, cx:0, cz:8, r:64, alt:21 };
       showToast('Helikopter lepas landas! Terbang berkeliling Desa Gerduren dari udara!', 4600);
@@ -10428,14 +10432,15 @@ function finishManualTour(){
     : 'Helikopter mendarat dengan selamat dan kembali ke landasannya. Terbang lagi kapan saja!', 4400);
 }
 function updateTourManual(dt){
-  // Kendali baku: KIRI pedal gas maju/mundur, KANAN pad arah (lihat vehReadInput).
-  // Dibaca mentah karena uiBlocked() selalu true selama tour berjalan.
-  var inp = vehReadInput(false);
+  // Kendali seperti berjalan biasa: joystick/WASD menunjuk arah tujuan
+  // (vektor jalan kaki yang sama). Dibaca mentah karena uiBlocked() selalu
+  // true selama tour berjalan.
+  var vec = vehWalkVec(false);
   if(tour.kind === 'bis'){
     var bp = busGroup.position;
-    var target = inp.throttle > 0 ? 13 : (inp.throttle < 0 ? -6 : 0); // maju maks 13, mundur maks 6
-    tour.speed = vehApproach(tour.speed, target, (inp.throttle !== 0 ? 7 : 9) * dt);
-    tour.heading = vehCockpitSteer(tour.heading, inp, tour.speed, 1.15, dt);
+    var target = 13 * vec.mag; // maju sebanding jauhnya dorongan joystick
+    tour.speed = vehApproach(tour.speed, target, (vec.mag > 0.05 ? 7 : 9) * dt);
+    tour.heading = vehSteerToward(tour.heading, vec, 1.7, dt);
     bp.x += Math.sin(tour.heading) * tour.speed * dt;
     bp.z += Math.cos(tour.heading) * tour.speed * dt;
     AudioSys.engineSet(Math.abs(tour.speed) / 13);
@@ -10455,11 +10460,10 @@ function updateTourManual(dt){
       if(tour.alt <= 0) finishManualTour();
       return;
     }
-    // Pad arah (relatif kamera) menentukan hadap hidung helikopter; pedal
-    // GAS MAJU / REM•MUNDUR menggerakkannya maju/mundur mengikuti hadap itu.
-    var want = vehPadWant(camYaw, inp);
-    if(want !== null) heliGroup.rotation.y = vehTurnToward(heliGroup.rotation.y, want, 2.2 * dt);
-    var fwdT = inp.throttle > 0 ? 17 : (inp.throttle < 0 ? -9 : 0);
+    // Seperti berjalan biasa: joystick/WASD menunjuk arah tujuan — hidung
+    // helikopter berbelok mulus ke arah itu dan melaju sebanding dorongan.
+    if(vec.mag > 0.05) heliGroup.rotation.y = vehTurnToward(heliGroup.rotation.y, Math.atan2(vec.x, vec.z), 2.4 * dt);
+    var fwdT = 17 * vec.mag;
     tour.hspeed = vehApproach(tour.hspeed || 0, fwdT, 26 * dt);
     hp.x += Math.sin(heliGroup.rotation.y) * tour.hspeed * dt;
     hp.z += Math.cos(heliGroup.rotation.y) * tour.hspeed * dt;
@@ -11655,12 +11659,28 @@ function mpVehKind(){
   return null;
 }
 /* Keadaan animasi khusus yang WAJIB terlihat pemain lain (selain jalan &
-   emote yang sudah tersinkron): berenang & berparasut. Dikirim sebagai
-   field ke-4 pesan VEH1| agar satu jalur siaran membawa kendaraan +
-   animasi; klien lama mengabaikan field tambahan ini dengan aman. */
+   emote yang sudah tersinkron): berenang, berparasut, DUDUK, TIDUR, dan
+   pose-pose WAHANA (ayunan, komidi putar, kereta karnaval, istana balon,
+   fase meluncur perosotan/perosotan air, fase melompat papan loncat).
+   Dikirim sebagai field ke-4 pesan VEH1| agar satu jalur siaran membawa
+   kendaraan + animasi; klien lama mengabaikan field tambahan ini dengan
+   aman. Tanpa state ini, pemain yang sedang naik wahana / duduk / tidur
+   hanya terlihat berjalan atau berdiri generik di layar pemain lain. */
 function mpAnimState(){
   if(typeof swimOn !== 'undefined' && swimOn) return 'swim';
   if(typeof paraActive !== 'undefined' && paraActive) return 'para';
+  if(typeof wahanaRide !== 'undefined' && wahanaRide){
+    var W = wahanaRide;
+    if(W.type === 'swing') return 'wswing';
+    if(W.type === 'merry') return 'wmerry';
+    if(W.type === 'bouncy') return 'wbouncy';
+    if(W.type === 'train') return 'wtrain';
+    if((W.type === 'slide' || W.type === 'waterslide') && W.phase === 'slide') return 'wslide';
+    if(W.type === 'dive' && W.phase === 'jump') return 'wdive';
+    return '-';
+  }
+  if(typeof poseMode !== 'undefined' && poseMode === 'sit') return 'sit';
+  if(typeof poseMode !== 'undefined' && poseMode === 'sleep') return 'sleep';
   return '-';
 }
 function mpSendVehState(){
@@ -11668,6 +11688,15 @@ function mpSendVehState(){
   var an = mpAnimState();
   mp.lastVehSent = vk; mp.lastVehSentAt = performance.now(); mp.lastAnimSent = an;
   if(mp.joined) mpSendChat('VEH1|' + (vk || '-') + '|' + (Math.round(player.position.y * 10) / 10) + '|' + an);
+}
+/* Aksi sesaat (tendangan bola, pukulan voli): BUKAN state menetap seperti
+   VEH1, melainkan kejadian sekali-lewat. Dikirim sebagai ACT1| lewat chat
+   ruangan; penerima memainkan ayunan kaki/tangan singkat (±0,4 detik) pada
+   avatar pengirim, persis pada saat aksinya terjadi — termasuk transisi
+   masuk/keluarnya. Tanpa ini penendang hanya terlihat berlari generik di
+   layar pemain lain padahal bolanya meluncur kencang. */
+function mpSendAct(act){
+  if(typeof mp !== 'undefined' && mp.joined) mpSendChat('ACT1|' + act);
 }
 function buildRemoteVehicle(kind){
   var g = new THREE.Group();
@@ -11764,7 +11793,7 @@ function mpSetRemoteVeh(id, kind, alt){
   mpApplyRemoteVeh(r);
 }
 function mpSetRemoteAnim(id, anim){
-  var a = (anim === 'swim' || anim === 'para') ? anim : '-';
+  var a = ['swim', 'para', 'wslide', 'wswing', 'wmerry', 'wdive', 'wbouncy', 'wtrain', 'sit', 'sleep'].indexOf(anim) >= 0 ? anim : '-';
   if(mp.players[id]) mp.players[id].anim = a;
   var r = mp.remotes[id];
   if(r) r.anim = a;
@@ -12150,7 +12179,7 @@ function mpConnect(code, asGM){
         r = mp.remotes[msg.id];
         mpUpdateChip(); if(mpOpen) mpRefreshPanel();
       }
-      if(r){ r.tx = msg.x; r.tz = msg.y; r.tdir = msg.dir; r.lastSeenAt = performance.now(); if(typeof msg.py === 'number' && r.veh === 'heli') r.talt = msg.py; }
+      if(r){ r.tx = msg.x; r.tz = msg.y; r.tdir = msg.dir; r.lastSeenAt = performance.now(); if(typeof msg.py === 'number'){ r.taltPy = msg.py; if(r.veh === 'heli') r.talt = msg.py; } }
       if(typeof msg.veh === 'string'){
         // Jalur cadangan: bila server kelak meneruskan status kendaraan di
         // pesan gerak, terapkan langsung (jalur utama tetap siaran VEH1|).
@@ -12178,7 +12207,16 @@ function mpConnect(code, asGM){
       if(msg.id !== mp.myId){
         var vparts = msg.text.split('|');
         mpSetRemoteVeh(msg.id, (vparts[1] && vparts[1] !== '-') ? vparts[1] : null, parseFloat(vparts[2]) || 0);
-        mpSetRemoteAnim(msg.id, vparts[3] || '-');   // animasi renang / parasut pemain ini
+        mpSetRemoteAnim(msg.id, vparts[3] || '-');   // animasi aksi pemain ini (renang / parasut / wahana / duduk / tidur)
+      }
+    }
+    else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('ACT1|') === 0){
+      /* Aksi sesaat pemain lain (tendangan bola / pukulan voli): mainkan
+         ayunan singkat pada avatarnya — bukan pesan obrolan, jangan tampilkan. */
+      if(msg.id !== mp.myId){
+        var actId = msg.text.slice(5);
+        var actR = mp.remotes[msg.id];
+        if(actR && (actId === 'kick' || actId === 'pukul')) actR.act = {id:actId, until: performance.now() + 400};
       }
     }
     else if(msg.type === 'chat' && typeof msg.text === 'string' && msg.text.indexOf('GIVE1|') === 0){
@@ -12469,7 +12507,7 @@ function mpTick(dt){
     var myVeh = mpVehKind();
     var myAnim = mpAnimState();
     var vehEvery = myVeh === 'heli' ? 900 : 4000;
-    if(myVeh !== mp.lastVehSent || myAnim !== (mp.lastAnimSent || '-') || (myVeh && performance.now() - (mp.lastVehSentAt || 0) > vehEvery)) mpSendVehState();
+    if(myVeh !== mp.lastVehSent || myAnim !== (mp.lastAnimSent || '-') || (myVeh && performance.now() - (mp.lastVehSentAt || 0) > vehEvery) || (myAnim !== '-' && performance.now() - (mp.lastVehSentAt || 0) > 4000)) mpSendVehState();
     var now = performance.now();
     if(now - mp.lastMoveAt >= 66){ // throttle ~15x/detik
       var px = player.position.x, pz = player.position.z, pd = player.rotation.y, py = player.position.y;
@@ -12492,8 +12530,12 @@ function mpTick(dt){
     while(dd < -Math.PI) dd += Math.PI * 2;
     r.group.rotation.y += dd * Math.min(1, dt * 12);
     // Ketinggian target: helikopter/perahu mengikuti talt; berenang = -0,42
-    // (badan di permukaan air, sama seperti tampilan renang lokal).
-    var talt = r.anim === 'swim' ? -0.42 : (r.talt || 0);
+    // (badan di permukaan air, sama seperti tampilan renang lokal). Pemain
+    // yang naik WAHANA atau berparasut: ketinggiannya mengikuti py pada
+    // pesan gerak (posisi Y pengirim) — tanpa ini avatarnya melayang di
+    // tanah sementara wahana-nya bergerak di atas.
+    var wahanaAnim = r.anim === 'wslide' || r.anim === 'wswing' || r.anim === 'wmerry' || r.anim === 'wdive' || r.anim === 'wbouncy' || r.anim === 'wtrain';
+    var talt = r.anim === 'swim' ? -0.42 : ((wahanaAnim || r.anim === 'para') ? (typeof r.taltPy === 'number' ? r.taltPy : 0) : (r.talt || 0));
     gp.y += (talt - gp.y) * Math.min(1, dt * 6);
     if(Math.abs(talt - gp.y) < 0.02) gp.y = talt;
     // Model kendaraan pemain ini mengikuti karakternya ke mana pun ia pergi.
@@ -12551,9 +12593,71 @@ function mpTick(dt){
       r.legL.rotation.x = -0.35; r.legR.rotation.x = -0.35;
       if(!r.paraMesh){ try{ r.paraMesh = buildRemoteParachute(); r.group.add(r.paraMesh); }catch(e){} }
       if(r.paraMesh) r.paraMesh.visible = true;
+    } else if(r.anim === 'wslide'){
+      // MELUNCUR di Perosotan Pelangi / Perosotan Air: duduk meluncur, kaki
+      // lurus ke depan, tangan di samping — pose yang sama persis dengan
+      // wahanaPoseStep lokal pada fase meluncur.
+      r.bodyG.rotation.x *= 0.8;
+      r.legL.rotation.x = -1.3; r.legR.rotation.x = -1.3;
+      r.armL.rotation.x = -0.5; r.armR.rotation.x = -0.5;
+      r.bodyG.position.y = -0.3;
+      if(r.paraMesh) r.paraMesh.visible = false;
+    } else if(r.anim === 'wswing' || r.anim === 'wtrain'){
+      // AYUNAN / KERETA KARNAVAL: duduk dengan paha mendatar, tangan
+      // memegang pegangan — sama persis dengan pose lokal kedua wahana.
+      r.bodyG.rotation.x *= 0.8;
+      r.legL.rotation.x = -1.25; r.legR.rotation.x = -1.25;
+      r.armL.rotation.x = r.anim === 'wtrain' ? -0.4 : -0.35; r.armR.rotation.x = r.anim === 'wtrain' ? -0.4 : -0.35;
+      r.bodyG.position.y = r.anim === 'wtrain' ? -0.28 : -0.3;
+      if(r.paraMesh) r.paraMesh.visible = false;
+    } else if(r.anim === 'wmerry'){
+      // KOMIDI PUTAR: duduk di kuda-kudaan, kedua tangan memegang pegangan.
+      r.bodyG.rotation.x *= 0.8;
+      r.legL.rotation.x = -0.9; r.legR.rotation.x = -0.9;
+      r.armL.rotation.x = -0.55; r.armR.rotation.x = -0.55;
+      r.bodyG.position.y = -0.3;
+      if(r.paraMesh) r.paraMesh.visible = false;
+    } else if(r.anim === 'wdive'){
+      // PAPAN LONCAT (fase melompat): kedua tangan terentang ke atas.
+      r.bodyG.rotation.x *= 0.8;
+      r.armL.rotation.x = -2.7; r.armR.rotation.x = -2.7;
+      r.legL.rotation.x = 0.15; r.legR.rotation.x = 0.15;
+      if(r.paraMesh) r.paraMesh.visible = false;
+    } else if(r.anim === 'wbouncy'){
+      // ISTANA BALON: melompat-lompat — tangan ke atas, kaki mengayun
+      // bergantian mengikuti pantulan kasur balon.
+      var wbt = clock.elapsedTime;
+      r.bodyG.rotation.x *= 0.8;
+      r.armL.rotation.x = -2.5; r.armR.rotation.x = -2.5;
+      r.legL.rotation.x = Math.sin(wbt * 4.4) * 0.55; r.legR.rotation.x = -Math.sin(wbt * 4.4) * 0.55;
+      r.bodyG.position.y = Math.abs(Math.sin(wbt * 4.4)) * 0.15;
+      if(r.paraMesh) r.paraMesh.visible = false;
+    } else if(r.anim === 'sit'){
+      // DUDUK di kursi/bangku: paha mendatar ke depan, tangan bertumpu santai.
+      r.bodyG.rotation.x *= 0.8;
+      r.legL.rotation.x = -1.25; r.legR.rotation.x = -1.25;
+      r.armL.rotation.x = -0.38; r.armR.rotation.x = -0.38;
+      r.bodyG.position.y = -0.33;
+      if(r.paraMesh) r.paraMesh.visible = false;
+    } else if(r.anim === 'sleep'){
+      // TIDUR: berbaring telentang dengan napas pelan, sama seperti lokal.
+      r.bodyG.rotation.x += (-1.5 - r.bodyG.rotation.x) * Math.min(1, dt * 6);
+      r.bodyG.position.y = 0.74 + Math.sin(clock.elapsedTime * 1.6) * 0.02;
+      r.legL.rotation.x = 0; r.legR.rotation.x = 0;
+      r.armL.rotation.x = -0.12; r.armR.rotation.x = -0.12;
+      if(r.paraMesh) r.paraMesh.visible = false;
     } else {
       r.bodyG.rotation.x *= 0.8;   // kembali tegak setelah renang/parasut
       if(r.paraMesh) r.paraMesh.visible = false;
+    }
+    if(r.act && performance.now() < r.act.until){
+      // AKSI SESAAT (dari ACT1|): ayunan tendangan / pukulan ±0,4 detik —
+      // kaki kanan menendang ke depan atau tangan kanan memukul, lalu
+      // kembali mulus ke pose dasarnya.
+      var actK = 1 - (r.act.until - performance.now()) / 400;
+      var actS = Math.sin(Math.max(0, Math.min(1, actK)) * Math.PI);
+      if(r.act.id === 'kick'){ r.legR.rotation.x = -1.9 * actS; r.legL.rotation.x = 0.25 * actS; }
+      else if(r.act.id === 'pukul'){ r.armR.rotation.x = -2.6 * actS - 0.2; r.armL.rotation.x = -0.4 * actS; }
     }
     if(r.emote && performance.now() < r.emote.until){
       var et = clock.elapsedTime;
@@ -12820,8 +12924,8 @@ function resolveCollisions(p){
     }
   }
   if(p.z > 120){
-    // Di dalam ruangan interior (Rumah Kamu z 145..155 dan ruang-ruang
-    // interior lain di zona selatan peta): penjepit dunia normal TIDAK
+    // Di dalam ruangan interior (Rumah Kamu z 275..285 dan ruang-ruang
+    // interior lain di strip selatan peta): penjepit dunia normal TIDAK
     // berlaku — dipakai batas ruangan aktif (interiorClamp).
     if(interiorClamp){
       p.x = Math.max(interiorClamp.minX, Math.min(interiorClamp.maxX, p.x));
@@ -12832,7 +12936,7 @@ function resolveCollisions(p){
     // baru bangun di Ruang UKS): jepit ke batas ruangan itu, BUKAN ke
     // bawaan Rumah Kamu.
     if(typeof insideInterior === 'function' && insideInterior(p.x, p.z)){
-      var ib = {minX:-5.6, maxX:5.6, minZ:145.6, maxZ:154.2};
+      var ib = {minX:-5.6, maxX:5.6, minZ:275.6, maxZ:284.2};
       if(typeof ROOMS !== 'undefined'){
         for(var rid in ROOMS){ var rc = ROOMS[rid] && ROOMS[rid].clamp;
           if(rc && p.x >= rc.minX - 0.3 && p.x <= rc.maxX + 0.3 && p.z >= rc.minZ - 0.3 && p.z <= rc.maxZ + 0.3){ ib = rc; break; } }
@@ -12952,8 +13056,9 @@ function animate(){
         camYawT += ORBIT_SPEED * dt;
       }
       /* KENDALI KENDARAAN (sepeda & kendaraan milik sendiri): gerak diatur
-         vehGroundStep — KIRI pedal gas maju/mundur, KANAN pad arah. Jalur
-         gerak jalan kaki di bawah dilewati selama berkendara. */
+         vehGroundStep dengan input jalan kaki yang sama persis (joystick /
+         WASD relatif kamera). Jalur gerak jalan kaki di bawah dilewati
+         selama berkendara. */
       var vehControlled = !!(riding || vehDrive);
       if(vehControlled){
         vehGroundStep(dt);
@@ -12986,7 +13091,7 @@ function animate(){
         bodyG.position.y = 0.74 + Math.sin(clock.elapsedTime * 1.6) * 0.02;
         legL.rotation.x = 0; legR.rotation.x = 0;
         armL.rotation.x = -0.12; armR.rotation.x = -0.12;
-        player.position.set(-4.2, 0.15, 149.2);
+        player.position.set(-4.2, 0.15, 279.2);
       } else if(poseMode === 'sit'){
         // DUDUK: paha mendatar ke depan, betis turun, tangan bertumpu santai
         bodyG.rotation.x += (0 - bodyG.rotation.x) * Math.min(1, dt*8);
@@ -13020,6 +13125,13 @@ function animate(){
         legL.rotation.x = swing; legR.rotation.x = -swing;
         armL.rotation.x = -swing*0.8; armR.rotation.x = swing*0.8;
         bodyG.position.y = moving ? Math.abs(Math.sin(walkPhase))*0.07 : 0;
+      }
+      if(performance.now() < kickAnimUntil && !poseMode && !swimOn && !riding && !vehDrive){
+        // AYUNAN TENDANGAN lokal (±0,4 detik): kaki kanan menendang ke depan
+        // lalu kembali — gerakan yang sama disiarkan lewat ACT1|kick supaya
+        // pemain lain melihat tendangan yang persis sama di layar mereka.
+        var kpr = 1 - (kickAnimUntil - performance.now()) / 400, ksw = Math.sin(kpr * Math.PI);
+        legR.rotation.x = -1.9 * ksw; legL.rotation.x = 0.25 * ksw;
       }
       if(vehDrive){
         // kendaraan milik sendiri mengikuti pemain; collider-nya ikut berpindah tempat
@@ -16812,10 +16924,13 @@ function soccerKick(power){
   soccerSetTouch();
   AudioSys.sfx('kick');
   soccerBroadcast();
+  kickAnimUntil = performance.now() + 400;   // ayunan kaki lokal...
+  mpSendAct('kick');                          // ...dan pemain lain melihat tendangan yang sama (ACT1|)
 }
 function soccerTapKick(){ soccerKick(0.3); }
 /* tahan untuk Power Bar tendangan */
 var socCharge = null, socSuppressClick = false;
+var kickAnimUntil = 0;   // sampai kapan ayunan kaki tendangan lokal dimainkan (ms)
 var kickBarEl = document.createElement('div');
 kickBarEl.style.cssText = 'position:fixed;left:50%;bottom:118px;transform:translateX(-50%);width:170px;height:16px;border-radius:9px;background:rgba(2,20,12,.72);border:2px solid rgba(255,255,255,.75);display:none;z-index:60;pointer-events:none;overflow:hidden;';
 kickBarEl.innerHTML = '<div id="kickBarFill" style="height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#facc15,#ef4444);"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 10px Nunito,Arial,sans-serif;color:#fff;letter-spacing:.08em;">POWER TENDANGAN</div>';
@@ -16993,6 +17108,7 @@ setInterval(function(){
       var fx2 = Math.sin(player.rotation.y), fz2 = Math.cos(player.rotation.y);
       soc.vx = pvx * 1.1 + fx2 * 1.4; soc.vz = pvz * 1.1 + fz2 * 1.4;
       soccerBroadcast();
+      kickAnimUntil = performance.now() + 400; mpSendAct('kick');   // sentuhan rebut/giring bola terlihat pemain lain
     }
     /* pemilik lama keluar ruangan: ambil alih agar bola tidak membeku */
     if(typeof mp !== 'undefined' && mp.joined && soc.owner !== 'me' && !mp.players[soc.owner] && playing){
@@ -17045,7 +17161,7 @@ function footBoostMul(){
   '#dashHUD{position:absolute;inset:0;z-index:8;display:none;pointer-events:none;}' +
   '#dashHUD.on{display:block;}' +
   '.dash-cap{font-family:Fredoka,sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.06em;color:#fff;text-align:center;background:rgba(10,25,43,.72);border:1.5px solid rgba(255,255,255,.3);border-radius:999px;padding:3px 6px;}' +
-  '#dashPedals{position:absolute;left:10px;bottom:calc(14px + env(safe-area-inset-bottom));width:104px;display:flex;flex-direction:column;gap:6px;pointer-events:auto;}' +
+  '#dashPedals{position:absolute;left:10px;bottom:calc(14px + env(safe-area-inset-bottom));width:104px;display:flex;flex-direction:column;gap:6px;pointer-events:none;}' +
   '#dashSpeedBox{background:rgba(10,25,43,.85);border:1.5px solid rgba(255,255,255,.3);border-radius:14px;padding:6px 4px 5px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}' +
   '#dashSpeed{font-family:Fredoka,sans-serif;color:#fff;text-align:center;line-height:1;}' +
   '#dashSpeed b{font-size:27px;} #dashSpeed span{font-size:10.5px;color:#bae6fd;font-weight:700;}' +
@@ -17059,18 +17175,6 @@ function footBoostMul(){
   '.pedal.held{filter:brightness(1.35);transform:scale(.96);}' +
   '#dashPadWrap{position:absolute;right:10px;bottom:calc(14px + env(safe-area-inset-bottom));width:172px;display:flex;flex-direction:column;gap:6px;pointer-events:auto;}' +
   '#dashPad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:rgba(10,25,43,.72);border:1.5px solid rgba(255,255,255,.3);border-radius:18px;padding:7px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}' +
-  '#dashSwipe{position:relative;height:104px;border-radius:18px;border:1.5px solid rgba(255,255,255,.35);background:rgba(10,25,43,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden;cursor:grab;}' +
-  '#dashSwipe.on{border-color:#38bdf8;background:rgba(2,90,140,.55);cursor:grabbing;}' +
-  '#dashSwipeArrow{font-size:34px;line-height:1;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5);transition:transform .05s linear;pointer-events:none;}' +
-  '#dashSwipe small{font-family:Nunito,sans-serif;font-size:10px;font-weight:800;color:#bae6fd;text-align:center;line-height:1.25;pointer-events:none;padding:0 8px;}' +
-  '.dash-minirow{display:flex;gap:6px;}' +
-  '.pad-mini{flex:1;border:1.5px solid rgba(255,255,255,.35);background:rgba(10,25,43,.8);color:#fff;border-radius:11px;font-family:Fredoka,sans-serif;font-weight:700;font-size:11.5px;padding:7px 2px;cursor:pointer;min-height:38px;touch-action:none;user-select:none;-webkit-user-select:none;}' +
-  '.pad-mini.held{background:#0284c7;transform:scale(.95);}' +
-  '.pad-btn{border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;border-radius:13px;font-family:Fredoka,sans-serif;font-weight:700;font-size:17px;padding:5px 2px 4px;cursor:pointer;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;touch-action:none;user-select:none;-webkit-user-select:none;}' +
-  '.pad-btn small{font-family:Nunito,sans-serif;font-size:9.5px;font-weight:800;opacity:.9;}' +
-  '.pad-btn.held{background:#0284c7;transform:scale(.94);}' +
-  '.pad-hub{display:grid;place-items:center;font-size:19px;}' +
-  '.pad-empty{display:block;}' +
   '.dash-row2{display:flex;gap:6px;}' +
   '.dash-btn{flex:1;border:1.5px solid rgba(255,255,255,.35);background:rgba(10,25,43,.8);color:#fff;border-radius:12px;font-family:Fredoka,sans-serif;font-weight:700;font-size:13px;padding:10px 4px;cursor:pointer;min-height:46px;touch-action:none;}' +
   '.dash-btn:active{background:#0284c7;}' +
@@ -17078,7 +17182,7 @@ function footBoostMul(){
   '.dash-kbd{display:none;font-size:10px;font-weight:800;color:#fff;text-align:center;background:rgba(10,25,43,.6);border-radius:8px;padding:3px 5px;line-height:1.35;}' +
   'body.laptop .dash-kbd{display:block;}' +
   '#hud.driving #jumpBtn,#hud.driving #actionBtn{opacity:0!important;pointer-events:none!important;}' +
-  '#flyUI{right:12px!important;bottom:calc(296px + env(safe-area-inset-bottom))!important;}' +
+  '#flyUI{right:12px!important;bottom:calc(88px + env(safe-area-inset-bottom))!important;}' +
   '#exitRideBtn{position:absolute;left:50%;transform:translateX(-50%);bottom:158px;z-index:8;display:none;border:none;border-radius:999px;background:#dc2626;color:#fff;font-family:Fredoka,sans-serif;font-weight:800;font-size:16px;padding:13px 26px;cursor:pointer;box-shadow:0 8px 22px rgba(220,38,38,.5);min-height:52px;}' +
   '#exitRideBtn.on{display:block;}' +
   '#photoBar{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;display:none;gap:8px;background:rgba(10,25,43,.88);padding:9px;border-radius:999px;border:1.5px solid rgba(255,255,255,.3);}' +
@@ -17431,33 +17535,33 @@ var homeDecor = {};
   g = new THREE.Group(); // Sofa Merah Putih
   box(0.95, 0.42, 2.3, 0xdc2626, 0, 0.36, 0, g); box(0.28, 0.85, 2.3, 0xb91c1c, -0.42, 0.6, 0, g);
   box(0.8, 0.14, 1.0, 0xf8fafc, 0.05, 0.6, -0.55, g, false); box(0.8, 0.14, 1.0, 0xf8fafc, 0.05, 0.6, 0.55, g, false);
-  g.position.set(-5.25, 0.15, 150.5); scene.add(g); homeDecor.sofaMP = g;
+  g.position.set(-5.25, 0.15, 280.5); scene.add(g); homeDecor.sofaMP = g;
   g = new THREE.Group(); // Smart TV Edukasi di dinding utara
   box(2.0, 1.15, 0.09, 0x111827, 0, 0, 0, g); box(1.8, 0.95, 0.03, 0x38bdf8, 0, 0, 0.06, g, false);
-  g.position.set(-3.2, 1.5, 145.85); scene.add(g); homeDecor.tvEdukasi = g;
+  g.position.set(-3.2, 1.5, 275.85); scene.add(g); homeDecor.tvEdukasi = g;
   g = new THREE.Group(); // Akuarium Ikan Hias
   box(1.35, 0.5, 0.55, 0x374151, 0, 0.25, 0, g);
   var tank = box(1.3, 0.68, 0.5, 0x7dd3fc, 0, 0.86, 0, g, false); tank.material = new THREE.MeshLambertMaterial({color:0x7dd3fc, transparent:true, opacity:0.55});
   var fish1 = sphG(0.07, 0xf97316, -0.3, 0.9, 0, g), fish2 = sphG(0.06, 0xfacc15, 0.25, 0.78, 0.05, g);
   ambients.push(function(dt, t){ fish1.position.x = Math.sin(t * 0.9) * 0.38; fish2.position.x = Math.sin(t * 0.7 + 2) * -0.36; });
-  g.position.set(5.15, 0.15, 153.5); scene.add(g); homeDecor.akuarium = g;
+  g.position.set(5.15, 0.15, 283.5); scene.add(g); homeDecor.akuarium = g;
   g = new THREE.Group(); // Karpet Batik
   flat(3.8, 2.7, 0x92400e, 0, 0, g, 0.02); flat(3.0, 1.9, 0xb45309, 0, 0, g, 0.03);
-  g.position.set(0, 0.16, 150.4); scene.add(g); homeDecor.karpetBatik = g;
+  g.position.set(0, 0.16, 280.4); scene.add(g); homeDecor.karpetBatik = g;
   g = new THREE.Group(); // Rak Piala
   box(1.5, 1.9, 0.36, 0x7c4a21, 0, 0.95, 0, g);
   [0.55, 1.1, 1.65].forEach(function(y){ cyl(0.07, 0.1, 0.3, 0xd4a017, -0.4, y, 0.24, g, 10); cyl(0.07, 0.1, 0.3, 0xd4a017, 0.35, y, 0.24, g, 10); });
-  g.position.set(3.9, 0.15, 145.95); scene.add(g); homeDecor.rakPiala = g;
-  g = new THREE.Group(); // Gitar Akustik bersandar di dinding TIMUR (DIPINDAH dari dinding selatan: titik interaksinya dulu hanya 0,86 m dari Kursi Makan (2.2,152.6) sehingga kedua target berhimpitan & ambigu saat pemain berdiri di meja makan)
+  g.position.set(3.9, 0.15, 275.95); scene.add(g); homeDecor.rakPiala = g;
+  g = new THREE.Group(); // Gitar Akustik bersandar di dinding TIMUR (DIPINDAH dari dinding selatan: titik interaksinya dulu hanya 0,86 m dari Kursi Makan (2.2,282.6) sehingga kedua target berhimpitan & ambigu saat pemain berdiri di meja makan)
   var gb = sphG(0.3, 0xb45309, 0, 0.32, 0, g); gb.scale.set(1, 1.25, 0.45);
   var gn = box(0.09, 0.85, 0.06, 0x7c4a21, 0.12, 0.95, 0, g, false); gn.rotation.z = -0.22;
-  g.position.set(4.6, 0.15, 149.5); g.rotation.y = -1.1; scene.add(g); homeDecor.gitar = g;
-  addInteractable(4.3, 149.5, 2.3, 'Gitar Akustik', null, {gitar:true});
+  g.position.set(4.6, 0.15, 279.5); g.rotation.y = -1.1; scene.add(g); homeDecor.gitar = g;
+  addInteractable(4.3, 279.5, 2.3, 'Gitar Akustik', null, {gitar:true});
   /* Cermin Lemari Pakaian di dinding selatan interior rumah */
-  box(1.15, 1.55, 0.08, 0x7c4a21, -3.0, 1.45, 154.22, scene, false);
+  box(1.15, 1.55, 0.08, 0x7c4a21, -3.0, 1.45, 284.22, scene, false);
   var mir = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 1.35), new THREE.MeshBasicMaterial({color:0xbae6fd}));
-  mir.position.set(-3.0, 1.45, 154.17); mir.rotation.y = Math.PI; mir.userData.noShadow = true; scene.add(mir);
-  addInteractable(-3.0, 153.4, 2.3, 'Cermin — Lemari Pakaian', null, {wardrobe:true});
+  mir.position.set(-3.0, 1.45, 284.17); mir.rotation.y = Math.PI; mir.userData.noShadow = true; scene.add(mir);
+  addInteractable(-3.0, 283.4, 2.3, 'Cermin — Lemari Pakaian', null, {wardrobe:true});
   INFO['Cermin — Lemari Pakaian'] = 'Cermin besar di Rumah Kamu. Tekan Aksi untuk membuka Lemari Pakaian: ganti wajah, seragam & aksesori tanpa kembali ke layar awal!';
   INFO['Gitar Akustik'] = 'Gitar Akustik dari Kopdes Merah Putih. Tekan Aksi untuk memetik gitar (+15 EP) — musik membuat hati senang dan badan segar!';
 })();
@@ -17532,94 +17636,62 @@ INFO['Sepeda Onthel Klasik'] = 'Sepeda Onthel Klasik milikmu dari Kopdes Merah P
 /* ---------- Dashboard Kendali & Tombol Turun Universal ---------- */
 var dashEl = document.createElement('div'); dashEl.id = 'dashHUD';
 dashEl.innerHTML =
-  '<div id="dashPedals"><div class="dash-cap">◀ KIRI • GAS</div>' +
-  '<div id="dashSpeedBox"><div id="dashSpeed"><b>0</b> <span>km/j</span></div><div id="dashGear">Gigi: N</div><div id="dashVehName"></div></div>' +
-  '<button class="pedal gas" id="dashGas" type="button"><span class="ped-arrow">▲</span>GAS MAJU<small>tahan untuk ngegas</small></button>' +
-  '<button class="pedal brk" id="dashRev" type="button"><span class="ped-arrow">▼</span>REM • MUNDUR<small>tahan: rem, lalu mundur</small></button></div>' +
-  '<div id="dashPadWrap"><div class="dash-cap">ARAH • GESER ⇆</div>' +
-  '<div id="dashSwipe" role="slider" aria-label="Geser untuk membelokkan kendaraan"><div id="dashSwipeArrow">⇆</div><small>GESER ◀ ▶ untuk belok<br>makin jauh gesernya, makin tajam beloknya<br>lepas jari = kembali lurus</small></div>' +
-  '<div class="dash-minirow"><button class="pad-mini" id="padUp" type="button">▲ Lurus</button><button class="pad-mini" id="padDown" type="button">▼ Putar Balik</button></div>' +
-  '<div class="dash-row2"><button class="dash-btn" id="dashHorn" type="button">🔔 Klakson</button><button class="dash-btn exit" id="dashExit" type="button">🚪 Turun</button></div>' +
-  '<div class="dash-kbd">W = Gas Maju • S = Rem/Mundur<br>A/D = Belok Kiri/Kanan</div></div>';
+  '<div id="dashPedals"><div id="dashSpeedBox"><div id="dashSpeed"><b>0</b> <span>km/j</span></div><div id="dashGear">Gigi: N</div><div id="dashVehName"></div></div></div>' +
+  '<div id="dashPadWrap"><div class="dash-row2"><button class="dash-btn" id="dashHorn" type="button">🔔 Klakson</button><button class="dash-btn exit" id="dashExit" type="button">🚪 Turun</button></div></div>';
 document.getElementById('hud').appendChild(dashEl);
-/* ================= KENDALI KENDARAAN: PEDAL KIRI + PAD ARAH KANAN =================
+/* ================= KENDALI KENDARAAN: SEPERTI BERJALAN BIASA =================
    Logika baku untuk SEMUA kendaraan (sepeda, motor, mobil polisi, bis manual,
-   perahu/speedboat, helikopter manual):
-   • KIRI = pedal gas: GAS MAJU mempercepat ke depan (dari mundur: mengerem
-     dulu sampai berhenti, baru maju); REM•MUNDUR mengerem saat melaju ke
-     depan, dan mundur saat sudah berhenti/diam. Tanpa pedal = meluncur
-     berhenti perlahan (gesekan).
-   • KANAN = area GESER (swipe) untuk arah: geser jari ke kanan = belok
-     kanan, geser ke kiri = belok kiri; besar belok mengikuti jarak geser
-     (dx/64, maksimal penuh pada ±64 px) dan arah kembali LURUS begitu jari
-     diangkat. Area swipe hanya ada di Dashboard Kendali (hanya tampil &
-     aktif saat berkendara) dan menelan semua sentuhannya sendiri
-     (stopPropagation + pointer capture) — tidak menembus ke joystick,
-     kamera, atau tombol Aksi. Tombol kecil ▲ Lurus & ▼ Putar Balik tetap
-     tersedia di bawah area geser; keyboard A/D tetap berfungsi digital.
-     - Kendaraan kamera luar (sepeda, perahu, helikopter): arah dihitung
-       relatif ke kamera/layar — hidung kendaraan berbelok mulus (laju putar
-       dibatasi) menuju arah yang ditunjuk geseran.
-     - Kendaraan kokpit (motor, mobil polisi, bis): geseran = setir belok
-       analog (makin terasa saat berjalan; saat mundur arah setir terbalik
-       seperti mobil sungguhan), ▲ Lurus = setir lurus, ▼ Putar Balik =
-       putar balik 180° menuju target yang dikunci saat tombol mulai
-       ditekan. */
-var vehPedal = {gas:false, rev:false};
-var vehPad = {up:false, down:false, left:false, right:false};
-var vehSpeed = 0;    // kecepatan bertanda (+ maju / − mundur) sepeda & kendaraan milik sendiri
-var vehUTurn = null; // target putar-balik 180° (mode kokpit); null = tidak aktif
+   perahu/speedboat, helikopter manual) — sesuai permintaan: mengemudi terasa
+   PERSIS seperti berjalan kaki biasa. Inputnya sama persis dengan input
+   jalan kaki: joystick melayang di kiri layar (atau WASD di laptop), arahnya
+   relatif ke kamera, jauhnya dorongan joystick menentukan kecepatan, dan
+   kendaraan berbelok mulus (laju putar dibatasi) menuju arah yang ditunjuk
+   joystick lalu melaju ke sana — tidak ada lagi pedal gas/rem, pad arah,
+   ataupun area geser. Yang MEMBEDAKAN berkendara dari berjalan hanyalah
+   TAMPILANnya: kotak speedometer (dashboard) di kiri bawah, tombol
+   Klakson & Turun di kanan bawah, serta lapisan kokpit berisi dashboard +
+   setir (mobil/bis) atau stang (motor) — setir kokpit ikut berputar
+   mengikuti arah belok kendaraan (lihat vehSteerVis). */
+var vehSpeed = 0;    // kecepatan sepeda & kendaraan milik sendiri (selalu >= 0: maju mengikuti arah hadap)
+var vehSteerVis = 0; // -1..1 arah belok saat ini untuk memutar setir kokpit secara visual
 function vehWrapAngle(a){ while(a > Math.PI) a -= Math.PI * 2; while(a < -Math.PI) a += Math.PI * 2; return a; }
 function vehApproach(v, target, step){ return v < target ? Math.min(target, v + step) : Math.max(target, v - step); }
 function vehTurnToward(cur, want, maxStep){ var d = vehWrapAngle(want - cur); return cur + Math.max(-maxStep, Math.min(maxStep, d)); }
-function vehReadInput(blocked){
-  if(blocked) return {throttle:0, up:false, down:false, left:false, right:false, sx:0};
-  var gas = vehPedal.gas || !!keys['KeyW'], rev = vehPedal.rev || !!keys['KeyS'];
-  return {throttle:(gas ? 1 : 0) - (rev ? 1 : 0), up:vehPad.up, down:vehPad.down,
-    left:vehPad.left || !!keys['KeyA'], right:vehPad.right || !!keys['KeyD'],
-    sx:(typeof vehSwipe !== 'undefined') ? vehSwipe.steer : 0};
-}
-function vehPadWant(camRef, inp){
-  var ix = (inp.right ? 1 : 0) - (inp.left ? 1 : 0) + (inp.sx || 0), iy = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
-  ix = Math.max(-1.6, Math.min(1.6, ix));
-  if(!ix && !iy) return null;
-  var mx = Math.sin(camRef) * (-iy) + (-Math.cos(camRef)) * ix;
-  var mz = Math.cos(camRef) * (-iy) + (Math.sin(camRef)) * ix;
-  return Math.atan2(mx, mz);
-}
-/* Kemudi kokpit bersama (motor / mobil polisi / bis manual): memutar `heading`
-   sesuai pad arah; mengembalikan heading baru. */
-function vehCockpitSteer(heading, inp, spd, turnRate, dt){
-  if(inp.down && vehUTurn === null && Math.abs(spd) > 0.25) vehUTurn = heading + Math.PI;
-  if(inp.up) vehUTurn = null;
-  if(vehUTurn !== null){
-    heading = vehTurnToward(heading, vehUTurn, turnRate * dt * (0.4 + 0.6 * Math.min(1, Math.abs(spd) / 6)));
-    if(Math.abs(vehWrapAngle(vehUTurn - heading)) < 0.04 || !inp.down) vehUTurn = null;
-    return heading;
-  }
-  var st = (inp.left ? 1 : 0) - (inp.right ? 1 : 0) - (inp.sx || 0);   // geser kanan (sx>0) = setir kanan, analog mengikuti jarak geser
-  st = Math.max(-1.6, Math.min(1.6, st));
-  if(st && Math.abs(spd) > 0.12)
-    heading += st * turnRate * dt * (0.3 + 0.7 * Math.min(1, Math.abs(spd) / 6)) * (spd < 0 ? -1 : 1);
-  return heading;
-}
-function vehGroundStep(dt){
-  var inp = vehReadInput(uiBlocked());
-  var isVeh = !!vehDrive;
-  var maxF = isVeh ? 10.5 * vehDrive.mul : 10.5 * 1.7;
-  var maxR = maxF * 0.4;
-  var accel = isVeh ? (vehDrive.kind === 'polisi' ? 19 : 17) : 16;
-  if(isVeh){
-    player.rotation.y = vehCockpitSteer(player.rotation.y, inp, vehSpeed, vehDrive.kind === 'polisi' ? 1.7 : 1.95, dt);
-  } else {
-    var want = vehPadWant(camYaw, inp);
-    if(want !== null){
-      var tr = 3.4 * (0.35 + 0.65 * Math.min(1, Math.abs(vehSpeed) / 5 + (inp.throttle !== 0 ? 0.35 : 0)));
-      player.rotation.y = vehTurnToward(player.rotation.y, want, tr * dt);
+/* Vektor gerak kendaraan = vektor gerak jalan kaki: joystick + WASD,
+   relatif ke kamera. mag 0..1 = seberapa jauh joystick didorong. */
+function vehWalkVec(blocked){
+  var ix = 0, iy = 0;
+  if(!blocked){
+    ix = joy.x * joy.mag; iy = joy.y * joy.mag;
+    if(!joy.active){
+      if(keys['KeyW']) iy -= 1; if(keys['KeyS']) iy += 1;
+      if(keys['KeyA']) ix -= 1; if(keys['KeyD']) ix += 1;
+      var kl = Math.hypot(ix, iy); if(kl > 1){ ix /= kl; iy /= kl; }
     }
   }
-  var target = inp.throttle > 0 ? maxF : (inp.throttle < 0 ? -maxR : 0);
-  vehSpeed = vehApproach(vehSpeed, target, (inp.throttle !== 0 ? accel : accel * 1.2) * dt);
+  var mx = Math.sin(camYaw) * (-iy) + (-Math.cos(camYaw)) * ix;
+  var mz = Math.cos(camYaw) * (-iy) + (Math.sin(camYaw)) * ix;
+  return {x:mx, z:mz, mag:Math.min(1, Math.hypot(mx, mz))};
+}
+/* Putar `heading` mulus menuju arah yang ditunjuk vektor jalan kaki;
+   sekaligus mencatat arah beloknya untuk animasi setir kokpit. */
+function vehSteerToward(heading, vec, turnRate, dt){
+  if(vec.mag <= 0.05){ vehSteerVis = 0; return heading; }
+  var want = Math.atan2(vec.x, vec.z);
+  vehSteerVis = Math.max(-1, Math.min(1, vehWrapAngle(want - heading) / 0.9));
+  return vehTurnToward(heading, want, turnRate * dt * (0.45 + 0.55 * vec.mag));
+}
+function vehGroundStep(dt){
+  // Seperti berjalan biasa: joystick/WASD menunjuk arah tujuan, kendaraan
+  // berbelok mulus ke arah itu dan melaju sebanding jauhnya dorongan.
+  var vec = vehWalkVec(uiBlocked());
+  var isVeh = !!vehDrive;
+  var maxF = isVeh ? 10.5 * vehDrive.mul : 10.5 * 1.7;
+  var accel = isVeh ? (vehDrive.kind === 'polisi' ? 19 : 17) : 16;
+  var turnRate = isVeh ? (vehDrive.kind === 'polisi' ? 2.6 : 3.0) : 3.6;
+  player.rotation.y = vehSteerToward(player.rotation.y, vec, turnRate, dt);
+  var target = maxF * vec.mag;
+  vehSpeed = vehApproach(vehSpeed, target, (vec.mag > 0.05 ? accel : accel * 1.2) * dt);
   if(Math.abs(vehSpeed) > 0.01){
     player.position.x += Math.sin(player.rotation.y) * vehSpeed * dt;
     player.position.z += Math.cos(player.rotation.y) * vehSpeed * dt;
@@ -17627,53 +17699,7 @@ function vehGroundStep(dt){
   }
   curSpeed = vehSpeed;
 }
-function bindVehHold(id, obj, prop){
-  var el = document.getElementById(id);
-  el.addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); obj[prop] = true; el.classList.add('held'); try{ el.setPointerCapture(e.pointerId); }catch(err){} });
-  ['pointerup','pointercancel','lostpointercapture'].forEach(function(ev){ el.addEventListener(ev, function(){ obj[prop] = false; el.classList.remove('held'); }); });
-  el.addEventListener('contextmenu', function(e){ e.preventDefault(); });
-}
-bindVehHold('dashGas', vehPedal, 'gas'); bindVehHold('dashRev', vehPedal, 'rev');
-bindVehHold('padUp', vehPad, 'up'); bindVehHold('padDown', vehPad, 'down');
-/* ---------- KEMUDI GESER (SWIPE) di sisi kanan Dashboard ----------
-   Menggantikan pad arah ◀ ▶: sentuh area #dashSwipe lalu geser jari —
-   dx positif (ke kanan) = belok kanan, dx negatif = belok kiri; steer
-   analog = dx/64 terpotong [-1, 1]. Jari diangkat / sentuhan batal =
-   steer kembali 0 (kendaraan lurus). Area ini hanya ada di dalam
-   Dashboard Kendali yang tampil saat berkendara, dan semua handler-nya
-   stopPropagation + pointer capture, jadi gestur tidak pernah bocor ke
-   joystick karakter, putar kamera, atau tombol Aksi. */
-var vehSwipe = {id:null, startX:0, steer:0};
-var swipeEl = document.getElementById('dashSwipe');
-var swipeArrowEl = document.getElementById('dashSwipeArrow');
-function vehSwipeReset(){
-  vehSwipe.id = null; vehSwipe.steer = 0;
-  if(swipeArrowEl){ swipeArrowEl.style.transform = 'translateX(0px)'; swipeArrowEl.textContent = '⇆'; }
-  if(swipeEl) swipeEl.classList.remove('on');
-}
-if(swipeEl){
-  swipeEl.addEventListener('pointerdown', function(e){
-    e.preventDefault(); e.stopPropagation();
-    vehSwipe.id = e.pointerId; vehSwipe.startX = e.clientX; vehSwipe.steer = 0;
-    swipeEl.classList.add('on');
-    try{ swipeEl.setPointerCapture(e.pointerId); }catch(err){}
-  });
-  swipeEl.addEventListener('pointermove', function(e){
-    if(vehSwipe.id !== e.pointerId) return;
-    e.preventDefault(); e.stopPropagation();
-    var dx = e.clientX - vehSwipe.startX;
-    vehSwipe.steer = Math.max(-1, Math.min(1, dx / 64));
-    if(swipeArrowEl){
-      swipeArrowEl.style.transform = 'translateX(' + Math.max(-34, Math.min(34, Math.round(dx * 0.5))) + 'px)';
-      swipeArrowEl.textContent = vehSwipe.steer < -0.25 ? '⬅' : (vehSwipe.steer > 0.25 ? '➡' : '⇆');
-    }
-  });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function(ev){
-    swipeEl.addEventListener(ev, function(){ vehSwipeReset(); });
-  });
-  swipeEl.addEventListener('contextmenu', function(e){ e.preventDefault(); });
-}
-window.addEventListener('blur', function(){ vehPedal.gas = vehPedal.rev = false; vehPad.up = vehPad.down = vehPad.left = vehPad.right = false; vehUTurn = null; vehSwipeReset(); });
+window.addEventListener('blur', function(){ vehSteerVis = 0; });
 var exitRideBtn = document.createElement('button');
 exitRideBtn.id = 'exitRideBtn'; exitRideBtn.type = 'button'; exitRideBtn.textContent = '🚪 Turun';
 exitRideBtn.style.pointerEvents = 'auto';
@@ -17725,6 +17751,9 @@ setInterval(function(){
   dashLast.x = player.position.x; dashLast.z = player.position.z; dashLast.t = now;
   var driving = !!(vehDrive || riding || (typeof boatDrive !== 'undefined' && boatDrive) || (tourActive && tour && tour.manual));
   dashEl.classList.toggle('on', driving);
+  // setir kokpit ikut berputar mengikuti arah belok kendaraan (vehSteerVis)
+  var wheelEl = document.getElementById('cockpitWheel');
+  if(wheelEl) wheelEl.setAttribute('transform', 'rotate(' + (driving ? Math.round((typeof vehSteerVis !== 'undefined' ? vehSteerVis : 0) * 38) : 0) + ' 400 212)');
   document.getElementById('hud').classList.toggle('driving', driving);
   if(driving){
     dashEl.querySelector('#dashSpeed b').textContent = dashLast.kmh;
@@ -17778,12 +17807,18 @@ INFO['Voli Pantai'] = 'Lapangan Voli Pantai di Pantai Pasir Putih! Dekati bola l
 INFO['Spot Memancing'] = 'Spot memancing favorit warga. Tekan Aksi untuk melempar kail: tunggu ikan menggigit, lalu TARIK tepat saat penanda berada di zona hijau!';
 var seaMesh = null;
 (function buildBeach(){
-  flat(140, 150, 0x79c25f, -52, 180, scene, -0.03);                        // alas rumput perluasan selatan-barat
+  /* Alas rumput TIDAK lagi menutupi kawasan laut: dulu satu bidang rumput
+     raksasa (140x150 di y=-0,03) menindih bidang laut (y=-0,28) sehingga
+     laut tak pernah terlihat biru dan bangunan interior yang berdiri di
+     strip selatan tampak berada di tengah laut. Kini alas rumput hanya di
+     bawah pantai (utara) dan di bawah strip interior (selatan laut). */
+  flat(150, 44, 0x79c25f, -52, 113, scene, -0.03);                         // alas rumput bawah pantai & jalan masuknya
+  flat(164, 160, 0x79c25f, 0, 335, scene, -0.03);                          // alas rumput strip interior di selatan laut
   flat(104, 26, 0xf2e2ac, -58, 119, scene, 0.015);                         // pasir Pantai Pasir Putih
   flat(5.5, 32, 0xd9cfae, -60, 98, scene, 0.02);                           // jalan setapak dari Jalan Lingkar ke pantai
   flat(104, 10, 0xf7ecc8, -58, 131, scene, 0.01);                          // bibir pantai
-  seaMesh = new THREE.Mesh(new THREE.PlaneGeometry(150, 108), new THREE.MeshLambertMaterial({color:0x2ea6dd, transparent:true, opacity:0.92}));
-  seaMesh.rotation.x = -Math.PI / 2; seaMesh.position.set(-52, -0.28, 188); scene.add(seaMesh);
+  seaMesh = new THREE.Mesh(new THREE.PlaneGeometry(150, 128), new THREE.MeshLambertMaterial({color:0x2ea6dd, transparent:true, opacity:0.92}));
+  seaMesh.rotation.x = -Math.PI / 2; seaMesh.position.set(-52, -0.28, 198); scene.add(seaMesh);
   var shallow = new THREE.Mesh(new THREE.PlaneGeometry(150, 12), new THREE.MeshLambertMaterial({color:0x7dd3fc, transparent:true, opacity:0.65}));
   shallow.rotation.x = -Math.PI / 2; shallow.position.set(-52, -0.1, 137); scene.add(shallow);
   ambients.push(function(dt, t){ if(seaMesh) seaMesh.position.y = -0.28 + Math.sin(t * 0.8) * 0.045; });  // gelombang ringan
@@ -17994,7 +18029,7 @@ function mountBoat(kind){
   boatDrive = {kind:kind, group:g, heading:g.rotation.y, speed:0, spot: kind === 'speed' ? speedSpot : perahuSpot};
   player.position.set(g.position.x, 0.3, g.position.z);
   AudioSys.sfx('bell');
-  showToast(kind === 'speed' ? 'Speedboat melesat! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah. Berlabuh di Dermaga Pantai atau dermaga kecil Pulau Tropis, lalu tekan Turun.' : 'Kamu mengemudikan Perahu Nelayan. Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah. Berlayarlah ke Pulau Tropis di seberang laut (arah selatan-barat)!', 5600);
+  showToast(kind === 'speed' ? 'Speedboat melesat! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju. Berlabuh di Dermaga Pantai atau dermaga kecil Pulau Tropis, lalu tekan Turun.' : 'Kamu mengemudikan Perahu Nelayan. Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju. Berlayarlah ke Pulau Tropis di seberang laut (arah selatan-barat)!', 5600);
 }
 function boatNearDock(){
   if(Math.hypot(player.position.x + 46, player.position.z - 150) < 7) return 'pantai';
@@ -18018,14 +18053,14 @@ setInterval(function(){
   if(!boatDrive) return;
   if(typeof patrolBusy !== 'undefined' && (patrolBusy || patrolOpen)) return; // Patroli Kesehatan: perahu berhenti halus di tempat
   var dt = 0.033, g = boatDrive.group;
-  // Kendali baku: KIRI pedal gas maju/mundur, KANAN pad arah relatif kamera.
-  var inp = vehReadInput(uiBlocked());
+  // Kendali seperti berjalan biasa: joystick/WASD menunjuk arah tujuan,
+  // perahu berbelok mulus ke arah itu & melaju sebanding dorongan joystick.
+  var vec = vehWalkVec(uiBlocked());
   var max = boatDrive.kind === 'speed' ? 15 : 7;
-  var target = inp.throttle > 0 ? max : (inp.throttle < 0 ? -max * 0.4 : 0);
-  boatDrive.speed = vehApproach(boatDrive.speed, target, (inp.throttle !== 0 ? 5 : 6) * dt);
-  var bwant = vehPadWant(camYaw, inp);
-  if(bwant !== null && Math.abs(boatDrive.speed) > 0.25)
-    boatDrive.heading = vehTurnToward(boatDrive.heading, bwant, 1.7 * dt * (0.35 + 0.65 * Math.min(1, Math.abs(boatDrive.speed) / 6)));
+  var target = max * vec.mag;
+  boatDrive.speed = vehApproach(boatDrive.speed, target, (vec.mag > 0.05 ? 5 : 6) * dt);
+  if(vec.mag > 0.05 && boatDrive.speed > 0.25)
+    boatDrive.heading = vehTurnToward(boatDrive.heading, Math.atan2(vec.x, vec.z), 1.9 * dt * (0.35 + 0.65 * Math.min(1, boatDrive.speed / 6)));
   var nx = g.position.x + Math.sin(boatDrive.heading) * boatDrive.speed * dt;
   var nz = g.position.z + Math.cos(boatDrive.heading) * boatDrive.speed * dt;
   nx = Math.max(-120, Math.min(2, nx)); nz = Math.max(133, Math.min(238, nz));
@@ -18060,6 +18095,7 @@ function volleyHit(){
   vol.vx = side * (4.6 + Math.random() * 1.6); vol.vy = 6.8; vol.vz = (VOL.z - b.z) * 0.55 + (Math.random() * 1.2 - 0.6);
   AudioSys.sfx('pop');
   volleySend();
+  mpSendAct('pukul');   // ayunan tangan memukul voli terlihat pemain lain (ACT1|)
 }
 function volleySend(){
   if(typeof mpSend === 'function') mpSend('VOLI1|' + JSON.stringify({x:+volleyBall.position.x.toFixed(2), y:+volleyBall.position.y.toFixed(2), z:+volleyBall.position.z.toFixed(2), vx:+vol.vx.toFixed(2), vy:+vol.vy.toFixed(2), vz:+vol.vz.toFixed(2), o:mp.id || ''}));
@@ -19340,6 +19376,8 @@ function soccer2Kick(power){
   soccer2SetTouch();
   AudioSys.sfx('kick');
   soccer2Broadcast();
+  kickAnimUntil = performance.now() + 400;
+  mpSendAct('kick');
 }
 function soccer2TapKick(){ soccer2Kick(0.3); }
 function soccer2ResetBall(){
@@ -19450,6 +19488,7 @@ setInterval(function(){
       var fx2 = Math.sin(player.rotation.y), fz2 = Math.cos(player.rotation.y);
       soc2.vx = pvx * 1.1 + fx2 * 1.4; soc2.vz = pvz * 1.1 + fz2 * 1.4;
       soccer2Broadcast();
+      kickAnimUntil = performance.now() + 400; mpSendAct('kick');   // sentuhan rebut/giring bola terlihat pemain lain
     }
     if(typeof mp !== 'undefined' && mp.joined && soc2.owner !== 'me' && !mp.players[soc2.owner] && playing){
       soccer2BecomeOwner(); soccer2Broadcast();
@@ -19494,6 +19533,7 @@ function soccerTackle(f){
     soc.vx = fx * 1.2; soc.vz = fz * 1.2;
     soccerBroadcast();
   }
+  kickAnimUntil = performance.now() + 400; mpSendAct('kick');   // gerakan merebut terlihat pemain lain
   showToast('⚡ Bola berhasil direbut! Giring bolanya dan tendang ke gawang lawan!', 2600);
 }
 
