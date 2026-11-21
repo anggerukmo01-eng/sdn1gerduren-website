@@ -6374,6 +6374,7 @@ var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, l
   loans:{},   // cicilan Dealer yang sedang berjalan: {motor:{paid:3, per:150, total:8}, ...}
   quests:{date:'', sampah:0, fed:{}, tanam:false, pancing:false, bola:false, rewarded:{}, bonus:false}, // progres Quest Harian (reset tiap tanggal baru)
   npcQuests:{date:'', st:{}, prog:{}},
+  qSeen:{}, // RIWAYAT SOAL ANTI-ULANG: hash teks soal yang SUDAH pernah diberikan/dijawab — soal itu tidak akan diberikan lagi sampai seluruh bank soalnya habis (lihat pickFreshQuestions)
   fase:'B', stats:{answered:0, correct:0, missions:0}, badges:[], furn:{}, eduPos:{}, faktaIdx:0,
   artefak:[], juaraHari:'', // artefak = id Artefak Sejarah yang sudah ditemukan; juaraHari = tanggal gelar "Juara Barung Hari Ini"
   houses:{},      // rumah Perumahan No. 1-8 yang SUDAH LUNAS milikku: {5:true, ...} (No. 5 juga tercermin di assets.rumah)
@@ -6437,6 +6438,7 @@ function loadEco(){
       if(s.npcQuests.st && typeof s.npcQuests.st === 'object') eco.npcQuests.st = s.npcQuests.st;
       if(s.npcQuests.prog && typeof s.npcQuests.prog === 'object') eco.npcQuests.prog = s.npcQuests.prog;
     }
+    if(s.qSeen && typeof s.qSeen === 'object' && !Array.isArray(s.qSeen)) eco.qSeen = s.qSeen; // riwayat soal anti-ulang antar hari
     if(s.fase === 'A' || s.fase === 'B' || s.fase === 'C') eco.fase = s.fase;
     if(s.stats && typeof s.stats === 'object'){ eco.stats.answered = s.stats.answered|0; eco.stats.correct = s.stats.correct|0; eco.stats.missions = s.stats.missions|0; }
     if(Array.isArray(s.badges)) eco.badges = s.badges;
@@ -6497,6 +6499,7 @@ function sanitizePlayerData(){
     while(eco.farm.plots.length < 12) eco.farm.plots.push(null);
     if(!eco.farm.ayam || typeof eco.farm.ayam !== 'object') eco.farm.ayam = {f:0, r:0};
     if(!eco.farm.sapi || typeof eco.farm.sapi !== 'object') eco.farm.sapi = {f:0, r:0};
+    if(!eco.qSeen || typeof eco.qSeen !== 'object' || Array.isArray(eco.qSeen)) eco.qSeen = {};
     if(!Array.isArray(eco.badges)) eco.badges = [];
     if(!Array.isArray(eco.artefak)) eco.artefak = [];
     if(['A','B','C'].indexOf(eco.fase) < 0) eco.fase = 'B';
@@ -7345,6 +7348,58 @@ var POS_DEFS = [
 function posById(id){ for(var i = 0; i < POS_DEFS.length; i++) if(POS_DEFS[i].id === id) return POS_DEFS[i]; return null; }
 function shuffleArr(a){ a = a.slice(); for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 function sampleArr(a, n){ return shuffleArr(a).slice(0, n); }
+/* ================= SISTEM SOAL BARU SETIAP HARI (ANTI-ULANG) =================
+   Perbaikan atas permintaan Anggi (21 Nov 2026): SEMUA quest pertanyaan —
+   terutama quest soal MATERI PELAJARAN dari guru — harus BERBEDA SETIAP HARI.
+   Aturannya:
+   1) Setiap soal yang sudah pernah diberikan/dijawab dicatat hash teksnya di
+      eco.qSeen (tersimpan antar hari, per karakter). Soal tercatat TIDAK akan
+      diberikan lagi — di quest mana pun — sampai seluruh bank soal itu habis;
+      barulah siklus bank itu dimulai lagi dari awal.
+   2) Pilihan soal harian diacak memakai benih (seed) TANGGAL + sumber quest,
+      jadi soal hari ini berbeda dari kemarin, tetapi tetap sama sepanjang
+      hari ini (dialog dibuka-tutup tidak mengganti soal di tengah jalan).
+   Semua pemilih soal (Quest Guru, kuis NPC, Pos Edukasi, Gerbang Turbo,
+   Lomba Barung, kuis kejar-kejaran, Pupuk Cerdas kebun, Pos Razia) WAJIB
+   lewat pickFreshQuestions / pickFreshOne di bawah ini. */
+function qHashOf(text){ var h = 5381, s = String(text || ''); for(var i = 0; i < s.length; i++){ h = ((h << 5) + h + s.charCodeAt(i)) | 0; } return 'q' + (h >>> 0).toString(36); }
+function qSeenMap(){ if(!eco.qSeen || typeof eco.qSeen !== 'object' || Array.isArray(eco.qSeen)) eco.qSeen = {}; return eco.qSeen; }
+function qIsSeen(q){ return !!(q && q.q && qSeenMap()[qHashOf(q.q)]); }
+function qMarkSeen(q){
+  if(!q || !q.q) return;
+  var m = qSeenMap(); m[qHashOf(q.q)] = 1;
+  var ks = Object.keys(m);
+  if(ks.length > 900){ for(var i = 0; i < ks.length - 900; i++) delete m[ks[i]]; } // jaga ukuran simpanan: buang catatan tertua
+}
+function qMarkSeenList(list){ (list || []).forEach(qMarkSeen); }
+function qSeededShuffle(a, seedStr){
+  var h = 2166136261, s = String(seedStr || '');
+  for(var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  var seed = h >>> 0;
+  function rnd(){ seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; }
+  a = a.slice();
+  for(var j = a.length - 1; j > 0; j--){ var k = Math.floor(rnd() * (j + 1)); var t = a[j]; a[j] = a[k]; a[k] = t; }
+  return a;
+}
+function pickFreshQuestions(pool, n, seedStr){
+  pool = (pool || []).filter(function(q){ return q && q.q; });
+  if(!pool.length || n <= 0) return [];
+  var fresh = pool.filter(function(q){ return !qIsSeen(q); });
+  var ordered = qSeededShuffle(fresh, seedStr);
+  if(ordered.length < n){
+    /* Bank soal segar habis: mulai siklus baru HANYA untuk soal-soal di bank
+       ini (riwayat bank lain tidak ikut terhapus), lalu lengkapi kekurangannya. */
+    var m = qSeenMap();
+    pool.forEach(function(q){ delete m[qHashOf(q.q)]; });
+    var rest = pool.filter(function(q){ return ordered.indexOf(q) < 0; });
+    ordered = ordered.concat(qSeededShuffle(rest, String(seedStr) + '#siklus2'));
+  }
+  var picked = ordered.slice(0, n);
+  qMarkSeenList(picked);
+  try{ saveEco(); }catch(e){}
+  return picked;
+}
+function pickFreshOne(pool, seedStr){ var p = pickFreshQuestions(pool, 1, seedStr); return p.length ? p[0] : null; }
 function mcq(q, correct, wrongs, explain){
   var opts = shuffleArr([correct].concat(wrongs));
   return {q:q, options:opts, correct:opts.indexOf(correct), explain:explain || ''};
@@ -9500,13 +9555,30 @@ var QUEST_ICONS = {
 };
 function fedCount(q){ var n = 0; ['ayam','ikan','kambing','sapi'].forEach(function(a){ if(q.fed[a]) n++; }); return n; }
 var QUEST_DEFS = [
-  {id:'sampah', color:'#16a34a', name:'Bersih-Bersih Sekolah & Desa', desc:'Pungut sampah warna-warni berbingkai kuning yang berserakan di halaman sekolah dan lingkungan desa. Cukup dekati sampahnya — langsung terpungut!', target:8, reward:120, prog:function(q){ return Math.min(q.sampah, 8); }},
+  {id:'sampah', color:'#16a34a', name:'Bersih-Bersih Sekolah & Desa', desc:'Pungut sampah warna-warni berbingkai kuning yang berserakan di halaman sekolah dan lingkungan desa. Cukup dekati sampahnya — langsung terpungut!', target:8, reward:120, prog:function(q){ return Math.min(q.sampah, QUEST_DEFS[0].target); }},
   {id:'pakan', color:'#d97706', name:'Beri Makan Peliharaan', desc:'Misi harian rutin: beri makan Ayam, Ikan, Kambing & Sapi di kandang dan kolam belakang sekolah — menangkan permainan memberi makannya untuk tiap hewan.', target:4, reward:160, prog:function(q){ return fedCount(q); }},
   {id:'tanam', color:'#65a30d', name:'Menanam & Memanen', desc:'Selesaikan permainan Menanam di Kebun Sekolah atau Menanam di Sawah.', target:1, reward:100, prog:function(q){ return q.tanam ? 1 : 0; }},
   {id:'pancing', color:'#0284c7', name:'Memancing di Sungai', desc:'Selesaikan permainan Memancing di Sungai Gerduren.', target:1, reward:100, prog:function(q){ return q.pancing ? 1 : 0; }},
   {id:'bola', color:'#dc2626', name:'Bermain Bola', desc:'Selesaikan permainan Bermain Bola di Lapangan Gerduren.', target:1, reward:120, prog:function(q){ return q.bola ? 1 : 0; }}
 ];
 function questTodayStr(){ var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+/* VARIASI QUEST HARIAN: supaya quest TIDAK sama persis setiap hari, target,
+   hadiah, dan fokus tiap quest digilir secara deterministik dari TANGGAL —
+   hari ini tetap sama sepanjang hari, besok berganti lagi. (Soal-soal
+   pertanyaan digilir terpisah oleh sistem anti-ulang pickFreshQuestions.) */
+function applyDailyQuestVariant(t){
+  function pickFor(id, arr){ return qSeededShuffle(arr, t + '|quest|' + id)[0]; }
+  QUEST_DEFS.forEach(function(def){ if(!def.baseDesc) def.baseDesc = def.desc; });
+  var sm = pickFor('sampah', [{target:6, reward:110}, {target:7, reward:120}, {target:8, reward:130}, {target:9, reward:145}, {target:10, reward:160}]);
+  var smDef = QUEST_DEFS[0]; smDef.target = sm.target; smDef.reward = sm.reward;
+  smDef.desc = smDef.baseDesc + ' Fokus bersih-bersih hari ini: ' + pickFor('sampahFokus', ['Halaman Sekolah', 'Sekitar Ruang Kelas', 'Taman Desa & Balai Desa', 'Sekitar Kantin & Koperasi', 'Jalan Desa & Lapangan Gerduren']) + ' — jumlah sampah yang dipungut hari ini: ' + sm.target + '.';
+  var pk = QUEST_DEFS[1]; pk.reward = pickFor('pakan', [150, 160, 170, 180]);
+  pk.desc = pk.baseDesc + ' Hewan fokus hari ini: ' + pickFor('pakanFokus', ['Ayam', 'Ikan', 'Kambing', 'Sapi']) + ' (keempat hewan tetap harus diberi makan semua).';
+  var tn = QUEST_DEFS[2]; tn.reward = pickFor('tanam', [100, 110, 120]);
+  tn.desc = tn.baseDesc + ' ' + pickFor('tanamFokus', ['Hari ini utamakan menanam di Kebun Sekolah.', 'Hari ini utamakan menanam di Sawah Gerduren.']);
+  QUEST_DEFS[3].reward = pickFor('pancing', [100, 110, 120]);
+  QUEST_DEFS[4].reward = pickFor('bola', [110, 120, 130]);
+}
 function ensureQuestDay(){
   var t = questTodayStr();
   if(eco.quests.date !== t){
@@ -9514,6 +9586,7 @@ function ensureQuestDay(){
     trashPickups.forEach(function(tp){ tp.taken = false; });
     saveEco();
   }
+  applyDailyQuestVariant(t);
   refreshTrashVisibility();
 }
 function questIsDone(def){ return def.prog(eco.quests) >= def.target; }
@@ -9576,8 +9649,8 @@ function renderQuests(){
   });
   if(typeof renderNPCQuestRows === 'function') renderNPCQuestRows(questList);
   questNote.innerHTML = doneN >= QUEST_DEFS.length
-    ? 'Semua Quest Harian hari ini <b>SELESAI</b> — termasuk bonus +100 Kredit. Sampai jumpa di quest besok!'
-    : 'Sudah selesai <b>' + doneN + ' dari ' + QUEST_DEFS.length + '</b> quest. Quest diperbarui setiap hari — besok ada misi baru menunggumu!';
+    ? 'Semua Quest Harian hari ini <b>SELESAI</b> — termasuk bonus +150 Kredit. Sampai jumpa di quest besok!'
+    : 'Sudah selesai <b>' + doneN + ' dari ' + QUEST_DEFS.length + '</b> quest. Quest berganti setiap hari: target & fokus misi berubah, dan <b>soal pertanyaan tidak pernah diulang</b> — soal yang sudah pernah kamu jawab akan diganti soal baru, terutama soal materi pelajaran dari Bapak/Ibu Guru.';
   updateQuestBadge();
 }
 
@@ -9665,6 +9738,24 @@ function setNPCState(id, st){ ensureNPCDay(); eco.npcQuests.st[id] = st; saveEco
 /* Kunci state quest per NPC: quest 'guru' kini per ORANG (setiap guru kelas
    memberi quest materinya sendiri tiap hari), peran lain tetap per peran. */
 function npcQuestId(n){ return n.def === 'guru' ? 'guru@' + n.key : n.def; }
+/* Soal kuis NPC HARI INI: dipilih sekali sehari dari bank soal NPC itu oleh
+   sistem anti-ulang (belum pernah dijawab + benih tanggal), disimpan di
+   prog[qid].quiz supaya tetap sama sepanjang hari, lalu berganti besok.
+   Urutan pilihan jawaban diacak agar jawaban benar tidak selalu di atas. */
+function npcDailyQuiz(def, qid){
+  if(!def.quiz) return null;
+  ensureNPCDay();
+  var pr = eco.npcQuests.prog[qid];
+  if(!pr || typeof pr !== 'object'){ pr = {}; eco.npcQuests.prog[qid] = pr; }
+  if(pr.quiz && pr.quizDay === questTodayStr() && pr.quiz.q) return pr.quiz;
+  var bank = (def.quizBank && def.quizBank.length) ? def.quizBank : [def.quiz];
+  var picked = pickFreshOne(bank, 'npc|' + qid + '|' + questTodayStr()) || def.quiz;
+  var sh = shuffleArr(picked.opts.map(function(t, ix){ return {t:t, ok:ix === picked.ans}; }));
+  pr.quiz = {q:picked.q, opts:sh.map(function(s){ return s.t; }), ans:sh.findIndex(function(s){ return s.ok; })};
+  pr.quizDay = questTodayStr();
+  saveEco();
+  return pr.quiz;
+}
 
 /* Ucapan Bahasa Indonesia bersama (dipakai sapaan suara guru & penilaian
    suara Pos Kompas — pola sama dengan suara sambutan masuk dunia). */
@@ -9863,7 +9954,13 @@ var SUBJECT_LIST = [
     {q:'Ayo berpikir! Angka berapa yang hilang dari pola ini: 7, 14, 21, 28, …?', opts:['35','33','36'], ans:0},
     {q:'Satu segitiga punya 3 sisi. Kalau ada 6 segitiga, jumlah semua sisinya adalah…', opts:['18','12','24'], ans:0},
     {q:'Rafi punya 3 koin Rp1.000 dan 2 koin Rp500. Uang Rafi seluruhnya…', opts:['Rp4.000','Rp3.500','Rp5.000'], ans:0},
-    {q:'Jam menunjukkan pukul 07.00. Dua jam 30 menit kemudian, jam menunjukkan pukul…', opts:['09.30','09.00','10.30'], ans:0}
+    {q:'Jam menunjukkan pukul 07.00. Dua jam 30 menit kemudian, jam menunjukkan pukul…', opts:['09.30','09.00','10.30'], ans:0},
+    {q:'Pak Slamet memanen 48 mangga. Mangga itu dimasukkan ke 6 keranjang sama banyak. Tiap keranjang berisi…', opts:['6 mangga','8 mangga','9 mangga'], ans:1},
+    {q:'Sinta mempunyai pita sepanjang 2 meter. Ia memakai 75 cm untuk hiasan. Sisa pita Sinta adalah…', opts:['125 cm','150 cm','25 cm'], ans:0},
+    {q:'Harga 1 buku tulis Rp3.500. Jika Raka membeli 4 buku, ia membayar…', opts:['Rp12.000','Rp14.000','Rp13.500'], ans:1},
+    {q:'Bangun datar yang mempunyai 4 sisi sama panjang dan 4 sudut siku-siku adalah…', opts:['persegi','segitiga','lingkaran'], ans:0},
+    {q:'Ibu membuat 3 loyang kue, tiap loyang berisi 12 kue. Sebanyak 9 kue sudah dimakan. Sisa kue adalah…', opts:['27 kue','36 kue','21 kue'], ans:0},
+    {q:'Pecahan yang senilai dengan 1/2 adalah…', opts:['2/3','3/6','2/5'], ans:1}
   ]},
   {id:'bind', name:'Bahasa Indonesia', qs:[
     {q:'Lawan kata (antonim) dari "rajin" adalah…', opts:['malas','pandai','cepat'], ans:0},
@@ -9871,7 +9968,13 @@ var SUBJECT_LIST = [
     {q:'Dalam kalimat "Pak Lurah mempunyai banyak kaki tangan", arti "kaki tangan" adalah…', opts:['pembantu / orang kepercayaan','kaki dan tangan sungguhan','sepatu baru'], ans:0},
     {q:'Persamaan kata (sinonim) dari "gembira" adalah…', opts:['senang','sedih','marah'], ans:0},
     {q:'Cerita tentang hewan yang berperilaku seperti manusia dan mengandung pelajaran baik disebut…', opts:['fabel','legenda','mitos'], ans:0},
-    {q:'Tanda baca yang dipakai di akhir kalimat tanya adalah…', opts:['tanda tanya (?)','tanda seru (!)','koma (,)'], ans:0}
+    {q:'Tanda baca yang dipakai di akhir kalimat tanya adalah…', opts:['tanda tanya (?)','tanda seru (!)','koma (,)'], ans:0},
+    {q:'Kata yang tepat untuk melengkapi kalimat "Ayah membaca koran di ___ rumah" adalah…', opts:['teras','kemarin','sangat'], ans:0},
+    {q:'Huruf kapital dipakai pada…', opts:['semua kata benda','awal kalimat dan nama orang','akhir kalimat saja'], ans:1},
+    {q:'Cerita rakyat dari Sumatera Barat tentang anak yang durhaka kepada ibunya adalah…', opts:['Timun Mas','Malin Kundang','Sangkuriang'], ans:1},
+    {q:'Kalimat ajakan yang sopan kepada teman adalah…', opts:['"Ambilkan bukuku sekarang!"','"Ayo, kita belajar kelompok bersama!"','"Kamu harus diam!"'], ans:1},
+    {q:'Makna ungkapan "ringan tangan" adalah…', opts:['suka menolong','suka memukul','tangannya kecil'], ans:0},
+    {q:'Urutan yang tepat menjadi paragraf padu adalah… (1) Lalu ia menyiramnya setiap pagi. (2) Dita menanam bibit cabai di pot. (3) Sebulan kemudian cabai berbuah lebat.', opts:['2-3-1','2-1-3','1-2-3'], ans:1}
   ]},
   {id:'bjawa', name:'Bahasa Jawa', qs:[
     {q:'Angka "telu" dalam Bahasa Jawa artinya…', opts:['tiga','dua','lima'], ans:0},
@@ -9879,7 +9982,13 @@ var SUBJECT_LIST = [
     {q:'"Sugeng enjing" artinya…', opts:['Selamat pagi','Selamat malam','Selamat jalan'], ans:0},
     {q:'Dalam bahasa krama, "bapak" disebut…', opts:['rama','simak','eyang'], ans:0},
     {q:'Angka "papat" dalam Bahasa Jawa artinya…', opts:['empat','enam','satu'], ans:0},
-    {q:'Anak yang sopan berpamitan pulang dari rumah guru dengan mengucapkan…', opts:['"Nyuwun pamit, Pak."','"Aku mulih ya!"','"Wis, aku bali!"'], ans:0}
+    {q:'Anak yang sopan berpamitan pulang dari rumah guru dengan mengucapkan…', opts:['"Nyuwun pamit, Pak."','"Aku mulih ya!"','"Wis, aku bali!"'], ans:0},
+    {q:'Bahasa krama dari kata "turu" (tidur) adalah…', opts:['sare','nedha','mlampah'], ans:0},
+    {q:'"Matur nuwun" artinya…', opts:['permisi','terima kasih','sampai jumpa'], ans:1},
+    {q:'Angka "sanga" dalam Bahasa Jawa artinya…', opts:['tujuh','delapan','sembilan'], ans:2},
+    {q:'Bahasa ngoko dari kata "kula" adalah…', opts:['aku','kowe','panjenengan'], ans:0},
+    {q:'Sapaan yang tepat untuk guru pada sore hari adalah…', opts:['Sugeng sonten','Sugeng dalu','Sugeng rawuh'], ans:0},
+    {q:'"Simbah tindak pasar" — kata "tindak" dalam kalimat itu artinya…', opts:['duduk','pergi','makan'], ans:1}
   ]},
   {id:'pancasila', name:'Pancasila', qs:[
     {q:'Sila pertama Pancasila berbunyi…', opts:['Ketuhanan Yang Maha Esa','Kemanusiaan yang adil dan beradab','Persatuan Indonesia'], ans:0},
@@ -9887,7 +9996,13 @@ var SUBJECT_LIST = [
     {q:'Contoh sikap Persatuan Indonesia (sila ketiga) di sekolah adalah…', opts:['bermain dengan semua teman tanpa membeda-bedakan','mengejek teman dari daerah lain','hanya mau bermain dengan teman satu desa'], ans:0},
     {q:'Musyawarah untuk memilih ketua kelas adalah contoh pengamalan sila ke…', opts:['empat','dua','lima'], ans:0},
     {q:'Bintang emas adalah lambang sila ke…', opts:['satu','tiga','lima'], ans:0},
-    {q:'Membantu teman yang kesulitan belajar adalah sikap yang sesuai dengan sila ke…', opts:['dua','satu','empat'], ans:0}
+    {q:'Membantu teman yang kesulitan belajar adalah sikap yang sesuai dengan sila ke…', opts:['dua','satu','empat'], ans:0},
+    {q:'Kepala banteng adalah lambang sila ke…', opts:['tiga','empat','lima'], ans:1},
+    {q:'Contoh sikap Keadilan Sosial (sila kelima) di sekolah adalah…', opts:['berbagi bekal dengan teman yang tidak membawa bekal','mengambil jajan teman','hanya bermain dengan teman yang kaya'], ans:0},
+    {q:'Hari Lahir Pancasila diperingati setiap tanggal…', opts:['17 Agustus','1 Juni','20 Mei'], ans:1},
+    {q:'Pohon beringin adalah lambang sila ke…', opts:['tiga','dua','empat'], ans:0},
+    {q:'Menghormati teman yang sedang beribadah sesuai agamanya adalah pengamalan sila ke…', opts:['satu','tiga','lima'], ans:0},
+    {q:'Hasil musyawarah harus dilaksanakan dengan…', opts:['terpaksa','tanggung jawab','marah-marah'], ans:1}
   ]},
   {id:'ipas', name:'IPAS (Sains & Sosial)', qs:[
     {q:'Bagian tumbuhan yang bertugas menyerap air dari dalam tanah adalah…', opts:['akar','daun','bunga'], ans:0},
@@ -9895,7 +10010,13 @@ var SUBJECT_LIST = [
     {q:'Air di jemuran basah berubah menjadi uap karena…', opts:['panas matahari','cahaya bulan','tiupan kipas'], ans:0},
     {q:'Sumber energi utama bagi kehidupan di Bumi adalah…', opts:['Matahari','Bulan','api unggun'], ans:0},
     {q:'Ikan bernapas menggunakan…', opts:['insang','paru-paru','kulit'], ans:0},
-    {q:'Benda yang dapat ditarik oleh magnet adalah…', opts:['paku besi','penghapus karet','daun kering'], ans:0}
+    {q:'Benda yang dapat ditarik oleh magnet adalah…', opts:['paku besi','penghapus karet','daun kering'], ans:0},
+    {q:'Proses tumbuhan membuat makanan sendiri dengan bantuan cahaya matahari disebut…', opts:['fotosintesis','pernapasan','perkecambahan'], ans:0},
+    {q:'Hewan yang makan tumbuhan dan juga daging disebut…', opts:['herbivora','karnivora','omnivora'], ans:2},
+    {q:'Perubahan wujud benda dari cair menjadi padat disebut…', opts:['mencair','membeku','menguap'], ans:1},
+    {q:'Planet tempat kita tinggal adalah…', opts:['Mars','Bumi','Jupiter'], ans:1},
+    {q:'Kenampakan alam berupa tanah yang menjulang tinggi dan besar disebut…', opts:['sungai','gunung','danau'], ans:1},
+    {q:'Cara menjaga kebersihan sungai yang paling tepat adalah…', opts:['membuang sampah ke sungai','tidak membuang sampah dan limbah ke sungai','menebang pohon di tepi sungai'], ans:1}
   ]},
   {id:'pai', name:'PAI & Budi Pekerti', qs:[
     {q:'Rukun Islam yang pertama adalah…', opts:['syahadat','salat','puasa'], ans:0},
@@ -9903,7 +10024,13 @@ var SUBJECT_LIST = [
     {q:'Sebelum makan, kita dianjurkan membaca…', opts:['basmalah','hamdalah','takbir'], ans:0},
     {q:'Nabi Muhammad SAW lahir di kota…', opts:['Makkah','Madinah','Thaif'], ans:0},
     {q:'Kitab suci umat Islam adalah…', opts:['Al-Qur\u2019an','Injil','Taurat'], ans:0},
-    {q:'Berbuat baik dan berbakti kepada orang tua disebut…', opts:['birrul walidain','takabur','riya'], ans:0}
+    {q:'Berbuat baik dan berbakti kepada orang tua disebut…', opts:['birrul walidain','takabur','riya'], ans:0},
+    {q:'Rukun Iman yang pertama adalah iman kepada…', opts:['Allah SWT','malaikat','kitab-kitab Allah'], ans:0},
+    {q:'Salat yang dikerjakan pada siang hari sebanyak 4 rakaat adalah salat…', opts:['Subuh','Zuhur','Magrib'], ans:1},
+    {q:'Puasa Ramadhan bagi umat Islam yang mampu hukumnya…', opts:['wajib','sunnah','makruh'], ans:0},
+    {q:'Nabi terakhir yang diutus Allah SWT adalah…', opts:['Nabi Musa AS','Nabi Muhammad SAW','Nabi Isa AS'], ans:1},
+    {q:'Setelah selesai makan, kita dianjurkan membaca…', opts:['basmalah','hamdalah','istighfar'], ans:1},
+    {q:'Sikap jujur dan dapat dipercaya seperti yang dicontohkan Nabi Muhammad SAW disebut…', opts:['amanah','kikir','sombong'], ans:0}
   ]},
   {id:'pjok', name:'PJOK (Olahraga)', qs:[
     {q:'Sebelum berolahraga, kita harus melakukan…', opts:['pemanasan','pendinginan','tidur'], ans:0},
@@ -9911,7 +10038,13 @@ var SUBJECT_LIST = [
     {q:'Lari cepat jarak pendek disebut…', opts:['sprint','maraton','joging'], ans:0},
     {q:'Makanan dan minuman yang baik untuk pertumbuhan tulang adalah yang mengandung kalsium, misalnya…', opts:['susu','permen','minuman bersoda'], ans:0},
     {q:'Gerakan menggulingkan badan ke depan disebut…', opts:['roll depan','lompat jauh','jalan cepat'], ans:0},
-    {q:'Setelah berolahraga, sebaiknya kita…', opts:['minum air putih dan beristirahat','langsung tidur tanpa mandi','makan permen sebanyak-banyaknya'], ans:0}
+    {q:'Setelah berolahraga, sebaiknya kita…', opts:['minum air putih dan beristirahat','langsung tidur tanpa mandi','makan permen sebanyak-banyaknya'], ans:0},
+    {q:'Permainan tradisional yang dimainkan dengan melompat satu kaki di kotak-kotak gambar di tanah adalah…', opts:['engklek','congklak','petak umpet'], ans:0},
+    {q:'Jumlah pemain inti satu tim sepak bola di lapangan adalah…', opts:['9 orang','11 orang','7 orang'], ans:1},
+    {q:'Vitamin yang banyak terdapat pada buah jeruk dan baik untuk daya tahan tubuh adalah…', opts:['vitamin A','vitamin C','vitamin D'], ans:1},
+    {q:'Gerakan push-up melatih kekuatan otot…', opts:['lengan dan dada','kaki saja','leher'], ans:0},
+    {q:'Alat bantu yang aman dipakai anak yang baru belajar berenang adalah…', opts:['ban pelampung','batu besar','tas berisi buku'], ans:0},
+    {q:'Tidur yang cukup untuk anak usia sekolah dalam sehari adalah selama…', opts:['4–5 jam','9–11 jam','14–15 jam'], ans:1}
   ]},
   {id:'seni', name:'Seni Budaya', qs:[
     {q:'Alat musik tradisional Jawa yang dipukul dan terbuat dari logam adalah…', opts:['gong (gamelan)','angklung','seruling'], ans:0},
@@ -9919,13 +10052,19 @@ var SUBJECT_LIST = [
     {q:'Tari tradisional khas Banyumas yang lucu dan lincah adalah tari…', opts:['Lengger','Jaipong','Saman'], ans:0},
     {q:'Campuran warna biru dan kuning menghasilkan warna…', opts:['hijau','ungu','oranye'], ans:0},
     {q:'Angklung adalah alat musik tradisional yang berasal dari…', opts:['Jawa Barat','Jawa Tengah','Bali'], ans:0},
-    {q:'Lagu dolanan "Gundul-Gundul Pacul" berasal dari…', opts:['Jawa Tengah','Sumatera Barat','Kalimantan Timur'], ans:0}
+    {q:'Lagu dolanan "Gundul-Gundul Pacul" berasal dari…', opts:['Jawa Tengah','Sumatera Barat','Kalimantan Timur'], ans:0},
+    {q:'Alat musik tradisional dari bambu yang dimainkan dengan cara digoyangkan hingga berbunyi adalah…', opts:['angklung','gong','kendang'], ans:0},
+    {q:'Campuran warna merah dan kuning menghasilkan warna…', opts:['ungu','oranye','hijau'], ans:1},
+    {q:'Tari tradisional yang gerakannya menirukan burung merak adalah…', opts:['Tari Merak','Tari Piring','Tari Kecak'], ans:0},
+    {q:'Batik dibuat dengan cara menggambar pola memakai…', opts:['canting dan malam (lilin batik)','spidol warna','cat tembok'], ans:0},
+    {q:'Alat musik gamelan yang bentuknya seperti panci-panci kecil berbaris dan dipukul adalah…', opts:['bonang','rebab','suling'], ans:0},
+    {q:'Lagu "Ampar-Ampar Pisang" berasal dari daerah…', opts:['Kalimantan Selatan','Jawa Timur','Sulawesi Selatan'], ans:0}
   ]}
 ];
 
 var NPC_QUEST_DEFS = {
   kepsek:{questName:'Kuis Kepala Sekolah', reward:220, desc:'Jawab pertanyaan Bapak dengan benar.', quiz:{q:'Ibu kota Kabupaten Banyumas adalah…', opts:['Purwokerto','Cilacap','Purbalingga'], ans:0}, doneText:'Bagus! Kamu anak yang cerdas dan rajin. Pertahankan semangat belajarmu, ya!'},
-  guru:{questName:'Materi Pelajaran Pilihan', reward:150, desc:'PILIH SENDIRI mata pelajaran favoritmu — Matematika, Bahasa Indonesia, Bahasa Jawa, Pancasila, IPAS, PAI & Budi Pekerti, PJOK, atau Seni Budaya — lalu jawab 3 soal seru dari Bapak/Ibu Guru!', doneText:'Pintar! Belajar itu seru kalau rajin berlatih. Besok Bapak/Ibu Guru beri soal baru lagi — boleh pilih mata pelajaran yang lain!'},
+  guru:{questName:'Materi Pelajaran Pilihan', reward:150, desc:'PILIH SENDIRI mata pelajaran favoritmu — Matematika, Bahasa Indonesia, Bahasa Jawa, Pancasila, IPAS, PAI & Budi Pekerti, PJOK, atau Seni Budaya — lalu jawab 3 soal seru dari Bapak/Ibu Guru! Soalnya BERGANTI SETIAP HARI dan tidak diulang: soal yang sudah pernah kamu jawab tidak akan muncul lagi sampai semua soal di banknya habis.', doneText:'Pintar! Belajar itu seru kalau rajin berlatih. Besok Bapak/Ibu Guru beri soal baru lagi — boleh pilih mata pelajaran yang lain!'},
   penjaga:{questName:'Jaga Gerbang Sekolah', reward:100, desc:'Jawab pertanyaan Pak Nartam tentang keamanan sekolah dengan benar.', quiz:{q:'Kalau menemukan benda tajam yang berbahaya di sekolah, kamu harus…', opts:['Membawanya pulang','Melapor ke Pak Penjaga atau Bapak/Ibu Guru','Membuangnya ke sungai'], ans:1}, doneText:'Betul! Anak yang peduli keamanan sekolah itu hebat. Gerbang dan lingkungan sekolah kita aman berkat anak-anak yang tertib.'},
   polisi:{questName:'Patroli Jalan Raya', reward:260, desc:'Kunjungi 3 titik patroli berurutan: Gerbang Sekolah → Lapangan Gerduren → Kantor Polsek. Berdirilah di lingkaran emas pada tiap titik.', doneText:'Patroli yang rapi! Jalan raya aman berkat anak-anak yang tertib dan patuh lampu lalu lintas.'},
   lurah:{questName:'Menyapa Warga Desa', reward:210, desc:'Sapa 3 warga desa: dekati Bu Tini, Pak Darto, dan Bu Wati lalu bicara dengan mereka.', doneText:'Terima kasih sudah menyapa warga. Desa kita rukun karena warganya saling menyapa!'},
@@ -10151,10 +10290,11 @@ function renderNPCDialog(){
     }
     npcQuestBox.innerHTML = 'Quest <b>"' + def.questName + '"</b> sedang berjalan. ' + progTxt;
     if(def.quiz){
-      npcQuestBox.innerHTML += '<br><br><b>Soalnya:</b> ' + def.quiz.q;
-      def.quiz.opts.forEach(function(op, ix){
+      var dq = npcDailyQuiz(def, qid);
+      npcQuestBox.innerHTML += '<br><br><b>Soal hari ini (baru — belum pernah kamu jawab):</b> ' + dq.q;
+      dq.opts.forEach(function(op, ix){
         addOpt(op, 'alt', function(){
-          if(ix === def.quiz.ans){
+          if(ix === dq.ans){
             setNPCState(qid, 'ready');
             AudioSys.sfx('correct');
             showToast('Jawaban BENAR! Bicara lagi untuk mengambil hadiahmu.', 3000);
@@ -10176,13 +10316,21 @@ function renderNPCDialog(){
     SUBJECT_LIST.forEach(function(sj){
       addOpt(sj.name, 'alt', function(){
         ensureNPCDay();
-        var pool = sj.qs; if(eco.fase === 'A') pool = sj.qs.slice(0, 3); else if(eco.fase === 'C') pool = sj.qs.slice(2); // soal menyesuaikan Fase kelas pemain
-        var qs = sampleArr(pool, 3).map(function(q){ return {q:q.q, opts:q.opts.slice(), ans:q.ans}; });
-        eco.npcQuests.prog[qid] = {subj:sj.name, qs:qs, qi:0};
+        /* Soal menyesuaikan Fase kelas pemain, lalu dipilih oleh sistem
+           ANTI-ULANG: 3 soal yang BELUM PERNAH dijawab pemain (diacak dengan
+           benih tanggal, jadi berbeda setiap hari) + urutan pilihan jawaban
+           diacak supaya jawaban benar tidak selalu di posisi yang sama. */
+        var pool = sj.qs; if(eco.fase === 'A') pool = sj.qs.slice(0, 8); else if(eco.fase === 'C') pool = sj.qs.slice(4); // Fase A: 8 soal termudah • Fase C: 8 soal tersulit • Fase B: semua 12 soal
+        var picked = pickFreshQuestions(pool, 3, 'guru|' + qid + '|' + sj.id + '|' + questTodayStr());
+        var qs = picked.map(function(q){
+          var sh = shuffleArr(q.opts.map(function(t, ix){ return {t:t, ok:ix === q.ans}; }));
+          return {q:q.q, opts:sh.map(function(s){ return s.t; }), ans:sh.findIndex(function(s){ return s.ok; })};
+        });
+        eco.npcQuests.prog[qid] = {subj:sj.name, subjId:sj.id, qs:qs, qi:0};
         saveEco();
         setNPCState(qid, 'active');
         AudioSys.sfx('pop');
-        showToast('Quest dimulai: "' + def.questName + '" — mata pelajaran ' + sj.name + ' dari ' + n.name + '. Jawab 3 soalnya dengan benar!', 4800);
+        showToast('Quest dimulai: "' + def.questName + '" — mata pelajaran ' + sj.name + ' dari ' + n.name + '. Soal hari ini BARU — belum pernah kamu jawab sebelumnya. Jawab 3 soalnya dengan benar!', 5200);
         renderNPCDialog();
       });
     });
@@ -13715,21 +13863,30 @@ var EDU_BANKS = {
       {q:'Daun kering yang gugur termasuk sampah…', o:['organik','anorganik','berbahaya','plastik'], a:0, x:'Daun berasal dari makhluk hidup, jadi sampah organik — bisa jadi kompos!'},
       {q:'Tanaman obat yang rimpangnya dipakai untuk jamu dan menghangatkan badan adalah…', o:['jahe','mawar','melati','kamboja'], a:0, x:'Jahe adalah tanaman obat keluarga (TOGA) yang terkenal.'},
       {q:'Hewan yang hanya makan tumbuhan disebut…', o:['herbivora','karnivora','omnivora','insektivora'], a:0, x:'Herbivora = pemakan tumbuhan, contohnya kambing dan sapi.'},
-      {q:'Tumbuhan membuat makanannya sendiri dengan bantuan…', o:['sinar matahari','cahaya bulan','lampu','api'], a:0, x:'Prosesnya disebut fotosintesis, memakai sinar matahari.'}
+      {q:'Tumbuhan membuat makanannya sendiri dengan bantuan…', o:['sinar matahari','cahaya bulan','lampu','api'], a:0, x:'Prosesnya disebut fotosintesis, memakai sinar matahari.'},
+      {q:'Hewan yang hanya makan daging disebut…', o:['karnivora','herbivora','omnivora','pengurai'], a:0, x:'Karnivora = pemakan daging, contohnya kucing dan elang.'},
+      {q:'Sampah kulit buah dan sisa sayur paling baik diolah menjadi…', o:['dibakar','kompos untuk pupuk','dibuang ke sungai','ditimbun di kelas'], a:1, x:'Sampah organik bisa diolah menjadi pupuk kompos.'},
+      {q:'Bagian tumbuhan yang menjadi tempat membuat makanan adalah…', o:['daun','akar','batang','bunga'], a:0, x:'Daun adalah dapur tumbuhan — tempat fotosintesis berlangsung.'}
     ],
     B:[
       {q:'Urutan rantai makanan yang BENAR di sawah adalah…', o:['padi → tikus → ular → elang','elang → ular → tikus → padi','tikus → padi → elang → ular','padi → elang → tikus → ular'], a:0, x:'Energi mengalir dari produsen (padi) ke konsumen tingkat akhir (elang).'},
       {q:'Botol plastik bekas termasuk sampah…', o:['anorganik','organik','kompos','daun'], a:0, x:'Plastik tidak bisa terurai alami — anorganik, sebaiknya didaur ulang.'},
       {q:'Tanaman obat untuk meredakan masuk angin dan dibuat jamu beras kencur adalah…', o:['kencur','bayam','cabai','tomat'], a:0, x:'Kencur adalah bahan utama jamu beras kencur.'},
       {q:'Makhluk hidup yang menguraikan sisa makhluk mati (daun, bangkai) adalah…', o:['pengurai (bakteri & jamur)','produsen','konsumen puncak','herbivora'], a:0, x:'Pengurai mengembalikan zat hara ke tanah.'},
-      {q:'Lidah buaya bermanfaat untuk…', o:['menyuburkan rambut & menyejukkan kulit','membuat plastik','mengusir elang','mengeringkan sawah'], a:0, x:'Lidah buaya (aloevera) adalah tanaman obat serbaguna.'}
+      {q:'Lidah buaya bermanfaat untuk…', o:['menyuburkan rambut & menyejukkan kulit','membuat plastik','mengusir elang','mengeringkan sawah'], a:0, x:'Lidah buaya (aloevera) adalah tanaman obat serbaguna.'},
+      {q:'Dalam rantai makanan rumput → belalang → katak, katak berperan sebagai…', o:['konsumen tingkat II','produsen','pengurai','konsumen tingkat I'], a:0, x:'Belalang konsumen tingkat I (makan produsen), katak konsumen tingkat II.'},
+      {q:'Kertas dan kardus bekas sebaiknya…', o:['dibuang ke sungai','dibakar di halaman','didaur ulang menjadi kertas baru','dikubur dalam plastik'], a:2, x:'Kertas termasuk sampah anorganik yang mudah didaur ulang.'},
+      {q:'Tanaman obat daun sirih bermanfaat sebagai…', o:['bahan bakar','pewarna kain','makanan pokok','antiseptik alami'], a:3, x:'Daun sirih bersifat antiseptik — dipakai berkumur dan membersihkan luka ringan.'}
     ],
     C:[
       {q:'Bila petani membasmi semua ular di sawah, yang paling mungkin terjadi adalah…', o:['populasi tikus meledak dan padi rusak','padi tumbuh lebih cepat','elang bertambah banyak','tanah menjadi subur'], a:0, x:'Ular adalah predator tikus; tanpa ular, hama tikus tak terkendali.'},
       {q:'Baterai bekas termasuk sampah yang harus diperlakukan khusus karena…', o:['mengandung bahan berbahaya (B3)','terlalu ringan','berwarna-warni','mudah terbakar kertas'], a:0, x:'Baterai mengandung logam berat berbahaya bagi tanah dan air.'},
       {q:'Tanaman obat kumis kucing dan daun sirih secara tradisional dimanfaatkan untuk…', o:['kesehatan saluran kemih & antiseptik alami','bahan bakar','pewarna kain batik saja','makanan pokok'], a:0, x:'Kumis kucing untuk saluran kemih; sirih bersifat antiseptik.'},
       {q:'Dalam ekosistem sawah, elang berperan sebagai…', o:['konsumen puncak','produsen','pengurai','konsumen pertama'], a:0, x:'Elang berada di puncak rantai makanan sawah.'},
-      {q:'Cara paling tepat mengurangi sampah plastik di lingkungan sekolah adalah…', o:['membawa botol minum & tas belanja sendiri','membakar semua plastik','membuang ke sungai','menimbun di sawah'], a:0, x:'Reduce (mengurangi) adalah langkah pertama 3R.'}
+      {q:'Cara paling tepat mengurangi sampah plastik di lingkungan sekolah adalah…', o:['membawa botol minum & tas belanja sendiri','membakar semua plastik','membuang ke sungai','menimbun di sawah'], a:0, x:'Reduce (mengurangi) adalah langkah pertama 3R.'},
+      {q:'Bila katak di sawah habis diburu, yang paling mungkin terjadi adalah…', o:['padi langsung panen','populasi serangga hama meningkat','ular pindah ke kota','tanah makin kering'], a:1, x:'Katak pemakan serangga; tanpa katak, hama serangga tidak terkendali.'},
+      {q:'Prinsip 3R yang berarti MEMAKAI KEMBALI barang yang masih layak adalah…', o:['reduce','recycle','reuse','replace'], a:2, x:'Reuse = pakai kembali, reduce = mengurangi, recycle = daur ulang.'},
+      {q:'Pemakaian pestisida berlebihan di sawah berbahaya karena…', o:['membuat padi wangi','menambah zat hara','mengusir elang','meracuni tanah, air, dan makhluk hidup lain'], a:3, x:'Pestisida kimia berlebihan mencemari seluruh ekosistem sawah.'}
     ]
   },
   literasi:{
@@ -13738,21 +13895,30 @@ var EDU_BANKS = {
       {q:'Sinonim (persamaan kata) dari "gembira" adalah…', o:['senang','sedih','marah','takut'], a:0, x:'Gembira = senang.'},
       {q:'Antonim (lawan kata) dari "besar" adalah…', o:['kecil','luas','tinggi','lebar'], a:0, x:'Besar lawannya kecil.'},
       {q:'Pesan moral cerita Timun Mas adalah…', o:['berani & cerdik menghadapi kesulitan','suka berbohong','malas bekerja','sombong pada teman'], a:0, x:'Timun Mas berani dan cerdik melawan raksasa.'},
-      {q:'Kalimat yang benar penulisannya adalah…', o:['Ani membaca buku di perpustakaan.','ani membaca Buku di Perpustakaan.','Ani membaca buku di Perpustakaan','ani membaca buku.'], a:0, x:'Awal kalimat huruf kapital, nama tempat khusus juga, dan diakhiri titik.'}
+      {q:'Kalimat yang benar penulisannya adalah…', o:['Ani membaca buku di perpustakaan.','ani membaca Buku di Perpustakaan.','Ani membaca buku di Perpustakaan','ani membaca buku.'], a:0, x:'Awal kalimat huruf kapital, nama tempat khusus juga, dan diakhiri titik.'},
+      {q:'Sinonim (persamaan kata) dari "cepat" adalah…', o:['lekas','lambat','pelan','tenang'], a:0, x:'Cepat = lekas.'},
+      {q:'Antonim (lawan kata) dari "tinggi" adalah…', o:['besar','panjang','rendah','luas'], a:2, x:'Tinggi lawannya rendah.'},
+      {q:'Lengkapi kalimat sebab-akibat: "Adik menangis karena ___"', o:['meja','terjatuh dari sepeda','biru','kemarin'], a:1, x:'Adik menangis karena terjatuh dari sepeda — itu sebabnya.'}
     ],
     B:[
       {q:'Sinonim dari kata "berani" adalah…', o:['gagah perkasa / tidak gentar','penakut','ragu-ragu','pemalu'], a:0, x:'Berani berarti tidak gentar menghadapi bahaya.'},
       {q:'Antonim dari kata "tiba" (dalam arti sampai) adalah…', o:['berangkat','datang','muncul','hadir'], a:0, x:'Tiba (sampai) berlawanan dengan berangkat (pergi).'},
       {q:'Pesan moral cerita Malin Kundang adalah…', o:['hormati & sayangi orang tua','durhaka membawa celaka — jangan seperti Malin','kaya itu paling penting','merantau itu dilarang'], a:1, x:'Malin Kundang durhaka kepada ibunya dan akhirnya celaka.'},
       {q:'Lengkapi kalimat dengan kata kerja yang tepat: "Adik sedang ___ bola di lapangan."', o:['menendang','meja','kemarin','sangat'], a:0, x:'Kata kerja untuk bola adalah menendang.'},
-      {q:'Dalam cerita Bawang Merah & Bawang Putih, Bawang Putih digambarkan sebagai anak yang…', o:['rajin & baik hati','pemalas','sombong','pemarah'], a:0, x:'Bawang Putih rajin dan baik hati, akhirnya hidup bahagia.'}
+      {q:'Dalam cerita Bawang Merah & Bawang Putih, Bawang Putih digambarkan sebagai anak yang…', o:['rajin & baik hati','pemalas','sombong','pemarah'], a:0, x:'Bawang Putih rajin dan baik hati, akhirnya hidup bahagia.'},
+      {q:'Sinonim dari kata "cermat" adalah…', o:['ceroboh','teliti','gegabah','asal-asalan'], a:1, x:'Cermat = teliti dan hati-hati.'},
+      {q:'Antonim dari kata "sombong" adalah…', o:['angkuh','tinggi hati','rendah hati','besar kepala'], a:2, x:'Sombong lawannya rendah hati.'},
+      {q:'Pesan moral cerita Kancil dan Buaya adalah…', o:['berbohong itu baik','yang besar selalu menang','berenang itu mudah','kecerdikan membantu keluar dari kesulitan'], a:3, x:'Kancil memakai akalnya untuk menyeberangi sungai dengan selamat.'}
     ],
     C:[
       {q:'Pesan moral utama legenda Sangkuriang adalah…', o:['jangan memaksakan kehendak & kendalikan amarah','membuat perahu itu mudah','gunung terbentuk dalam semalam','berburu itu wajib'], a:0, x:'Sangkuriang gagal mengendalikan amarah dan kehendaknya.'},
       {q:'Sinonim kata "menyaksikan" adalah…', o:['melihat','mendengar','meraba','mengira'], a:0, x:'Menyaksikan = melihat dengan mata sendiri.'},
       {q:'Antonim kata "boros" adalah…', o:['hemat','mewah','kaya','murah'], a:0, x:'Boros lawannya hemat.'},
       {q:'Ungkapan "besar kepala" berarti…', o:['sombong','pintar','rajin','berani'], a:0, x:'Besar kepala adalah ungkapan untuk orang yang sombong.'},
-      {q:'Kalimat efektif yang paling tepat adalah…', o:['Para siswa-siswi sedang belajar di kelas.','Para siswa sedang belajar di kelas.','Siswa-siswa para sedang belajar kelas di.','Belajar di kelas para siswa-siswi sedang.'], a:1, x:'Hindari pengulangan makna: "para" saja sudah berarti banyak.'}
+      {q:'Kalimat efektif yang paling tepat adalah…', o:['Para siswa-siswi sedang belajar di kelas.','Para siswa sedang belajar di kelas.','Siswa-siswa para sedang belajar kelas di.','Belajar di kelas para siswa-siswi sedang.'], a:1, x:'Hindari pengulangan makna: "para" saja sudah berarti banyak.'},
+      {q:'Ungkapan "kutu buku" berarti orang yang…', o:['gemar membaca buku','takut pada buku','menjual buku','merusak buku'], a:0, x:'Kutu buku = orang yang sangat gemar membaca.'},
+      {q:'Sinonim kata "menatap" adalah…', o:['menyentuh','mendengar','memandang','mengendus'], a:2, x:'Menatap = memandang dengan sungguh-sungguh.'},
+      {q:'Kalimat yang menggunakan tanda koma dengan BENAR adalah…', o:['Ibu membeli, beras gula dan telur, di pasar.','Ibu, membeli beras gula, dan telur di pasar.','Ibu membeli beras gula dan, telur di pasar.','Ibu membeli beras, gula, dan telur di pasar.'], a:3, x:'Koma dipakai memisahkan rincian: beras, gula, dan telur.'}
     ]
   },
   ppkn:{
@@ -13761,21 +13927,30 @@ var EDU_BANKS = {
       {q:'Tempat yang aman untuk menyeberang jalan adalah…', o:['zebra cross','tengah jalan raya','belokan tajam','jembatan layang mobil'], a:0, x:'Menyeberanglah di zebra cross dan tengok kiri-kanan.'},
       {q:'Lambang sila pertama Pancasila adalah…', o:['bintang','rantai','pohon beringin','kepala banteng'], a:0, x:'Sila pertama Ketuhanan Yang Maha Esa berlambang bintang.'},
       {q:'Menolong teman yang jatuh di sekolah adalah pengamalan sila ke…', o:['dua (Kemanusiaan)','satu','tiga','lima'], a:0, x:'Sila kedua mengajarkan kemanusiaan dan tolong-menolong.'},
-      {q:'Saat naik sepeda motor bersama orang tua, anak wajib memakai…', o:['helm','topi sekolah','syal','kacamata hitam'], a:0, x:'Helm melindungi kepala — wajib untuk keselamatan.'}
+      {q:'Saat naik sepeda motor bersama orang tua, anak wajib memakai…', o:['helm','topi sekolah','syal','kacamata hitam'], a:0, x:'Helm melindungi kepala — wajib untuk keselamatan.'},
+      {q:'Lampu lalu lintas berwarna HIJAU berarti kendaraan boleh…', o:['jalan','berhenti','parkir','mundur'], a:0, x:'Hijau = jalan — tetap hati-hati saat melintasi persimpangan.'},
+      {q:'Sila ketiga Pancasila berbunyi…', o:['Keadilan Sosial bagi Seluruh Rakyat Indonesia','Persatuan Indonesia','Ketuhanan Yang Maha Esa','Kemanusiaan yang Adil dan Beradab'], a:1, x:'Sila ketiga: Persatuan Indonesia, lambangnya pohon beringin.'},
+      {q:'Saat menyeberang di zebra cross, kita harus…', o:['berlari sambil bermain','menyeberang sambil melihat HP','berhenti di tengah jalan','tengok kanan-kiri lalu berjalan tegak'], a:3, x:'Berjalan tegak (tidak berlari) dan tetap waspada.'}
     ],
     B:[
       {q:'Rambu lingkaran merah dengan huruf P dicoret berarti…', o:['dilarang parkir','boleh parkir','tempat parkir','parkir gratis'], a:0, x:'Rambu larangan berwarna merah; P dicoret = dilarang parkir.'},
       {q:'Rambu segitiga merah-putih dengan gambar orang menyeberang berarti…', o:['hati-hati, ada penyeberangan pejalan kaki','dilarang menyeberang','tempat bermain','halte bus'], a:0, x:'Rambu peringatan berbentuk segitiga.'},
       {q:'Memilih ketua kelas dengan musyawarah adalah pengamalan sila ke…', o:['empat','dua','tiga','satu'], a:0, x:'Sila keempat: Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan.'},
       {q:'Bermain dengan semua teman tanpa membeda-bedakan suku adalah sila ke…', o:['tiga (Persatuan Indonesia)','satu','empat','lima'], a:0, x:'Persatuan Indonesia berarti bersatu dalam keberagaman.'},
-      {q:'Rambu lingkaran merah dengan gambar mobil dan motor berarti…', o:['dilarang masuk bagi kendaraan bermotor','jalan khusus mobil','tempat balapan','bengkel kendaraan'], a:0, x:'Rambu larangan masuk untuk kendaraan bermotor.'}
+      {q:'Rambu lingkaran merah dengan gambar mobil dan motor berarti…', o:['dilarang masuk bagi kendaraan bermotor','jalan khusus mobil','tempat balapan','bengkel kendaraan'], a:0, x:'Rambu larangan masuk untuk kendaraan bermotor.'},
+      {q:'Rambu biru berbentuk lingkaran dengan gambar sepeda berarti…', o:['dilarang bersepeda','jalur khusus sepeda','tempat parkir sepeda','toko sepeda'], a:1, x:'Rambu perintah biru menunjukkan jalur yang dipakai pesepeda.'},
+      {q:'Gotong royong membersihkan lingkungan sekolah mencerminkan sila…', o:['pertama saja','kedua saja','ketiga dan kelima','keempat saja'], a:2, x:'Gotong royong = persatuan (sila 3) dan kebersamaan sosial (sila 5).'},
+      {q:'Pengendara yang baik saat melihat lampu KUNING akan…', o:['tancap gas agar tidak kena merah','berhenti mendadak di tengah persimpangan','membunyikan klakson panjang','bersiap berhenti dengan mengurangi kecepatan'], a:3, x:'Kuning = bersiap berhenti, bukan tancap gas.'}
     ],
     C:[
       {q:'Studi kasus: antre membeli jajan di kantin dengan tertib tanpa menyerobot adalah pengamalan sila ke…', o:['lima (Keadilan Sosial)','satu','dua','tiga'], a:0, x:'Antre dengan adil adalah wujud keadilan sosial dalam keseharian.'},
       {q:'Rambu kuning berbentuk belah ketupat dengan gambar tikungan tajam berarti…', o:['peringatan: hati-hati tikungan tajam','wajib berbelok','dilarang berbelok','jalan ditutup'], a:0, x:'Rambu peringatan umumnya kuning/segitiga — di Indonesia segitiga merah-putih untuk peringatan.'},
       {q:'Warga bergotong royong memperbaiki jalan desa bersama-sama. Sikap ini mencerminkan sila…', o:['tiga dan lima','satu saja','empat saja','dua saja'], a:0, x:'Gotong royong = persatuan (sila 3) sekaligus keadilan sosial & kebersamaan (sila 5).'},
       {q:'Pengendara yang menerobos lampu merah melanggar nilai sila kedua karena…', o:['membahayakan keselamatan manusia lain','tidak membawa uang','terburu-buru','lampunya jauh'], a:0, x:'Sila kedua menuntut sikap manusiawi — keselamatan orang lain wajib dijaga.'},
-      {q:'Rambu biru lingkaran dengan panah putih memutar berarti…', o:['wajib mengikuti arah bundaran','dilarang memutar','tempat parkir bundar','jalan satu arah lurus'], a:0, x:'Rambu perintah berwarna biru: wajib mengikuti petunjuknya.'}
+      {q:'Rambu biru lingkaran dengan panah putih memutar berarti…', o:['wajib mengikuti arah bundaran','dilarang memutar','tempat parkir bundar','jalan satu arah lurus'], a:0, x:'Rambu perintah berwarna biru: wajib mengikuti petunjuknya.'},
+      {q:'Studi kasus: musyawarah memilih ketua kelas tidak mencapai kata sepakat, lalu dilakukan pemungutan suara. Hal itu sesuai sila keempat karena…', o:['pemungutan suara adalah jalan sah terakhir dalam demokrasi Pancasila','suara terbanyak selalu paling benar','musyawarah tidak penting','ketua lama yang memutuskan'], a:0, x:'Sila keempat mengutamakan musyawarah; bila buntu, pemungutan suara dapat ditempuh.'},
+      {q:'Rambu segitiga merah-putih bergambar anak menyeberang berarti…', o:['dilarang ada anak','tempat bermain anak','hati-hati, kawasan sekolah / penyeberangan anak','halte sekolah'], a:2, x:'Rambu peringatan di dekat sekolah: kurangi kecepatan dan waspada.'},
+      {q:'Membuang sampah pada tempatnya di tempat umum adalah wujud sila kelima karena…', o:['supaya dipuji petugas','agar tidak dimarahi','kebiasaan orang kota saja','menjaga kenyamanan dan hak semua orang'], a:3, x:'Lingkungan bersih adalah hak semua orang — keadilan sosial dalam hal kecil.'}
     ]
   }
 };
@@ -13840,7 +14015,7 @@ function renderEduHome(){
   var def = EDU_DEFS[curEdu], rec = eco.eduPos[curEdu];
   var html = '<div class="pos-qcard"><div class="pos-qprog">Pos ' + def.num + ' • ' + FASE_LABEL[eco.fase] + '</div>' +
     '<div class="pos-qask">' + def.desc + '</div>' +
-    '<p style="margin:8px 0 0;font-size:13px;font-weight:700;color:#475569;">Hadiah menyelesaikan pos ini: <b>100 Kredit + 30 per jawaban benar</b> (maksimal 250 Kredit).' +
+    '<p style="margin:8px 0 0;font-size:13px;font-weight:700;color:#475569;">Hadiah menyelesaikan pos ini: <b>100 Kredit + 30 per jawaban benar</b> (maksimal 250 Kredit). Soal kuisnya <b>baru setiap hari</b> — diambil dari bank soal yang belum pernah kamu jawab.' +
     (rec && rec.done ? '<br>Terbaikmu di pos ini: <b>' + rec.best + ' dari 5 soal benar</b>.' : '') + '</p></div><div class="stage-row">';
   html += '<button class="stage-btn" id="eduQuizBtn" type="button"><span class="st-ic" style="background:' + def.color + ';">' + POS_ICONS.target + '</span><span><b>Mulai Kuis (5 Soal)</b><span>Soal menyesuaikan ' + FASE_LABEL[eco.fase] + '.</span></span></button>';
   if(curEdu === 'ipas') html += '<button class="stage-btn" id="eduSortBtn" type="button"><span class="st-ic" style="background:#16a34a;">' + POS_ICONS.book + '</span><span><b>Misi Pilah Sampah Sawah</b><span>Tentukan organik atau anorganik untuk 8 sampah di sekitar sawah & hutan.</span></span></button>';
@@ -13852,7 +14027,13 @@ function renderEduHome(){
   document.getElementById('eduBackBtn').addEventListener('click', function(){ AudioSys.sfx('click'); closeEduPos(); });
 }
 function runEduQuiz(){
-  var qs = curEdu === 'numerasi' ? genNumerasiQs() : shuffleArr(EDU_BANKS[curEdu][eco.fase].slice());
+  /* Soal kuis Pos dipilih oleh sistem ANTI-ULANG: 5 soal yang belum pernah
+     dijawab (benih tanggal — berbeda setiap hari). Numerasi bersifat
+     prosedural (angkanya diacak mesin) sehingga selalu baru; teksnya tetap
+     dicatat agar tidak berulang persis. */
+  var qs;
+  if(curEdu === 'numerasi'){ qs = genNumerasiQs(); qMarkSeenList(qs); saveEco(); }
+  else qs = pickFreshQuestions(EDU_BANKS[curEdu][eco.fase], 5, 'edu|' + curEdu + '|' + eco.fase + '|' + questTodayStr());
   qs = qs.map(function(q){ var sh = shuffleArr(q.o.map(function(t, i){ return {t:t, ok:i === q.a}; })); return {q:q.q, o:sh.map(function(s){ return s.t; }), a:sh.findIndex(function(s){ return s.ok; }), x:q.x}; });
   eduState = {qs:qs, idx:0, correct:0, answered:false};
   renderEduQ();
@@ -13979,7 +14160,7 @@ var TURBO_BANKS = {
 function turboPickEdu(cat){
   var qs = cat === 'numerasi' ? genNumerasiQs() : ((EDU_BANKS[cat] && EDU_BANKS[cat][eco.fase]) || []);
   if(!qs.length) return null;
-  var src = qs[Math.floor(Math.random() * qs.length)];
+  var src = pickFreshOne(qs, 'turbo|' + cat + '|' + eco.fase + '|' + questTodayStr() + '|' + Date.now()) || qs[0]; // anti-ulang: soal yang sudah dijawab tidak muncul lagi sampai bank habis
   var opts = shuffleArr(src.o.map(function(t, i){ return {t:t, ok:i === src.a}; }));
   return {q:src.q, opts:opts, correct:opts.findIndex(function(o){ return o.ok; }), x:src.x || '', right:src.o[src.a]};
 }
@@ -13990,7 +14171,7 @@ function turboNewQ(){
   var q = turboPickEdu(kind);
   if(q) return q;
   var bank = TURBO_BANKS[eco.fase] || TURBO_BANKS.B;
-  var src = bank[Math.floor(Math.random() * bank.length)];
+  var src = pickFreshOne(bank, 'turbobank|' + eco.fase + '|' + questTodayStr() + '|' + Date.now()) || bank[0];
   var opts = shuffleArr([{t:src.a, ok:true}].concat(src.w.map(function(w){ return {t:w, ok:false}; })));
   return {q:src.q, opts:opts, correct:opts.findIndex(function(o){ return o.ok; }), x:'', right:src.a};
 }
@@ -15035,7 +15216,7 @@ function kpsEstafetPickQ(cat, fase){
   var qs = c === 'numerasi' ? genNumerasiQs() : ((EDU_BANKS[c] && EDU_BANKS[c][fase]) || []);
   if(!qs.length) qs = (EDU_BANKS.ipas && EDU_BANKS.ipas[fase]) || [];
   if(!qs.length) return null;
-  var src = qs[Math.floor(Math.random() * qs.length)];
+  var src = pickFreshOne(qs, 'kps|' + c + '|' + fase + '|' + questTodayStr() + '|' + Date.now()) || qs[0]; // anti-ulang: soal estafet tidak mengulang soal yang sudah dijawab
   var order = shuffleArr(src.o.map(function(t, i){ return {t:t, ok:i === src.a}; }));
   return {q:src.q, o:order.map(function(x){ return x.t; }), a:order.findIndex(function(x){ return x.ok; }), x:src.x || '', cat:c};
 }
@@ -15318,6 +15499,83 @@ NPC_QUEST_DEFS.slamet = {questName:'Kuis Petani Teladan', reward:200, desc:'Jawa
 NPC_QUEST_DEFS.bima = {questName:'Kuis Tertib Lalu Lintas', reward:220, desc:'Jawab soal tertib lalu lintas dari Aipda Bima, Polisi Sahabat Anak.', quiz:{q:'Lampu lalu lintas berwarna merah artinya semua kendaraan harus…', opts:['berhenti','jalan terus','membunyikan klakson'], ans:0}, doneText:'Betul! Anak tertib lalu lintas adalah anak hebat. Ingat: nyeberang dalan kudu tengak-tengok dhisit!'};
 NPC_QUEST_DEFS.bagas = {questName:'Kuis Mekanik Cilik', reward:150, desc:'Jawab soal peralatan bengkel dari Mas Bagas, mekanik Dealer Gerduren.', quiz:{q:'Alat untuk membuka dan mengencangkan baut pada kendaraan adalah…', opts:['kunci pas','sendok','sapu lidi'], ans:0}, doneText:'Jos! Kowe wis kenal piranti bengkel. Kendaraan sing dirawat bakal awet lan aman dinggo.'};
 NPC_QUEST_DEFS.rini = {questName:'Kuis Kesehatan UKS', reward:150, desc:'Jawab soal kesehatan dari Kak Rini, petugas Ruang UKS.', quiz:{q:'Sebelum makan, kita harus…', opts:['cuci tangan pakai sabun','langsung makan saja','tidur dulu'], ans:0}, doneText:'Betul! Cuci tangan pakai sabun membunuh kuman. Jaga kesehatan terus, ya — aja lali madhang MBG!'};
+/* BANK SOAL KUIS NPC (sistem anti-ulang): dulu tiap NPC hanya punya SATU soal
+   yang sama selamanya. Sekarang tiap pemberi quest kuis punya bank 6 soal;
+   soal hari ini dipilih pickFreshOne (benih tanggal + riwayat qSeen), jadi
+   berbeda setiap hari dan tidak diulang sampai banknya habis. Soal pertama
+   tiap bank = soal lama NPC itu (isi quiz di atas tetap sebagai cadangan). */
+NPC_QUEST_DEFS.kepsek.quizBank = [
+  {q:'Ibu kota Kabupaten Banyumas adalah…', opts:['Purwokerto','Cilacap','Purbalingga'], ans:0},
+  {q:'Lambang negara Indonesia adalah…', opts:['Garuda Pancasila','Banteng','Pohon Beringin'], ans:0},
+  {q:'Sikap yang baik saat upacara bendera adalah…', opts:['berdiri tegak dan khidmat','bermain dengan teman','berbicara sendiri'], ans:0},
+  {q:'Hari Pendidikan Nasional diperingati setiap tanggal…', opts:['2 Mei','17 Agustus','1 Juni'], ans:0},
+  {q:'Bapak Pendidikan Nasional Indonesia adalah…', opts:['Ki Hajar Dewantara','Ir. Soekarno','R.A. Kartini'], ans:0},
+  {q:'Anak yang datang ke sekolah tepat waktu menunjukkan sikap…', opts:['disiplin','malas','sombong'], ans:0}
+];
+NPC_QUEST_DEFS.penjaga.quizBank = [
+  {q:'Kalau menemukan benda tajam yang berbahaya di sekolah, kamu harus…', opts:['Membawanya pulang','Melapor ke Pak Penjaga atau Bapak/Ibu Guru','Membuangnya ke sungai'], ans:1},
+  {q:'Saat pulang sekolah, anak yang belum dijemput sebaiknya…', opts:['menunggu di dalam gerbang sekolah','ikut orang yang tidak dikenal','berjalan pulang sendirian jauh'], ans:0},
+  {q:'Melihat orang asing masuk sekolah tanpa izin, kamu harus…', opts:['melapor ke Pak Penjaga atau guru','membiarkannya saja','mengikutinya diam-diam'], ans:0},
+  {q:'Pagar dan gerbang sekolah ditutup pada malam hari supaya…', opts:['sekolah aman dari gangguan','anak tidak bisa bermain','terlihat bagus'], ans:0},
+  {q:'Kalau ada barang hilang di sekolah, tempat bertanya yang tepat adalah…', opts:['Pak Penjaga atau Bapak/Ibu Guru','teman di kelas lain','dibiarkan saja'], ans:0},
+  {q:'Anak yang baik saat melewati gerbang sekolah akan…', opts:['berpamitan dan bersikap sopan','berlari sekencang-kencangnya','mendorong teman'], ans:0}
+];
+NPC_QUEST_DEFS.yanda.quizBank = [
+  {q:'Arah mata angin tempat matahari terbit adalah…', opts:['Timur','Barat','Utara'], ans:0},
+  {q:'Arah mata angin tempat matahari terbenam adalah…', opts:['Timur','Barat','Selatan'], ans:1},
+  {q:'Sikap badan saat hormat kepada bendera adalah…', opts:['tegak dan pandangan ke bendera','membungkuk','duduk santai'], ans:0},
+  {q:'Warna hasduk (setangan leher) Pramuka Siaga adalah…', opts:['hijau','merah-putih','biru'], ans:0},
+  {q:'Ikatan untuk menyambung dua tongkat sejajar disebut ikatan…', opts:['palang','pangkal','mati'], ans:0},
+  {q:'Sebelum berkemah, perlengkapan yang WAJIB dicek adalah…', opts:['tenda, tali, dan peralatan masak','mainan dan boneka','buku komik'], ans:0}
+];
+NPC_QUEST_DEFS.ratna.quizBank = [
+  {q:'Sinonim (persamaan kata) dari "gembira" adalah…', opts:['senang','sedih','marah'], ans:0},
+  {q:'Tempat menyimpan dan meminjam buku di sekolah disebut…', opts:['perpustakaan / pojok baca','kantin','ruang UKS'], ans:0},
+  {q:'Sebelum meminjam buku, kita harus…', opts:['mencatat peminjaman dan merawat bukunya','melipat halaman buku','menulis di halaman buku'], ans:0},
+  {q:'Bagian buku yang menunjukkan judul dan pengarang di bagian depan disebut…', opts:['sampul buku','daftar isi','halaman terakhir'], ans:0},
+  {q:'Pesan moral dari cerita "Kancil dan Buaya" adalah…', opts:['cerdik dan berani menghadapi kesulitan','suka berbohong kepada teman','malas berusaha'], ans:0},
+  {q:'Membaca buku setiap hari membuat kita…', opts:['tambah pintar dan banyak pengetahuan','cepat mengantuk selamanya','lupa pelajaran'], ans:0}
+];
+NPC_QUEST_DEFS.darmi.quizBank = [
+  {q:'Es teh Rp3.000 lan roti Rp2.000. Total belanjane…', opts:['Rp5.000','Rp4.000','Rp6.000'], ans:0},
+  {q:'Bakso Rp5.000 dibayar nganggo uang Rp10.000. Kembaliane…', opts:['Rp4.000','Rp5.000','Rp6.000'], ans:1},
+  {q:'Telu bungkus permen, saben bungkus Rp1.000. Total bayare…', opts:['Rp2.000','Rp3.000','Rp4.000'], ans:1},
+  {q:'Jajanan sing sehat kanggo anak sekolah yaiku…', opts:['buah lan susu','permen wae saben dina','minuman bersoda wae'], ans:0},
+  {q:'Sadurunge mangan jajanan, tangan kudu…', opts:['dicuci resik nganggo sabun','langsung mangan wae','diusap nang klambi'], ans:0},
+  {q:'Susu kotak Rp3.500 lan jeruk Rp2.500. Total belanjane…', opts:['Rp5.000','Rp6.000','Rp7.000'], ans:1}
+];
+NPC_QUEST_DEFS.slamet.quizBank = [
+  {q:'Tanaman obat yang biasa ditanam di pekarangan untuk menghangatkan badan adalah…', opts:['jahe','padi','mangga'], ans:0},
+  {q:'Padi yang sudah menguning tandanya…', opts:['siap dipanen','baru ditanam','kekeringan'], ans:0},
+  {q:'Alat tradisional untuk membajak sawah yang ditarik kerbau adalah…', opts:['luku (bajak)','cangkul saja','galah'], ans:0},
+  {q:'Supaya padi tumbuh subur, sawah membutuhkan…', opts:['air yang cukup dan pupuk','aspal','pasir pantai'], ans:0},
+  {q:'Hama yang paling sering menyerang tanaman padi adalah…', opts:['wereng dan tikus','kupu-kupu','lebah madu'], ans:0},
+  {q:'Tanaman obat untuk jamu beras kencur adalah…', opts:['kencur','bayam','cabai rawit'], ans:0}
+];
+NPC_QUEST_DEFS.bima.quizBank = [
+  {q:'Lampu lalu lintas berwarna merah artinya semua kendaraan harus…', opts:['berhenti','jalan terus','membunyikan klakson'], ans:0},
+  {q:'Lampu lalu lintas berwarna hijau artinya kendaraan boleh…', opts:['jalan','berhenti','parkir'], ans:0},
+  {q:'Saat menyeberang jalan, urutan yang benar adalah…', opts:['berhenti, tengok kanan-kiri-kanan, lalu menyeberang','langsung berlari','menyeberang sambil bermain HP'], ans:0},
+  {q:'Anak di bawah umur bolehkah mengendarai sepeda motor di jalan raya?', opts:['Tidak boleh — berbahaya dan melanggar aturan','Boleh kalau pelan','Boleh kalau dekat rumah'], ans:0},
+  {q:'Rambu bergambar anak menyeberang di dekat sekolah artinya pengendara harus…', opts:['hati-hati dan mengurangi kecepatan','tancap gas','membunyikan klakson terus'], ans:0},
+  {q:'Tempat menunggu kendaraan umum (bus) yang aman adalah…', opts:['halte / terminal','tengah jalan raya','tikungan tajam'], ans:0}
+];
+NPC_QUEST_DEFS.bagas.quizBank = [
+  {q:'Alat untuk membuka dan mengencangkan baut pada kendaraan adalah…', opts:['kunci pas','sendok','sapu lidi'], ans:0},
+  {q:'Ban sepeda yang kempis diisi dengan…', opts:['pompa angin','air','pasir'], ans:0},
+  {q:'Bagian sepeda yang berbunyi "kring-kring" untuk memberi tanda adalah…', opts:['bel sepeda','rantai','sadel'], ans:0},
+  {q:'Kendaraan harus diservis secara rutin supaya…', opts:['awet dan aman dipakai','cepat rusak','boros bensin'], ans:0},
+  {q:'Alat untuk mengangkat mobil saat mengganti ban adalah…', opts:['dongkrak','ember','payung'], ans:0},
+  {q:'Sebelum berkendara jauh, yang WAJIB diperiksa adalah…', opts:['rem, ban, dan bahan bakar','warna cat saja','klakson saja'], ans:0}
+];
+NPC_QUEST_DEFS.rini.quizBank = [
+  {q:'Sebelum makan, kita harus…', opts:['cuci tangan pakai sabun','langsung makan saja','tidur dulu'], ans:0},
+  {q:'Gosok gigi yang baik dilakukan…', opts:['pagi setelah sarapan dan malam sebelum tidur','sebulan sekali','hanya saat gigi sakit'], ans:0},
+  {q:'Kalau merasa pusing dan lemas di sekolah, kamu harus…', opts:['melapor ke guru dan beristirahat di Ruang UKS','diam saja sampai pulang','berlari ke lapangan'], ans:0},
+  {q:'Makanan bergizi yang membuat tulang kuat adalah yang mengandung…', opts:['kalsium, misalnya susu','gula saja','pewarna'], ans:0},
+  {q:'Saat batuk atau bersin, mulut sebaiknya…', opts:['ditutup dengan siku atau tisu','dibiarkan terbuka ke arah teman','ditutup tangan lalu memegang makanan'], ans:0},
+  {q:'Air minum yang sehat untuk dibawa ke sekolah adalah…', opts:['air putih matang dalam botol sendiri','air keran mentah','minuman bersoda setiap hari'], ans:0}
+];
 function npcMesh(geo, color){ return new THREE.Mesh(geo, mat(color)); }
 function propArm(inst, mesh, y, z){
   var f = inst.fig3;
@@ -16551,7 +16809,7 @@ function renderFarmPanel(){
 }
 function renderFarmQuiz(i){
   var st = eco.farm.plots[i]; if(!st) return;
-  var Q = FARM_QUIZ[Math.floor(Math.random() * FARM_QUIZ.length)];
+  var Q = pickFreshOne(FARM_QUIZ, 'kebun|' + questTodayStr() + '|' + Date.now()) || FARM_QUIZ[0]; // anti-ulang: soal Pupuk Cerdas tidak mengulang soal yang sudah dijawab
   var body = document.getElementById('farmBody');
   document.getElementById('farmSub').textContent = 'Pupuk Cerdas: jawab BENAR untuk mempercepat pertumbuhan +50%!';
   body.innerHTML = '';
@@ -18346,7 +18604,7 @@ function openRazia(idx){
     body.appendChild(done);
     return;
   }
-  var Q = RAZIA_QUIZ[Math.floor(Math.random() * RAZIA_QUIZ.length)];
+  var Q = pickFreshOne(RAZIA_QUIZ, 'razia|' + idx + '|' + questTodayStr()) || RAZIA_QUIZ[0]; // anti-ulang: pertanyaan razia hari ini berbeda dari yang sudah pernah dijawab
   var qEl = document.createElement('div'); qEl.className = 'farm-quiz-q'; qEl.textContent = Q.q; body.appendChild(qEl);
   var opts = document.createElement('div'); opts.className = 'farm-quiz-opts';
   var order = Q.o.map(function(t, ix){ return {t:t, ok:ix === Q.a}; });
