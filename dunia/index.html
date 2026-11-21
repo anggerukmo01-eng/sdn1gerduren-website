@@ -4054,8 +4054,15 @@ var heliGroup = new THREE.Group(), heliRotor = null;
      Lapangan Voli Pantai (VOL -70, 120) ke arah timur/laut. Kini dipindah
      ke barisan latar utara (-38, -104) — sejajar dua gunung kerucut
      (z -96 & -100), di luar batas jalan pemain (minZ -90): murni pemandangan
-     tepi desa, tidak lagi menghalangi view di pantai maupun lapangan voli. */
-  [[-104, 10, 15, 5.5], [58, 105, 17, 6.5], [-38, -104, 13, 4.5]].forEach(function(h){
+     tepi desa, tidak lagi menghalangi view di pantai maupun lapangan voli.
+     PERBAIKAN AKSES PANTAI (lanjutan): kubah kedua di (58, 105) — r=17 m,
+     tinggi 6,5 m, kakinya x 41..75 / z 88..122 — adalah gunung terakhir
+     yang masih berdiri di dekat pantai (sisi timur), menutupi pandangan
+     ke laut dari kawasan selatan dan menghalangi jalur menyusuri pantai
+     ke arah timur. Kubah itu DIHAPUS: bentang alam besar kini hanya di
+     tepi barat (-104, 10) dan latar utara (-38, -104) plus dua gunung
+     kerucut utara — seluruh kawasan pantai & laut bebas gunung. */
+  [[-104, 10, 15, 5.5], [-38, -104, 13, 4.5]].forEach(function(h){
     var hill = new THREE.Mesh(new THREE.SphereGeometry(h[2], 18, 12), mat(0x5db34c));
     hill.scale.y = h[3] / h[2]; hill.position.set(h[0], 0, h[1]); hill.receiveShadow = true; scene.add(hill);
   });
@@ -15197,8 +15204,18 @@ sawahBridge(58, -27); sawahBridge(-58, 84); sawahBridge(30, 84);
 (function boundaryHills(){
   var geo = new THREE.ConeGeometry(1, 1, 7);
   var m1 = mat(0x3f9e4d), m2 = mat(0x2f8f43), pts = [], x, z, i;
-  for(x = -112; x <= 112; x += 16){ pts.push([x + (Math.random() * 4 - 2), -94]); pts.push([x + (Math.random() * 4 - 2), 118]); }
-  for(z = -80; z <= 104; z += 16){ pts.push([-116, z]); pts.push([116, z]); }
+  /* PERBAIKAN AKSES PANTAI: baris selatan bukit batas (z = 118) DIHAPUS.
+     Baris itu warisan batas dunia lama: kerucut-kerucutnya (radius 7–12 m)
+     duduk TEPAT di atas hamparan pasir Pantai Pasir Putih (z 106..132),
+     menelan pohon kelapa pantai, Lapangan Voli Pantai, payung pantai, dan
+     memotong jalan dari pasir menuju Dermaga & laut — inilah "gunung di
+     dekat pantai" yang masih menghalangi akses ke laut. Kini batas selatan
+     desa adalah laut itu sendiri (pemain dijepit batas dunia z maks 242),
+     jadi tidak ada lagi obyek yang berhimpitan dengan kawasan pantai.
+     Kolom tepi barat/timur juga dipangkas sampai z = 80 agar kerucut
+     terakhirnya tidak menyentuh sudut barat-laut hamparan pasir pantai. */
+  for(x = -112; x <= 112; x += 16){ pts.push([x + (Math.random() * 4 - 2), -94]); }
+  for(z = -80; z <= 80; z += 16){ pts.push([-116, z]); pts.push([116, z]); }
   pts.forEach(function(p, i){
     var s = 7 + (i % 4) * 1.7;
     var cone = new THREE.Mesh(geo, i % 2 ? m1 : m2);
@@ -17800,6 +17817,7 @@ setInterval(function(){
 /* ================= PANTAI PASIR PUTIH, LAUT & PULAU TROPIS ================= */
 INFO['Pantai Pasir Putih'] = 'Pantai Pasir Putih di selatan Desa Gerduren: pasir lembut, pohon kelapa, batu karang, dan Dermaga kayu. Naik Perahu Nelayan (gratis) atau Speedboat dari dermaga untuk berlayar ke Pulau Tropis!';
 INFO['Dermaga Pantai'] = 'Dermaga kayu Pantai Pasir Putih. Di ujung dermaga kamu bisa MEMANCING, dan dari sini Perahu Nelayan & Speedboat berangkat melintasi laut menuju Pulau Tropis.';
+INFO['Jalan Pantai'] = 'Jalan Pantai: jalan beraspal dari Jalan Lingkar Selatan menuju Pantai Pasir Putih, membelah celah di antara dua petak sawah. Ujung jalannya tepat di Dermaga Pantai — dari sana tinggal beberapa langkah ke pasir & laut, atau naik perahu ke Pulau Tropis. Tidak ada lagi gunung atau bukit yang menghalangi jalan ke pantai!';
 INFO['Pulau Tropis'] = 'Pulau Tropis Indah di seberang laut: pasir putih melingkar, pohon kelapa, batu karang untuk memancing, dan lapangan Voli Pantai. Berlabuhlah di dermaga kecil sisi selatan pulau!';
 INFO['Perahu Nelayan'] = 'Perahu Nelayan gratis di Dermaga Pantai. Tekan Aksi untuk mengemudikannya melintasi laut — arahkan ke dermaga kecil Pulau Tropis, lalu tekan Turun untuk berlabuh.';
 INFO['Speedboat'] = 'Speedboat merah-putih milikmu (dibeli di Kopdes) — jauh lebih cepat dari Perahu Nelayan. Tekan Aksi di dermaga untuk melesat ke Pulau Tropis!';
@@ -17815,7 +17833,26 @@ var seaMesh = null;
   flat(150, 44, 0x79c25f, -52, 113, scene, -0.03);                         // alas rumput bawah pantai & jalan masuknya
   flat(164, 160, 0x79c25f, 0, 335, scene, -0.03);                          // alas rumput strip interior di selatan laut
   flat(104, 26, 0xf2e2ac, -58, 119, scene, 0.015);                         // pasir Pantai Pasir Putih
-  flat(5.5, 32, 0xd9cfae, -60, 98, scene, 0.02);                           // jalan setapak dari Jalan Lingkar ke pantai
+  /* JALAN PANTAI: jalan beraspal resmi menggantikan jalan setapak tanah
+     lama (5,5 m di x -60, berhenti di z 114) yang menembus petak Sawah
+     (-58, 97) dan menindih jembatan sawahnya. Jalan baru memakai celah
+     kosong DI ANTARA dua petak sawah selatan (petak sawah barat berakhir
+     di x -45,7 dan collider pematang timurnya di x -44,3; sawah timur
+     mulai di x 17): lebar 5,0 m di x -44,2..-39,2 (pusat -41,7), lurus
+     dari Jalan Lingkar Selatan (z 79) sampai z 128 — ujungnya tepat di
+     mulut Dermaga (papan dermaga di (-42,5, 130,5) berdiri di pasir di
+     depan ujung jalan), tinggal beberapa langkah ke bibir pantai & air
+     laut (z 137). Kelapa pantai (-38, 116) berjarak aman 0,67 m dari
+     tepi timur jalan. Lengkap dengan garis tepi, marka tengah, papan
+     petunjuk di persimpangan Jalan Lingkar, dan 3 lampu jalan di luar
+     badan jalan — tak satu pun menimpa obyek lama. */
+  flat(5.0, 49, 0x6b7280, -41.7, 103.5, scene, 0.032);                     // badan Jalan Pantai
+  flat(0.22, 49, 0xf8fafc, -43.9, 103.5, scene, 0.038);                    // garis tepi barat
+  flat(0.22, 49, 0xf8fafc, -39.5, 103.5, scene, 0.038);                    // garis tepi timur
+  for(var mz = 83; mz <= 125; mz += 4) flat(0.28, 1.8, 0xfde68a, -41.7, mz, scene, 0.038);   // marka tengah putus-putus
+  postSign('Pantai Pasir Putih', -36.6, 86.5, Math.PI, {w:3.2, bg:'#0284c7', fg:'#ffffff'}); // papan petunjuk di mulut jalan, sisi timur (tiang terdekat 1,75 m dari tepi jalan)
+  lampPost(-38.5, 96); lampPost(-45.2, 112); lampPost(-38.5, 124);         // lampu Jalan Pantai (tiang & collider di luar badan jalan, berselang-seling sisi)
+  addInteractable(-41.7, 86, 4.5, 'Jalan Pantai');
   flat(104, 10, 0xf7ecc8, -58, 131, scene, 0.01);                          // bibir pantai
   seaMesh = new THREE.Mesh(new THREE.PlaneGeometry(150, 128), new THREE.MeshLambertMaterial({color:0x2ea6dd, transparent:true, opacity:0.92}));
   seaMesh.rotation.x = -Math.PI / 2; seaMesh.position.set(-52, -0.28, 198); scene.add(seaMesh);
@@ -17840,6 +17877,7 @@ var seaMesh = null;
   labelAt('Pantai Pasir Putih', -58, 3.4, 118, 0.85);
   addInteractable(-46, 152, 3.4, 'Spot Memancing', null, {fish:'laut'});
   zones.push({name:'Pantai Pasir Putih', minX:-112, maxX:-12, minZ:104, maxZ:133});
+  zones.push({name:'Jalan Pantai', minX:-44.2, maxX:-39.2, minZ:80, maxZ:128});
   zones.push({name:'Laut & Pulau Tropis', minX:-126, maxX:8, minZ:133, maxZ:244});
 })();
 /* ---------- Percantik Laut, Pulau Tropis & Pantai Pasir Putih ----------
@@ -18400,6 +18438,7 @@ document.getElementById('photoClose').addEventListener('click', function(){ phot
 DESTS.push(
   {name:'Kopdes Merah Putih Gerduren', x:-11, z:40, kind:'tempat', label:'Kopdes'},
   {name:'Pantai Pasir Putih', x:-58, z:118, kind:'tempat', label:'Pantai'},
+  {name:'Jalan Pantai', x:-41.7, z:104, kind:'tempat', label:'Jln. Pantai'},
   {name:'Dermaga Pantai', x:-46, z:148, kind:'tempat', label:'Dermaga'},
   {name:'Pulau Tropis', x:-92, z:198, kind:'tempat', label:'Pulau Tropis'},
   {name:'Pos Razia Barat', x:-101, z:52, kind:'tempat', label:'Razia'},
@@ -18446,7 +18485,7 @@ function mapShowInfo(d){
   el('line', {x1:0, y1:264, x2:440, y2:264, stroke:'#ffffff', 'stroke-width':2, 'stroke-dasharray':'10 8', opacity:0.75}, extra); // garis tengah jalan utama
   el('line', {x1:220, y1:162, x2:220, y2:264, stroke:'#ffffff', 'stroke-width':2, 'stroke-dasharray':'10 8', opacity:0.75}, extra);
   /* pantai, laut & pulau */
-  el('rect', {x:97, y:328, width:6, height:92, fill:'#d9cfae'}, extra);
+  el('rect', {x:132, y:318, width:10, height:98, fill:'#4b5563'}, extra);
   el('rect', {x:0, y:380, width:440, height:64, fill:'#fde68a'}, extra);
   el('rect', {x:0, y:444, width:440, height:216, fill:'#38b6e8'}, extra);
   el('ellipse', {cx:36, cy:566, rx:34, ry:30, fill:'#fde68a'}, extra);
