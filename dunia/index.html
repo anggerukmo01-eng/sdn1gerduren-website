@@ -5666,8 +5666,8 @@ function updateInteract(){
     if(currentTarget !== WAKE_OFF){ currentTarget = WAKE_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = 'Bangun Tidur'; }
     return;
   }
-  if(typeof wahanaRide !== 'undefined' && wahanaRide && (wahanaRide.type === 'swing' || wahanaRide.type === 'merry')){
-    // sedang naik ayunan / komidi putar: tombol Aksi menjadi Turun Wahana
+  if(typeof wahanaRide !== 'undefined' && wahanaRide && (wahanaRide.type === 'swing' || wahanaRide.type === 'merry' || wahanaRide.type === 'bouncy' || wahanaRide.type === 'train')){
+    // sedang naik wahana berkelanjutan (ayunan / komidi / istana balon / kereta): tombol Aksi menjadi Turun Wahana
     if(currentTarget !== WAHANA_OFF){ currentTarget = WAHANA_OFF; actionBtn.classList.add('ready'); actionLabel.textContent = '⬇ Turun Wahana'; }
     return;
   }
@@ -5697,7 +5697,7 @@ function updateInteract(){
   }
   if(best !== currentTarget){
     currentTarget = best;
-    if(best){ actionBtn.classList.add('ready'); actionLabel.textContent = best.name; }
+    if(best){ actionBtn.classList.add('ready'); actionLabel.textContent = (best.wahana && typeof WAHANA_PRICES !== 'undefined' && WAHANA_PRICES[best.wahana]) ? best.name + ' • ' + WAHANA_PRICES[best.wahana] + ' Kredit' : best.name; }
     else { actionBtn.classList.remove('ready'); actionLabel.textContent = 'Aksi'; }
   }
   if(infoTarget && infoTarget !== currentTarget) hideInfo();
@@ -6233,6 +6233,7 @@ var AudioSys = (function(){
       case 'lock':    tone(220, 0, 0.1, 'square', 0.04); tone(330, 0.09, 0.12, 'square', 0.04); break;
       case 'crash':   tone(140, 0, 0.25, 'sawtooth', 0.07, 60); break;
       case 'beep':    tone(880, 0, 0.07, 'square', 0.035); break;
+      case 'splash':  tone(620, 0, 0.16, 'sine', 0.06, 180); tone(880, 0.05, 0.1, 'sine', 0.04, 300); tone(520, 0.1, 0.14, 'sine', 0.045, 150); break;
     }
   }
   return {
@@ -7159,13 +7160,14 @@ function mountBike(g, spot){
   if(swimOn){ showToast('Kamu sedang berenang! Berenanglah ke tepi dulu untuk naik sepeda.', 3200); return; }   // FSM: larang naik kendaraan darat saat berenang
   g = g || bike; spot = spot || bikeSpot;
   riding = true; activeBike = g; activeBikeSpot = spot;
+  vehSpeed = 0; vehUTurn = null;
   player.position.x = g.position.x; player.position.z = g.position.z;
   player.rotation.y = g.rotation.y;
   AudioSys.sfx('bell');
-  showToast('Kamu naik sepeda! Sepeda membuatmu jauh lebih cepat. Tekan tombol Aksi untuk turun.', 4200);
+  showToast('Kamu naik sepeda! Kendali baru: KIRI = pedal GAS MAJU & REM•MUNDUR, KANAN = pad arah (Depan/Kiri/Kanan/Belakang). Tekan Turun untuk turun.', 5200);
 }
 function dismountBike(){
-  riding = false;
+  riding = false; vehSpeed = 0; vehUTurn = null;
   // sepeda tetap di tempat turun; titik interaksinya ikut pindah
   var g = activeBike || bike, sp = activeBikeSpot || bikeSpot;
   if(sp && g){ sp.x = g.position.x; sp.z = g.position.z; }
@@ -7207,14 +7209,15 @@ function mountVehicle(kind){
   var spot = null;
   for(var i = 0; i < interactables.length; i++){ if(interactables[i].game === kind) spot = interactables[i]; }
   vehDrive = {kind:kind, group:g, mul: kind === 'polisi' ? 3.0 : 2.4, spot:spot};
+  vehSpeed = 0; vehUTurn = null;
   driveColSkip = g.userData.col || null;
   player.position.x = g.position.x; player.position.z = g.position.z;
   player.rotation.y = g.rotation.y;
   AudioSys.sfx('bell');
   AudioSys.engineStart(kind === 'polisi' ? 'mobil' : 'motor');   // suara mesin kendaraan menyala
   showToast(kind === 'polisi'
-    ? 'Kamu mengendarai Mobil Polisi milikmu! Jauh lebih cepat dari jalan kaki. Tekan tombol Aksi untuk turun.'
-    : 'Kamu mengendarai Motor Trail milikmu! Ngebut keliling desa, tapi tetap hati-hati ya. Tekan tombol Aksi untuk turun.', 4600);
+    ? 'Kamu mengendarai Mobil Polisi milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah (◀ ▶ setir, ▲ lurus, ▼ putar balik). Tekan Turun untuk turun.'
+    : 'Kamu mengendarai Motor Trail milikmu! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah (◀ ▶ setir, ▲ lurus, ▼ putar balik). Tekan Turun untuk turun.', 5600);
 }
 function dismountVehicle(){
   if(!vehDrive) return;
@@ -7222,7 +7225,7 @@ function dismountVehicle(){
   // kendaraan tetap di tempat turun; titik interaksinya (arena + kendarai) ikut pindah
   if(vehDrive.spot){ vehDrive.spot.x = g.position.x; vehDrive.spot.z = g.position.z; }
   driveColSkip = null;
-  vehDrive = null;
+  vehDrive = null; vehSpeed = 0; vehUTurn = null;
   AudioSys.sfx('bell');
   AudioSys.engineStop();
   setCockpit(null);
@@ -10308,17 +10311,17 @@ function startTour(kind, manual){
       tour = { kind:'bis', manual:true, heading: busGroup.rotation.y, speed:0 };
       player.position.set(busGroup.position.x, 0, busGroup.position.z);
       player.rotation.y = tour.heading;
-      showToast('Kamu menyetir Bis sendiri! Joystick / W-A-S-D: dorong ke atas = gas, ke bawah = rem & mundur, kiri-kanan = setir. Tekan tombol Aksi untuk turun.', 6200);
+      showToast('Kamu menyetir Bis sendiri! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah (◀ ▶ setir, ▲ lurus, ▼ putar balik). Di laptop: W/S gas/mundur, A/D setir. Tekan Turun untuk turun.', 6200);
     } else {
       tour = { kind:'bis', i:0, pts:[[63,59.8],[57,50.5],[52,50.5],[52,18],[52,50.5],[100,50.5],[52,50.5],[-60,50.5],[-88,50.5],[-60,50.5],[57,50.5],[63,59.8]] };
       showToast('Bis berangkat dari Terminal! Keliling Desa Gerduren lewat jalan raya, Jembatan Sungai, dan jalan timur. Duduk manis, ya!', 4600);
     }
   } else {
     if(manual){
-      tour = { kind:'heli', manual:true, alt: heliGroup.position.y, landing:false };
+      tour = { kind:'heli', manual:true, alt: heliGroup.position.y, landing:false, hspeed:0 };
       player.position.set(heliGroup.position.x, heliGroup.position.y, heliGroup.position.z);
       flyUI.classList.add('on');
-      showToast('Kamu menerbangkan Helikopter sendiri! Joystick / W-A-S-D untuk terbang, tombol Naik & Turun (di laptop: Spasi & C) untuk ketinggian. Tekan tombol Aksi untuk mendarat & turun.', 6200);
+      showToast('Kamu menerbangkan Helikopter sendiri! Kendali: KANAN = pad arah (hadap helikopter), KIRI = GAS MAJU & REM•MUNDUR untuk melaju/mundur, tombol Naik & Turun (di laptop: Spasi & C) untuk ketinggian. Tekan Turun untuk mendarat & turun.', 6200);
     } else {
       tour = { kind:'heli', phase:'up', t:0, ang:-Math.PI/2, cx:0, cz:8, r:64, alt:21 };
       showToast('Helikopter lepas landas! Terbang berkeliling Desa Gerduren dari udara!', 4600);
@@ -10386,22 +10389,14 @@ function finishManualTour(){
     : 'Helikopter mendarat dengan selamat dan kembali ke landasannya. Terbang lagi kapan saja!', 4400);
 }
 function updateTourManual(dt){
-  // input mentah: joystick, atau WASD (semua relatif kamera untuk helikopter)
-  var ix = joy.x * joy.mag, iy = joy.y * joy.mag;
-  if(!joy.active){
-    if(keys['KeyW']) iy -= 1; if(keys['KeyS']) iy += 1;
-    if(keys['KeyA']) ix -= 1; if(keys['KeyD']) ix += 1;
-    var kl = Math.hypot(ix, iy); if(kl > 1){ ix /= kl; iy /= kl; }
-  }
+  // Kendali baku: KIRI pedal gas maju/mundur, KANAN pad arah (lihat vehReadInput).
+  // Dibaca mentah karena uiBlocked() selalu true selama tour berjalan.
+  var inp = vehReadInput(false);
   if(tour.kind === 'bis'){
     var bp = busGroup.position;
-    var throttle = -iy; // dorong joystick ke atas / W = maju
-    var target = throttle >= 0 ? throttle * 13 : throttle * 6; // mundur maks 6
-    tour.speed += (target - tour.speed) * Math.min(1, dt * 2.4);
-    if(Math.abs(tour.speed) > 0.2){
-      // setir: belok makin terasa saat bis berjalan; mundur = arah setir terbalik (seperti mobil sungguhan)
-      tour.heading -= ix * dt * 1.15 * (tour.speed >= 0 ? 1 : -1) * Math.min(1, Math.abs(tour.speed) / 5 + 0.2);
-    }
+    var target = inp.throttle > 0 ? 13 : (inp.throttle < 0 ? -6 : 0); // maju maks 13, mundur maks 6
+    tour.speed = vehApproach(tour.speed, target, (inp.throttle !== 0 ? 7 : 9) * dt);
+    tour.heading = vehCockpitSteer(tour.heading, inp, tour.speed, 1.15, dt);
     bp.x += Math.sin(tour.heading) * tour.speed * dt;
     bp.z += Math.cos(tour.heading) * tour.speed * dt;
     AudioSys.engineSet(Math.abs(tour.speed) / 13);
@@ -10421,20 +10416,19 @@ function updateTourManual(dt){
       if(tour.alt <= 0) finishManualTour();
       return;
     }
-    var mx = Math.sin(camYaw) * (-iy) + (-Math.cos(camYaw)) * ix;
-    var mz = Math.cos(camYaw) * (-iy) + (Math.sin(camYaw)) * ix;
-    var ml = Math.hypot(mx, mz); if(ml > 1){ mx /= ml; mz /= ml; }
-    hp.x += mx * 17 * dt; hp.z += mz * 17 * dt;
+    // Pad arah (relatif kamera) menentukan hadap hidung helikopter; pedal
+    // GAS MAJU / REM•MUNDUR menggerakkannya maju/mundur mengikuti hadap itu.
+    var want = vehPadWant(camYaw, inp);
+    if(want !== null) heliGroup.rotation.y = vehTurnToward(heliGroup.rotation.y, want, 2.2 * dt);
+    var fwdT = inp.throttle > 0 ? 17 : (inp.throttle < 0 ? -9 : 0);
+    tour.hspeed = vehApproach(tour.hspeed || 0, fwdT, 26 * dt);
+    hp.x += Math.sin(heliGroup.rotation.y) * tour.hspeed * dt;
+    hp.z += Math.cos(heliGroup.rotation.y) * tour.hspeed * dt;
     hp.x = Math.max(-112, Math.min(112, hp.x)); hp.z = Math.max(-88, Math.min(112, hp.z));
     var up = (keys['Space'] || flyUp) ? 1 : 0, dn = (keys['KeyC'] || flyDown) ? 1 : 0;
     tour.alt += (up - dn) * 9 * dt;
     tour.alt = Math.max(0, Math.min(26, tour.alt));
     hp.y = tour.alt;
-    if(ml > 0.12){
-      var want = Math.atan2(mx, mz), diff = want - heliGroup.rotation.y;
-      while(diff > Math.PI) diff -= Math.PI * 2; while(diff < -Math.PI) diff += Math.PI * 2;
-      heliGroup.rotation.y += Math.max(-2.4 * dt, Math.min(2.4 * dt, diff * Math.min(1, dt * 6)));
-    }
     player.position.set(hp.x, hp.y, hp.z);
     player.rotation.y = heliGroup.rotation.y;
     vy = 0; grounded = tour.alt <= 0.01;
@@ -12794,7 +12788,7 @@ function animate(){
       // Input gerak (joystick/WASD, tercermin di "moving") atau input kamera
       // (geser layar kanan / tombol panah) mengnolkan timer dan menghentikan orbit.
       var hasCamInput = camDrag.active || keys['ArrowLeft'] || keys['ArrowRight'] || keys['ArrowUp'] || keys['ArrowDown'];
-      if(moving || hasCamInput || droneMode || uiBlocked() || vehDrive){
+      if(moving || hasCamInput || droneMode || uiBlocked() || vehDrive || riding || (typeof vehSpeed !== 'undefined' && Math.abs(vehSpeed) > 0.1)){
         idleTime = 0; orbiting = false;
       } else {
         idleTime += dt;
@@ -12806,7 +12800,14 @@ function animate(){
         // jadi separuh putaran menampilkan wajah karakter, separuhnya lagi sekelilingnya.
         camYawT += ORBIT_SPEED * dt;
       }
-      if(moving){
+      /* KENDALI KENDARAAN (sepeda & kendaraan milik sendiri): gerak diatur
+         vehGroundStep — KIRI pedal gas maju/mundur, KANAN pad arah. Jalur
+         gerak jalan kaki di bawah dilewati selama berkendara. */
+      var vehControlled = !!(riding || vehDrive);
+      if(vehControlled){
+        vehGroundStep(dt);
+        mx = 0; mz = 0; mLen = 0; moving = false;
+      } else if(moving){
         // belok halus: laju putar dibatasi + diredam, jadi tidak liar dan tidak menyentak
         var want = Math.atan2(mx, mz);
         var diff = want - player.rotation.y;
@@ -12816,17 +12817,18 @@ function animate(){
       }
       // kecepatan naik & turun mulus (akselerasi dan pengereman lembut, termasuk saat mundur)
       // EP habis = kehabisan tenaga: kecepatan jalan tinggal separuh sampai minum susu lagi
-      // Naik sepeda: kecepatan 1,7x — menjelajah desa jadi jauh lebih cepat
-      // Shift (kiri/kanan) ditahan = lari 1,5x saat jalan kaki; naik sepeda sudah cepat dari sananya
+      // Shift (kiri/kanan) ditahan = lari 1,5x saat jalan kaki
       var sprinting = !riding && !vehDrive && !!(keys['ShiftLeft'] || keys['ShiftRight']);
-      var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (riding ? 1.7 : (vehDrive ? vehDrive.mul : 1)) * (sprinting ? 1.5 : 1) * (swimOn ? 0.45 : 1) * footBoostMul() : 0;
-      curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt*7);
-      if(curSpeed > 0.05){
-        player.position.x += Math.sin(player.rotation.y) * curSpeed * dt;
-        player.position.z += Math.cos(player.rotation.y) * curSpeed * dt;
-        walkPhase += dt * 11 * (curSpeed/10.5);
-        stepFx(dt, grounded && !swimOn && !poseMode);
-      } else { walkPhase = 0; }
+      if(!vehControlled){
+        var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (sprinting ? 1.5 : 1) * (swimOn ? 0.45 : 1) * footBoostMul() : 0;
+        curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt*7);
+        if(curSpeed > 0.05){
+          player.position.x += Math.sin(player.rotation.y) * curSpeed * dt;
+          player.position.z += Math.cos(player.rotation.y) * curSpeed * dt;
+          walkPhase += dt * 11 * (curSpeed/10.5);
+          stepFx(dt, grounded && !swimOn && !poseMode);
+        } else { walkPhase = 0; }
+      }
       if(poseMode === 'sleep'){
         // TIDUR: badan berbaring telentang di atas kasur Rumah Kamu, napas pelan teratur
         bodyG.rotation.x += (-1.5 - bodyG.rotation.x) * Math.min(1, dt*6);
@@ -12856,7 +12858,7 @@ function animate(){
         bodyG.rotation.x = 0;
         (activeBike || bike).position.set(player.position.x, 0, player.position.z);
         (activeBike || bike).rotation.y = player.rotation.y;
-        var pedal = curSpeed > 0.05 ? Math.sin(walkPhase * 1.6) * 0.28 : 0;
+        var pedal = Math.abs(curSpeed) > 0.05 ? Math.sin(walkPhase * 1.6) * 0.28 : 0;
         legL.rotation.x = -0.95 + pedal; legR.rotation.x = -0.95 - pedal;
         armL.rotation.x = -0.55; armR.rotation.x = -0.55;
         bodyG.position.y = 0.30;
@@ -16728,15 +16730,36 @@ function footBoostMul(){
   '.wd-btn{border:1.5px solid #d6c9a8;background:#fffaf0;color:#17324a;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px;}' +
   '.wd-btn.on{background:#16a34a;border-color:#16a34a;color:#fff;}' +
   '.wd-btn:disabled{opacity:.45;cursor:default;}' +
-  '#dashHUD{position:absolute;right:10px;bottom:86px;z-index:8;display:none;flex-direction:column;gap:7px;align-items:stretch;background:rgba(10,25,43,.82);border:1.5px solid rgba(255,255,255,.3);border-radius:16px;padding:10px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:172px;pointer-events:auto;}' +
-  '#dashHUD.on{display:flex;}' +
+  '#dashHUD{position:absolute;inset:0;z-index:8;display:none;pointer-events:none;}' +
+  '#dashHUD.on{display:block;}' +
+  '.dash-cap{font-family:Fredoka,sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.06em;color:#fff;text-align:center;background:rgba(10,25,43,.72);border:1.5px solid rgba(255,255,255,.3);border-radius:999px;padding:3px 6px;}' +
+  '#dashPedals{position:absolute;left:10px;bottom:calc(14px + env(safe-area-inset-bottom));width:104px;display:flex;flex-direction:column;gap:6px;pointer-events:auto;}' +
+  '#dashSpeedBox{background:rgba(10,25,43,.85);border:1.5px solid rgba(255,255,255,.3);border-radius:14px;padding:6px 4px 5px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}' +
   '#dashSpeed{font-family:Fredoka,sans-serif;color:#fff;text-align:center;line-height:1;}' +
-  '#dashSpeed b{font-size:30px;} #dashSpeed span{font-size:11px;color:#bae6fd;font-weight:700;}' +
-  '#dashGear{text-align:center;color:#fde68a;font-family:Fredoka,sans-serif;font-weight:700;font-size:12.5px;}' +
-  '.dash-row{display:flex;gap:7px;}' +
-  '.dash-btn{flex:1;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:12px;font-family:Fredoka,sans-serif;font-weight:700;font-size:13px;padding:10px 4px;cursor:pointer;min-height:46px;}' +
-  '.dash-btn:active,.dash-btn.held{background:#0284c7;}' +
-  '.dash-btn.gas{background:rgba(22,163,74,.5);} .dash-btn.brk{background:rgba(220,38,38,.45);}' +
+  '#dashSpeed b{font-size:27px;} #dashSpeed span{font-size:10.5px;color:#bae6fd;font-weight:700;}' +
+  '#dashGear{text-align:center;color:#fde68a;font-family:Fredoka,sans-serif;font-weight:700;font-size:12px;margin-top:2px;}' +
+  '#dashVehName{text-align:center;color:#e0f2fe;font-size:10.5px;font-weight:800;line-height:1.25;padding:0 2px;}' +
+  '.pedal{border:2px solid rgba(255,255,255,.45);color:#fff;border-radius:16px;font-family:Fredoka,sans-serif;font-weight:700;font-size:14.5px;padding:9px 4px 8px;cursor:pointer;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.15;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 6px 16px rgba(10,25,43,.35);}' +
+  '.pedal .ped-arrow{font-size:19px;line-height:1;}' +
+  '.pedal small{font-family:Nunito,sans-serif;font-size:9.5px;font-weight:800;opacity:.85;line-height:1.2;text-align:center;}' +
+  '.pedal.gas{background:linear-gradient(180deg,#22c55e,#15803d);}' +
+  '.pedal.brk{background:linear-gradient(180deg,#f87171,#b91c1c);}' +
+  '.pedal.held{filter:brightness(1.35);transform:scale(.96);}' +
+  '#dashPadWrap{position:absolute;right:10px;bottom:calc(14px + env(safe-area-inset-bottom));width:172px;display:flex;flex-direction:column;gap:6px;pointer-events:auto;}' +
+  '#dashPad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:rgba(10,25,43,.72);border:1.5px solid rgba(255,255,255,.3);border-radius:18px;padding:7px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}' +
+  '.pad-btn{border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;border-radius:13px;font-family:Fredoka,sans-serif;font-weight:700;font-size:17px;padding:5px 2px 4px;cursor:pointer;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;touch-action:none;user-select:none;-webkit-user-select:none;}' +
+  '.pad-btn small{font-family:Nunito,sans-serif;font-size:9.5px;font-weight:800;opacity:.9;}' +
+  '.pad-btn.held{background:#0284c7;transform:scale(.94);}' +
+  '.pad-hub{display:grid;place-items:center;font-size:19px;}' +
+  '.pad-empty{display:block;}' +
+  '.dash-row2{display:flex;gap:6px;}' +
+  '.dash-btn{flex:1;border:1.5px solid rgba(255,255,255,.35);background:rgba(10,25,43,.8);color:#fff;border-radius:12px;font-family:Fredoka,sans-serif;font-weight:700;font-size:13px;padding:10px 4px;cursor:pointer;min-height:46px;touch-action:none;}' +
+  '.dash-btn:active{background:#0284c7;}' +
+  '.dash-btn.exit{background:#b91c1c;}' +
+  '.dash-kbd{display:none;font-size:10px;font-weight:800;color:#fff;text-align:center;background:rgba(10,25,43,.6);border-radius:8px;padding:3px 5px;line-height:1.35;}' +
+  'body.laptop .dash-kbd{display:block;}' +
+  '#hud.driving #jumpBtn,#hud.driving #actionBtn{opacity:0!important;pointer-events:none!important;}' +
+  '#flyUI{right:12px!important;bottom:calc(296px + env(safe-area-inset-bottom))!important;}' +
   '#exitRideBtn{position:absolute;left:50%;transform:translateX(-50%);bottom:158px;z-index:8;display:none;border:none;border-radius:999px;background:#dc2626;color:#fff;font-family:Fredoka,sans-serif;font-weight:800;font-size:16px;padding:13px 26px;cursor:pointer;box-shadow:0 8px 22px rgba(220,38,38,.5);min-height:52px;}' +
   '#exitRideBtn.on{display:block;}' +
   '#photoBar{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;display:none;gap:8px;background:rgba(10,25,43,.88);padding:9px;border-radius:999px;border:1.5px solid rgba(255,255,255,.3);}' +
@@ -17189,24 +17212,110 @@ INFO['Sepeda Onthel Klasik'] = 'Sepeda Onthel Klasik milikmu dari Kopdes Merah P
 
 /* ---------- Dashboard Kendali & Tombol Turun Universal ---------- */
 var dashEl = document.createElement('div'); dashEl.id = 'dashHUD';
-dashEl.innerHTML = '<div id="dashSpeed"><b>0</b> <span>km/j</span></div><div id="dashGear">Gigi: N</div>' +
-  '<div class="dash-row"><button class="dash-btn" id="dashLeft" type="button">◀ Belok</button><button class="dash-btn" id="dashRight" type="button">Belok ▶</button></div>' +
-  '<div class="dash-row"><button class="dash-btn gas" id="dashGas" type="button">⛽ GAS</button><button class="dash-btn brk" id="dashBrake" type="button">🛑 REM</button></div>' +
-  '<div class="dash-row"><button class="dash-btn" id="dashHorn" type="button">🔔 Klakson</button><button class="dash-btn" id="dashExit" type="button">🚪 Turun</button></div>';
+dashEl.innerHTML =
+  '<div id="dashPedals"><div class="dash-cap">◀ KIRI • GAS</div>' +
+  '<div id="dashSpeedBox"><div id="dashSpeed"><b>0</b> <span>km/j</span></div><div id="dashGear">Gigi: N</div><div id="dashVehName"></div></div>' +
+  '<button class="pedal gas" id="dashGas" type="button"><span class="ped-arrow">▲</span>GAS MAJU<small>tahan untuk ngegas</small></button>' +
+  '<button class="pedal brk" id="dashRev" type="button"><span class="ped-arrow">▼</span>REM • MUNDUR<small>tahan: rem, lalu mundur</small></button></div>' +
+  '<div id="dashPadWrap"><div class="dash-cap">ARAH • KANAN ▶</div>' +
+  '<div id="dashPad">' +
+  '<span class="pad-empty"></span><button class="pad-btn" id="padUp" type="button">▲<small>Depan</small></button><span class="pad-empty"></span>' +
+  '<button class="pad-btn" id="padLeft" type="button">◀<small>Kiri</small></button><span class="pad-hub">🧭</span><button class="pad-btn" id="padRight" type="button">▶<small>Kanan</small></button>' +
+  '<span class="pad-empty"></span><button class="pad-btn" id="padDown" type="button">▼<small>Belakang</small></button><span class="pad-empty"></span>' +
+  '</div>' +
+  '<div class="dash-row2"><button class="dash-btn" id="dashHorn" type="button">🔔 Klakson</button><button class="dash-btn exit" id="dashExit" type="button">🚪 Turun</button></div>' +
+  '<div class="dash-kbd">W = Gas Maju • S = Rem/Mundur<br>A/D = Arah Kiri/Kanan</div></div>';
 document.getElementById('hud').appendChild(dashEl);
+/* ================= KENDALI KENDARAAN: PEDAL KIRI + PAD ARAH KANAN =================
+   Logika baku untuk SEMUA kendaraan (sepeda, motor, mobil polisi, bis manual,
+   perahu/speedboat, helikopter manual):
+   • KIRI = pedal gas: GAS MAJU mempercepat ke depan (dari mundur: mengerem
+     dulu sampai berhenti, baru maju); REM•MUNDUR mengerem saat melaju ke
+     depan, dan mundur saat sudah berhenti/diam. Tanpa pedal = meluncur
+     berhenti perlahan (gesekan).
+   • KANAN = pad arah 4 penjuru (Depan/Kiri/Kanan/Belakang, bisa diagonal):
+     - Kendaraan kamera luar (sepeda, perahu, helikopter): arah dihitung
+       relatif ke kamera/layar — hidung kendaraan berbelok mulus (laju putar
+       dibatasi) menuju arah yang ditunjuk pad.
+     - Kendaraan kokpit (motor, mobil polisi, bis): ◀ ▶ = setir belok
+       (makin terasa saat berjalan; saat mundur arah setir terbalik seperti
+       mobil sungguhan), ▲ Depan = setir lurus, ▼ Belakang = putar balik
+       180° menuju target yang dikunci saat tombol mulai ditekan. */
+var vehPedal = {gas:false, rev:false};
+var vehPad = {up:false, down:false, left:false, right:false};
+var vehSpeed = 0;    // kecepatan bertanda (+ maju / − mundur) sepeda & kendaraan milik sendiri
+var vehUTurn = null; // target putar-balik 180° (mode kokpit); null = tidak aktif
+function vehWrapAngle(a){ while(a > Math.PI) a -= Math.PI * 2; while(a < -Math.PI) a += Math.PI * 2; return a; }
+function vehApproach(v, target, step){ return v < target ? Math.min(target, v + step) : Math.max(target, v - step); }
+function vehTurnToward(cur, want, maxStep){ var d = vehWrapAngle(want - cur); return cur + Math.max(-maxStep, Math.min(maxStep, d)); }
+function vehReadInput(blocked){
+  if(blocked) return {throttle:0, up:false, down:false, left:false, right:false};
+  var gas = vehPedal.gas || !!keys['KeyW'], rev = vehPedal.rev || !!keys['KeyS'];
+  return {throttle:(gas ? 1 : 0) - (rev ? 1 : 0), up:vehPad.up, down:vehPad.down,
+    left:vehPad.left || !!keys['KeyA'], right:vehPad.right || !!keys['KeyD']};
+}
+function vehPadWant(camRef, inp){
+  var ix = (inp.right ? 1 : 0) - (inp.left ? 1 : 0), iy = (inp.down ? 1 : 0) - (inp.up ? 1 : 0);
+  if(!ix && !iy) return null;
+  var mx = Math.sin(camRef) * (-iy) + (-Math.cos(camRef)) * ix;
+  var mz = Math.cos(camRef) * (-iy) + (Math.sin(camRef)) * ix;
+  return Math.atan2(mx, mz);
+}
+/* Kemudi kokpit bersama (motor / mobil polisi / bis manual): memutar `heading`
+   sesuai pad arah; mengembalikan heading baru. */
+function vehCockpitSteer(heading, inp, spd, turnRate, dt){
+  if(inp.down && vehUTurn === null && Math.abs(spd) > 0.25) vehUTurn = heading + Math.PI;
+  if(inp.up) vehUTurn = null;
+  if(vehUTurn !== null){
+    heading = vehTurnToward(heading, vehUTurn, turnRate * dt * (0.4 + 0.6 * Math.min(1, Math.abs(spd) / 6)));
+    if(Math.abs(vehWrapAngle(vehUTurn - heading)) < 0.04 || !inp.down) vehUTurn = null;
+    return heading;
+  }
+  var st = (inp.left ? 1 : 0) - (inp.right ? 1 : 0);
+  if(st && Math.abs(spd) > 0.12)
+    heading += st * turnRate * dt * (0.3 + 0.7 * Math.min(1, Math.abs(spd) / 6)) * (spd < 0 ? -1 : 1);
+  return heading;
+}
+function vehGroundStep(dt){
+  var inp = vehReadInput(uiBlocked());
+  var isVeh = !!vehDrive;
+  var maxF = isVeh ? 10.5 * vehDrive.mul : 10.5 * 1.7;
+  var maxR = maxF * 0.4;
+  var accel = isVeh ? (vehDrive.kind === 'polisi' ? 19 : 17) : 16;
+  if(isVeh){
+    player.rotation.y = vehCockpitSteer(player.rotation.y, inp, vehSpeed, vehDrive.kind === 'polisi' ? 1.7 : 1.95, dt);
+  } else {
+    var want = vehPadWant(camYaw, inp);
+    if(want !== null){
+      var tr = 3.4 * (0.35 + 0.65 * Math.min(1, Math.abs(vehSpeed) / 5 + (inp.throttle !== 0 ? 0.35 : 0)));
+      player.rotation.y = vehTurnToward(player.rotation.y, want, tr * dt);
+    }
+  }
+  var target = inp.throttle > 0 ? maxF : (inp.throttle < 0 ? -maxR : 0);
+  vehSpeed = vehApproach(vehSpeed, target, (inp.throttle !== 0 ? accel : accel * 1.2) * dt);
+  if(Math.abs(vehSpeed) > 0.01){
+    player.position.x += Math.sin(player.rotation.y) * vehSpeed * dt;
+    player.position.z += Math.cos(player.rotation.y) * vehSpeed * dt;
+    walkPhase += dt * 11 * (Math.abs(vehSpeed) / 10.5);
+  }
+  curSpeed = vehSpeed;
+}
+function bindVehHold(id, obj, prop){
+  var el = document.getElementById(id);
+  el.addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); obj[prop] = true; el.classList.add('held'); try{ el.setPointerCapture(e.pointerId); }catch(err){} });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(ev){ el.addEventListener(ev, function(){ obj[prop] = false; el.classList.remove('held'); }); });
+  el.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+}
+bindVehHold('dashGas', vehPedal, 'gas'); bindVehHold('dashRev', vehPedal, 'rev');
+bindVehHold('padUp', vehPad, 'up'); bindVehHold('padDown', vehPad, 'down');
+bindVehHold('padLeft', vehPad, 'left'); bindVehHold('padRight', vehPad, 'right');
+window.addEventListener('blur', function(){ vehPedal.gas = vehPedal.rev = false; vehPad.up = vehPad.down = vehPad.left = vehPad.right = false; vehUTurn = null; });
 var exitRideBtn = document.createElement('button');
 exitRideBtn.id = 'exitRideBtn'; exitRideBtn.type = 'button'; exitRideBtn.textContent = '🚪 Turun';
 exitRideBtn.style.pointerEvents = 'auto';
 document.getElementById('hud').appendChild(exitRideBtn);
-function bindDashHold(id, key){
-  var el = document.getElementById(id);
-  el.addEventListener('pointerdown', function(e){ e.preventDefault(); keys[key] = true; el.classList.add('held'); });
-  ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ el.addEventListener(ev, function(){ keys[key] = false; el.classList.remove('held'); }); });
-}
-bindDashHold('dashGas', 'KeyW'); bindDashHold('dashBrake', 'KeyS');
-bindDashHold('dashLeft', 'KeyA'); bindDashHold('dashRight', 'KeyD');
-document.getElementById('dashHorn').addEventListener('click', function(){ AudioSys.sfx('horn'); });
-document.getElementById('dashExit').addEventListener('click', function(){ exitRide(); });
+document.getElementById('dashHorn').addEventListener('click', function(e){ e.stopPropagation(); AudioSys.sfx('horn'); });
+document.getElementById('dashExit').addEventListener('click', function(e){ e.stopPropagation(); exitRide(); });
 exitRideBtn.addEventListener('click', function(){ exitRide(); });
 /* Parasut Otomatis untuk turun dari helikopter di ketinggian */
 var paraMesh = (function(){
@@ -17252,12 +17361,16 @@ setInterval(function(){
   dashLast.x = player.position.x; dashLast.z = player.position.z; dashLast.t = now;
   var driving = !!(vehDrive || riding || (typeof boatDrive !== 'undefined' && boatDrive) || (tourActive && tour && tour.manual));
   dashEl.classList.toggle('on', driving);
+  document.getElementById('hud').classList.toggle('driving', driving);
   if(driving){
     dashEl.querySelector('#dashSpeed b').textContent = dashLast.kmh;
-    var gear = 'N';
-    if(tourActive && tour && tour.manual && tour.kind === 'bis') gear = tour.speed > 0.4 ? 'D' : (tour.speed < -0.4 ? 'R' : 'N');
-    else if(dashLast.kmh > 1) gear = 'D';
-    document.getElementById('dashGear').textContent = 'Gigi: ' + gear + (vehDrive ? (vehDrive.kind === 'polisi' ? ' • Mobil Polisi' : ' • Motor Trail') : (typeof boatDrive !== 'undefined' && boatDrive) ? (boatDrive.kind === 'speed' ? ' • Speedboat' : ' • Perahu') : riding ? ' • Sepeda' : ' • Bis');
+    var vs = 0;
+    if(vehDrive || riding) vs = vehSpeed;
+    else if(typeof boatDrive !== 'undefined' && boatDrive) vs = boatDrive.speed;
+    else if(tourActive && tour && tour.manual) vs = tour.kind === 'bis' ? tour.speed : (tour.hspeed || 0);
+    var gear = vs > 0.4 ? 'D' : (vs < -0.4 ? 'R' : 'N');
+    document.getElementById('dashGear').textContent = 'Gigi: ' + gear;
+    document.getElementById('dashVehName').textContent = vehDrive ? (vehDrive.kind === 'polisi' ? 'Mobil Polisi' : 'Motor Trail') : (typeof boatDrive !== 'undefined' && boatDrive) ? (boatDrive.kind === 'speed' ? 'Speedboat' : 'Perahu Nelayan') : riding ? 'Sepeda' : (tourActive && tour && tour.kind === 'heli') ? 'Helikopter' : 'Bis';
   }
   var showExit = !!(tourActive || vehDrive || riding || (typeof boatDrive !== 'undefined' && boatDrive));
   exitRideBtn.classList.toggle('on', showExit && !driving);
@@ -17370,7 +17483,7 @@ function mountBoat(kind){
   boatDrive = {kind:kind, group:g, heading:g.rotation.y, speed:0, spot: kind === 'speed' ? speedSpot : perahuSpot};
   player.position.set(g.position.x, 0.3, g.position.z);
   AudioSys.sfx('bell');
-  showToast(kind === 'speed' ? 'Speedboat melesat! Joystick/WASD untuk berlayar — berlabuh di Dermaga Pantai atau dermaga kecil Pulau Tropis, lalu tekan Turun.' : 'Kamu mengemudikan Perahu Nelayan. Berlayarlah ke Pulau Tropis di seberang laut (arah selatan-barat)!', 5600);
+  showToast(kind === 'speed' ? 'Speedboat melesat! Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah. Berlabuh di Dermaga Pantai atau dermaga kecil Pulau Tropis, lalu tekan Turun.' : 'Kamu mengemudikan Perahu Nelayan. Kendali: KIRI = GAS MAJU & REM•MUNDUR, KANAN = pad arah. Berlayarlah ke Pulau Tropis di seberang laut (arah selatan-barat)!', 5600);
 }
 function boatNearDock(){
   if(Math.hypot(player.position.x + 46, player.position.z - 150) < 7) return 'pantai';
@@ -17394,12 +17507,14 @@ setInterval(function(){
   if(!boatDrive) return;
   if(typeof patrolBusy !== 'undefined' && (patrolBusy || patrolOpen)) return; // Patroli Kesehatan: perahu berhenti halus di tempat
   var dt = 0.033, g = boatDrive.group;
-  var ix = joy.x * joy.mag, iy = joy.y * joy.mag;
-  if(!joy.active){ if(keys['KeyW']) iy -= 1; if(keys['KeyS']) iy += 1; if(keys['KeyA']) ix -= 1; if(keys['KeyD']) ix += 1; }
+  // Kendali baku: KIRI pedal gas maju/mundur, KANAN pad arah relatif kamera.
+  var inp = vehReadInput(uiBlocked());
   var max = boatDrive.kind === 'speed' ? 15 : 7;
-  var target = -iy * max;
-  boatDrive.speed += (target - boatDrive.speed) * Math.min(1, dt * 1.8);
-  if(Math.abs(boatDrive.speed) > 0.3) boatDrive.heading -= ix * dt * 1.1 * Math.sign(boatDrive.speed);
+  var target = inp.throttle > 0 ? max : (inp.throttle < 0 ? -max * 0.4 : 0);
+  boatDrive.speed = vehApproach(boatDrive.speed, target, (inp.throttle !== 0 ? 5 : 6) * dt);
+  var bwant = vehPadWant(camYaw, inp);
+  if(bwant !== null && Math.abs(boatDrive.speed) > 0.25)
+    boatDrive.heading = vehTurnToward(boatDrive.heading, bwant, 1.7 * dt * (0.35 + 0.65 * Math.min(1, Math.abs(boatDrive.speed) / 6)));
   var nx = g.position.x + Math.sin(boatDrive.heading) * boatDrive.speed * dt;
   var nz = g.position.z + Math.cos(boatDrive.heading) * boatDrive.speed * dt;
   nx = Math.max(-120, Math.min(2, nx)); nz = Math.max(133, Math.min(238, nz));
@@ -18871,15 +18986,35 @@ function soccerTackle(f){
    Mini) + Kolam Renang Sekolah (Perosotan Air & Papan Loncat Indah).
    Semua wahana dimainkan real-time: pemain lain melihat gerakan yang sama
    lewat sinkronisasi posisi karakter yang sudah ada. */
-INFO['Perosotan Pelangi'] = 'Perosotan Pelangi di Taman Bermain belakang sekolah! Tekan Aksi untuk naik tangga dan meluncur duduk mengikuti lengkung perosotan warna-warni sampai mendarat di bawah.';
-INFO['Ayunan Ganda'] = 'Ayunan Ganda di Taman Bermain: tekan Aksi untuk duduk dan berayun. Tekan tombol Aksi lagi (⬇ Turun Wahana) kapan saja untuk turun.';
-INFO['Komidi Putar Mini'] = 'Komidi Putar Mini: tekan Aksi untuk naik dan berputar mengelilingi taman. Tekan tombol Aksi lagi (⬇ Turun Wahana) untuk turun.';
-INFO['Kolam Renang Sekolah'] = 'Kolam Renang Sekolah berair biru jernih dengan dasar keramik! Masuk lewat tangga di sisi selatan, meluncur lewat Perosotan Air, atau lompat dari Papan Loncat Indah — begitu masuk air, kamu otomatis berenang.';
-INFO['Perosotan Air'] = 'Perosotan Air (Water Slide): tekan Aksi untuk menaiki menara dan meluncur cepat masuk ke Kolam Renang dengan percikan air!';
-INFO['Papan Loncat Indah'] = 'Papan Loncat Indah di tepi Kolam Renang: tekan Aksi untuk berjalan ke ujung papan dan melompat masuk ke air!';
-function inPoolWater(x, z){ return x > 2.6 && x < 17.4 && z > -57.9 && z < -50.1; }
+INFO['Perosotan Pelangi'] = 'Perosotan Pelangi di Taman Bermain belakang sekolah! Tarif 10 Kredit sekali meluncur. Tekan Aksi untuk naik tangga dan meluncur duduk mengikuti lengkung perosotan warna-warni sampai mendarat di bawah.';
+INFO['Ayunan Ganda'] = 'Ayunan Ganda di Taman Bermain: tarif 5 Kredit sekali naik. Tekan Aksi untuk duduk dan berayun. Tekan tombol Aksi lagi (⬇ Turun Wahana) kapan saja untuk turun.';
+INFO['Komidi Putar Mini'] = 'Komidi Putar Mini (Carousel): tarif 10 Kredit sekali naik. Tekan Aksi untuk naik dan berputar mengelilingi taman menaiki kuda-kudaan. Tekan tombol Aksi lagi (⬇ Turun Wahana) untuk turun.';
+INFO['Kolam Renang Sekolah'] = 'Kolam Renang Sekolah yang DIPERLUAS: air biru jernih, dasar keramik, tali lintasan renang, dan dua tangga masuk (barat & timur). Masuk lewat tangga, meluncur lewat Perosotan Air, atau lompat dari Papan Loncat Indah — begitu masuk air, kamu otomatis berenang.';
+INFO['Perosotan Air'] = 'Perosotan Air (Water Slide): tarif 15 Kredit sekali meluncur. Berdiri di depan menara (papan "Naik Perosotan Air" di sisi selatan menara), tekan Aksi [E] untuk menaiki menara, lalu kamu meluncur otomatis mengikuti kurva perosotan — duduk meluncur sampai BYUR masuk ke Kolam Renang dengan percikan air, lalu otomatis berenang!';
+INFO['Papan Loncat Indah'] = 'Papan Loncat Indah di tepi Kolam Renang: tarif 5 Kredit sekali lompat. Tekan Aksi untuk berjalan ke ujung papan dan melompat masuk ke air!';
+INFO['Istana Balon'] = 'Istana Balon (Bouncy Castle) di Karnaval Pesta Rakyat: tarif 15 Kredit sekali main. Tekan Aksi di depan pintunya untuk masuk dan melompat-lompat di atas kasur balon raksasa! Tekan tombol Aksi lagi (⬇ Turun Wahana) kapan saja untuk keluar.';
+INFO['Kereta Karnaval'] = 'Kereta Karnaval: tarif 20 Kredit sekali putaran. Tekan Aksi di Stasiun Kereta Karnaval untuk naik gerbong dan berkeliling rel taman melewati tenda, stan, dan lampu hias. Tekan tombol Aksi lagi (⬇ Turun Wahana) kapan saja untuk turun di stasiun.';
+INFO['Papan Tarif Wahana'] = 'TARIF WAHANA KARNIVAL (dibayar dengan Kredit): Ayunan Ganda 5 • Papan Loncat 5 • Perosotan Pelangi 10 • Komidi Putar 10 • Istana Balon 15 • Perosotan Air 15 • Kereta Karnaval 20. Tarif juga tampil di tombol Aksi saat kamu mendekati wahana, dan Kredit dipotong tepat saat kamu naik. Kumpulkan Kredit dari Pos belajar, Quest Harian, dan mini-game!';
+INFO['Tenda Karnaval'] = 'Tenda Karnaval Pesta Rakyat: tenda warna-warni tempat warga berkumpul merayakan pesta desa. Di sekelilingnya ada stan permainan, lampu hias, dan umbul-umbul yang meriah!';
+INFO['Stan Karnaval'] = 'Stan Karnaval: stan permainan & jajanan pesta rakyat. Coba wahana di sekeliling taman: Istana Balon, Kereta Karnaval, Komidi Putar, Ayunan Ganda, dan Perosotan Pelangi!';
+function inPoolWater(x, z){ return x > 2.7 && x < 25.3 && z > -57.7 && z < -50.3; }
 var POOL_WATER = null;
 var swingGrps = [], merryGrp = null;
+/* Kereta Karnaval: rel elips di taman (pusat TRAIN_C) + gerbong-gerbongnya */
+var TRAIN_C = {x:-14, z:-55, rx:6.5, rz:4.6};
+var trainParts = [];
+function trainPoint(a){
+  var x = TRAIN_C.x + Math.cos(a) * TRAIN_C.rx, z = TRAIN_C.z + Math.sin(a) * TRAIN_C.rz;
+  var dx = -Math.sin(a) * TRAIN_C.rx, dz = Math.cos(a) * TRAIN_C.rz;
+  return {x:x, z:z, rot:Math.atan2(dx, dz)};
+}
+function trainPlace(a){
+  for(var i = 0; i < trainParts.length; i++){
+    var p = trainPoint(a + trainParts[i].off);
+    trainParts[i].g.position.set(p.x, 0.1, p.z);
+    trainParts[i].g.rotation.y = p.rot;
+  }
+}
 function chuteSegments(S, C, E, colors, sign){
   var prev = null;
   for(var i = 0; i <= 7; i++){
@@ -18896,7 +19031,7 @@ function chuteSegments(S, C, E, colors, sign){
 (function buildPlaygroundPool(){
   /* ----- lantai dasar zona (pasir taman & dek kolam): rumput tidak menembus ----- */
   flat(25, 15.5, 0xf3d9a4, -14, -54, scene, 0.04);
-  flat(21.5, 13, 0xd6d3cd, 10, -54, scene, 0.045);
+  flat(34, 13.5, 0xd6d3cd, 13.5, -54, scene, 0.045);
   /* ----- Perosotan Pelangi ----- */
   var RB = [0xef4444, 0xf97316, 0xfacc15, 0x22c55e, 0x3b82f6, 0x8b5cf6, 0xec4899, 0xef4444];
   [[-23.05,-52.35],[-20.95,-52.35],[-23.05,-50.65],[-20.95,-50.65]].forEach(function(p){
@@ -18935,26 +19070,121 @@ function chuteSegments(S, C, E, colors, sign){
     box(0.09, 0.85, 0.09, 0x374151, Math.cos(ma) * 1.6, 0.62, Math.sin(ma) * 1.6, merryGrp, false);
   }
   addCollider(-4.5, -54, 0.35, 0.35);
+  /* kuda-kudaan carousel pada tiang komidi putar (bukan di titik naik pemain) */
+  [Math.PI / 2, Math.PI, -Math.PI / 2].forEach(function(ma, hi){
+    var hx = Math.cos(ma) * 1.6, hz = Math.sin(ma) * 1.6, hcol = [0xf59e0b, 0x38bdf8, 0xf472b6][hi];
+    box(0.62, 0.34, 0.3, hcol, hx, 0.62, hz, merryGrp, false);
+    box(0.2, 0.3, 0.22, hcol, hx * 1.13, 0.85, hz * 1.13, merryGrp, false);
+    box(0.5, 0.07, 0.36, 0x92400e, hx, 0.82, hz, merryGrp, false);
+  });
   addInteractable(-4.5, -51.2, 2.7, 'Komidi Putar Mini', null, {wahana:'merry'});
   postSign('Taman Bermain', -13, -47.3, 0, {w:3.2, bg:'#db2777', fg:'#ffffff'});
+  /* ================= KARNAVAL / PESTA RAKYAT =================
+     Taman Bermain diperluas jadi suasana karnaval: tenda warna-warni, stan
+     permainan, lampu hias & umbul-umbul, Istana Balon, dan Kereta Karnaval. */
+  postSign('Karnaval Pesta Rakyat', -13, -46.2, 0, {w:4.4, bg:'#7c3aed', fg:'#ffffff'});
+  addInteractable(-10.2, -46.9, 2.4, 'Papan Tarif Wahana');
+  postSign('Papan Tarif Wahana', -10.2, -46.55, 0, {w:2.6, bg:'#b45309', fg:'#fef3c7'});
+  /* --- Tenda karnival (barat & timur laut taman) --- */
+  [[-25.6, -48.6, 0xef4444], [-1.9, -60.6, 0x2563eb]].forEach(function(T){
+    box(3.1, 1.5, 3.1, 0xfff7ed, T[0], 0.75, T[1], scene);
+    box(3.2, 0.28, 3.2, T[2], T[0], 1.6, T[1], scene, false);
+    cyl(0.06, 2.35, 1.35, T[2], T[0], 2.35, T[1], scene, 12);
+    cyl(0.03, 0.03, 1.0, 0x78716c, T[0], 3.4, T[1], scene, 6);
+    box(0.55, 0.4, 0.04, 0xfacc15, T[0] + 0.28, 3.75, T[1], scene, false);
+    addCollider(T[0], T[1], 1.6, 1.6);
+    addInteractable(T[0], T[1] + 2.6, 2.6, 'Tenda Karnaval');
+  });
+  /* --- Stan permainan di tepi selatan taman --- */
+  [[-19, 0x16a34a], [-7.5, 0xea580c]].forEach(function(ST){
+    box(2.6, 1.0, 0.9, 0x92400e, ST[0], 0.5, -47.9, scene);
+    box(0.12, 2.1, 0.12, 0x78716c, ST[0] - 1.25, 1.05, -48.3, scene); box(0.12, 2.1, 0.12, 0x78716c, ST[0] + 1.25, 1.05, -48.3, scene);
+    var awn = box(3.0, 0.07, 1.5, ST[1], ST[0], 2.12, -47.9, scene, false); awn.rotation.x = 0.18;
+    box(0.5, 0.5, 0.5, 0xfacc15, ST[0] - 0.7, 1.28, -47.9, scene, false); box(0.5, 0.5, 0.5, 0x38bdf8, ST[0] + 0.7, 1.28, -47.9, scene, false);
+    addCollider(ST[0], -47.9, 1.35, 0.55);
+    addInteractable(ST[0], -46.9, 2.4, 'Stan Karnaval');
+  });
+  /* --- Lampu hias berderet di tepi selatan + umbul-umbul --- */
+  var lampX = [-26, -17, -8, 0.5];
+  lampX.forEach(function(lx){ cyl(0.05, 0.06, 3.0, 0x374151, lx, 1.5, -46.9, scene, 8); });
+  var bulbCols = [0xffd166, 0xff8fa3, 0x7dd3fc, 0xfacc15];
+  for(var li = 0; li < lampX.length - 1; li++){
+    for(var lb = 1; lb <= 6; lb++){
+      var lt = lb / 7, bx2 = lampX[li] + (lampX[li + 1] - lampX[li]) * lt;
+      var by = 2.95 - Math.sin(lt * Math.PI) * 0.38;
+      var bulb = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshBasicMaterial({color:bulbCols[(li * 6 + lb) % 4]}));
+      bulb.position.set(bx2, by, -46.9); scene.add(bulb);
+    }
+  }
+  [[-27.5, -46.6], [-13, -46.3], [1.2, -46.6], [-27.5, -61.5]].forEach(function(UP, ui){
+    cyl(0.04, 0.05, 4.4, 0x65a30d, UP[0], 2.2, UP[1], scene, 6);
+    var fl = box(0.06, 1.15, 0.5, [0xef4444, 0xfacc15, 0x2563eb, 0x16a34a][ui], UP[0] + 0.26, 3.7, UP[1], scene, false);
+    fl.rotation.z = 0.35;
+  });
+  /* --- Istana Balon (bouncy castle) di barat taman --- */
+  flat(6.4, 6.4, 0xf3d9a4, -24.8, -55, scene, 0.035);
+  box(4.2, 0.55, 4.2, 0xfacc15, -24.8, 0.28, -55, scene);
+  box(3.6, 0.18, 3.6, 0xef4444, -24.8, 0.62, -55, scene, false);
+  box(4.2, 0.5, 0.45, 0x2563eb, -24.8, 0.6, -57.0, scene, false);
+  box(0.45, 0.5, 4.2, 0x2563eb, -26.75, 0.6, -55, scene, false);
+  box(0.45, 0.5, 4.2, 0x2563eb, -22.85, 0.6, -55, scene, false);
+  box(1.3, 0.35, 0.8, 0xef4444, -24.8, 0.18, -52.5, scene, false);
+  [[-26.6, -56.9], [-23.0, -56.9], [-26.6, -53.1], [-23.0, -53.1]].forEach(function(CT){
+    cyl(0.3, 0.34, 1.6, 0x2563eb, CT[0], 0.8, CT[1], scene, 10);
+    cyl(0.03, 0.48, 0.75, 0xef4444, CT[0], 1.95, CT[1], scene, 10);
+  });
+  postSign('Istana Balon', -24.8, -52.2, 0, {w:2.6, bg:'#2563eb', fg:'#ffffff'});
+  addInteractable(-24.8, -52.4, 2.7, 'Istana Balon', null, {wahana:'bouncy'});
+  /* --- Kereta Karnaval: rel elips mengelilingi taman + lokomotif & 2 gerbong --- */
+  var railRing = new THREE.Mesh(new THREE.RingGeometry(0.93, 1.0, 56), new THREE.MeshBasicMaterial({color:0x8a5a2e, side:THREE.DoubleSide}));
+  railRing.rotation.x = -Math.PI / 2; railRing.scale.set(TRAIN_C.rx, TRAIN_C.rz, 1); railRing.position.set(TRAIN_C.x, 0.07, TRAIN_C.z); scene.add(railRing);
+  for(var si2 = 0; si2 < 22; si2++){
+    var sa = si2 / 22 * Math.PI * 2, sp2 = trainPoint(sa);
+    var slp = box(0.32, 0.05, 1.15, 0x6d4c2f, sp2.x, 0.05, sp2.z, scene, false); slp.rotation.y = sp2.rot;
+  }
+  function buildTrainCar(bodyCol, roofCol){
+    var g = new THREE.Group();
+    box(1.05, 0.55, 1.85, bodyCol, 0, 0.5, 0, g);
+    box(1.1, 0.1, 1.9, roofCol, 0, 0.95, 0, g, false);
+    [[-0.42, 0.62], [0.42, 0.62], [-0.42, -0.62], [0.42, -0.62]].forEach(function(w){ var wh = cyl(0.19, 0.19, 0.1, 0x111827, w[0], 0.19, w[1], g, 10); wh.rotation.z = Math.PI / 2; });
+    scene.add(g); return g;
+  }
+  var locoG = buildTrainCar(0xdc2626, 0x111827);
+  box(0.7, 0.5, 0.7, 0x111827, 0, 0.95, -0.45, locoG, false);
+  cyl(0.13, 0.17, 0.55, 0x111827, 0, 1.05, 0.62, locoG, 10);
+  box(0.9, 0.3, 0.25, 0xfacc15, 0, 0.32, 1.0, locoG, false);
+  trainParts.push({g:locoG, off:0});
+  trainParts.push({g:buildTrainCar(0x2563eb, 0xfacc15), off:-0.46});
+  trainParts.push({g:buildTrainCar(0x16a34a, 0xf8fafc), off:-0.92});
+  trainPlace(Math.PI / 2);
+  postSign('Stasiun Kereta Karnaval', -14, -49.6, 0, {w:3.2, bg:'#b91c1c', fg:'#ffffff'});
+  addInteractable(-14, -49.9, 2.8, 'Kereta Karnaval', null, {wahana:'train'});
   /* ----- Kolam Renang Sekolah ----- */
   var conc = 0x9db8c4;
-  box(7.5, 1.0, 0.6, conc, 5.25, 0.5, -58.7, scene); box(7.5, 1.0, 0.6, conc, 14.75, 0.5, -58.7, scene);
-  addCollider(5.25, -58.7, 3.75, 0.35); addCollider(14.75, -58.7, 3.75, 0.35);
-  box(4, 1.0, 0.6, conc, 3.5, 0.5, -49.3, scene); box(6.5, 1.0, 0.6, conc, 10.75, 0.5, -49.3, scene); box(2.5, 1.0, 0.6, conc, 17.25, 0.5, -49.3, scene);
-  addCollider(3.5, -49.3, 2, 0.35); addCollider(10.75, -49.3, 3.25, 0.35); addCollider(17.25, -49.3, 1.25, 0.35);
-  box(0.6, 1.0, 9.4, conc, 1.8, 0.5, -54, scene); box(0.6, 1.0, 9.4, conc, 18.2, 0.5, -54, scene);
-  addCollider(1.8, -54, 0.35, 4.7); addCollider(18.2, -54, 0.35, 4.7);
-  flat(15.8, 7.6, 0xa5dff5, 10, -54, scene, 0.12);                       // dasar keramik biru muda
-  POOL_WATER = new THREE.Mesh(new THREE.PlaneGeometry(15.8, 7.6),
+  box(7.5, 1.0, 0.6, conc, 5.25, 0.5, -58.7, scene); box(7.5, 1.0, 0.6, conc, 14.75, 0.5, -58.7, scene); box(8.5, 1.0, 0.6, conc, 22.75, 0.5, -58.7, scene);
+  addCollider(5.25, -58.7, 3.75, 0.35); addCollider(14.75, -58.7, 3.75, 0.35); addCollider(22.75, -58.7, 4.25, 0.35);
+  box(4, 1.0, 0.6, conc, 3.5, 0.5, -49.3, scene); box(6.5, 1.0, 0.6, conc, 10.75, 0.5, -49.3, scene); box(2.5, 1.0, 0.6, conc, 17.25, 0.5, -49.3, scene); box(2.5, 1.0, 0.6, conc, 19.75, 0.5, -49.3, scene); box(4, 1.0, 0.6, conc, 25, 0.5, -49.3, scene);
+  addCollider(3.5, -49.3, 2, 0.35); addCollider(10.75, -49.3, 3.25, 0.35); addCollider(17.25, -49.3, 1.25, 0.35); addCollider(19.75, -49.3, 1.25, 0.35); addCollider(25, -49.3, 2, 0.35);
+  box(0.6, 1.0, 9.4, conc, 1.8, 0.5, -54, scene); box(0.6, 1.0, 9.4, conc, 26.8, 0.5, -54, scene);
+  addCollider(1.8, -54, 0.35, 4.7); addCollider(26.8, -54, 0.35, 4.7);
+  flat(23.6, 7.6, 0xa5dff5, 14, -54, scene, 0.12);                       // dasar keramik biru muda (kolam DIPERLUAS ke timur)
+  POOL_WATER = new THREE.Mesh(new THREE.PlaneGeometry(23.6, 7.6),
     new THREE.MeshLambertMaterial({color:0x38b6e8, transparent:true, opacity:0.78}));
-  POOL_WATER.rotation.x = -Math.PI / 2; POOL_WATER.position.set(10, 0.75, -54); scene.add(POOL_WATER);
+  POOL_WATER.rotation.x = -Math.PI / 2; POOL_WATER.position.set(14, 0.75, -54); scene.add(POOL_WATER);
+  /* tali pembatas lintasan renang merah-putih mengapung */
+  [-52.3, -55.7].forEach(function(lz){ for(var lx = 0; lx < 5; lx++) box(4.2, 0.07, 0.14, lx % 2 ? 0xef4444 : 0xf8fafc, 5.6 + lx * 4.3, 0.78, lz, scene, false); });
   /* tangga masuk kolam (celah dinding selatan x 5,5..7,5) */
   box(2, 0.28, 0.8, conc, 6.5, 0.14, -48.45, scene, false);
   box(2, 0.55, 0.6, conc, 6.5, 0.27, -49.3, scene, false);
   box(1.8, 0.3, 0.8, conc, 6.5, 0.15, -49.95, scene, false);
   addStepCollider(6.5, -48.45, 1, 0.45); addStepCollider(6.5, -49.3, 1, 0.35); addStepCollider(6.5, -49.95, 0.95, 0.45);
   cyl(0.035, 0.035, 1.3, 0x9ca3af, 5.9, 0.65, -49.3, scene, 8); cyl(0.035, 0.035, 1.3, 0x9ca3af, 7.1, 0.65, -49.3, scene, 8);
+  /* tangga masuk kedua di ujung timur kolam yang diperluas (celah dinding selatan x 21..23) */
+  box(2, 0.28, 0.8, conc, 22, 0.14, -48.45, scene, false);
+  box(2, 0.55, 0.6, conc, 22, 0.27, -49.3, scene, false);
+  box(1.8, 0.3, 0.8, conc, 22, 0.15, -49.95, scene, false);
+  addStepCollider(22, -48.45, 1, 0.45); addStepCollider(22, -49.3, 1, 0.35); addStepCollider(22, -49.95, 0.95, 0.45);
+  cyl(0.035, 0.035, 1.3, 0x9ca3af, 21.4, 0.65, -49.3, scene, 8); cyl(0.035, 0.035, 1.3, 0x9ca3af, 22.6, 0.65, -49.3, scene, 8);
   /* Papan Loncat Indah (celah dinding selatan x 14..16) */
   box(1.6, 0.33, 0.85, conc, 15, 0.16, -48.4, scene, false);
   box(0.5, 1.0, 0.5, 0x78716c, 15, 0.5, -49.35, scene);
@@ -18970,14 +19200,15 @@ function chuteSegments(S, C, E, colors, sign){
   for(var ri = 0; ri < 5; ri++) box(0.06, 0.06, 0.95, 0x9ca3af, 8.72, 0.45 + ri * 0.48, -60.8, scene, false);
   cyl(0.04, 0.04, 2.6, 0x9ca3af, 8.72, 1.3, -61.28, scene, 6); cyl(0.04, 0.04, 2.6, 0x9ca3af, 8.72, 1.3, -60.32, scene, 6);
   chuteSegments({x:10, y:2.6, z:-59.9}, {x:10, y:2.15, z:-56.2}, {x:10, y:0.85, z:-51.4}, [0x38bdf8, 0x0ea5e9], 1);
-  addInteractable(8.2, -59.2, 2.7, 'Perosotan Air', null, {wahana:'waterslide'});
+  postSign('⬆ Naik Perosotan Air — Tekan E', 6.6, -58.4, 0, {w:3.4, bg:'#0369a1', fg:'#ffffff'});
+  addInteractable(9.3, -58.2, 3.4, 'Perosotan Air', null, {wahana:'waterslide'});
   postSign('Kolam Renang Sekolah', 10, -47.1, 0, {w:3.6, bg:'#0284c7', fg:'#ffffff'});
   addInteractable(10, -47.6, 3, 'Kolam Renang Sekolah');
   ambients.push(function(dt, t){
     if(POOL_WATER) POOL_WATER.position.y = 0.75 + Math.sin(t * 1.8) * 0.02;
   });
-  zones.push({name:'Taman Bermain Belakang Sekolah', minX:-30, maxX:-1, minZ:-62, maxZ:-47});
-  zones.push({name:'Kolam Renang Sekolah', minX:1, maxX:19.5, minZ:-62, maxZ:-47});
+  zones.push({name:'Karnaval & Taman Bermain Belakang Sekolah', minX:-30, maxX:-1, minZ:-62, maxZ:-47});
+  zones.push({name:'Kolam Renang Sekolah', minX:1, maxX:28.5, minZ:-62, maxZ:-47});
   DESTS.push({name:'Kolam Renang & Taman Bermain', x:-6, z:-47.2, kind:'tempat', label:'Kolam & Taman'});
   DESTS.push({name:'Lapangan Sepak Bola Desa', x:-64, z:17.6, kind:'tempat', label:'Bola Desa'});
 })();
@@ -18991,7 +19222,7 @@ function splashAt(x, y, z, n){
     scene.add(m);
     splashP.push({m:m, t:0, vx:(Math.random() - 0.5) * 2.4, vy:2.3 + Math.random() * 2.3, vz:(Math.random() - 0.5) * 2.4});
   }
-  AudioSys.sfx('pop');
+  AudioSys.sfx('splash');
 }
 setInterval(function(){
   for(var i = splashP.length - 1; i >= 0; i--){
@@ -19004,21 +19235,33 @@ setInterval(function(){
 /* ---------- Sistem Wahana (perosotan / ayunan / komidi / papan loncat) ---------- */
 var wahanaRide = null;
 var WAHANA_OFF = {wahanaOff:true, name:'Turun Wahana', x:0, z:0, r:0};
+/* Tarif wahana Karnaval (Kredit, dipotong tepat saat naik; tarif tampil di
+   tombol Aksi & Papan Tarif Wahana sebelum naik) */
+var WAHANA_PRICES = {slide:10, waterslide:15, swing0:5, swing1:5, merry:10, dive:5, bouncy:15, train:20};
+var WAHANA_NAMES = {slide:'Perosotan Pelangi', waterslide:'Perosotan Air', swing0:'Ayunan Ganda', swing1:'Ayunan Ganda', merry:'Komidi Putar Mini', dive:'Papan Loncat Indah', bouncy:'Istana Balon', train:'Kereta Karnaval'};
 function startWahana(kind){
   if(wahanaRide || !playing) return;
   if(poseMode || riding || vehDrive || tourActive || swimOn){ showToast('Selesaikan dulu aktivitasmu sekarang untuk naik wahana.', 2600); return; }
+  var price = WAHANA_PRICES[kind] || 0;
+  if(price > 0){
+    if(eco.kredit < price){ AudioSys.sfx('error'); showToast('🎟️ Kreditmu kurang! Tarif ' + (WAHANA_NAMES[kind] || 'wahana ini') + ' adalah ' + price + ' Kredit (Kreditmu: ' + eco.kredit + '). Kumpulkan Kredit dari Pos belajar, Quest Harian, dan mini-game dulu, ya!', 4600); return; }
+    eco.kredit -= price; saveEco(); updateStatsUI();
+    showToast('🎟️ Tiket ' + (WAHANA_NAMES[kind] || 'wahana') + ' terbayar: −' + price + ' Kredit (sisa ' + eco.kredit + '). Selamat bermain!', 3600);
+  }
   AudioSys.sfx('pop');
   if(kind === 'slide') wahanaRide = {type:'slide', phase:'climb', t:0, face:Math.PI,
     from:{x:-22, z:-49.0}, top:{x:-22, y:2.3, z:-51.5},
     S:{x:-22, y:2.25, z:-52.3}, C:{x:-22, y:1.95, z:-55.6}, E:{x:-22, y:0.12, z:-59.6}};
   else if(kind === 'waterslide') wahanaRide = {type:'waterslide', phase:'climb', t:0, face:0,
-    from:{x:8.2, z:-59.4}, top:{x:10, y:2.68, z:-60.8},
+    from:{x:9.3, z:-58.4}, top:{x:10, y:2.68, z:-60.8},
     S:{x:10, y:2.6, z:-59.9}, C:{x:10, y:2.15, z:-56.2}, E:{x:10, y:0.85, z:-51.4}};
   else if(kind === 'swing0') wahanaRide = {type:'swing', t:0, x:-14, grp:swingGrps[0]};
   else if(kind === 'swing1') wahanaRide = {type:'swing', t:0, x:-11, grp:swingGrps[1]};
   else if(kind === 'merry') wahanaRide = {type:'merry', t:0, ang:Math.PI / 2, grp:merryGrp};
   else if(kind === 'dive') wahanaRide = {type:'dive', phase:'walk', t:0};
-  if(wahanaRide && (wahanaRide.type === 'swing' || wahanaRide.type === 'merry'))
+  else if(kind === 'bouncy') wahanaRide = {type:'bouncy', t:0, boing:false};
+  else if(kind === 'train') wahanaRide = {type:'train', t:0, ang:Math.PI / 2};
+  if(wahanaRide && (wahanaRide.type === 'swing' || wahanaRide.type === 'merry' || wahanaRide.type === 'bouncy' || wahanaRide.type === 'train'))
     showToast('Kamu naik wahana! Tekan tombol Aksi (⬇ Turun Wahana) kapan saja untuk turun.', 3400);
 }
 function endWahana(silent){
@@ -19028,6 +19271,8 @@ function endWahana(silent){
   bodyG.position.y = 0; vy = 0; grounded = true;
   if(W.type === 'swing'){ if(W.grp) W.grp.rotation.x = 0; player.position.set(W.x, 0, -50.1); }
   if(W.type === 'merry'){ player.position.set(-4.5, 0, -51.3); }
+  if(W.type === 'bouncy'){ player.position.set(-24.8, 0, -52.2); player.rotation.y = 0; }
+  if(W.type === 'train'){ trainPlace(Math.PI / 2); player.position.set(-14, 0, -49.2); player.rotation.y = 0; }
   if(!silent){ AudioSys.sfx('pop'); showToast('Kamu turun dari wahana. Seru, ya!', 2400); }
 }
 function wahanaPoseStep(dt){
@@ -19100,6 +19345,28 @@ function wahanaPoseStep(dt){
         showToast('💦 Lompatan indah! Kamu masuk ke kolam dan berenang!', 3400);
       }
     }
+  }
+  else if(W.type === 'bouncy'){
+    // Istana Balon: melompat-lompat di atas kasur balon sampai pemain turun
+    var bb = Math.abs(Math.sin(W.t * 4.4));
+    player.position.set(-24.8, 0.55 + bb * 0.85, -55);
+    player.rotation.y = 0;
+    legL.rotation.x = Math.sin(W.t * 4.4) * 0.55; legR.rotation.x = -Math.sin(W.t * 4.4) * 0.55;
+    armL.rotation.x = -2.5; armR.rotation.x = -2.5;
+    bodyG.position.y = bb * 0.15;
+    if(bb > 0.96 && !W.boing){ W.boing = true; AudioSys.sfx('jump'); }
+    if(bb < 0.4) W.boing = false;
+  }
+  else if(W.type === 'train'){
+    // Kereta Karnaval: gerbong penumpan mengikuti lokomotif mengelilingi rel elips taman
+    W.ang += dt * 0.42;
+    trainPlace(W.ang);
+    var cp = trainPoint(W.ang - 0.46);
+    player.position.set(cp.x, 0.68, cp.z);
+    player.rotation.y = cp.rot;
+    legL.rotation.x = -1.25; legR.rotation.x = -1.25;
+    armL.rotation.x = -0.4; armR.rotation.x = -0.4;
+    bodyG.position.y = -0.28;
   }
 }
 
