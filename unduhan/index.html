@@ -17,7 +17,7 @@
 <script>try{var t=localStorage.getItem('sdn-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
 <style>
 /* Tombol cetak + pemberitahuan (gaya dari media Pos Kompas) */
@@ -56,21 +56,32 @@
 </head>
 <body>
 <a class="skip" href="#konten">Lewati ke konten utama</a>
-<div class="topstrip" aria-hidden="true"></div>
-<div class="utilbar"><div class="wrap utilbar-inner"><span>SD Negeri 1 Gerduren &bull; Purwojati &bull; Banyumas &bull; NPSN 20302352</span><span class="clock" id="clock-widget">Memuat jam&hellip;</span></div></div>
+<!-- 1. Top Utility Bar -->
+<div class="utilbar"><div class="wrap utilbar-inner"><span class="util-left"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> NPSN: 20302352 <span class="util-addr">&bull; Desa Gerduren, Kec. Purwojati, Kab. Banyumas</span></span><span class="util-right"><span class="clock" id="clock-widget">Memuat jam&hellip;</span></span></div></div>
 <header>
-  <div class="wrap topbar">
+  <div class="wrap">
+    <div class="topbar">
     <a class="brand" href="/" aria-label="Beranda SD Negeri 1 Gerduren">
       <span class="brand-logos" aria-hidden="true"><img src="/images/logo-sdn1gerduren.png" alt=""><img class="logo-bms" src="/images/logo-banyumas.png" alt=""></span>
-      <span><b>SD Negeri 1 Gerduren</b><span>Purwojati &bull; Banyumas &bull; NPSN 20302352</span></span>
+      <span><b>SD Negeri 1 Gerduren</b><span class="brand-sub">Purwojati &bull; Banyumas</span></span>
     </a>
     <div class="header-actions">
-      <button class="theme-btn" type="button" id="theme-btn" aria-label="Ubah mode gelap atau terang">&#127769; Mode Gelap</button>
-      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-utama" id="menu-btn">&#9776; Menu</button>
+      <button class="theme-btn" type="button" id="theme-btn" aria-label="Ubah mode gelap atau terang"><span class="theme-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span><span class="theme-label">Mode Gelap</span></button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-utama" id="menu-btn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg> Menu</button>
     </div>
-    <nav aria-label="Navigasi utama" id="nav-utama"><a href="/"><span aria-hidden="true">🏠</span> Beranda</a><a href="/profil/"><span aria-hidden="true">🏫</span> Profil</a><a href="/guru/"><span aria-hidden="true">👩‍🏫</span> Guru</a><a href="/akademik/"><span aria-hidden="true">📚</span> Akademik</a><a href="/berita/"><span aria-hidden="true">📰</span> Berita</a><a href="/kegiatan/"><span aria-hidden="true">🎨</span> Kegiatan</a><div class="nav-drop"><a href="/digitalisasi/" class="nav-drop-toggle" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">💻</span> Digitalisasi <span class="caret" aria-hidden="true">▾</span></a><div class="nav-sub"><a href="/digitalisasi/"><span aria-hidden="true">🏕️</span> Aplikasi Latihan Pramuka Siaga</a><a href="/dunia/"><span aria-hidden="true">🎮</span> Dunia SDN 1 Gerduren</a><a href="#" onclick="return bukaKhususGuru(event)"><span aria-hidden="true">🔒</span> Aplikasi Administrasi Guru</a></div></div><a href="/unduhan/" class="active"><span aria-hidden="true">📥</span> Unduhan</a><a href="/perpustakaan/"><span aria-hidden="true">📖</span> Perpustakaan Online</a><a href="/jadwal/"><span aria-hidden="true">🗓️</span> Jadwal</a><a href="/ppdb/"><span aria-hidden="true">📝</span> PPDB</a><a href="/kontak/"><span aria-hidden="true">📞</span> Kontak</a><a class="cta" href="/berita/">Berita Terbaru &rarr;</a></nav>
+    </div>
+    <nav aria-label="Navigasi utama" id="nav-utama">
+      <button class="drawer-close" type="button" id="drawer-close"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> Tutup</button>
+      <a href="/" class="nav-link"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg> Profil <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/profil/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg><span><b>Profil &amp; Visi Misi</b><small>Visi, misi &amp; sejarah sekolah</small></span></a><a href="/guru/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span><b>Guru &amp; Tendik</b><small>10 pendidik &amp; tenaga kependidikan</small></span></a><a href="/kontak/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><b>Kontak</b><small>Alamat, email &amp; lokasi sekolah</small></span></a></div></div>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg> Akademik <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/akademik/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span><b>Kurikulum Merdeka</b><small>Fase A, B &amp; C Kurikulum Merdeka</small></span></a><a href="/jadwal/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span><b>Jadwal Pelajaran</b><small>Jadwal Kelas 1&ndash;6 Senin&ndash;Jumat</small></span></a><a href="/kegiatan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg><span><b>Kegiatan &amp; Prestasi</b><small>Galeri, ekstrakurikuler &amp; prestasi</small></span></a><a href="/perpustakaan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg><span><b>Perpustakaan Online</b><small>174 buku digital Kurikulum Merdeka</small></span></a></div></div>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Zona Digital <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/digitalisasi/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 21 14 3"/><path d="M20.5 21 10 3"/><path d="M15.5 21 12 15l-3.5 6"/><path d="M2 21h20"/></svg><span><b>Media Pramuka Siaga</b><small>9 Pos latihan Pesta Siaga</small></span></a><a href="/dunia/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg><span><b>Dunia SDN 1 Gerduren</b><small>Game dunia virtual sekolah</small></span></a><a href="/kompas/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg><span><b>Pos Kompas Interaktif</b><small>Roda kompas &amp; kuis derajat</small></span></a><a href="#" onclick="return bukaKhususGuru(event)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span><b>Aplikasi Administrasi Guru</b><small>Khusus guru &mdash; kata sandi NPSN</small></span></a></div></div>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle active" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8"/></svg> Informasi <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/berita/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8"/></svg><span><b>Berita Sekolah</b><small>Kabar &amp; pengumuman terbaru</small></span></a><a href="/unduhan/" class="active"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span><b>Pusat Unduhan</b><small>Formulir &amp; dokumen resmi</small></span></a></div></div>
+      <a class="nav-cta" href="/ppdb/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Info PPDB 2026/2027</a>
+    </nav>
   </div>
 </header>
+<div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
 <main id="konten">
   <div class="page-head"><div class="wrap"><img class="page-corner" src="/images/ilustrasi-pojok.png" alt="" aria-hidden="true"><p class="eyebrow" style="color:#ffe082">Dokumen &amp; Media Cetak</p><h1>Unduhan</h1><p>Bahan cetak dan dokumen SD Negeri 1 Gerduren yang bisa diunduh dan dicetak — untuk latihan murid dan keperluan sekolah.</p></div></div>
   <section>
@@ -126,26 +137,39 @@
     </div>
   </section>
 </main>
+<!-- 9. Footer institusi -->
 <footer>
   <div class="wrap footer-grid">
     <div>
       <div class="footer-logos"><img src="/images/logo-sdn1gerduren.png" alt="Logo SD Negeri 1 Gerduren"><img src="/images/logo-banyumas.png" alt="Logo Kabupaten Banyumas"></div>
-      <strong style="color:#fff;font-size:18px">SD Negeri 1 Gerduren</strong>
-      <p>Desa Gerduren, Purwojati, Banyumas &bull; NPSN 20302352</p>
-      <p class="small" style="color:#bcd8c8">Situs statis ini dihosting gratis di Cloudflare Pages. Tidak ada data siswa, nilai, atau data pribadi yang disimpan atau ditampilkan di situs ini.</p>
+      <strong class="footer-brand">SD Negeri 1 Gerduren</strong>
+      <p>Desa Gerduren, Kecamatan Purwojati,<br>Kabupaten Banyumas, Jawa Tengah<br>NPSN 20302352</p>
+      <p class="footer-privacy">Portal resmi informasi publik sekolah. Kami menjaga privasi dan tidak mempublikasikan data pribadi siswa.</p>
     </div>
-    <div>
-      <strong style="color:#fff">Navigasi</strong>
-      <ul class="footer-links">
-        <li><a href="/">Beranda</a> &bull; <a href="/profil/">Profil</a> &bull; <a href="/guru/">Guru</a> &bull; <a href="/akademik/">Akademik</a></li>
-        <li><a href="/berita/">Berita</a> &bull; <a href="/kegiatan/">Kegiatan</a> &bull; <a href="/digitalisasi/">Digitalisasi</a> &bull; <a href="/digitalisasi/">Aplikasi Latihan Pramuka Siaga</a> &bull; <a href="/unduhan/">Unduhan</a> &bull; <a href="/perpustakaan/">Perpustakaan Online</a> &bull; <a href="/jadwal/">Jadwal</a> &bull; <a href="/ppdb/">PPDB</a></li>
-        <li><a href="/kontak/">Kontak</a> &bull; <a href="#" onclick="return bukaKhususGuru(event)">Aplikasi Administrasi Guru</a> &bull; <a href="/admin">Kelola Berita (Admin)</a></li>
+    <div class="footer-col">
+      <h3>Profil &amp; Akademik</h3>
+      <ul>
+        <li><a href="/profil/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Profil &amp; Visi Misi</a></li>
+        <li><a href="/guru/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Guru &amp; Tendik</a></li>
+        <li><a href="/akademik/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Akademik</a></li>
+        <li><a href="/jadwal/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Jadwal Pelajaran</a></li>
+        <li><a href="/kegiatan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Kegiatan &amp; Prestasi</a></li>
       </ul>
     </div>
-    <div>
-      <strong style="color:#fff">Catatan</strong>
-      <p class="small" style="color:#bcd8c8">Versi 3.7</p>
+    <div class="footer-col">
+      <h3>Layanan Digital &amp; Siswa</h3>
+      <ul>
+        <li><a href="/perpustakaan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Perpustakaan Online</a></li>
+        <li><a href="/digitalisasi/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Media Pramuka Siaga</a></li>
+        <li><a href="/dunia/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Dunia Virtual</a></li>
+        <li><a href="/unduhan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Pusat Unduhan</a></li>
+        <li><a href="/ppdb/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Info PPDB</a></li>
+      </ul>
     </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>&copy; 2026 SD Negeri 1 Gerduren &bull; NPSN 20302352</span>
+    <a class="footer-admin" href="/admin"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Kelola Berita (Admin)</a>
   </div>
 </footer>
 <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
