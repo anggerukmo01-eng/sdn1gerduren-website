@@ -14887,16 +14887,29 @@ function richText(t){
   s = s.replace(/\u0001/g, '<span class="rt-loc">').replace(/\u0002/g, '</span>');
   return s;
 }
-var infoRichBusy = false;
+var infoRichBusy = false, infoRichPlainFor = null;
 if(window.MutationObserver && typeof infoText !== 'undefined' && infoText){
   new MutationObserver(function(){
     if(infoRichBusy) return;
     var t = infoText.textContent;
-    if(t && !infoText.querySelector('.rt-loc,.rt-gold,.rt-food,.rt-vit') && /Kredit|\bHP\b|\bEP\b|MBG|Sawah|Kelas|Polsek|Kantin|Koperasi/.test(t)){
-      infoRichBusy = true;
-      infoText.innerHTML = richText(t);
-      infoRichBusy = false;
-    }
+    if(!t) return;
+    if(infoText.querySelector('.rt-loc,.rt-gold,.rt-food,.rt-vit')) return;   // sudah berwarna: selesai, jangan proses lagi
+    if(t === infoRichPlainFor) return;   // teks ini sudah diperiksa dan memang tidak menghasilkan pewarnaan — lewati selamanya
+    if(!/Kredit|\bHP\b|\bEP\b|MBG|Sawah|Kelas|Polsek|Kantin|Koperasi/.test(t)){ infoRichPlainFor = t; return; }
+    var rich = richText(t);
+    /* PERBAIKAN FREEZE (klik Sawah / Dealer / Papan Tarif Wahana): dulu innerHTML
+       TETAP ditulis walau richText() mengembalikan teks yang identik (tidak ada
+       span warna, mis. teks "Sawah warga Gerduren…" — kata "Sawah" lolos uji
+       pemicu, tetapi daftar lokasi richText hanya mengenal "Sawah Glempang").
+       Penulisan itu memicu MutationObserver lagi (bendera sibuk sudah terlanjur
+       direset karena callback observer berjalan asinkron), kondisinya tetap
+       terpenuhi, lalu menulis lagi — loop mikro-task tanpa henti yang membekukan
+       seluruh halaman. Kini: bila hasil pewarnaan identik dengan teks asal,
+       teks ditandai "polos" dan DOM TIDAK disentuh sama sekali. */
+    if(rich === t){ infoRichPlainFor = t; return; }
+    infoRichBusy = true;
+    infoText.innerHTML = rich;
+    infoRichBusy = false;
   }).observe(infoText, {childList:true, characterData:true, subtree:true});
 }
 
@@ -17921,12 +17934,12 @@ function mapShowInfo(d){
   var markers = document.getElementById('mapMarkers');
   svg.insertBefore(extra, markers);
   /* kerucut arah pandang (FOV) pada penanda pemain */
-  var mp = document.getElementById('mapPlayer');
-  if(mp){
+  var mpEl = document.getElementById('mapPlayer');
+  if(mpEl){
     var cone = document.createElementNS(NS, 'polygon');
     cone.setAttribute('points', '0,-9 17,-30 -17,-30');
     cone.setAttribute('fill', 'rgba(37,99,235,.22)');
-    mp.insertBefore(cone, mp.firstChild);
+    mpEl.insertBefore(cone, mpEl.firstChild);
   }
   var route = el('polyline', {id:'mapRoute', fill:'none', stroke:'#d97706', 'stroke-width':2.6, 'stroke-dasharray':'7 6', 'stroke-linecap':'round', opacity:0}, svg);
   var others = el('g', {id:'mapOthers'}, svg);
@@ -17958,15 +17971,21 @@ function mapShowInfo(d){
   setInterval(function(){
     if(!mapOpen) return;
     others.innerHTML = '';
-    if(typeof mp !== 'undefined' && mp.players && mp.players.forEach){
-      mp.players.forEach(function(r){
-        if(!r.group) return;
-        var p = mapXY(r.group.position.x, r.group.position.z);
+    /* PERBAIKAN: dulu blok ini membaca "mp.players.forEach" — tetapi "mp" di sini
+       tertutup (shadowed) oleh variabel elemen #mapPlayer sehingga selalu kosong,
+       dan mp.players pun objek kamus (bukan array) tanpa .group. Avatar pemain
+       lain hidup di mp.remotes (kamus id -> {group,…}). Akibatnya titik pemain
+       lain di peta tidak pernah tampil; kini diiterasi dari mp.remotes global. */
+    if(typeof mp !== 'undefined' && mp && mp.remotes){
+      for(var rid in mp.remotes){
+        var rr = mp.remotes[rid];
+        if(!rr || !rr.group) continue;
+        var p = mapXY(rr.group.position.x, rr.group.position.z);
         var c = document.createElementNS(NS, 'circle');
         c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]); c.setAttribute('r', 3.2);
         c.setAttribute('fill', '#f59e0b'); c.setAttribute('stroke', '#ffffff'); c.setAttribute('stroke-width', 1.2);
         others.appendChild(c);
-      });
+      }
     }
     if(navTarget){
       var a = mapXY(player.position.x, player.position.z), b = mapXY(navTarget.x, navTarget.z);
