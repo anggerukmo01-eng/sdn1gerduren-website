@@ -2,10 +2,15 @@
 (function(){
   // Tema: simpan pilihan, hormati preferensi perangkat saat pertama kali
   var themeBtn = document.getElementById('theme-btn');
+  var ICO_MOON = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+  var ICO_SUN = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
   function applyTheme(t){
     document.documentElement.setAttribute('data-theme', t);
     try{ localStorage.setItem('sdn-theme', t); }catch(e){}
-    if(themeBtn) themeBtn.textContent = (t === 'dark') ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+    if(themeBtn){
+      var ico = themeBtn.querySelector('.theme-ico'); if(ico) ico.innerHTML = (t === 'dark') ? ICO_SUN : ICO_MOON;
+      var lab = themeBtn.querySelector('.theme-label'); if(lab) lab.textContent = (t === 'dark') ? 'Mode Terang' : 'Mode Gelap';
+    }
   }
   if(themeBtn){
     themeBtn.addEventListener('click', function(){
@@ -15,17 +20,29 @@
     applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
   }
 
-  // Menu mobile
+  // Menu mobile: drawer geser dari kanan + backdrop
   var menuBtn = document.getElementById('menu-btn');
   var nav = document.getElementById('nav-utama');
+  var navBackdrop = document.getElementById('nav-backdrop');
+  var drawerClose = document.getElementById('drawer-close');
+  function closeDrawer(){
+    if(!nav) return;
+    nav.classList.remove('open');
+    if(navBackdrop) navBackdrop.classList.remove('open');
+    if(menuBtn) menuBtn.setAttribute('aria-expanded','false');
+  }
   if(menuBtn && nav){
     menuBtn.addEventListener('click', function(){
       var open = nav.classList.toggle('open');
+      if(navBackdrop) navBackdrop.classList.toggle('open', open);
       menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
     nav.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){ nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); });
+      a.addEventListener('click', closeDrawer);
     });
+    if(drawerClose) drawerClose.addEventListener('click', closeDrawer);
+    if(navBackdrop) navBackdrop.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeDrawer(); });
   }
 
   // Widget jam & tanggal (WIB) — diperbarui tiap detik, plus status sekolah live
@@ -381,7 +398,7 @@
   if(window.innerWidth <= 960 && !document.querySelector('.quickbar')){
     var bar = document.createElement('nav');
     bar.className = 'quickbar'; bar.setAttribute('aria-label', 'Navigasi cepat');
-    bar.innerHTML = '<a href="/"><span class="qi" aria-hidden="true">🏠</span>Beranda</a><a href="/jadwal/"><span class="qi" aria-hidden="true">🗓️</span>Jadwal</a><a href="/ppdb/"><span class="qi" aria-hidden="true">📝</span>PPDB</a><a href="/kontak/"><span class="qi" aria-hidden="true">📞</span>Kontak</a>';
+    bar.innerHTML = '<a href="/"><span class="qi" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Beranda</a><a href="/jadwal/"><span class="qi" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></span>Jadwal</a><a href="/ppdb/"><span class="qi" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>PPDB</a><a href="/kontak/"><span class="qi" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>Kontak</a>';
     document.body.appendChild(bar);
   }
 })();
@@ -445,48 +462,69 @@
   };
 })();
 
-/* Dropdown Digitalisasi — submenu sebagai panel fixed di desktop (nav bisa
-   digeser horizontal, jadi panel tidak boleh jadi anak nav yang terpotong);
-   di menu mobile submenu tampil statis menjorok (diatur CSS). */
+/* Dropdown nav — submenu sebagai panel fixed di desktop (nav bisa digeser
+   horizontal, jadi panel tidak boleh jadi anak nav yang terpotong); di menu
+   mobile (drawer) submenu tampil statis menjorok (diatur CSS).
+   Berlaku untuk SEMUA grup .nav-drop, masing-masing dengan timer sendiri. */
 (function(){
-  var drop = document.querySelector('.nav-drop');
-  if(!drop) return;
-  var toggle = drop.querySelector('.nav-drop-toggle');
-  var sub = drop.querySelector('.nav-sub');
-  if(!toggle || !sub) return;
-  var timer = null;
+  var drops = document.querySelectorAll('.nav-drop');
+  if(!drops.length) return;
   function desktop(){ return window.innerWidth > 1180; }
-  function place(){
-    var r = toggle.getBoundingClientRect();
-    var w = sub.offsetWidth || 300;
-    var left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8));
-    sub.style.left = left + 'px';
-    sub.style.top = (r.bottom + 6) + 'px';
+  function closeAll(except){
+    drops.forEach(function(d){
+      if(d === except) return;
+      var s = d.querySelector('.nav-sub'), t = d.querySelector('.nav-drop-toggle');
+      if(s) s.classList.remove('open');
+      if(t) t.setAttribute('aria-expanded','false');
+    });
   }
-  function open(){
-    if(!desktop()) return;
-    clearTimeout(timer);
-    sub.classList.add('open');
-    place();
-    toggle.setAttribute('aria-expanded', 'true');
-  }
-  function close(){
-    clearTimeout(timer);
-    sub.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-  }
-  function later(){ clearTimeout(timer); timer = setTimeout(close, 200); }
-  drop.addEventListener('mouseenter', open);
-  drop.addEventListener('mouseleave', later);
-  sub.addEventListener('mouseenter', function(){ clearTimeout(timer); });
-  sub.addEventListener('mouseleave', later);
-  toggle.addEventListener('focus', open);
-  sub.addEventListener('focusout', function(e){ if(!sub.contains(e.relatedTarget)) later(); });
-  sub.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
-  document.addEventListener('click', function(e){ if(!drop.contains(e.target)) close(); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
-  window.addEventListener('scroll', close, true);
-  window.addEventListener('resize', close);
+  drops.forEach(function(drop){
+    var toggle = drop.querySelector('.nav-drop-toggle');
+    var sub = drop.querySelector('.nav-sub');
+    if(!toggle || !sub) return;
+    var timer = null;
+    function place(){
+      var r = toggle.getBoundingClientRect();
+      var w = sub.offsetWidth || 320;
+      var left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8));
+      sub.style.left = left + 'px';
+      sub.style.top = (r.bottom + 6) + 'px';
+    }
+    function open(){
+      if(!desktop()) return;
+      clearTimeout(timer);
+      closeAll(drop);
+      sub.classList.add('open');
+      place();
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+    function close(){
+      clearTimeout(timer);
+      sub.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    function later(){ clearTimeout(timer); timer = setTimeout(close, 200); }
+    drop.addEventListener('mouseenter', open);
+    drop.addEventListener('mouseleave', later);
+    sub.addEventListener('mouseenter', function(){ clearTimeout(timer); });
+    sub.addEventListener('mouseleave', later);
+    toggle.addEventListener('click', function(e){
+      if(!desktop()) return;
+      e.preventDefault();
+      if(sub.classList.contains('open')) close(); else open();
+    });
+    toggle.addEventListener('focus', open);
+    sub.addEventListener('focusout', function(e){ if(!sub.contains(e.relatedTarget)) later(); });
+    sub.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
+  });
+  document.addEventListener('click', function(e){
+    var inside = false;
+    drops.forEach(function(d){ if(d.contains(e.target)) inside = true; });
+    if(!inside) closeAll();
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', function(){ closeAll(); }, true);
+  window.addEventListener('resize', function(){ closeAll(); });
   var nav = document.getElementById('nav-utama');
-  if(nav) nav.addEventListener('scroll', close);
+  if(nav) nav.addEventListener('scroll', function(){ closeAll(); });
 })();
