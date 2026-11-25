@@ -985,6 +985,20 @@
     #actionBtn{width:54px;height:54px;}
     #actionBtn .e-key{font-size:21px;}
   }
+  /* ===== TAHAP 2: Tombol Serang (zombie malam) + chip senjata terpilih =====
+     Tombol pedang duduk DI ATAS tombol Aksi (kanan bawah yang sama); hanya
+     tampil saat malam zombie aktif & mode solo (kelas .on dari JS). */
+  #attackBtn{position:absolute;right:16px;bottom:calc(176px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(146,64,14,.82);color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;box-shadow:0 6px 16px rgba(23,50,74,.35);pointer-events:auto;cursor:pointer;display:none;flex-direction:column;align-items:center;justify-content:center;gap:1px;line-height:1.05;padding:4px;z-index:6;}
+  #attackBtn.on{display:flex;}
+  #attackBtn:active{transform:scale(.94);}
+  #attackBtn svg{width:24px;height:24px;flex:none;}
+  #attackBtn span{font-size:9.5px;font-family:'Nunito',sans-serif;font-weight:800;}
+  body.laptop #attackBtn{display:none;}
+  @media (max-width:640px){ #attackBtn{width:54px;height:54px;right:10px;bottom:calc(158px + env(safe-area-inset-bottom));} #attackBtn svg{width:20px;height:20px;} }
+  /* Chip kecil senjata ajaib terpilih + tier-nya, di kolom HUD kiri */
+  #weaponChip{display:none;align-items:center;gap:6px;background:rgba(13,32,52,.78);border:1.5px solid rgba(253,224,71,.55);color:#fef9c3;font-family:'Fredoka',sans-serif;font-weight:600;font-size:11.5px;padding:5px 10px;border-radius:99px;box-shadow:0 4px 12px rgba(8,25,45,.35);pointer-events:none;width:max-content;max-width:100%;}
+  #weaponChip.on{display:flex;}
+  #weaponChip svg{width:14px;height:14px;flex:none;color:#fde047;}
   /* Panel Kebun & Kandang (Bertani/Beternak) */
   .farm-sec{font-family:'Fredoka',sans-serif;font-weight:700;font-size:13px;color:#92400e;margin:12px 0 4px;}
   .farm-status{font-size:13.5px;font-weight:700;color:#334155;line-height:1.5;background:#f0fdf4;border:2px solid #bbf7d0;border-radius:11px;padding:9px 11px;}
@@ -1221,6 +1235,7 @@
         <span class="nav-meta"><b id="navName">Tujuan</b><span id="navDist">0 m lagi</span></span>
         <button id="navCancel" type="button" aria-label="Batalkan tujuan">×</button>
       </div>
+      <div id="weaponChip" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/></svg><span id="weaponChipText">Senjata Ajaib</span></div>
     </div>
     <div class="hud-right">
       <!-- MICRO-HUD: satu tombol laci 34x34 — semua menu sekunder ada di dalamnya -->
@@ -1322,6 +1337,12 @@
   <button id="actionBtn" type="button" aria-label="Tombol aksi E untuk berinteraksi dengan objek">
     <span class="e-key">E</span>
     <span id="actionLabel">Aksi</span>
+  </button>
+
+  <!-- Tombol Serang (Tahap 2 — Zombie Malam): hanya tampil saat malam zombie aktif, mode solo -->
+  <button id="attackBtn" type="button" aria-label="Serang — usir zombie dengan Senjata Ajaib">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/></svg>
+    <span>Serang</span>
   </button>
 
   <!-- Kontrol ketinggian saat menerbangkan Helikopter sendiri (mode manual) -->
@@ -2335,6 +2356,93 @@ function pyramidRoofGeo(w, h, d){
   return geo;
 }
 
+/* ================= PEMBANGUN NUSANTARA (Tahap 1B — adaptasi NusantaraBuildingBuilder) =================
+   Builder bangunan bergaya Nusantara untuk game ini: SEMUA prosedural &
+   inline (tanpa import/export, tanpa berkas eksternal). Material memakai
+   MeshLambertMaterial (helper mat()) dengan tekstur CanvasTexture genteng &
+   dinding; jendela memakai kaca Lambert yang menyala hangat saat malam
+   mengikuti jam dunia WX (bukan bendera isNight modul luar); setiap bangunan
+   padat WAJIB ber-collider (opts.solid). Tanpa PointLight tambahan:
+   cahaya malam hanya emissive kaca. */
+var NUSA_GLASS_MATS = [];
+function nusaDindingTex(){
+  if(nusaDindingTex._t) return nusaDindingTex._t;
+  var cv = document.createElement('canvas'); cv.width = 256; cv.height = 256;
+  var g = cv.getContext('2d');
+  g.fillStyle = '#f5efe2'; g.fillRect(0,0,256,256);
+  g.strokeStyle = 'rgba(146,110,60,0.20)'; g.lineWidth = 3;
+  for(var i = 0; i <= 256; i += 32){ g.beginPath(); g.moveTo(i,0); g.lineTo(i,256); g.stroke(); g.beginPath(); g.moveTo(0,i); g.lineTo(256,i); g.stroke(); }
+  g.strokeStyle = 'rgba(146,110,60,0.10)';
+  for(var j = -256; j < 256; j += 32){ g.beginPath(); g.moveTo(j,0); g.lineTo(j+256,256); g.stroke(); }
+  var t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace;
+  nusaDindingTex._t = t; return t;
+}
+function nusaGentengTex(){
+  if(nusaGentengTex._t) return nusaGentengTex._t;
+  var cv = document.createElement('canvas'); cv.width = 256; cv.height = 256;
+  var g = cv.getContext('2d');
+  g.fillStyle = '#e8ddd2'; g.fillRect(0,0,256,256);
+  g.strokeStyle = 'rgba(90,50,30,0.35)'; g.lineWidth = 4;
+  for(var y = 0; y <= 256; y += 32){ g.beginPath(); g.moveTo(0,y); g.lineTo(256,y); g.stroke(); }
+  for(var x = 0; x <= 256; x += 32){ g.beginPath(); g.moveTo(x,0); g.lineTo(x,256); g.stroke(); }
+  g.fillStyle = 'rgba(90,50,30,0.13)';
+  for(var y2 = 0; y2 < 256; y2 += 32) for(var x2 = 0; x2 < 256; x2 += 32) g.fillRect(x2+4, y2+18, 24, 8);
+  var t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace;
+  nusaGentengTex._t = t; return t;
+}
+function buildNusantara(o){
+  var g = new THREE.Group(); g.position.set(o.x, 0, o.z); if(o.ry) g.rotation.y = o.ry; scene.add(g);
+  var w = o.w, d = o.d, h = o.h || 3.6, baseY = o.baseY || 0;
+  var wallMat = new THREE.MeshLambertMaterial({color:o.wall, map:nusaDindingTex()});
+  var body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), wallMat);
+  body.position.set(0, baseY + h/2, 0); body.castShadow = true; body.receiveShadow = true; g.add(body);
+  box(w + 0.16, 0.45, d + 0.16, o.plint || 0x9aa3ab, 0, baseY + 0.22, 0, g, false);   // plint beton
+  // atap: limasan (piramida) atau joglo (limasan susun dua)
+  var roofMat = new THREE.MeshLambertMaterial({color:o.roofColor || PAL.roofTile, map:nusaGentengTex()});
+  var rh = o.rh || 2.4;
+  var roof = new THREE.Mesh(pyramidRoofGeo(w + 1.5, rh, d + 1.5), roofMat);
+  roof.position.y = baseY + h + 0.04; roof.castShadow = true; roof.receiveShadow = true; g.add(roof);
+  if(o.roof === 'joglo'){
+    var roof2 = new THREE.Mesh(pyramidRoofGeo(w * 0.58 + 1.0, rh * 0.72, d * 0.58 + 1.0), roofMat);
+    roof2.position.y = baseY + h + rh * 0.62; roof2.castShadow = true; g.add(roof2);
+    box(0.7, 0.26, 0.7, 0x3f3f46, 0, baseY + h + rh * 0.62 + rh * 0.72 + 0.06, 0, g, false);
+  } else {
+    box(0.95, 0.3, 0.95, 0x3f3f46, 0, baseY + h + rh + 0.08, 0, g, false);             // tutup puncak limasan
+  }
+  // teras depan (+z lokal): lantai + 2 pilar kayu + atap teras (bisa dimatikan via teras:false)
+  if(o.teras !== false){
+    box(Math.min(w * 0.7, w - 1), 0.18, 1.9, 0xd6d3cd, 0, baseY + 0.09, d/2 + 0.85, g, false);
+    [-1, 1].forEach(function(s){
+      box(0.22, h * 0.72, 0.22, o.pillar || 0x8a5a2b, s * (Math.min(w * 0.7, w - 1)/2 - 0.3), baseY + h * 0.36, d/2 + 1.55, g);
+    });
+    box(Math.min(w * 0.7, w - 1) + 0.5, 0.14, 2.3, o.roofColor || PAL.roofTile, 0, baseY + h * 0.74, d/2 + 0.9, g);
+  }
+  // pintu tengah depan + jendela kaca di kedua sisinya (menyala malam via NUSA_GLASS_MATS)
+  box(1.5, 2.4, 0.14, o.door || 0x7c4a21, 0, baseY + 1.2, d/2 + 0.05, g, false);
+  var glassMat = new THREE.MeshLambertMaterial({color:0xcfeeff, emissive:0x000000});
+  NUSA_GLASS_MATS.push(glassMat);
+  [-1, 1].forEach(function(s){
+    var wx = s * (w/2 - 1.55);
+    box(1.35, 1.25, 0.13, PAL.winFrame, wx, baseY + 2.35, d/2 + 0.05, g, false);
+    var gl = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.0, 0.06), glassMat);
+    gl.position.set(wx, baseY + 2.35, d/2 + 0.13); g.add(gl);
+  });
+  // satu jendela samping (+x lokal)
+  box(0.13, 1.25, 1.35, PAL.winFrame, w/2 + 0.05, baseY + 2.35, Math.min(1.8, d/2 - 1.6), g, false);
+  var gl2 = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.0, 1.1), glassMat);
+  gl2.position.set(w/2 + 0.13, baseY + 2.35, Math.min(1.8, d/2 - 1.6)); g.add(gl2);
+  if(o.sign) wallSign(g, o.sign, 0, h - 0.55, d/2 + 0.07, Math.min(5.6, w - 1.6), {bg:o.signBg || '#1e6fb8', fg:'#ffffff', frame:PAL.trimBlueD});
+  if(o.solid){
+    var swp = o.ry && Math.abs(Math.sin(o.ry)) > 0.5;
+    addCollider(o.x, o.z, (swp ? d : w)/2 + 0.5, (swp ? w : d)/2 + 0.5);
+    if(o.teras !== false){
+      var px = Math.min(w * 0.7, w - 1)/2 - 0.3, pz = d/2 + 1.55, ry = o.ry || 0, cs = Math.cos(ry), sn = Math.sin(ry);
+      [-1, 1].forEach(function(s){ var lx = s * px; addCollider(o.x + lx * cs + pz * sn, o.z - lx * sn + pz * cs, 0.28, 0.28); });
+    }
+  }
+  return g;
+}
+
 var colliders = []; // {minX,maxX,minZ,maxZ}
 var driveColSkip = null; // collider kendaraan yang sedang dikendarai pemain (diabaikan resolveCollisions)
 
@@ -2539,25 +2647,15 @@ for(var i=0;i<6;i++){
    seng berkarat dari analisis Maps; foto Nov 2026 yang berlaku). Dinding hijau cerah +
    atap limasan merah bata + pintu cokelat + jendela kaca biru muda. Tanpa papan nama
    sampai fungsi ruang dikonfirmasi. --- */
-(function(){
-  var g = new THREE.Group(); g.position.set(33, 0, -8.5); scene.add(g);
-  var w = 8, d = 11, h = 4.0;
-  box(w, h, d, FYP.eastBuildingWall, 0, h/2, 0, g);
-  box(w + 0.14, 0.45, d + 0.14, 0x9aa3ab, 0, 0.22, 0, g, false);            // plint beton abu-abu
-  var roof = new THREE.Mesh(pyramidRoofGeo(w + 1.4, 2.6, d + 1.4), mat(FYP.eastBuildingRoof));
-  roof.position.y = h + 0.04; roof.castShadow = true; roof.receiveShadow = true; g.add(roof);
-  box(0.95, 0.3, 0.95, 0x3f3f46, 0, h + 2.68, 0, g, false);                 // tutup puncak gelap
-  // pintu cokelat + dua jendela kaca biru muda di sisi barat (menghadap halaman)
-  box(0.14, 2.5, 1.4, 0x8a5a2b, -w/2 - 0.05, 1.25, 0, g, false);
-  [-3.2, 3.2].forEach(function(wz){
-    box(0.12, 1.3, 1.3, PAL.winFrame, -w/2 - 0.05, 2.5, wz, g, false);
-    box(0.06, 1.05, 1.05, 0xcfeeff, -w/2 - 0.13, 2.5, wz, g, false);
-  });
-  // satu jendela di sisi selatan
-  box(1.3, 1.3, 0.12, PAL.winFrame, 1.8, 2.5, d/2 + 0.05, g, false);
-  box(1.05, 1.05, 0.06, 0xcfeeff, 1.8, 2.5, d/2 + 0.13, g, false);
-  addCollider(33, -8.5, w/2 + 0.5, d/2 + 0.5);
-})();
+/* REBUILD Tahap 1B: bangunan hijau dibangun ulang memakai Pembangun Nusantara
+   (buildNusantara) — posisi, tapak 8x11, collider & ketiadaan papan nama
+   IDENTIK dengan bangunan lama; muka (pintu + 2 jendela) tetap menghadap
+   barat ke halaman, 1 jendela tetap di sisi selatan, atap tetap limasan
+   merah bata. Teras dimatikan agar tapak persis seperti bangunan lama. */
+buildNusantara({x:33, z:-8.5, ry:-Math.PI/2, w:11, d:8, h:4.0, rh:2.6,
+  wall:FYP.eastBuildingWall, roof:'limasan', roofColor:FYP.eastBuildingRoof,
+  door:0x8a5a2b, plint:0x9aa3ab, solid:false, teras:false});
+addCollider(33, -8.5, 8/2 + 0.5, 11/2 + 0.5);
 
 /* --- Kanopi parkir motor (barat halaman depan, Lampiran B): tiang oranye, langit-langit
    biru muda, dinding belakang kuning, tiga motor terparkir menghadap dinding --- */
@@ -3994,6 +4092,138 @@ house(79, 40, 0xdbeafe, 0x8a3320); house(-70, 64, 0xfce7f3, 0x7c4a21); house(-1,
 /* --- TERMINAL GERDUREN (BARU) di perempatan timur desa — persimpangan
    Jl. Sawah Glempang × jalan cabang timur (arah Polsek & Puskesmas).
    Bis Keliling Desa berangkat, parkir, dan kembali ke sini. --- */
+/* ================= TAHAP 1A — MARKAS GARDA GARUDA FORCE (RINGKAS) =================
+   CATATAN LOKASI (hasil verifikasi kode 25 Nov 2026): tapak contoh di
+   spesifikasi, strip (0,-56), ternyata SUDAH TERISI Kolam Renang Sekolah &
+   Karnaval/Taman Bermain (zona x -30..28,5, z -62..-47; 10 collider fisik:
+   dinding kolam, menara Perosotan Air, papan loncat, dst.) — markas tidak
+   bisa ditaruh di sana tanpa menghancurkan wahana yang sudah jadi. Markas
+   dibangun di strip utara yang BENAR-BENAR kosong menurut pindai collider
+   yang sama: pusat (-52,-56), tapak 40 x 24 m (x -72..-32, z -68..-44).
+   Tetap di sabuk utara desa, gerbang SELATAN menghadap sekolah, 4 m dari
+   Jalan Lingkar utara (z -72), tidak menabrak Hutan Desa (x <= -74),
+   Balai Desa (z >= -41,5), Karnaval (x >= -30), kandang ayam/kambing/sapi
+   (z >= -44,5 di x -28..8) maupun Kolam Ikan (16,-40). Isi mengikuti
+   spesifikasi 1A: plaza titanium + jalur cahaya cyan, Gedung Komando
+   oktagonal + kubah emas + Hologram Garuda berputar (1 PointLight beacon),
+   benteng + gerbang selatan + papan nama, Lapangan Apel + tiang bendera,
+   hanggar 4 bay KOSONG (kendaraan belum dipindah), Ruang Briefing
+   (eksterior Pembangun Nusantara + interior betulan 'briefing').
+   Spawn pemain TIDAK berubah (tetap (0,26)); tanpa state baru di eco.
+   STATUS: lokasi markas (-52,-56) DISETUJUI Anggi 25 Nov 2026. Pada
+   persetujuan yang sama diperbaiki pula 3 cacat kecil hasil inspeksi:
+   tiang lampu Jalan Lingkar digeser keluar dinding barat markas, Gedung
+   Komando digeser 1 m ke selatan agar tidak menjorok ke Jalan Lingkar,
+   dan hanggar digeser 0,5 m ke barat agar kanopinya tidak menembus
+   dinding timur markas. */
+var gardaHolo = null;
+(function(){
+  var MX = -52, MZ = -56; // pusat markas
+  INFO['Markas GARDA GARUDA FORCE'] = 'Markas Satuan Khusus GARDA GARUDA FORCE di utara desa: markas penjaga keamanan dan ketertiban Desa Gerduren. Di dalamnya ada Gedung Komando berkubah emas dengan Hologram Garuda berputar, Lapangan Apel, Hanggar 4 bay, dan Ruang Briefing. Gerbangnya menghadap selatan ke arah sekolah.';
+  INFO['Ruang Briefing GARDA'] = 'Ruang Briefing GARDA: ruang rapat operasi di sisi barat markas — ada meja rapat panjang, papan peta desa, dan kursi-kursi komando. Tekan Aksi lalu pilih Masuk Ruangan untuk melihat isinya.';
+  INFO['Lapangan Apel GARDA'] = 'Lapangan Apel Markas GARDA: tempat baris-berbaris dan upacara satuan khusus, lengkap dengan tiang bendera Merah Putih.';
+  INFO['Hanggar GARDA'] = 'Hanggar Markas GARDA: 4 landasan parkir (BAY-01 sampai BAY-04) yang masih kosong — kendaraan satuan khusus belum ditempatkan di sini.';
+  INFO['Gedung Komando GARDA'] = 'Gedung Komando GARDA GARUDA FORCE: gedung oktagonal putih bersabuk kaca dengan kubah emas. Di puncaknya berputar Hologram Garuda — lambang satuan khusus penjaga Desa Gerduren.';
+  // --- Plaza titanium (permukaan +0,3 m = tinggi auto-step game) + jalur cahaya cyan ke Gedung Komando
+  box(40, 0.3, 24, 0x8d99ae, MX, 0.15, MZ, scene, false).receiveShadow = true;
+  addStepCollider(MX, MZ, 20, 12);
+  var pathGlow = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 19), new THREE.MeshBasicMaterial({color:0x22d3ee, transparent:true, opacity:0.5}));
+  pathGlow.rotation.x = -Math.PI/2; pathGlow.position.set(MX, 0.335, -54.5); scene.add(pathGlow);
+  flat(40, 0.7, 0x64748b, MX, -44.35, scene, 0.315); flat(40, 0.7, 0x64748b, MX, -67.65, scene, 0.315);
+  // --- Dinding benteng keliling (gerbang terbuka di sisi SELATAN, tengah)
+  function mWall(w, d, x, z){
+    box(w, 2.2, d, 0xd8dee6, x, 1.4, z, scene);
+    box(w < 1 ? 0.56 : w, 0.22, d < 1 ? 0.56 : d, 0x0f2a4a, x, 2.61, z, scene, false);
+    addCollider(x, z, Math.max(w/2, 0.4), Math.max(d/2, 0.4));
+  }
+  mWall(40, 0.4, MX, -68);            // utara
+  mWall(0.4, 24, -72, MZ);           // barat
+  mWall(0.4, 24, -32, MZ);           // timur
+  mWall(16.4, 0.4, -63.8, -44);      // selatan barat (menyisakan celah gerbang x -55,6..-48,4)
+  mWall(16.4, 0.4, -40.2, -44);      // selatan timur
+  // --- Gerbang utama selatan + papan nama (pola wallSign/signTexture game)
+  [-55.6, -48.4].forEach(function(px){
+    box(0.9, 4.6, 0.9, 0x0f2a4a, px, 2.6, -44, scene);
+    box(1.15, 0.28, 1.15, 0xd4a017, px, 5.05, -44, scene, false);
+    addCollider(px, -44, 0.6, 0.6);
+  });
+  var gateG = new THREE.Group(); gateG.position.set(MX, 0, -44); scene.add(gateG);
+  box(8.6, 1.9, 0.5, 0x0f2a4a, 0, 3.6, 0, gateG);
+  wallSign(gateG, 'MARKAS SATUAN KHUSUS', 0, 3.6, 0.26, 7.6, {sub:'GARDA GARUDA FORCE', bg:'#0f2a4a', fg:'#ffd97a', frame:0x0f2a4a});
+  labelAt('Markas GARDA GARUDA FORCE', MX, 5.9, -44, 0.66);
+  addInteractable(MX, -44, 6.5, 'Markas GARDA GARUDA FORCE');
+  // --- Gedung Komando: badan oktagonal putih + sabuk kaca + kubah emas + hologram Garuda
+  // (digeser 1 m ke selatan dari -63 ke -62: tepi utara collider lama di z -69,3 menjorok masuk ke badan Jalan Lingkar utara yang berakhir di z -68,5)
+  var cmd = new THREE.Group(); cmd.position.set(MX, 0.3, -62); scene.add(cmd);
+  var bodyC = new THREE.Mesh(new THREE.CylinderGeometry(5.6, 6.1, 4.2, 8), mat(0xf1f5f9));
+  bodyC.rotation.y = Math.PI/8; bodyC.position.y = 2.1; bodyC.castShadow = true; bodyC.receiveShadow = true; cmd.add(bodyC);
+  var band = new THREE.Mesh(new THREE.CylinderGeometry(5.78, 5.78, 1.05, 8), new THREE.MeshLambertMaterial({color:0x155e75, emissive:0x164e63}));
+  band.rotation.y = Math.PI/8; band.position.y = 2.9; cmd.add(band);
+  var dome = new THREE.Mesh(new THREE.SphereGeometry(4.4, 18, 10, 0, Math.PI*2, 0, Math.PI/2), mat(0xd4a017));
+  dome.position.y = 4.2; dome.castShadow = true; cmd.add(dome);
+  cyl(0.09, 0.13, 1.4, 0x92400e, 0, 9.2, 0, cmd, 8);
+  box(2.1, 2.7, 0.16, 0x0f2a4a, 0, 1.35, 5.22, cmd, false);   // pintu selatan gedung
+  wallSign(cmd, 'GEDUNG KOMANDO', 0, 3.62, 5.28, 3.6, {bg:'#0f2a4a', fg:'#ffd97a', frame:0x0f2a4a});
+  addCollider(MX, -62, 6.3, 6.3);
+  addInteractable(MX, -54.9, 5.5, 'Gedung Komando GARDA');
+  gardaHolo = new THREE.Group(); gardaHolo.position.set(MX, 11.7, -62); scene.add(gardaHolo);
+  var holoMat = new THREE.MeshBasicMaterial({color:0x67e8f9, transparent:true, opacity:0.78});
+  var hb = new THREE.Mesh(new THREE.ConeGeometry(0.55, 1.5, 8), holoMat); hb.rotation.x = Math.PI; gardaHolo.add(hb);
+  var hh = new THREE.Mesh(new THREE.SphereGeometry(0.34, 10, 8), holoMat); hh.position.set(0, 1.05, 0); gardaHolo.add(hh);
+  [-1, 1].forEach(function(s){ var wg = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.5, 0.12), holoMat); wg.position.set(s * 1.25, 0.45, 0); wg.rotation.z = s * 0.45; gardaHolo.add(wg); });
+  var hring = new THREE.Mesh(new THREE.TorusGeometry(1.7, 0.07, 8, 28), new THREE.MeshBasicMaterial({color:0xfacc15, transparent:true, opacity:0.9}));
+  hring.rotation.x = Math.PI/2; hring.position.y = -1.15; gardaHolo.add(hring);
+  var beacon = new THREE.PointLight(0xffd97a, 0.9, 26, 1.8); beacon.position.set(MX, 10.3, -62); scene.add(beacon);
+  // --- Lapangan Apel + tiang bendera Merah Putih (pola tiang bendera game)
+  flat(16, 6.5, 0xaebdd0, MX, -49.5, scene, 0.315);
+  box(16, 0.02, 0.3, 0xffffff, MX, 0.325, -52.6, scene, false); box(16, 0.02, 0.3, 0xffffff, MX, 0.325, -46.4, scene, false);
+  cyl(0.07, 0.1, 7.6, 0xf8fafc, MX, 4.1, -49.5, scene, 8);
+  box(1.1, 0.9, 1.1, 0xd6d3cd, MX, 0.75, -49.5, scene);
+  box(2.1, 0.8, 0.05, 0xdc2626, MX + 1.12, 7.45, -49.5, scene, false);
+  box(2.1, 0.8, 0.05, 0xffffff, MX + 1.12, 6.65, -49.5, scene, false);
+  addCollider(MX, -49.5, 0.6, 0.6);
+  addInteractable(MX, -46.2, 4.5, 'Lapangan Apel GARDA');
+  // --- Hanggar (timur): kanopi + 4 landasan parkir KOSONG BAY-01..04 + kantor hanggar
+  // (seluruh hanggar digeser 0,5 m ke barat: lis kanopi lama mencapai x -32,3 dan menembus dinding timur markas di x -32,2)
+  var HX = -40.5, HZ = -61.5;
+  [[-47,-65.5],[-34,-65.5],[-47,-57.5],[-34,-57.5]].forEach(function(p){
+    box(0.3, 3.4, 0.3, 0x475569, p[0], 2.0, p[1], scene); addCollider(p[0], p[1], 0.32, 0.32);
+  });
+  box(15, 0.2, 10, 0x64748b, HX, 3.75, HZ, scene);
+  box(15.4, 0.14, 10.4, 0x0f2a4a, HX, 3.98, HZ, scene, false);
+  for(var bi = 0; bi < 4; bi++){
+    var bx = -45.8 + bi * 3.55;
+    flat(3.1, 7.6, bi % 2 ? 0x707d90 : 0x7b8798, bx, HZ, scene, 0.315);
+    postSign('BAY-0' + (bi + 1), bx, -56.9, 0, {w:1.9, bg:'#0f2a4a', fg:'#ffd97a'});
+  }
+  addInteractable(HX, -56.4, 5, 'Hanggar GARDA');
+  buildNusantara({x:-35.8, z:-50.5, ry:-Math.PI/2, w:6.5, d:4.6, h:3.0, rh:1.6,
+    wall:0xe7e5e4, roof:'limasan', roofColor:0x475569, sign:'KANTOR HANGAR', signBg:'#334155', solid:true, teras:false});
+  // --- Gedung Briefing (barat): eksterior Pembangun Nusantara, atap joglo
+  buildNusantara({x:-65, z:-60.5, ry:0, w:11, d:7.5, h:3.6, rh:2.2,
+    wall:0xfef3c7, roof:'joglo', roofColor:0x9e3d2c, sign:'RUANG BRIEFING', signBg:'#0f2a4a', solid:true});
+  addInteractable(-65, -54.4, 5.5, 'Ruang Briefing GARDA', null, {enterRoom:'briefing'});
+})();
+/* Interior Ruang Briefing GARDA — kantong interior (96,310), pola ruang kelas:
+   meja rapat panjang + 8 kursi + papan peta desa + rak berkas. */
+(function(){
+  var cx = 96, cz = 310;
+  var g = buildRoomShell('briefing', 'Ruang Briefing GARDA', cx, cz, 14, 10,
+    {wall:0xdde5ee, floor:0x8d99ae, sign:'RUANG BRIEFING GARDA', signBg:'#0f2a4a'});
+  box(6.4, 0.75, 1.7, 0x475569, 0, 0.38, 0.4, g);                 // meja rapat panjang
+  box(6.8, 0.1, 2.0, 0x334155, 0, 0.8, 0.4, g, false);
+  box(3.2, 0.05, 1.1, 0xdcfce7, 0, 0.87, 0.4, g, false);          // peta desa di atas meja
+  [-2.6, -0.9, 0.9, 2.6].forEach(function(dx){ furnChair(g, dx, 1.95, Math.PI, 0x0f2a4a); furnChair(g, dx, -1.15, 0, 0x0f2a4a); });
+  box(4.6, 1.7, 0.09, 0x14532d, 3.9, 1.75, 4.8, g, false);        // papan peta operasi (dinding selatan)
+  [[2.6,2.2,0xdc2626],[4.0,1.5,0xf59e0b],[5.2,2.1,0x22d3ee]].forEach(function(pn){
+    var pin = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), new THREE.MeshBasicMaterial({color:pn[2]}));
+    pin.position.set(pn[0], pn[1], 4.72); g.add(pin);
+  });
+  furnShelf(g, -6.2, -3.2, Math.PI/2, 3.4);                      // rak berkas di dinding barat
+  colL(cx, cz, 0, 0.4, 3.5, 1.1);
+  colL(cx, cz, -6.2, -3.2, 0.5, 1.9);
+})();
+
 var busGroup = new THREE.Group();
 (function(){
   flat(21, 12.5, 0xd6d3cd, 66, 63, scene, 0.045);                    // apron beton terminal
@@ -4230,7 +4460,7 @@ function lampPost(x, z){
 [-84,-60,-36,-12,12,36,60,84].forEach(function(lx){ lampPost(lx, 46.4); });   // sepanjang Jl. Sawah Glempang
 lampPost(95, 46.2); lampPost(109, 57.8);                                       // kedua ujung Jembatan Gerduren
 lampPost(75, 57.5);                                                            // sudut Terminal Gerduren
-lampPost(-72, -65.5); lampPost(72, -65.5);                                     // Jalan Lingkar sisi utara
+lampPost(-74.6, -65.5); lampPost(72, -65.5);                                   // Jalan Lingkar sisi utara (yang barat digeser 2,6 m ke barat: posisi lama (-72,-65,5) menempel tepat di dinding barat Markas GARDA)
 var wxLabel = document.getElementById('wxLabel');
 function wxClockText(){
   var hh = Math.floor(WX.hour), mm = Math.floor((WX.hour - hh) * 60);
@@ -4271,6 +4501,12 @@ function updateSkyWeather(dt){
   scene.background.copy(_skyA); scene.fog.color.copy(_skyA);
   scene.fog.near = WX.weather === 'hujan' ? 30 : 45 - night * 10;
   scene.fog.far = WX.weather === 'hujan' ? 58 : 75 - night * 15;
+  /* TAHAP 2: malam zombie aktif -> kabut sedikit lebih rapat. Game yang
+     memutuskan nilai akhir di sini; modul zombie TIDAK PERNAH meng-assign
+     scene.fog — ia hanya menaikkan flag global nightZombieActive. */
+  if(typeof nightZombieActive !== 'undefined' && nightZombieActive){ scene.fog.near = Math.min(scene.fog.near, 28); scene.fog.far = Math.min(scene.fog.far, 55); }
+  /* TAHAP 5: di dalam Dimensi Lain selalu malam gelap + kabut rapat. Hanya flag inDimensi yang dibaca di sini; scene.fog TIDAK PERNAH di-assign (hanya .near/.far/.color). */
+  if(typeof inDimensi !== 'undefined' && inDimensi){ night = 1; sunI *= 0.25; hemiI *= 0.4; ambI *= 0.5; scene.fog.near = Math.min(scene.fog.near, 22); scene.fog.far = Math.min(scene.fog.far, 48); scene.background.setHex(0x0b1026); scene.fog.color.setHex(0x141b3d); }
   sun.intensity = sunI; sun.color.copy(_sunA); hemi.intensity = hemiI; amb.intensity = ambI;
   var ang = (WX.hour - 6) / 12 * Math.PI;
   if(Math.sin(ang) > -0.05) sun.position.set(Math.cos(ang) * 55, 12 + Math.sin(ang) * 55, 30);
@@ -4514,6 +4750,7 @@ makeBird(-20, 20, 30, 16, 0.11, 0); makeBird(30, 0, 38, 19, 0.09, 2.4); makeBird
     if(Math.abs(x + 88) < 5 && z > -76 && z < 84) return true;           // jalan lingkar barat
     if(Math.abs(x - 88) < 5 && z > -76 && z < 84) return true;           // jalan lingkar timur
     if(x > 54 && x < 78 && z > 55 && z < 71) return true;                // terminal gerduren
+    if(x > 68.5 && x < 85.5 && z > -40.5 && z < -25.5) return true;       // stasiun gerduren (lokasi perbaikan kedua di timur Puskesmas)
     if(x > 14 && x < 34 && z > 30 && z < 46) return true;                // masjid
     for(var hi = 0; hi < houseSpots.length; hi++){
       if(Math.abs(x - houseSpots[hi][0]) < 5.5 && Math.abs(z - houseSpots[hi][1]) < 4.5) return true;
@@ -4725,6 +4962,234 @@ buildTrafficLight(5.6, 46.4, 0);            // persimpangan Gerbang Sekolah
 buildTrafficLight(46.6, 46.4, 0);           // persimpangan Timur (arah Polsek)
 buildTrafficLight(57.8, 17.5, -Math.PI / 2); // jalan timur dekat Polsek
 postSign('Lampu Lalu Lintas', 5.6, 44.6, Math.PI, {w:2.6, bg:'#1f2937', fg:'#facc15'});
+
+/* ================= TAHAP 1C — PURWOKERTO SEBAGAI ZONA FAST-TRAVEL =================
+   Jembatan Kali Tajum = jembatan beton yang SUDAH ADA di atas Sungai
+   Gerduren pada Jl. Sawah Glempang (z=52 x sungai 99,2..106,8) — diberi
+   nama resmi + papan nama + tiang ujung (tanpa sungai baru). Stasiun
+   Gerduren (kini di timur Puskesmas — lihat blok stasiun di bawah)
+   menjadi gerbang fast-travel ke kantong Kota
+   Purwokerto di (600,600) — jauh dari kantong interior (z 275..397) dan
+   dari batas dunia; selama di kota, interiorClamp dipakai sebagai batas
+   gerak kantong (pola yang sama dengan ruangan interior), jadi
+   WORLD_BOUNDS tidak diubah sama sekali. Lampu lalu lintas kota memakai
+   buildTrafficLight yang sama (satu sistem, satu fase global). Total
+   PointLight baru Tahap 1 = 2 (beacon Garuda + beacon Teratai). */
+var terataiPetals = [];
+var cityReturn = null;
+function teleportToCity(){
+  if(!playing) return;
+  if(interiorClamp){ showToast('Keluar dulu dari ruangan ini sebelum naik kereta ke Purwokerto.', 3200); return; }
+  if(riding || vehDrive || tourActive){ showToast('Turun dulu dari kendaraanmu sebelum naik kereta ke Purwokerto.', 3200); return; }
+  if(poseMode) standPose(true);
+  cityReturn = {x:player.position.x, z:player.position.z, ry:player.rotation.y};
+  interiorClamp = {minX:547, maxX:653, minZ:547, maxZ:653};
+  roomFloorY = 0;
+  player.position.set(600, 0, 639); player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
+  AudioSys.sfx('pop');
+  showToast('Kamu naik kereta dari Stasiun Gerduren... Selamat datang di PURWOKERTO! Kunjungi Alun-Alun, Menara Pandang Teratai, dan City Mall. Kembali ke desa lewat Stasiun Purwokerto.', 5600);
+}
+function teleportToGerduren(){
+  var r = cityReturn || {x:77, z:-27.5, ry:Math.PI};
+  if(poseMode) standPose(true);
+  interiorClamp = null; roomFloorY = 0; cityReturn = null;
+  player.position.set(r.x, 0, r.z); player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = r.ry; camYawT = r.ry; camYaw = r.ry;
+  AudioSys.sfx('pop');
+  showToast('Kamu kembali ke Stasiun Gerduren. Selamat datang kembali di Desa Gerduren!', 4200);
+}
+/* ================= TAHAP 5 — PORTAL DIMENSI & DIMENSI LAIN =================
+   Dimensi Lain = kantong dunia baru di (800,800) (pola kantong Purwokerto):
+   selama di dalam, interiorClamp dipakai sebagai batas gerak kantong
+   (741..859) dan flag inDimensi menyalakan langit gelap di
+   updateSkyWeather + konteks spawn zombie dimensi. Satu-satunya pintu
+   masuk: Portal Dimensi di Markas GARDA (-68,-47).
+   TAHAP 5B: portal BISA dimasuki saat Main Bareng. Zombie/boss/material
+   di dalam Dimensi Lain berjalan LOKAL per pemain — masing-masing pemain
+   melawan zombienya sendiri, hadiah masuk ke eco masing-masing, TIDAK ada
+   sinkronisasi zombie via server. Ini batas arsitektur yang disengaja,
+   bukan bug. (Bocor malam di dunia utama tetap solo-only.) */
+var inDimensi = false;
+var dimensiReturn = null;
+function teleportToDimensi(){
+  if(!playing) return;
+  if(inDimensi) return;
+  if(interiorClamp){ showToast('Keluar dulu dari ruangan ini sebelum masuk Portal Dimensi.', 3200); return; }
+  if(riding || vehDrive || tourActive){ showToast('Turun dulu dari kendaraanmu sebelum masuk Portal Dimensi.', 3200); return; }
+  if(poseMode) standPose(true);
+  dimensiReturn = {x:player.position.x, z:player.position.z, ry:player.rotation.y};
+  interiorClamp = {minX:741, maxX:859, minZ:741, maxZ:859};
+  roomFloorY = 0; inDimensi = true;
+  player.position.set(800, 0, 845); player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = Math.PI; camYawT = Math.PI; camYaw = Math.PI;
+  nzSpawnBoss();
+  AudioSys.sfx('pop');
+  showToast('Kamu melangkah melewati Portal Dimensi... Selamat datang di DIMENSI LAIN! Di sini selalu malam: usir zombie untuk mendapat Kristal Dimensi, jelajahi Ruang Gerbang, Lorong Kabut, dan Ruang Penjaga. Penjaga Dimensi menantimu di ruang terakhir! Portal Pulang di plaza masuk membawamu kembali ke Markas GARDA.', 7200);
+}
+function teleportToDimensiBack(){
+  if(poseMode) standPose(true);
+  var r = dimensiReturn || {x:-68, z:-45, ry:Math.PI};
+  inDimensi = false; interiorClamp = null; roomFloorY = 0; dimensiReturn = null;
+  nzClearAll(false);
+  player.position.set(r.x, 0, r.z); player.position.y = 0; vy = 0; grounded = true;
+  player.rotation.y = r.ry; camYawT = r.ry; camYaw = r.ry;
+  AudioSys.sfx('pop');
+  showToast('Kamu kembali melewati Portal Dimensi ke Markas GARDA. Selamat datang kembali di Desa Gerduren!', 4200);
+}
+/* --- JEMBATAN KALI TAJUM: penguat visual + nama resmi jembatan yang sudah ada --- */
+INFO['Jembatan Kali Tajum'] = 'Jembatan Kali Tajum: nama resmi jembatan beton di atas Sungai Gerduren pada Jl. Sawah Glempang — penghubung Desa Gerduren ke arah timur, jalan menuju Purwokerto. Bis Keliling Desa dan kendaraan warga menyeberang lewat jembatan ini setiap hari.';
+postSign('Jembatan Kali Tajum', 93.8, 58.9, -2.6, {w:3.8, bg:'#075985', fg:'#ffffff'});
+box(0.9, 1.7, 0.9, 0x78716c, 94.6, 0.85, 46.9, scene); addCollider(94.6, 46.9, 0.6, 0.6);
+box(0.9, 1.7, 0.9, 0x78716c, 109.4, 0.85, 57.1, scene); addCollider(109.4, 57.1, 0.6, 0.6);
+box(0.5, 0.35, 0.5, 0xd4a017, 94.6, 1.9, 46.9, scene, false); box(0.5, 0.35, 0.5, 0xd4a017, 109.4, 1.9, 57.1, scene, false);
+/* --- STASIUN GERDUREN (gerbang fast-travel) ---
+   PERBAIKAN KEDUA (perintah Anggi 25 Nov 2026): lokasi perbaikan pertama
+   (75,42) ternyata MENABRAK rumah warga di (79,40) — collider stasiun
+   x 69,2..80,8 / z 39,2..44,8 menembus collider rumah x 74,5..83,5 /
+   z 36,2..43,8 sebesar 6,3 x 4,6 m; pemeriksaan perbaikan pertama
+   melewatkan rumah terdekat itu. Jalur z ~42 diapit rumah (64,44) dan
+   rumah (79,40) dengan celah hanya 6 m — stasiun selebar 11 m TIDAK
+   muat di sana, jadi stasiun DIPINDAH ke (77,-33): lahan kosong di
+   timur Puskesmas, di antara sawah timur laut dan sawah timur, barat
+   Jalan Lingkar timur. Verifikasi dari kode: collider bangunan
+   x 71,2..82,8 / z -35,8..-30,2 TIDAK menyentuh collider Puskesmas
+   (x <= 69,5; celah 1,7 m), aspal Jalan Lingkar timur (x >= 84,5;
+   celah 1,7 m), collider undakan sawah timur laut (z <= -38,3; celah
+   2,5 m) maupun sawah timur (z >= -27,7; celah 2,5 m). Rel di sisi
+   utara (z -38,2, membentang x 70..84) berhenti 0,65 m di selatan
+   petak sawah timur laut dan 1 m di timur dinding Puskesmas, dan
+   berakhir di x 84 tepat sebelum Jalan Lingkar timur. Pindai
+   menyeluruh atas seluruh berkas: TIDAK ADA satu pun penempatan objek
+   (bangunan, pohon, warga, papan, lampu) pada x 65..90 / z -45..-20
+   selain Puskesmas di tepi barat tapak ini. */
+INFO['Stasiun Gerduren'] = 'Stasiun Gerduren di timur laut desa, di sebelah timur Puskesmas, di antara dua petak sawah dekat Jalan Lingkar timur. Dari sini kereta berangkat ke Kota Purwokerto! Tekan Aksi lalu pilih Naik Kereta ke Purwokerto untuk berangkat.';
+INFO['Stasiun Purwokerto'] = 'Stasiun Purwokerto: stasiun besar di selatan Kota Purwokerto. Tekan Aksi lalu pilih Naik Kereta Kembali ke Gerduren untuk pulang ke desa.';
+INFO['Purwokerto'] = 'Purwokerto: kota kabupaten Banyumas di timur Desa Gerduren. Ada Alun-Alun dengan Menara Pandang Teratai, Stasiun Purwokerto, dan Purwokerto City Mall. Kamu tiba di sini naik kereta dari Stasiun Gerduren.';
+INFO['Alun-Alun Purwokerto'] = 'Alun-Alun Purwokerto: lapangan hijau luas di tengah kota, tempat warga berkumpul dan bermain. Di tengahnya berdiri Menara Pandang Teratai yang terkenal.';
+INFO['Menara Pandang Teratai'] = 'Menara Pandang Teratai: menara pandang kebanggaan Purwokerto dengan 12 kelopak teratai di puncaknya. Saat malam, kelopaknya bercahaya ungu dan lampu beacon-nya menyala!';
+INFO['Purwokerto City Mall'] = 'Purwokerto City Mall: pusat perbelanjaan besar berkaca biru di timur laut kota. Gedungnya tinggi dan mengkilap — tanda kamu sedang berada di kota!';
+(function(){
+  var SX = 77, SZ = -33;
+  flat(13, 8.5, 0xd6d3cd, SX, SZ + 1.5, scene, 0.03);                    // lantai peron stasiun
+  var g = new THREE.Group(); g.position.set(SX, 0, SZ); scene.add(g);
+  box(11, 3.3, 5, 0xfef9c3, 0, 1.65, 0, g);
+  box(11.14, 0.5, 5.14, 0x7c2d12, 0, 0.25, 0, g, false);
+  gableRoof(g, 11, 5, 1.8, 3.3, 0x9e3d2c, 0x7c2d1e);
+  wallSign(g, 'STASIUN GERDUREN', 0, 2.75, 2.56, 5.6, {bg:'#7c2d12', fg:'#fef3c7', frame:0x7c2d12});
+  box(1.9, 2.4, 0.14, 0x7c4a21, -2.6, 1.2, 2.55, g, false);
+  box(1.5, 1.1, 0.1, 0xcfeeff, 2.4, 2.0, 2.55, g, false);
+  [-4.6, 4.6].forEach(function(px){ box(0.2, 2.6, 0.2, 0x475569, px, 1.3, 4.1, g); addCollider(SX + px, SZ + 4.1, 0.25, 0.25); });
+  box(11.4, 0.14, 2.2, 0x64748b, 0, 2.68, 3.6, g);                       // kanopi peron
+  scene.add(g);
+  addCollider(SX, SZ, 5.8, 2.8);
+  for(var rx = 70; rx <= 84; rx += 2.1) box(0.55, 0.07, 1.7, 0x78350f, rx, 0.035, SZ - 5.2, scene, false); // bantalan rel
+  box(14, 0.09, 0.16, 0x9ca3af, SX, 0.09, SZ - 5.65, scene, false); box(14, 0.09, 0.16, 0x9ca3af, SX, 0.09, SZ - 4.75, scene, false);
+  postSign('Stasiun Gerduren', SX - 5.5, SZ + 4.6, 2.8, {w:3.4, bg:'#7c2d12', fg:'#fef3c7'});
+  addInteractable(SX, SZ + 4.8, 5.5, 'Stasiun Gerduren', null, {teleport:'pwt'});
+  labelAt('Stasiun Gerduren', SX, 6.4, SZ, 0.6);
+})();
+/* --- KANTONG KOTA PURWOKERTO (pusat 600,600, luas +/- 60 m) --- */
+function cityGlassTex(){
+  if(cityGlassTex._t) return cityGlassTex._t;
+  var cv = document.createElement('canvas'); cv.width = 256; cv.height = 256;
+  var g = cv.getContext('2d');
+  g.fillStyle = '#274b63'; g.fillRect(0,0,256,256);
+  for(var y = 8; y < 248; y += 30) for(var x = 8; x < 248; x += 30){
+    g.fillStyle = (x + y) % 90 === 0 ? '#9fd8ef' : '#5ea9c9'; g.fillRect(x, y, 20, 20);
+  }
+  var t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace;
+  cityGlassTex._t = t; return t;
+}
+(function(){
+  var CX = 600, CZ = 600;
+  flat(124, 124, 0x86b06a, CX, CZ, scene, 0.008);                       // tanah kantong kota
+  flat(112, 112, 0xb9c0c7, CX, CZ, scene, 0.015);                      // pelat kota
+  flat(112, 13, 0x4b5563, CX, CZ, scene, 0.03);                        // jalan utama timur-barat (4 lajur)
+  flat(13, 112, 0x4b5563, CX, CZ, scene, 0.03);                        // jalan utama utara-selatan
+  for(var lx = 552; lx <= 648; lx += 8){ if(Math.abs(lx - 600) > 9) box(4, 0.05, 0.4, 0xfacc15, lx, 0.06, CZ, scene, false); }
+  for(var lz = 552; lz <= 648; lz += 8){ if(Math.abs(lz - 600) > 9) box(0.4, 0.05, 4, 0xfacc15, CX, 0.06, lz, scene, false); }
+  flat(112, 2.4, 0xd6d3cd, CX, 592.2, scene, 0.025); flat(112, 2.4, 0xd6d3cd, CX, 607.8, scene, 0.025); // trotoar
+  for(var zi = -2; zi <= 2; zi++){                                       // zebra cross di simpang tengah
+    box(0.9, 0.04, 1.6, 0xffffff, 591.8, 0.05, CZ + zi * 2.3, scene, false);
+    box(0.9, 0.04, 1.6, 0xffffff, 608.2, 0.05, CZ + zi * 2.3, scene, false);
+  }
+  buildTrafficLight(591, 591, 0); buildTrafficLight(609, 609, Math.PI); // 1 pasang, sistem lampu yang sama
+  lampPost(580, 591); lampPost(620, 591); lampPost(580, 609); lampPost(620, 609); lampPost(590, 624); lampPost(610, 624);
+  // Alun-Alun + Menara Pandang Teratai
+  flat(34, 30, 0x5db34c, 566, 572, scene, 0.02);
+  flat(34, 2.2, 0xd6d3cd, 566, 572, scene, 0.028); flat(2.2, 30, 0xd6d3cd, 566, 572, scene, 0.028);
+  (function(){
+    var TX = 566, TZ = 572;
+    cyl(3.2, 3.8, 1.0, 0xd6d3cd, TX, 0.5, TZ, scene, 18);
+    var tw = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 2.0, 15, 10), mat(0xf1f5f9));
+    tw.position.set(TX, 8.5, TZ); tw.castShadow = true; scene.add(tw);
+    cyl(1.7, 1.7, 0.5, 0xd4a017, TX, 16.2, TZ, scene, 12);
+    for(var pi = 0; pi < 12; pi++){
+      var a = pi / 12 * Math.PI * 2;
+      var pm = new THREE.MeshLambertMaterial({color:0xf9a8d4, emissive:0x000000});
+      terataiPetals.push(pm);
+      var petal = new THREE.Mesh(new THREE.BoxGeometry(0.7, 3.4, 1.7), pm);
+      petal.position.set(TX + Math.cos(a) * 2.1, 17.6, TZ + Math.sin(a) * 2.1);
+      petal.rotation.z = Math.cos(a) * 0.6; petal.rotation.x = -Math.sin(a) * 0.6;
+      petal.castShadow = true; scene.add(petal);
+    }
+    var tb = new THREE.Mesh(new THREE.SphereGeometry(0.55, 12, 9), new THREE.MeshBasicMaterial({color:0xfff3c4}));
+    tb.position.set(TX, 19.6, TZ); scene.add(tb);
+    var tl2 = new THREE.PointLight(0xffc4e1, 0.85, 30, 1.8); tl2.position.set(TX, 19.6, TZ); scene.add(tl2);
+    addCollider(TX, TZ, 3.4, 3.4);
+    labelAt('Menara Pandang Teratai', TX, 22.4, TZ, 0.7);
+  })();
+  addInteractable(578, 572, 7, 'Alun-Alun Purwokerto');
+  addInteractable(566, 579.5, 6, 'Menara Pandang Teratai');
+  addInteractable(614, 614, 6.5, 'Purwokerto');
+  // Stasiun Purwokerto (gerbang kembali ke Gerduren)
+  (function(){
+    var g = new THREE.Group(); g.position.set(600, 0, 650); g.rotation.y = Math.PI; scene.add(g);
+    box(15, 3.6, 5.5, 0xfef9c3, 0, 1.8, 0, g);
+    box(15.14, 0.5, 5.64, 0x7c2d12, 0, 0.25, 0, g, false);
+    gableRoof(g, 15, 5.5, 2.0, 3.6, 0x9e3d2c, 0x7c2d1e);
+    wallSign(g, 'STASIUN PURWOKERTO', 0, 3.0, 2.81, 6.4, {bg:'#7c2d12', fg:'#fef3c7', frame:0x7c2d12});
+    box(2.0, 2.5, 0.14, 0x7c4a21, 0, 1.25, 2.78, g, false);
+    flat(18, 3.4, 0xd6d3cd, 0, 4.6, g, 0.03);
+    for(var rx2 = -8; rx2 <= 8; rx2 += 2.2) box(0.55, 0.07, 1.7, 0x78350f, rx2, 0.035, -4.8, g, false);
+    box(19, 0.09, 0.16, 0x9ca3af, 0, 0.09, -4.35, g, false); box(19, 0.09, 0.16, 0x9ca3af, 0, 0.09, -5.25, g, false);
+    scene.add(g);
+    addCollider(600, 650, 8, 3.2);
+    addInteractable(600, 643.5, 6.5, 'Stasiun Purwokerto', null, {teleport:'gerduren'});
+    labelAt('Stasiun Purwokerto', 600, 7.8, 650, 0.66);
+  })();
+  // Purwokerto City Mall + 4 gedung kaca
+  (function(){
+    var g = new THREE.Group(); g.position.set(632, 0, 566); scene.add(g);
+    var mm = new THREE.Mesh(new THREE.BoxGeometry(24, 11, 15), new THREE.MeshLambertMaterial({map:cityGlassTex()}));
+    mm.position.y = 5.5; mm.castShadow = true; mm.receiveShadow = true; g.add(mm);
+    box(25, 0.5, 16, 0x334155, 0, 11.25, 0, g, false);
+    box(4.5, 3.2, 0.2, 0x0ea5e9, 0, 1.6, 7.55, g, false);
+    wallSign(g, 'PURWOKERTO CITY MALL', 0, 8.6, 7.6, 9.5, {bg:'#0c4a6e', fg:'#ffffff', frame:0x082f49});
+    scene.add(g);
+    addCollider(632, 566, 12.5, 8);
+    addInteractable(632, 575.5, 7, 'Purwokerto City Mall');
+    labelAt('Purwokerto City Mall', 632, 13.6, 566, 0.66);
+  })();
+  [[562, 552, 15], [562, 648, 13], [638, 648, 17], [638, 550, 14]].forEach(function(tw2){
+    var tm = new THREE.Mesh(new THREE.BoxGeometry(13, tw2[2], 13), new THREE.MeshLambertMaterial({map:cityGlassTex()}));
+    tm.position.set(tw2[0], tw2[2]/2, tw2[1]); tm.castShadow = true; tm.receiveShadow = true; scene.add(tm);
+    box(13.6, 0.45, 13.6, 0x334155, tw2[0], tw2[2] + 0.2, tw2[1], scene, false);
+    addCollider(tw2[0], tw2[1], 7, 7);
+  });
+})();
+/* Updater Tahap 1 (dipanggil dari animate() lewat updateAmbients):
+   hologram Garuda berputar; kaca Pembangun Nusantara + kelopak Teratai
+   menyala hanya saat malam mengikuti WX.hour (19,6-4,8). */
+ambients.push(function(dt, t){ if(gardaHolo) gardaHolo.rotation.y = t * 0.7; });
+var t1NightState = null;
+ambients.push(function(dt){
+  var night = (WX.hour >= 19.6 || WX.hour < 4.8);
+  if(night === t1NightState) return; t1NightState = night;
+  for(var i = 0; i < NUSA_GLASS_MATS.length; i++) NUSA_GLASS_MATS[i].emissive.setHex(night ? 0xcc8f3f : 0x000000);
+  for(var j = 0; j < terataiPetals.length; j++) terataiPetals[j].emissive.setHex(night ? 0x9d4edd : 0x000000);
+});
 ambients.push(function(dt){
   TL.t += dt;
   var dur = TL.phase === 'green' ? 6 : (TL.phase === 'yellow' ? 1.4 : 6);
@@ -5604,6 +6069,7 @@ window.addEventListener('keydown', function(e){
   if(e.repeat) return;
   if(e.code === 'KeyE' && playing && tourActive && tour && tour.manual){ endManualTour(); return; } // E saat menyetir wahana manual = turun / mendarat (tombol Aksi tersembunyi di laptop)
   if(e.code === 'KeyE' && playing && !uiBlocked()) document.getElementById('actionBtn').click(); // E = tombol Aksi
+  if(e.code === 'KeyF' && playing && !uiBlocked()) nzAttack(); // F = serang dengan Senjata Ajaib (Tahap 2)
   if(e.code === 'KeyT' && playing && !uiBlocked()){ // T = langsung mengetik di chat
     e.preventDefault();
     var ci = document.getElementById('chatInput');
@@ -5655,6 +6121,16 @@ camZone.addEventListener('pointermove', function(e){
 });
 function camEnd(e){ if(e.pointerId === camDrag.id) camDrag.active = false; }
 camZone.addEventListener('pointerup', camEnd); camZone.addEventListener('pointercancel', camEnd);
+/* TAHAP 2 (PC): klik kiri TANPA menggeser kamera = serang. Klik yang berubah
+   jadi drag kamera TIDAK menyerang — dibedakan dari jarak geser & durasi. */
+var camClickMark = null;
+camZone.addEventListener('pointerdown', function(e){ if(e.pointerType === 'mouse' && e.button === 0) camClickMark = {x:e.clientX, y:e.clientY, t:performance.now()}; });
+camZone.addEventListener('pointerup', function(e){
+  if(!camClickMark) return;
+  var cdx = e.clientX - camClickMark.x, cdy = e.clientY - camClickMark.y, cdt = performance.now() - camClickMark.t;
+  camClickMark = null;
+  if(Math.hypot(cdx, cdy) < 6 && cdt < 350 && playing && !uiBlocked()) nzAttack();
+});
 
 /* ---------- Joystick virtual kiri (mengambang, muncul di titik sentuh) ---------- */
 var joy = {active:false, id:null, cx:0, cy:0, x:0, y:0, mag:0};
@@ -5885,6 +6361,13 @@ actionBtn.addEventListener('click', function(){
     fb.addEventListener('click', function(){ hideInfo(); showRakFakta(); });
     infoActions.appendChild(fb);
     infoActions.classList.add('show');
+  } else if(t.teleport){
+    var tp = document.createElement('button');
+    tp.type = 'button'; tp.className = 'info-act-btn';
+    tp.textContent = t.teleport === 'pwt' ? 'Naik Kereta ke Purwokerto' : (t.teleport === 'dimensi' ? 'Masuk ke Dimensi Lain' : (t.teleport === 'dimensiBack' ? 'Kembali ke Markas GARDA' : 'Naik Kereta Kembali ke Gerduren'));
+    (function(dst){ tp.addEventListener('click', function(){ hideInfo(); if(dst === 'pwt') teleportToCity(); else if(dst === 'dimensi') teleportToDimensi(); else if(dst === 'dimensiBack') teleportToDimensiBack(); else teleportToGerduren(); }); })(t.teleport);
+    infoActions.appendChild(tp);
+    infoActions.classList.add('show');
   } else if(t.act){
     var ab = document.createElement('button');
     ab.type = 'button'; ab.className = 'info-act-btn';
@@ -5974,6 +6457,20 @@ actionBtn.addEventListener('click', function(){
     eb.textContent = '[E] Masuk Ruangan — Lihat Interiornya';
     (function(rid){ eb.addEventListener('click', function(){ hideInfo(); enterRoom(rid); }); })(t.enterRoom);
     infoActions.appendChild(eb); infoActions.classList.add('show');
+  }
+  if(t.ambilLentera){
+    var lb = document.createElement('button');
+    lb.type = 'button'; lb.className = 'info-act-btn';
+    lb.textContent = eco.inv.lenteraTajum > 0 ? 'Sudah Kamu Ambil — Ada di Tas' : 'Ambil Lentera Kristal Tajum';
+    lb.addEventListener('click', function(){ hideInfo(); ambilLentera(); });
+    infoActions.appendChild(lb); infoActions.classList.add('show');
+  }
+  if(t.bengkel){
+    var bk = document.createElement('button');
+    bk.type = 'button'; bk.className = 'info-act-btn';
+    bk.textContent = 'Buka Bengkel — Tempa Senjata Ajaib';
+    bk.addEventListener('click', function(){ hideInfo(); openBlacksmith(); });
+    infoActions.appendChild(bk); infoActions.classList.add('show');
   }
   if(t.exitRoom){
     var xb2 = document.createElement('button');
@@ -6344,6 +6841,7 @@ var ITEM_DEFS = [
   {id:'bibitTomat',  name:'Bibit Tomat',  src:'Koperasi • Bibit', kind:'bibit', hp:0, ep:0, use:'Tanam', price:20},
   {id:'bibitJagung', name:'Bibit Jagung', src:'Koperasi • Bibit', kind:'bibit', hp:0, ep:0, use:'Tanam', price:25},
   {id:'bibitPadi',   name:'Bibit Padi',   src:'Koperasi • Bibit', kind:'bibit', hp:0, ep:0, use:'Tanam', price:20},
+  {id:'bibitJahe',   name:'Bibit Jahe',   src:'Koperasi • Bibit', kind:'bibit', hp:0, ep:0, use:'Tanam', price:25},
   {id:'pakan',       name:'Pakan Ternak', src:'Koperasi • Pakan', kind:'pakan', hp:0, ep:0, use:'Beri Makan', price:10},
   {id:'hasilBayam',  name:'Bayam Segar',  src:'Kebun Praktik • Panen', kind:'makanan', hp:18, ep:6,  use:'Makan', sell:25},
   {id:'hasilTomat',  name:'Tomat Segar',  src:'Kebun Praktik • Panen', kind:'makanan', hp:14, ep:10, use:'Makan', sell:30},
@@ -6355,6 +6853,7 @@ var ITEM_DEFS = [
   {id:'bibitMelon',  name:'Bibit Melon Gerduren', src:'Kopdes Merah Putih', kind:'bibit', price:22, use:'Tanam'},
   {id:'hasilSemangka', name:'Semangka Emas', src:'Kebun Praktik • Panen', kind:'makanan', hp:30, ep:14, use:'Makan', sell:60},
   {id:'hasilMelon',  name:'Melon Gerduren', src:'Kebun Praktik • Panen', kind:'makanan', hp:24, ep:16, use:'Makan', sell:55},
+  {id:'hasilJahe',   name:'Jahe Segar',   src:'Kebun Praktik • Panen', kind:'makanan', hp:20, ep:14, use:'Makan', sell:45},
   {id:'pakanPremium', name:'Pakan Ternak Premium', src:'Kopdes Merah Putih', kind:'pakan', price:30, use:'Beri'},
   {id:'telurEmas',   name:'Telur Emas',   src:'Kandang Desa • Pakan Premium', kind:'makanan', hp:10, ep:75, use:'Makan', sell:90},
   {id:'susuCokelat', name:'Susu Cokelat', src:'Kandang Desa • Pakan Premium', kind:'minuman', hp:10, ep:75, use:'Minum', sell:85},
@@ -6363,7 +6862,25 @@ var ITEM_DEFS = [
   {id:'getukGoreng', name:'Getuk Goreng', src:'Kopdes • Kuliner Banyumas', kind:'makanan', hp:55, ep:0, price:28, use:'Makan'},
   {id:'ikanLaut',    name:'Ikan Laut Segar', src:'Memancing • Pantai & Pulau', kind:'makanan', hp:18, ep:6, use:'Makan', sell:35},
   {id:'ikanMas',     name:'Ikan Mas Pulau', src:'Memancing • Pulau Tropis', kind:'makanan', hp:26, ep:10, use:'Makan', sell:55},
-  {id:'ikanGoreng',  name:'Ikan Goreng Renyah', src:'Masakan Sendiri', kind:'makanan', hp:45, ep:12, use:'Makan', sell:70}
+  {id:'ikanGoreng',  name:'Ikan Goreng Renyah', src:'Masakan Sendiri', kind:'makanan', hp:45, ep:12, use:'Makan', sell:70},
+  /* TAHAP 4: Masakan dari hasil Kebun Praktik — dimasak di Kantin (2 bahan → 1 masakan). */
+  {id:'nasiGerduren', name:'Nasi Gerduren', src:'Masakan Sendiri • Kantin', kind:'makanan', hp:35, ep:10, use:'Makan', sell:60},
+  {id:'jagungBakar', name:'Jagung Bakar', src:'Masakan Sendiri • Kantin', kind:'makanan', hp:28, ep:12, use:'Makan', sell:50},
+  /* TAHAP 2: Senjata Ajaib — diambil SEKALI di Ruang Briefing Markas GARDA.
+     kind 'senjata': tombol Pakai = melengkapi senjata (BUKAN dikonsumsi). */
+  {id:'lenteraTajum', name:'Lentera Kristal Tajum', src:'Markas GARDA • Senjata Ajaib', kind:'senjata', hp:0, ep:0, use:'Pakai'},
+  /* TAHAP 3: 3 Senjata Ajaib sisanya — DITEMPA di Bengkel Las Pak Karso. */
+  {id:'tongkatBintang', name:'Tongkat Pramuka Bintang', src:'Bengkel Pak Karso • Senjata Ajaib', kind:'senjata', hp:0, ep:0, use:'Pakai'},
+  {id:'tombakMerapi', name:'Tombak Bara Merapi', src:'Bengkel Pak Karso • Senjata Ajaib', kind:'senjata', hp:0, ep:0, use:'Pakai'},
+  {id:'ketapelCahaya', name:'Ketapel Peluru Cahaya', src:'Bengkel Pak Karso • Senjata Ajaib', kind:'senjata', hp:0, ep:0, use:'Pakai'},
+  /* TAHAP 5: Pedang Dimensi — senjata ke-5, ditempa di Bengkel Pak Karso
+     dengan 3 Kristal Dimensi + 100 Kredit. */
+  {id:'pedangDimensi', name:'Pedang Dimensi', src:'Bengkel Pak Karso • Senjata Ajaib', kind:'senjata', hp:0, ep:0, use:'Pakai'},
+  /* TAHAP 5: Material drop Dimensi Lain — TANPA price (tidak dijual di
+     Kantin); bisa dijual di Kopdes (sell) atau ditempa jadi Pedang Dimensi. */
+  {id:'kristalDimensi', name:'Kristal Dimensi', src:'Dimensi Lain • Material', kind:'material', hp:0, ep:0, use:'Lihat', sell:20},
+  {id:'esensiKabut', name:'Esensi Kabut', src:'Dimensi Lain • Material', kind:'material', hp:0, ep:0, use:'Lihat', sell:30},
+  {id:'mahkotaPenjaga', name:'Mahkota Penjaga', src:'Dimensi Lain • Material', kind:'material', hp:0, ep:0, use:'Lihat', sell:120}
 ];
 var MBG_IDS = ['nasi', 'susu', 'buah']; // isi satu paket MBG (item Kantin TIDAK ikut jatah MBG)
 var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, lastUangSaku:0, welcomed:false,
@@ -6379,7 +6896,17 @@ var eco = { kredit:0, hp:100, ep:100, inv:{nasi:0, susu:0, buah:0}, lastMBG:0, l
   artefak:[], juaraHari:'', // artefak = id Artefak Sejarah yang sudah ditemukan; juaraHari = tanggal gelar "Juara Barung Hari Ini"
   houses:{},      // rumah Perumahan No. 1-8 yang SUDAH LUNAS milikku: {5:true, ...} (No. 5 juga tercermin di assets.rumah)
   houseOwners:{}, // peta kepemilikan rumah dari siaran multiplayer terakhir: {3:'Nama Pemain'}
-  farm:{plots:[], ayam:{f:0, r:0}, sapi:{f:0, r:0}} }; // Kebun Praktik: 12 petak {c,p,w} + ternak {f=fedAt, r=readyAt}
+  farm:{plots:[], ayam:{f:0, r:0}, sapi:{f:0, r:0}}, // Kebun Praktik: 12 petak {c,p,w} + ternak {f=fedAt, r=readyAt}
+  /* TAHAP 2 — Zombie Malam & Senjata Ajaib: nightCount = malam ke-berapa yang
+     sudah dimulai (bulan purnama tiap kelipatan 5); weaponTiers = tier tiap
+     senjata ajaib; equippedWeapon = id senjata yang sedang dipakai;
+     zombiesRepelled = total zombie yang sudah diusir (kembali jadi warga). */
+  nightCount:0, weaponTiers:{}, equippedWeapon:'', zombiesRepelled:0,
+  /* TAHAP 3 — Bengkel Pak Karso: weaponSockets = soket kristal per senjata
+     {idSenjata:'lifesteal'|'greed'|'vision'}; bumper = Bumper Baja sudah
+     terpasang di kendaraan milik pemain; bumperQuiz = kuis syarat bumper
+     sudah pernah lulus. Semua tetap di eco — tanpa state terpisah. */
+  weaponSockets:{}, bumper:false, bumperQuiz:false };
 ITEM_DEFS.forEach(function(d){ if(eco.inv[d.id] === undefined) eco.inv[d.id] = 0; });
 var POS_IDS = ['kompas','kim','bangga','tanda','ketaqwaan','bumbung','grazy','pbb','pionering'];
 POS_IDS.forEach(function(id){ eco.pos[id] = {best:0, stamp:false, plays:0}; });
@@ -6453,11 +6980,18 @@ function loadEco(){
     if(s.houseOwners && typeof s.houseOwners === 'object') eco.houseOwners = s.houseOwners;
     if(s.farm && typeof s.farm === 'object'){
       if(Array.isArray(s.farm.plots)) eco.farm.plots = s.farm.plots.slice(0, 12).map(function(p){
-        return (p && typeof p === 'object' && typeof p.c === 'string') ? {c:p.c, p:Math.max(0, Math.min(1, +p.p || 0)), w:Math.max(0, +p.w || 0)} : null;
+        return (p && typeof p === 'object' && typeof p.c === 'string') ? {c:p.c, p:Math.max(0, Math.min(1, +p.p || 0)), w:Math.max(0, +p.w || 0), s:p.s ? 1 : 0} : null;
       });
       if(s.farm.ayam && typeof s.farm.ayam === 'object') eco.farm.ayam = {f:+s.farm.ayam.f || 0, r:+s.farm.ayam.r || 0};
       if(s.farm.sapi && typeof s.farm.sapi === 'object') eco.farm.sapi = {f:+s.farm.sapi.f || 0, r:+s.farm.sapi.r || 0};
     }
+    if(typeof s.nightCount === 'number') eco.nightCount = Math.max(0, Math.floor(s.nightCount));
+    if(s.weaponTiers && typeof s.weaponTiers === 'object') eco.weaponTiers = s.weaponTiers;
+    if(typeof s.equippedWeapon === 'string') eco.equippedWeapon = s.equippedWeapon;
+    if(typeof s.zombiesRepelled === 'number') eco.zombiesRepelled = Math.max(0, Math.floor(s.zombiesRepelled));
+    if(s.weaponSockets && typeof s.weaponSockets === 'object') eco.weaponSockets = s.weaponSockets;
+    eco.bumper = !!s.bumper;
+    eco.bumperQuiz = !!s.bumperQuiz;
     eco.muted = !!s.muted;
   }catch(e){ /* simpanan rusak/diabaikan: mulai dari nilai awal */ }
 }
@@ -6494,7 +7028,7 @@ function sanitizePlayerData(){
     if(!eco.farm || typeof eco.farm !== 'object') eco.farm = {plots:[], ayam:{f:0, r:0}, sapi:{f:0, r:0}};
     if(!Array.isArray(eco.farm.plots)) eco.farm.plots = [];
     eco.farm.plots = eco.farm.plots.slice(0, 12).map(function(p){
-      return (p && typeof p === 'object' && typeof p.c === 'string') ? {c:p.c, p:Math.min(1, Math.max(0, sNum(p.p, 0))), w:Math.max(0, sNum(p.w, 0))} : null;
+      return (p && typeof p === 'object' && typeof p.c === 'string') ? {c:p.c, p:Math.min(1, Math.max(0, sNum(p.p, 0))), w:Math.max(0, sNum(p.w, 0)), s:p.s ? 1 : 0} : null;
     });
     while(eco.farm.plots.length < 12) eco.farm.plots.push(null);
     if(!eco.farm.ayam || typeof eco.farm.ayam !== 'object') eco.farm.ayam = {f:0, r:0};
@@ -6505,6 +7039,13 @@ function sanitizePlayerData(){
     if(['A','B','C'].indexOf(eco.fase) < 0) eco.fase = 'B';
     eco.lastMBG = Math.max(0, sNum(eco.lastMBG, 0));
     eco.lastUangSaku = Math.max(0, sNum(eco.lastUangSaku, 0));
+    eco.nightCount = Math.max(0, Math.floor(sNum(eco.nightCount, 0)));
+    if(!eco.weaponTiers || typeof eco.weaponTiers !== 'object') eco.weaponTiers = {};
+    if(typeof eco.equippedWeapon !== 'string') eco.equippedWeapon = '';
+    eco.zombiesRepelled = Math.max(0, Math.floor(sNum(eco.zombiesRepelled, 0)));
+    if(!eco.weaponSockets || typeof eco.weaponSockets !== 'object') eco.weaponSockets = {};
+    eco.bumper = !!eco.bumper;
+    eco.bumperQuiz = !!eco.bumperQuiz;
   }catch(e){ /* sanitizer tidak boleh menjatuhkan permainan */ }
 }
 sanitizePlayerData();
@@ -6649,6 +7190,7 @@ function checkMBGOnEnter(){
 var bagOpen = false;
 var bagOverlay = document.getElementById('bagOverlay'), bagGrid = document.getElementById('bagGrid');
 function itemIcon(kind){
+  if(kind === 'senjata') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/></svg>';
   if(kind === 'bibit') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5v-8"/><path d="M12 13.5C12 10 9.2 8 5 8c0 4.2 2.3 6.7 7 5.5z"/><path d="M12 11.5c0-3.5 2.8-5.5 7-5.5 0 4.2-2.3 6.7-7 5.5z"/></svg>';
   if(kind === 'pakan') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8.5 7.5 4h9L18 8.5V19a1.8 1.8 0 0 1-1.8 1.8H7.8A1.8 1.8 0 0 1 6 19V8.5z"/><path d="M6 8.5h12M9.5 13.2c.8-1.4 3.2-1.4 5 0-1 .9-1.7 2.3-2.5 3.8-.8-1.5-1.5-2.9-2.5-3.8z"/></svg>';
   if(kind === 'makanan') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h16a8 8 0 0 1-16 0z" fill="currentColor" stroke="none" opacity=".28"/><path d="M4 13h16a8 8 0 0 1-16 0z"/><path d="M7.5 9.5c1-1.8 2.6-2.7 4.5-2.7s3.5.9 4.5 2.7M12 4.2v1M8.6 5l.6.9M15.4 5l-.6.9"/></svg>';
@@ -6681,6 +7223,19 @@ function renderBag(){
 }
 function useItem(d){
   if(eco.inv[d.id] <= 0) return;
+  if(d.kind === 'senjata'){
+    /* Senjata Ajaib: Pakai = LENGKAPI senjata itu — tidak dikonsumsi seperti
+       makanan, jumlah di Tas tetap. Pilihan tersimpan di eco.equippedWeapon. */
+    eco.equippedWeapon = d.id; saveEco(); updateWeaponChip();
+    AudioSys.sfx('pop');
+    showToast(d.name + ' dipakai! Saat malam tiba, usir zombie dengan tombol Serang (di HP), tombol F, atau klik kiri (di komputer).', 4600);
+    return;
+  }
+  if(d.kind === 'material'){
+    /* Material Dimensi Lain: BUKAN makanan — jangan dikonsumsi. */
+    showToast(d.name + ': Material untuk Bengkel Pak Karso — tidak bisa dimakan. Bawa ke Bengkel Pak Karso untuk menempa Pedang Dimensi, atau jual di Kopdes Merah Putih.', 4600);
+    return;
+  }
   if(d.kind === 'bibit'){
     showToast(d.name + ' ditanam di petak tanah Kebun Praktik & Kandang Desa (tepi Jl. Sawah Glempang, dekat Perumahan). Dekati petak tanah kosong, tekan E, lalu pilih Tanam!', 5200);
     return;
@@ -7002,7 +7557,7 @@ nameInputEl.addEventListener('blur', function(){ setTimeout(syncStartScreen, 120
 
 /* ================= TOKO, POS PRAMUKA, KENDARAAN, ARENA & GM ================= */
 var shopOpen = false, posOpen = false, arenaOpen = false, gmOpen = false, mapOpen = false;
-function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting || actOpen || dealerOpen || questOpen || npcOpen || tourActive || kpsOpen || eduOpen || kuisOpen || (typeof farmOpen !== 'undefined' && farmOpen) || (typeof kopdesOpen !== 'undefined' && kopdesOpen) || (typeof wardrobeOpen !== 'undefined' && wardrobeOpen) || (typeof fishOpen !== 'undefined' && fishOpen) || (typeof raziaOpen !== 'undefined' && raziaOpen); }
+function uiBlocked(){ return bagOpen || shopOpen || posOpen || arenaOpen || gmOpen || mapOpen || mpOpen || fainting || actOpen || dealerOpen || questOpen || npcOpen || tourActive || kpsOpen || eduOpen || kuisOpen || (typeof farmOpen !== 'undefined' && farmOpen) || (typeof kopdesOpen !== 'undefined' && kopdesOpen) || (typeof wardrobeOpen !== 'undefined' && wardrobeOpen) || (typeof fishOpen !== 'undefined' && fishOpen) || (typeof raziaOpen !== 'undefined' && raziaOpen) || (typeof blacksmithOpen !== 'undefined' && blacksmithOpen); }
 function addKredit(n){
   if(n <= 0) return;
   eco.kredit += n; saveEco(); updateStatsUI();
@@ -7109,7 +7664,43 @@ function renderShop(){
     sellHead.textContent = '🧺 Jual Hasil Kebun & Ternakmu';
     shopGrid.appendChild(sellHead);
     ITEM_DEFS.forEach(function(d){ if(d.sell !== undefined) shopGrid.appendChild(jualCard(d)); });
+    /* TAHAP 4 — Masak dari hasil kebun: 2 bahan panen → 1 masakan (pola Masak Ikan Goreng di panel pancing) */
+    var cookHead = document.createElement('div');
+    cookHead.className = 'farm-sec'; cookHead.style.gridColumn = '1 / -1';
+    cookHead.textContent = '🍳 Masak dari Hasil Kebunmu';
+    shopGrid.appendChild(cookHead);
+    COOK_RECIPES.forEach(function(r){ shopGrid.appendChild(masakCard(r)); });
   }
+}
+/* TAHAP 4 — Resep masakan Kantin: bahan = hasil panen Kebun Praktik */
+var COOK_RECIPES = [
+  {out:'nasiGerduren', need:'hasilPadi', needN:2},
+  {out:'jagungBakar', need:'hasilJagung', needN:2}
+];
+function itemDefById(id){ for(var i = 0; i < ITEM_DEFS.length; i++) if(ITEM_DEFS[i].id === id) return ITEM_DEFS[i]; return null; }
+/* Kartu MASAK di Kantin: tukar needN bahan panen menjadi 1 masakan */
+function masakCard(r){
+  var out = itemDefById(r.out), need = itemDefById(r.need);
+  var nNeed = eco.inv[r.need] || 0, nOut = eco.inv[r.out] || 0, can = nNeed >= r.needN;
+  var card = document.createElement('div');
+  card.className = 'shop-card' + (can ? '' : ' empty');
+  card.innerHTML =
+    '<span class="shop-ic">' + itemIcon(out.kind) + '</span>' +
+    '<div class="shop-name">' + out.name + '</div>' +
+    '<div class="shop-desc">Bahan: ' + r.needN + ' × ' + need.name + ' (di Tas: ×' + nNeed + ') • Hasil di Tas: ×' + nOut + '</div>' +
+    '<div class="shop-price">+' + out.hp + ' HP & +' + out.ep + ' EP <small>/ makan</small></div>';
+  var btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'shop-btn'; btn.textContent = can ? 'Masak' : 'Bahan Kurang';
+  btn.disabled = !can;
+  btn.addEventListener('click', function(){
+    if((eco.inv[r.need] || 0) < r.needN) return;
+    eco.inv[r.need] -= r.needN; eco.inv[r.out] = (eco.inv[r.out] || 0) + 1;
+    saveEco(); updateStatsUI(); renderShop(); renderBag();
+    AudioSys.sfx('eat');
+    showToast(out.name + ' matang dimasak dari ' + r.needN + ' × ' + need.name + '! Makan dari Tas untuk +' + out.hp + ' HP & +' + out.ep + ' EP, atau jual lagi ke Kantin/Kopdes.', 4200);
+  });
+  card.appendChild(btn);
+  return card;
 }
 /* Kartu JUAL hasil kebun/ternak di Kantin: 1 hasil = +sell Kredit */
 function jualCard(d){
@@ -11012,6 +11603,16 @@ DESTS.push(
   {name:'Jalan Lingkar Desa', x:0, z:-72, kind:'tempat', label:'Jln. Lingkar'}
 );
 DESTS.push(
+  {name:'Markas GARDA GARUDA FORCE', x:-52, z:-56, kind:'tempat', label:'Markas'},
+  {name:'Stasiun Gerduren', x:77, z:-28.2, kind:'tempat', label:'Stasiun'},
+  {name:'Jembatan Kali Tajum', x:102, z:52, kind:'tempat', label:'Kali Tajum'},
+  {name:'Purwokerto', x:600, z:600, kind:'tempat', label:'Purwokerto'},
+  {name:'Alun-Alun Purwokerto', x:566, z:572, kind:'tempat', label:'Alun-Alun'},
+  {name:'Menara Pandang Teratai', x:566, z:579, kind:'tempat', label:'Teratai'},
+  {name:'Stasiun Purwokerto', x:600, z:643.5, kind:'tempat', label:'Stasiun Pwt'},
+  {name:'Purwokerto City Mall', x:632, z:575.5, kind:'tempat', label:'City Mall'}
+);
+DESTS.push(
 );
 DESTS.push(
   {name:'Pos 2 • Numerasi & Belanja Cerdas (Kantin)', x:30, z:13, kind:'pos', label:'Pos 2 Numerasi'},
@@ -13125,6 +13726,538 @@ function resolveCollisions(p){
   p.z = Math.max(-80, Math.min(104, p.z));
 }
 
+/* =====================================================================
+   TAHAP 2 — ZOMBIE MALAM & SENJATA AJAIB
+   Adaptasi NightZombieSystem (modul blueprint) ke pola game: satu script
+   klasik, MeshLambertMaterial, geometri & material DIBAGI per jenis zombie,
+   tanpa import/export, tanpa PointLight per zombie.
+   Keputusan terkunci (Anggi, 25 Nov 2026):
+   - Serang = tombol pedang BARU di atas tombol Aksi (HP) / klik kiri & F (PC).
+     E tetap interaksi, Shift tetap lari, Spasi tetap lompat.
+   - Zombie SOLO-only: nonaktif total saat Main Bareng (mp.joined/connecting).
+   - Ramah anak Kelas 1: zombie TIDAK mati — HP habis = pingsan lalu kembali
+     menjadi warga (ledakan cahaya + Kredit). Tanpa darah, tanpa mayat.
+   - Semua state masuk eco: nightCount, weaponTiers, equippedWeapon,
+     zombiesRepelled. TIDAK ada playerState / Kredit kedua.
+   - Modul ini TIDAK PERNAH meng-assign scene.fog: hanya menaikkan flag
+     nightZombieActive; updateSkyWeather yang merapatkan kabut malam.
+   ===================================================================== */
+var nightZombieActive = false;
+/* Katalog 4 Senjata Ajaib (data-driven). Di Tahap 2 hanya Lentera Kristal
+   Tajum yang bisa DIPEROLEH (Ruang Briefing GARDA); 3 lainnya terkunci
+   sampai Tahap 3 (bengkel) — pola serangnya sudah disiapkan di nzAttack. */
+var WEAPONS = {
+  lenteraTajum:  {id:'lenteraTajum',   name:'Lentera Kristal Tajum',   element:'LIGHT',     dmg:45, range:7.5, cd:0.75, color:0xffeb3b},
+  tongkatBintang:{id:'tongkatBintang', name:'Tongkat Pramuka Bintang', element:'LIGHTNING', dmg:38, range:9,   cd:0.55, color:0x00e5ff},
+  tombakMerapi:  {id:'tombakMerapi',   name:'Tombak Bara Merapi',      element:'FIRE',      dmg:60, range:6.5, cd:0.9,  color:0xff5722},
+  ketapelCahaya: {id:'ketapelCahaya',  name:'Ketapel Peluru Cahaya',   element:'RANGED',    dmg:34, range:24,  cd:0.45, color:0x76ff03},
+  pedangDimensi: {id:'pedangDimensi', name:'Pedang Dimensi',          element:'LIGHT',     dmg:70, range:7,    cd:0.8,  color:0xab47bc}
+};
+var NZ_TYPES = {
+  SAWAH:{name:'Zombie Sawah',        hp:80,  speed:3.1, dmg:10, reward:25,  body:0x7d8f69, cloth:0x6d4c2f, eye:0x76ff03, scale:1.0},
+  KABUT:{name:'Zombie Kabut',        hp:65,  speed:4.6, dmg:12, reward:35,  body:0x7fa398, cloth:0x37474f, eye:0x00e5ff, scale:0.95},
+  ELITE:{name:'Zombie Penjaga Malam',hp:220, speed:2.6, dmg:22, reward:100, body:0x9a8ab5, cloth:0x311b92, eye:0xff5252, scale:1.45},
+  BOSS:{name:'Penjaga Dimensi',       hp:400, speed:2.2, dmg:30, reward:200, body:0x4a148c, cloth:0xd4a017, eye:0xff1744, scale:1.9}
+};
+/* Zona aman — DIUKUR ULANG dari koordinat bangunan asli game (angka blueprint
+   salah): sekolah (0,0) r30 menutup kelas di z -24; perumahan (55,45) r25
+   menutup rumah z 16..64; masjid (24,38) r18; balai desa (-76,-36) r18.
+   TAHAP 3: Bengkel Las Pak Karso (70,14) r14 ditambahkan sebagai zona aman. */
+var NZ_SAFE = [ {x:0, z:0, r:30}, {x:55, z:45, r:25}, {x:24, z:38, r:18}, {x:-76, z:-36, r:18}, {x:70, z:14, r:14} ];
+var NZ_FIELDS = [[58,-14],[66,-52],[-58,97],[30,97]]; // titik sawah acuan Zombie Sawah
+var nz = { list:[], projectiles:[], vfx:[], spawnT:2, leakT:6, cdT:0, comboStep:0, comboT:0,
+           fullMoon:false, nightCounted:false, wasActive:false, hintT:0, btnShown:false, chipKey:'' };
+/* Geometri DIBAGI semua zombie (tidak ada geometri unik per zombie) */
+var NZ_GEO = {
+  torso:new THREE.BoxGeometry(0.9, 1.15, 0.5), head:new THREE.BoxGeometry(0.64, 0.64, 0.64),
+  arm:new THREE.BoxGeometry(0.24, 0.24, 0.95), leg:new THREE.BoxGeometry(0.27, 0.62, 0.27),
+  eye:new THREE.BoxGeometry(0.13, 0.08, 0.05), speck:new THREE.BoxGeometry(0.16, 0.16, 0.16),
+  proj:new THREE.SphereGeometry(0.28, 8, 8), ring:new THREE.RingGeometry(0.5, 1.15, 26)
+};
+var NZ_MATS = {}; // material DIBAGI per jenis zombie
+function nzMatsFor(type){
+  if(NZ_MATS[type]) return NZ_MATS[type];
+  var c = NZ_TYPES[type];
+  var m = { body:new THREE.MeshLambertMaterial({color:c.body}),
+            cloth:new THREE.MeshLambertMaterial({color:c.cloth}),
+            eye:new THREE.MeshBasicMaterial({color:c.eye}) };
+  if(type === 'KABUT'){ m.body.transparent = true; m.body.opacity = 0.78; m.cloth.transparent = true; m.cloth.opacity = 0.78; }
+  NZ_MATS[type] = m; return m;
+}
+var NZ_FX_MATS = {};
+function nzFxMat(color){ if(!NZ_FX_MATS[color]) NZ_FX_MATS[color] = new THREE.MeshBasicMaterial({color:color}); return NZ_FX_MATS[color]; }
+function nzBuildMesh(type){
+  var c = NZ_TYPES[type], m = nzMatsFor(type), g = new THREE.Group();
+  function part(geo, mm, x, y, z){ var q = new THREE.Mesh(geo, mm); q.position.set(x, y, z); g.add(q); return q; }
+  part(NZ_GEO.leg, m.cloth, -0.22, 0.31, 0); part(NZ_GEO.leg, m.cloth, 0.22, 0.31, 0);
+  part(NZ_GEO.torso, m.cloth, 0, 1.2, 0);
+  part(NZ_GEO.head, m.body, 0, 2.12, 0);
+  part(NZ_GEO.eye, m.eye, -0.15, 2.16, 0.33); part(NZ_GEO.eye, m.eye, 0.15, 2.16, 0.33);
+  var aL = part(NZ_GEO.arm, m.body, -0.58, 1.5, 0.38), aR = part(NZ_GEO.arm, m.body, 0.58, 1.5, 0.38);
+  if(type === 'BOSS'){ var crown = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.24, 0.52), new THREE.MeshBasicMaterial({color:0xffd54f})); crown.position.set(0, 2.58, 0); g.add(crown); }
+  g.scale.setScalar(c.scale);
+  return {g:g, aL:aL, aR:aR};
+}
+function nzInSafe(x, z){
+  for(var i = 0; i < NZ_SAFE.length; i++){ var s = NZ_SAFE[i], dx = x - s.x, dz = z - s.z;
+    if(dx * dx + dz * dz < s.r * s.r) return true; }
+  return false;
+}
+function nzInCollider(x, z, pad){
+  for(var i = 0; i < colliders.length; i++){ var c = colliders[i];
+    if(x > c.minX - pad && x < c.maxX + pad && z > c.minZ - pad && z < c.maxZ + pad) return true; }
+  return false;
+}
+/* Titik spawn: 22-36 m dari pemain, di-clamp ke WORLD_BOUNDS; DITOLAK bila di
+   dalam collider, di zona aman, atau di air (sungai/laut/kolam lewat helper
+   game inRiverWater). Maks 8 percobaan, lalu giliran ini dilewati. */
+/* TAHAP 5: zona aman plaza masuk Dimensi Lain (800,845) r10 — hanya
+   berlaku di dalam kantong (800,800); NZ_SAFE dunia utama tidak diubah. */
+function nzInDimSafe(x, z){ var dx = x - 800, dz = z - 845; return dx * dx + dz * dz < 10 * 10; }
+function nzSpawnPoint(px, pz, ctx){
+  for(var t = 0; t < 8; t++){
+    var a = Math.random() * Math.PI * 2, d = 22 + Math.random() * 14;
+    var x = px + Math.cos(a) * d, z = pz + Math.sin(a) * d;
+    if(ctx === 'dimensi'){
+      if(x < 742 || x > 858 || z < 742 || z > 858) continue;
+      if(nzInDimSafe(x, z)) continue;
+      if(nzInCollider(x, z, 0.5)) continue;
+      return {x:x, z:z};
+    }
+    if(x < WORLD_BOUNDS.minX + 1 || x > WORLD_BOUNDS.maxX - 1 || z < WORLD_BOUNDS.minZ + 1 || z > WORLD_BOUNDS.maxZ - 1) continue;
+    if(nzInSafe(x, z)) continue;
+    if(nzInCollider(x, z, 0.5)) continue;
+    if(typeof inRiverWater === 'function' && inRiverWater(x, z)) continue;
+    return {x:x, z:z};
+  }
+  return null;
+}
+function nzTypeAt(x, z){
+  if(nz.fullMoon && Math.random() < 0.25) return 'ELITE';       // Elite: hanya bulan purnama, peluang 25%
+  for(var i = 0; i < NZ_FIELDS.length; i++){ var dx = x - NZ_FIELDS[i][0], dz = z - NZ_FIELDS[i][1];
+    if(dx * dx + dz * dz < 22 * 22) return 'SAWAH'; }            // dekat sawah -> Zombie Sawah
+  if(x > 84 || (x < -68 && z < -38)) return 'KABUT';             // dekat sungai timur / Hutan Desa -> Zombie Kabut
+  return Math.random() < 0.5 ? 'KABUT' : 'SAWAH';
+}
+function nzSpawn(px, pz, ctx, leak){
+  var p = nzSpawnPoint(px, pz, ctx); if(!p) return;
+  var type = nzTypeAt(p.x, p.z), c = NZ_TYPES[type], b = nzBuildMesh(type);
+  b.g.position.set(p.x, 0, p.z); scene.add(b.g);
+  nz.list.push({type:type, name:c.name, mesh:b.g, armL:b.aL, armR:b.aR, hp:c.hp, speed:c.speed,
+                dmg:c.dmg, reward:c.reward, atkT:0, burnT:0, hopT:0, phase:Math.random() * 10, leak:!!leak});
+}
+/* TAHAP 5 — Bocor malam: zombie Dimensi Lain yang bocor lewat portal dan
+   muncul 15-25 m dari portal markas (-52,-56); maks 5 bocor bersamaan.
+   Validasi sama seperti spawn biasa (batas dunia, NZ_SAFE, collider, air). */
+function nzLeakCount(){ var n = 0; for(var i = 0; i < nz.list.length; i++) if(nz.list[i].leak) n++; return n; }
+function nzSpawnLeak(){
+  for(var t = 0; t < 8; t++){
+    var a = Math.random() * Math.PI * 2, d = 15 + Math.random() * 10;
+    var x = -52 + Math.cos(a) * d, z = -56 + Math.sin(a) * d;
+    if(x < WORLD_BOUNDS.minX + 1 || x > WORLD_BOUNDS.maxX - 1 || z < WORLD_BOUNDS.minZ + 1 || z > WORLD_BOUNDS.maxZ - 1) continue;
+    if(nzInSafe(x, z)) continue;
+    if(nzInCollider(x, z, 0.5)) continue;
+    if(typeof inRiverWater === 'function' && inRiverWater(x, z)) continue;
+    var type = nzTypeAt(x, z), c = NZ_TYPES[type], b = nzBuildMesh(type);
+    b.g.position.set(x, 0, z); scene.add(b.g);
+    nz.list.push({type:type, name:c.name, mesh:b.g, armL:b.aL, armR:b.aR, hp:c.hp, speed:c.speed,
+                  dmg:c.dmg, reward:c.reward, atkT:0, burnT:0, hopT:0, phase:Math.random() * 10, leak:true});
+    return;
+  }
+}
+/* TAHAP 5 — Boss Penjaga Dimensi: 1 boss di tengah Ruang Penjaga (800,792),
+   muncul saat pemain masuk Dimensi Lain bila belum ada boss hidup.
+   nzTypeAt TIDAK PERNAH mengembalikan BOSS — boss hanya dari sini. */
+function nzSpawnBoss(){
+  for(var i = 0; i < nz.list.length; i++) if(nz.list[i].type === 'BOSS') return;
+  var c = NZ_TYPES.BOSS, b = nzBuildMesh('BOSS');
+  b.g.position.set(800, 0, 792); scene.add(b.g);
+  nz.list.push({type:'BOSS', name:c.name, mesh:b.g, armL:b.aL, armR:b.aR, hp:c.hp, speed:c.speed,
+                dmg:c.dmg, reward:c.reward, atkT:0, burnT:0, hopT:0, phase:Math.random() * 10, leak:false});
+}
+function nzClearAll(burst){
+  for(var i = 0; i < nz.list.length; i++){
+    if(burst) nzBurst(nz.list[i].mesh.position, 0xffd54f, 10);
+    scene.remove(nz.list[i].mesh);   // geometri/material bersama: JANGAN di-dispose
+  }
+  nz.list.length = 0;
+}
+/* ---------- Efek cahaya (prosedural, ringan, tanpa PointLight tambahan) ---------- */
+function nzBurst(pos, color, n){
+  for(var i = 0; i < n; i++){
+    var m = new THREE.Mesh(NZ_GEO.speck, nzFxMat(color));
+    m.position.set(pos.x, 1.2, pos.z); scene.add(m);
+    nz.vfx.push({mesh:m, life:0.45, max:0.45, vx:(Math.random() - 0.5) * 7, vy:2 + Math.random() * 5, vz:(Math.random() - 0.5) * 7, spin:true});
+  }
+}
+function nzRing(pos, maxR, color){
+  var mm = new THREE.MeshBasicMaterial({color:color, side:THREE.DoubleSide, transparent:true, opacity:0.85});
+  var m = new THREE.Mesh(NZ_GEO.ring, mm);
+  m.rotation.x = -Math.PI / 2; m.position.set(pos.x, 0.18, pos.z); scene.add(m);
+  nz.vfx.push({mesh:m, life:0.35, max:0.35, ring:maxR, ownMat:true});
+}
+function nzBeam(a, b, color){
+  var mid = a.clone().lerp(b, 0.5); mid.x += (Math.random() - 0.5) * 1.2; mid.y += 0.6; mid.z += (Math.random() - 0.5) * 1.2;
+  var geo = new THREE.BufferGeometry().setFromPoints([a, mid, b]);
+  var mm = new THREE.LineBasicMaterial({color:color, transparent:true, opacity:1});
+  var l = new THREE.Line(geo, mm); scene.add(l);
+  nz.vfx.push({mesh:l, life:0.22, max:0.22, ownMat:true, ownGeo:true});
+}
+function nzUpdateVFX(dt){
+  for(var i = nz.vfx.length - 1; i >= 0; i--){ var f = nz.vfx[i]; f.life -= dt;
+    var pr = 1 - Math.max(0, f.life / f.max);
+    if(f.ring){ var s = 1 + pr * f.ring; f.mesh.scale.set(s, s, 1); f.mesh.material.opacity = 1 - pr; }
+    else if(f.spin){ f.mesh.position.x += f.vx * dt; f.mesh.position.y += f.vy * dt; f.mesh.position.z += f.vz * dt;
+      f.mesh.rotation.y += dt * 7; f.mesh.scale.setScalar(Math.max(0.01, 1 - pr)); }
+    else if(f.mesh.material) f.mesh.material.opacity = 1 - pr;
+    if(f.life <= 0){ scene.remove(f.mesh);
+      if(f.ownGeo) f.mesh.geometry.dispose();
+      if(f.ownMat) f.mesh.material.dispose();
+      nz.vfx.splice(i, 1); }
+  }
+}
+function nzUpdateProjectiles(dt){
+  for(var i = nz.projectiles.length - 1; i >= 0; i--){ var p = nz.projectiles[i]; p.life -= dt;
+    p.mesh.position.x += p.vx * dt; p.mesh.position.z += p.vz * dt;
+    var hit = false;
+    for(var j = 0; j < nz.list.length; j++){ var z = nz.list[j];
+      var dx = z.mesh.position.x - p.mesh.position.x, dz = z.mesh.position.z - p.mesh.position.z;
+      if(dx * dx + dz * dz < 1.6 * 1.6){ nzBurst(p.mesh.position, p.wpn.color, 8); nzDamage(z, p.dmg, p.wpn); hit = true; break; } }
+    if(hit || p.life <= 0){ scene.remove(p.mesh); nz.projectiles.splice(i, 1); } }
+}
+/* ---------- Serangan & kekalahan ---------- */
+function nzEquipped(){
+  var id = eco.equippedWeapon;
+  return (id && WEAPONS[id] && eco.inv[id] > 0) ? WEAPONS[id] : null;
+}
+function nzDamage(z, amount, wpn){
+  z.hp -= amount;
+  z.mesh.position.y = 0.22; z.hopT = 0.12;   // terpental kecil kena cahaya
+  if(z.hp <= 0) nzDefeat(z, wpn);
+}
+function nzDefeat(z, wpn){
+  var ix = nz.list.indexOf(z); if(ix < 0) return;
+  nz.list.splice(ix, 1);
+  nzBurst(z.mesh.position, wpn ? wpn.color : 0xffffff, 14);
+  scene.remove(z.mesh);
+  eco.zombiesRepelled = (eco.zombiesRepelled || 0) + 1;
+  /* TAHAP 3 — Soket kristal senjata yang dipakai (Bengkel Pak Karso):
+     Lifesteal +8 HP tiap zombie diusir; Greed +25% Kredit hadiah.
+     Bumper kendaraan memanggil ini dengan wpn semu tanpa id -> hadiah normal. */
+  var reward = z.reward;
+  var sock = (wpn && wpn.id && eco.weaponSockets) ? eco.weaponSockets[wpn.id] : null;
+  if(sock === 'greed') reward = Math.round(reward * 1.25);
+  if(sock === 'lifesteal') eco.hp = Math.min(100, eco.hp + 8);
+  /* TAHAP 5 — Material drop: di Dimensi Lain semua zombie menjatuhkan
+     Kristal Dimensi; KABUT menjatuhkan Esensi Kabut di mana saja; boss
+     Penjaga Dimensi menjatuhkan Mahkota Penjaga. */
+  var drops = [];
+  if(typeof inDimensi !== 'undefined' && inDimensi){ eco.inv.kristalDimensi = (eco.inv.kristalDimensi || 0) + 1; drops.push('Kristal Dimensi'); }
+  if(z.type === 'KABUT'){ eco.inv.esensiKabut = (eco.inv.esensiKabut || 0) + 1; drops.push('Esensi Kabut'); }
+  if(z.type === 'BOSS'){ eco.inv.mahkotaPenjaga = (eco.inv.mahkotaPenjaga || 0) + 1; drops.push('Mahkota Penjaga'); }
+  addKredit(reward); saveEco(); updateStatsUI();
+  AudioSys.sfx('win');
+  showToast((z.type === 'BOSS' ? 'Penjaga Dimensi berhasil diusir! ' : 'Zombie kembali menjadi warga! ') + '+' + reward + ' Kredit' + (sock === 'lifesteal' ? ' • Kristal Lifesteal +8 HP' : '') + (drops.length ? ' • Drop: ' + drops.join(' + ') : ''), 3400);
+}
+function nzAttack(){
+  if(!playing || uiBlocked() || fainting) return;
+  if(typeof mp !== 'undefined' && (mp.joined || mp.connecting) && !(typeof inDimensi !== 'undefined' && inDimensi)) return;   // solo-only di dunia utama; di dalam Dimensi Lain serangan tetap boleh saat Main Bareng (TAHAP 5B — zombie lokal per pemain)
+  if(interiorClamp && !(typeof inDimensi !== 'undefined' && inDimensi)) return;   // TAHAP 5: di Dimensi Lain (interiorClamp = kantong) serangan TETAP boleh
+  var wpn = nzEquipped();
+  if(!wpn){
+    if(performance.now() > nz.hintT){ nz.hintT = performance.now() + 4000;
+      showToast(eco.inv.lenteraTajum > 0
+        ? 'Lengkapi dulu Senjata Ajaibmu: buka Tas, lalu tekan Pakai pada Lentera Kristal Tajum.'
+        : 'Tangan kosong tidak mempan untuk zombie! Ambil Lentera Kristal Tajum di Ruang Briefing Markas GARDA.', 4200); }
+    return;
+  }
+  if(nz.cdT > 0) return;
+  nz.cdT = wpn.cd;
+  /* Kombo: pukulan ke-3 berurutan +50% damage; jeda > 1,2 dtk mereset hitungan. */
+  nz.comboStep = (nz.comboT > 0) ? (nz.comboStep + 1) % 3 : 0;
+  nz.comboT = 1.2;
+  var tier = (eco.weaponTiers && eco.weaponTiers[wpn.id]) || 1;
+  var dmg = Math.round(wpn.dmg * (1 + (tier - 1) * 0.35) * (nz.comboStep === 2 ? 1.5 : 1));  // tier: +35% per tier
+  var pp = player.position;
+  var fwd = {x:Math.sin(camYaw), z:Math.cos(camYaw)};   // arah hadap kamera (di belakang pemain)
+  AudioSys.sfx('pop');
+  if(wpn.element === 'LIGHT'){           // Lentera: gelombang cahaya melingkar (AoE)
+    nzRing(pp, wpn.range, wpn.color);
+    for(var i = nz.list.length - 1; i >= 0; i--){ var z = nz.list[i];
+      var dx = z.mesh.position.x - pp.x, dz = z.mesh.position.z - pp.z;
+      if(dx * dx + dz * dz <= wpn.range * wpn.range) nzDamage(z, dmg, wpn); }
+  } else if(wpn.element === 'LIGHTNING'){ // Tongkat: petir berantai hingga 3 target
+    var ox = pp.x, oz = pp.z, hit = [];
+    for(var b = 0; b < 3; b++){
+      var best = null, bd = (b === 0 ? wpn.range : 7.5);
+      for(var j = 0; j < nz.list.length; j++){ var zz = nz.list[j]; if(hit.indexOf(zz) >= 0) continue;
+        var ddx = zz.mesh.position.x - ox, ddz = zz.mesh.position.z - oz, dd = Math.sqrt(ddx * ddx + ddz * ddz);
+        if(dd <= bd){ bd = dd; best = zz; } }
+      if(!best) break; hit.push(best);
+      nzBeam(new THREE.Vector3(ox, 1.4, oz), new THREE.Vector3(best.mesh.position.x, 1.4, best.mesh.position.z), wpn.color);
+      nzDamage(best, Math.round(dmg * Math.pow(0.85, b)), wpn);
+      ox = best.mesh.position.x; oz = best.mesh.position.z;
+    }
+    if(!hit.length) nzBurst({x:pp.x + fwd.x * 2, z:pp.z + fwd.z * 2}, wpn.color, 4);
+  } else if(wpn.element === 'FIRE'){      // Tombak: tebasan api ke depan + bakar 3,5 dtk
+    nzBurst({x:pp.x + fwd.x * 2.5, z:pp.z + fwd.z * 2.5}, wpn.color, 14);
+    for(var k = nz.list.length - 1; k >= 0; k--){ var zf = nz.list[k];
+      var tx = zf.mesh.position.x - pp.x, tz = zf.mesh.position.z - pp.z, tl = Math.sqrt(tx * tx + tz * tz);
+      if(tl <= wpn.range && tl > 0.01 && (tx / tl) * fwd.x + (tz / tl) * fwd.z > 0.35){ zf.burnT = 3.5; nzDamage(zf, dmg, wpn); } }
+  } else {                                // Ketapel: proyektil cahaya jarak jauh
+    var pm = new THREE.Mesh(NZ_GEO.proj, nzFxMat(wpn.color));
+    pm.position.set(pp.x, 1.5, pp.z); scene.add(pm);
+    nz.projectiles.push({mesh:pm, vx:fwd.x * 28, vz:fwd.z * 28, dmg:dmg, wpn:wpn, life:1.2});
+  }
+}
+/* ---------- Lentera di Ruang Briefing GARDA (satu-satunya perolehan Tahap 2) ---------- */
+INFO['Lentera Kristal Tajum'] = 'Lentera Kristal Tajum: Senjata Ajaib dari kristal Kali Tajum yang bercahaya hangat, disimpan di Ruang Briefing Markas GARDA. Ambil lentera ini untuk mengusir zombie di malam hari — zombie yang terkena cahayanya akan pingsan lalu kembali menjadi warga baik-baik.';
+var nzLanternMesh = (function(){
+  var g = new THREE.Group(); g.position.set(96, 0.18, 306.6); scene.add(g);   // lantai Ruang Briefing (96,310)
+  box(0.8, 0.85, 0.8, 0x475569, 0, 0.43, 0, g);                    // tumpuan batu
+  box(0.95, 0.09, 0.95, 0x0f2a4a, 0, 0.9, 0, g, false);           // alas biru GARDA
+  box(0.08, 0.5, 0.08, 0x92400e, 0, 1.15, 0, g, false);            // gagang lentera
+  var cr = new THREE.Mesh(new THREE.OctahedronGeometry(0.3), new THREE.MeshBasicMaterial({color:0xffe066}));
+  cr.position.set(0, 1.45, 0); g.add(cr);                           // kristal bercahaya (tanpa PointLight)
+  ambients.push(function(dt, t){ if(g.visible){ cr.rotation.y = t * 1.4; cr.position.y = 1.45 + Math.sin(t * 2) * 0.06; } });
+  return g;
+})();
+if(eco.inv.lenteraTajum > 0) nzLanternMesh.visible = false;
+addInteractable(96, 307, 3.4, 'Lentera Kristal Tajum', null, {ambilLentera:true});
+function ambilLentera(){
+  if(eco.inv.lenteraTajum > 0){ showToast('Lentera Kristal Tajum sudah ada di Tasmu. Buka Tas lalu tekan Pakai untuk melengkapinya.', 4200); return; }
+  eco.inv.lenteraTajum = 1;
+  eco.equippedWeapon = 'lenteraTajum';
+  if(!eco.weaponTiers) eco.weaponTiers = {};
+  if(!eco.weaponTiers.lenteraTajum) eco.weaponTiers.lenteraTajum = 1;
+  saveEco(); updateStatsUI(); updateWeaponChip();
+  nzLanternMesh.visible = false;
+  AudioSys.sfx('win');
+  showToast('Kamu mengambil Lentera Kristal Tajum Tier I! Senjata ajaib ini langsung terpasang — saat malam, usir zombie dengan tombol Serang, tombol F, atau klik kiri.', 5600);
+}
+/* ================= TAHAP 5 — PORTAL DIMENSI + KANTONG DIMENSI LAIN =================
+   Portal Dimensi di (-68,-47): sudut barat daya plaza Markas GARDA.
+   Collider portal 2,0 m (x -69..-67, z -48..-46) — terverifikasi dari
+   kode: bersih dari dinding barat markas (x -72,4..-71,6), dinding
+   selatan (z -44,4..-43,6), Gedung Briefing (x -70,5..-59,5 /
+   z -64,25..-56,75), dan Lapangan Apel (x >= -60). Portal = gerbang
+   prosedural + cincin torus emissive berputar pelan (MeshBasicMaterial,
+   TANPA PointLight baru — total PointLight baru Tahap 5 = 0).
+   Kantong Dimensi Lain (800,800): tanah 120x120 (pola kantong kota),
+   plaza masuk selatan (800,845) = zona aman r10 + Portal Pulang, lalu
+   3 ruang fisik berurutan ke utara yang dilalui BERJALAN KAKI (bukan
+   enterRoom): Ruang Gerbang (800,830) -> Lorong Kabut (800,812) ->
+   Ruang Penjaga (800,792). Dinding mengikuti pola buildRoomShell
+   (tinggi 3,2 m + addCollider tiap dinding padat) dengan celah pintu
+   2,2 m di sisi penghubung; tanpa atap agar kamera bebas. */
+var dimensiRingOut = null, dimensiRingIn = null;
+INFO['Portal Dimensi'] = 'Portal Dimensi di sudut barat daya plaza Markas GARDA GARUDA FORCE: satu-satunya pintu masuk ke Dimensi Lain, dunia gelap tempat zombie tinggal dan dungeon Penjaga Dimensi berada. Tekan Aksi lalu pilih Masuk ke Dimensi Lain. Portal ini bisa dimasuki juga saat Main Bareng — zombie di dalam Dimensi Lain berjalan lokal per pemain, jadi masing-masing pemain melihat dan melawan zombienya sendiri (tidak tersinkronisasi antar pemain).';
+INFO['Dimensi Lain'] = 'Dimensi Lain: dunia gelap di seberang Portal Dimensi Markas GARDA. Di sini selalu malam dan zombie berkeliaran bebas. Jelajahi Ruang Gerbang, Lorong Kabut, dan Ruang Penjaga; usir zombie untuk mendapat Kristal Dimensi, dan usir Penjaga Dimensi untuk mendapat Mahkota Penjaga!';
+INFO['Portal Pulang'] = 'Portal Pulang: gerbang kembali dari Dimensi Lain ke plaza Markas GARDA GARUDA FORCE di Desa Gerduren. Tekan Aksi lalu pilih Kembali ke Markas GARDA.';
+INFO['Ruang Gerbang'] = 'Ruang Gerbang: ruang pertama dungeon Dimensi Lain, di utara plaza masuk. Lewati pintu utaranya menuju Lorong Kabut.';
+INFO['Lorong Kabut'] = 'Lorong Kabut: ruang tengah dungeon Dimensi Lain yang berkabut rapat — Zombie Kabut senang bersembunyi di sini. Terus ke utara menuju Ruang Penjaga.';
+INFO['Ruang Penjaga'] = 'Ruang Penjaga: aula terakhir dungeon Dimensi Lain, singgasana Penjaga Dimensi bermahkota emas. Usir dia untuk mendapat Mahkota Penjaga dan 200 Kredit!';
+DESTS.push({name:'Portal Dimensi', x:-68, z:-47, kind:'tempat', label:'Portal'});
+function buildPortalRing(x, z, baseY){
+  var g = new THREE.Group(); g.position.set(x, baseY, z); scene.add(g);
+  box(3.2, 0.25, 3.2, 0x1e1b4b, 0, 0.13, 0, g);
+  box(0.35, 3.0, 0.35, 0x312e81, -1.3, 1.6, 0, g);
+  box(0.35, 3.0, 0.35, 0x312e81, 1.3, 1.6, 0, g);
+  box(3.0, 0.35, 0.35, 0x312e81, 0, 3.2, 0, g, false);
+  var ring = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.09, 10, 28), new THREE.MeshBasicMaterial({color:0xab47bc}));
+  ring.position.set(0, 1.7, 0); g.add(ring);
+  var disc = new THREE.Mesh(new THREE.CircleGeometry(0.95, 24), new THREE.MeshBasicMaterial({color:0x7c3aed, transparent:true, opacity:0.4, side:THREE.DoubleSide}));
+  disc.position.set(0, 1.7, 0); g.add(disc);
+  addCollider(x, z, 2.0, 2.0);
+  return ring;
+}
+dimensiRingOut = buildPortalRing(-68, -47, 0.3);
+addInteractable(-68, -47, 4.5, 'Portal Dimensi', null, {teleport:'dimensi'});
+labelAt('Portal Dimensi', -68, 4.6, -47, 0.55);
+/* Varian dinding ruang dimensi: pola buildRoomShell (tinggi 3,2 m +
+   collider per dinding padat) TAPI pintu bisa di utara dan/atau selatan. */
+function buildDimRoom(cx, cz, w, d, o){
+  var g = new THREE.Group(); g.position.set(cx, 0, cz); scene.add(g);
+  flat(w, d, o.floor, 0, 0, g, 0.03);
+  var seg = (w - 2.2) / 2;
+  function wallNS(zSide, hasDoor){
+    if(hasDoor){
+      box(seg, 3.2, 0.3, o.wall, -(1.1 + seg/2), 1.6, zSide, g);
+      box(seg, 3.2, 0.3, o.wall, 1.1 + seg/2, 1.6, zSide, g);
+      box(2.2, 0.5, 0.3, o.wall, 0, 2.95, zSide, g, false);
+      addCollider(cx - (1.1 + seg/2), cz + zSide, seg/2, 0.4);
+      addCollider(cx + (1.1 + seg/2), cz + zSide, seg/2, 0.4);
+    } else {
+      box(w, 3.2, 0.3, o.wall, 0, 1.6, zSide, g);
+      addCollider(cx, cz + zSide, w/2, 0.4);
+    }
+  }
+  wallNS(-d/2, o.northDoor);
+  wallNS(d/2, o.southDoor);
+  box(0.3, 3.2, d, o.wall, -w/2, 1.6, 0, g);
+  box(0.3, 3.2, d, o.wall, w/2, 1.6, 0, g);
+  addCollider(cx - w/2, cz, 0.4, d/2); addCollider(cx + w/2, cz, 0.4, d/2);
+  wallSign(g, o.sign, 0, 2.62, -d/2 + 0.18, Math.min(6.4, w - 3), {bg:'#1e1b4b', fg:'#e9d5ff', frame:0x312e81});
+  labelAt(o.name, cx, 4.6, cz, 0.55);
+  addInteractable(cx, cz, 4, o.name);
+  return g;
+}
+var dimCrystals = [];
+(function(){
+  flat(124, 124, 0x0f1430, 800, 800, scene, 0.008);   // tanah kantong Dimensi Lain
+  flat(120, 120, 0x1a2145, 800, 800, scene, 0.015);   // pelat kantong
+  flat(18, 16, 0x2a3560, 800, 845, scene, 0.03);       // plaza masuk (zona aman r10)
+  flat(3, 62, 0x232c52, 800, 814, scene, 0.025);       // jalan penghubung plaza -> ruang-ruang
+  dimensiRingIn = buildPortalRing(800, 845, 0);
+  addInteractable(800, 845, 4.5, 'Portal Pulang', null, {teleport:'dimensiBack'});
+  labelAt('Portal Pulang', 800, 4.4, 845, 0.55);
+  buildDimRoom(800, 830, 14, 12, {name:'Ruang Gerbang', sign:'RUANG GERBANG', wall:0x2e3a67, floor:0x252e52, southDoor:true, northDoor:true});
+  buildDimRoom(800, 812, 10, 12, {name:'Lorong Kabut', sign:'LORONG KABUT', wall:0x27335c, floor:0x20294a, southDoor:true, northDoor:true});
+  buildDimRoom(800, 792, 16, 14, {name:'Ruang Penjaga', sign:'RUANG PENJAGA', wall:0x3b2a5e, floor:0x2a2145, southDoor:true, northDoor:false});
+  function dimCrystal(x, z, s, color){
+    var g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+    box(0.7 * s, 0.4 * s, 0.7 * s, 0x1f2937, 0, 0.2 * s, 0, g);
+    var cr = new THREE.Mesh(new THREE.OctahedronGeometry(0.42 * s), new THREE.MeshBasicMaterial({color:color}));
+    cr.position.set(0, 0.95 * s, 0); g.add(cr);
+    addCollider(x, z, 0.5 * s, 0.5 * s);
+    dimCrystals.push(cr);
+  }
+  [[790,850,1,0xab47bc],[810,850,1,0x22d3ee],[786,834,1.2,0xab47bc],[814,826,1,0x7c3aed],[788,812,1,0x22d3ee],[812,800,1.2,0xab47bc],[790,780,1,0x7c3aed],[812,782,1,0x22d3ee],[760,760,1.4,0xab47bc],[840,760,1.4,0x7c3aed],[758,842,1.2,0x22d3ee],[842,842,1.2,0xab47bc]].forEach(function(c){ dimCrystal(c[0], c[1], c[2], c[3]); });
+  function dimTree(x, z, s){
+    var g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+    cyl(0.14 * s, 0.3 * s, 2.2 * s, 0x1f1633, 0, 1.1 * s, 0, g, 7);
+    var top = new THREE.Mesh(new THREE.SphereGeometry(1.5 * s, 10, 8), new THREE.MeshLambertMaterial({color:0x241a3f, emissive:0x120a24}));
+    top.position.set(0, 3.1 * s, 0); top.castShadow = true; g.add(top);
+    addCollider(x, z, 0.5 * s, 0.5 * s);
+  }
+  [[752,752,1.2],[848,752,1.2],[752,848,1],[848,848,1],[770,758,1],[830,758,1],[766,856,1.1],[834,856,1.1]].forEach(function(c){ dimTree(c[0], c[1], c[2]); });
+})();
+ambients.push(function(dt, t){
+  if(dimensiRingOut) dimensiRingOut.rotation.z = t * 0.8;
+  if(dimensiRingIn) dimensiRingIn.rotation.z = -t * 0.8;
+  for(var i = 0; i < dimCrystals.length; i++) dimCrystals[i].rotation.y = t * 1.2 + i;
+});
+
+/* ---------- HUD: chip senjata + tombol serang ---------- */
+var attackBtnEl = document.getElementById('attackBtn');
+var weaponChipEl = document.getElementById('weaponChip'), weaponChipText = document.getElementById('weaponChipText');
+function updateWeaponChip(){
+  var w = nzEquipped();
+  if(w){ var t = (eco.weaponTiers && eco.weaponTiers[w.id]) || 1;
+    weaponChipText.textContent = w.name + ' • Tier ' + t;
+    weaponChipEl.classList.add('on');
+  } else weaponChipEl.classList.remove('on');
+}
+attackBtnEl.addEventListener('pointerdown', function(e){ e.preventDefault(); nzAttack(); });
+updateWeaponChip();
+/* Aura cahaya senjata: SATU PointLight hangat mengikuti pemain saat senjata
+   ajaib terpilih (total PointLight baru Tahap 1+2 = 3, sesuai anggaran). */
+var nzAura = new THREE.PointLight(0xffeb3b, 0, 18, 1.6); scene.add(nzAura);
+/* ---------- Update utama (dipanggil dari animate) ---------- */
+function updateNightZombies(dt){
+  if(nz.cdT > 0) nz.cdT -= dt;
+  if(nz.comboT > 0){ nz.comboT -= dt; if(nz.comboT <= 0) nz.comboStep = 0; }
+  nzUpdateVFX(dt); nzUpdateProjectiles(dt);
+  var inMp = (typeof mp !== 'undefined') && (mp.joined || mp.connecting);
+  var isNight = WX.hour >= 19.6 || WX.hour < 4.8;   // selaras malam visual game (skyStops)
+  var active = playing && isNight && !inMp;
+  /* TAHAP 5 + 5B: konteks Dimensi Lain — spawn aktif selama pemain di dalam
+     (selalu malam di sana), walau di dunia utama sedang siang, dan TETAP
+     aktif saat Main Bareng: zombie di sini LOKAL per pemain (tidak
+     disinkronisasi via server). Bocor malam dunia utama (variabel active
+     di atas) tetap solo-only. */
+  var dimActive = (typeof inDimensi !== 'undefined' && inDimensi) && playing;
+  var spawnActive = active || dimActive;
+  nightZombieActive = spawnActive;
+  if(dimActive) nz.fullMoon = (eco.nightCount || 0) % 5 === 0;   // purnama juga berlaku di Dimensi Lain
+  if(inMp && !(typeof inDimensi !== 'undefined' && inDimensi) && nz.list.length) nzClearAll(false);      // masuk ruangan Main Bareng: zombie dibubarkan — KECUALI di dalam Dimensi Lain (TAHAP 5B: zombie/boss lokal per pemain tetap jalan; boss hanya spawn saat masuk lewat portal, jadi tidak boleh dibubarkan di sini)
+  if(isNight && playing && !nz.nightCounted){       // malam dimulai: hitung malam & tentukan purnama
+    nz.nightCounted = true;
+    eco.nightCount = (eco.nightCount || 0) + 1; saveEco();
+    nz.fullMoon = eco.nightCount % 5 === 0;          // WX tidak punya fase bulan: purnama tiap malam ke-5
+    nz.spawnT = 1.2;
+    if(active) showToast(nz.fullMoon
+      ? 'Malam bulan purnama tiba — malam ke-' + eco.nightCount + '! Zombie Penjaga Elite bisa muncul malam ini. Pegang Senjata Ajaibmu dan tetap dekat tempat aman.'
+      : 'Malam tiba! Zombie muncul di tempat gelap, jauh dari sekolah, perumahan, masjid, dan balai desa. Usir mereka dengan Senjata Ajaib supaya kembali menjadi warga.', 5200);
+  }
+  if(!isNight && !(typeof inDimensi !== 'undefined' && inDimensi)){
+    nz.nightCounted = false;
+    if(nz.wasActive){                                 // fajar: sisa zombie menghilang menjadi cahaya
+      if(nz.list.length) nzClearAll(true);
+      if(playing) showToast('Fajar tiba — para zombie kembali menjadi warga. Desa aman lagi!', 4200);
+    }
+  }
+  nz.wasActive = active;
+  if(dimActive){
+    nz.spawnT -= dt;
+    if(nz.spawnT <= 0){
+      nz.spawnT = nz.fullMoon ? 2.5 : 4.2;
+      if(nz.list.length < 14) nzSpawn(player.position.x, player.position.z, 'dimensi');   // maks 14 zombie aktif
+    }
+  } else if(active && !interiorClamp){
+    nz.spawnT -= dt;
+    if(nz.spawnT <= 0){
+      nz.spawnT = nz.fullMoon ? 2.5 : 4.2;
+      if(nz.list.length < 14) nzSpawn(player.position.x, player.position.z);   // maks 14 zombie aktif
+    }
+    /* TAHAP 5 — Bocor malam: tiap ±6 dtk (4 dtk saat purnama) 1 zombie
+       bocor lewat portal di sekitar markas, maks 5 bocor bersamaan. */
+    nz.leakT -= dt;
+    if(nz.leakT <= 0){
+      nz.leakT = nz.fullMoon ? 4 : 6;
+      if(nzLeakCount() < 5 && nz.list.length < 14) nzSpawnLeak();
+    }
+  }
+  var pp = player.position, tNow = clock.elapsedTime;
+  for(var i = nz.list.length - 1; i >= 0; i--){ var z = nz.list[i]; if(!z) continue;
+    if(z.hopT > 0){ z.hopT -= dt; if(z.hopT <= 0) z.mesh.position.y = 0; }
+    if(z.burnT > 0){ z.burnT -= dt; z.hp -= 14 * dt;
+      if(z.hp <= 0){ nzDefeat(z, WEAPONS.tombakMerapi); continue; } }
+    if(!spawnActive || (interiorClamp && !(typeof inDimensi !== 'undefined' && inDimensi))) continue;           // beku sopan saat pemain di dalam ruangan / mode lain (di Dimensi Lain zombie TETAP bergerak)
+    var dx = pp.x - z.mesh.position.x, dz = pp.z - z.mesh.position.z;
+    var dist = Math.sqrt(dx * dx + dz * dz);
+    if(dist > 1.35){
+      var step = Math.min(z.speed * dt, dist - 1.2);
+      var mvx = z.mesh.position.x + dx / dist * step, mvz = z.mesh.position.z + dz / dist * step;
+      /* Zombie BERHENTI di tepi collider, tepi zona aman, dan tepi air —
+         tidak pernah menembus bangunan. */
+      if(!nzInCollider(mvx, mvz, 0.45) && !nzInSafe(mvx, mvz) &&
+         !((typeof inDimensi !== 'undefined' && inDimensi) && nzInDimSafe(mvx, mvz)) &&
+         !(typeof inRiverWater === 'function' && inRiverWater(mvx, mvz))){
+        z.mesh.position.x = mvx; z.mesh.position.z = mvz;
+      }
+      z.mesh.rotation.y = Math.atan2(dx, dz);
+      z.mesh.rotation.z = Math.sin(tNow * 6 + z.phase) * 0.07;
+      z.armL.rotation.x = Math.sin(tNow * 6 + z.phase) * 0.15;
+      z.armR.rotation.x = -Math.sin(tNow * 6 + z.phase) * 0.15;
+    } else {
+      z.atkT -= dt;
+      if(z.atkT <= 0 && playing && !fainting){
+        z.atkT = 1.4;
+        eco.hp = Math.max(0, eco.hp - z.dmg);        // kait ke HP game yang sudah ada
+        saveEco(); updateStatsUI();
+        AudioSys.sfx('wrong');
+        if(eco.hp <= 0) faintPlayer();               // pingsan -> alur UKS yang sudah ada
+        else showToast(z.name + ' menyerangmu! HP -' + z.dmg + '. Usir dia dengan Senjata Ajaib, atau lari ke tempat aman!', 2600);
+      }
+    }
+  }
+  /* Aura senjata mengikuti pemain */
+  var wpnNow = nzEquipped();
+  if(wpnNow){ nzAura.color.setHex(wpnNow.color); nzAura.intensity = 1.5 + Math.sin(tNow * 5) * 0.25;
+    /* TAHAP 3 — Soket Kristal Vision: radius aura cahaya pemain +10. */
+    nzAura.distance = (eco.weaponSockets && eco.weaponSockets[wpnNow.id] === 'vision') ? 28 : 18; }
+  else nzAura.intensity = 0;
+  nzAura.position.set(pp.x, 2.2, pp.z);
+  /* Chip senjata segar bila senjata/tier berubah (termasuk ganti karakter) */
+  var chipKey = wpnNow ? (wpnNow.id + ':' + ((eco.weaponTiers && eco.weaponTiers[wpnNow.id]) || 1)) : '';
+  if(chipKey !== nz.chipKey){ nz.chipKey = chipKey; updateWeaponChip(); }
+  /* Tombol serang: hanya saat malam zombie aktif, tidak terblokir panel,
+     tidak di dalam ruangan, tidak sedang berkendara / tur. */
+  var showBtn = spawnActive && !uiBlocked() && !(interiorClamp && !(typeof inDimensi !== 'undefined' && inDimensi)) && !vehDrive;
+  if(showBtn !== nz.btnShown){ nz.btnShown = showBtn; attackBtnEl.classList.toggle('on', showBtn); }
+}
+
 function animate(){
   requestAnimationFrame(animate);
   var dt = Math.min(clock.getDelta(), 0.05);
@@ -13137,6 +14270,7 @@ function animate(){
     updateNPCWorld(dt);
     updateAmbienceLife(dt);
     updateChase(dt);
+    updateNightZombies(dt);
 
     if(playing){
       /* --- HP & EP sama-sama berkurang 0,00001 poin setiap detik
@@ -15409,7 +16543,8 @@ sawahBridge(58, -27); sawahBridge(-58, 84); sawahBridge(30, 84);
 function teleportKeGerbang(){
   if(vehDrive) dismountVehicle();
   if(riding) dismountBike();
-  if(interiorClamp){
+  if(typeof inDimensi !== 'undefined' && inDimensi) teleportToDimensiBack();
+  else if(interiorClamp){
     if(interiorClamp.minZ > 100) exitHome(); else exitRoom();
     interiorClamp = null; roomFloorY = 0;
   }
@@ -16581,7 +17716,7 @@ refreshHouseOwners();
    Perah. Bibit & pakan dibeli di Koperasi; tanaman disiram memakai EP;
    "Pupuk Cerdas" = jawab 1 soal IPAS/Numerasi untuk +50% pertumbuhan;
    panen & hasil ternak bisa dimakan dari Tas atau dijual ke Kantin. */
-INFO['Kebun Praktik & Kandang Desa'] = 'Kebun Praktik & Kandang Desa Gerduren di tepi Jl. Sawah Glempang: ada 12 petak tanah untuk menanam Bayam, Tomat, Jagung & Padi, plus Kandang Ayam dan Kandang Sapi Perah. Beli bibit & pakan di Koperasi Sekolah, tanam di petak, siram memakai EP, lalu panen hasilnya — bisa dimakan dari Tas atau dijual ke Kantin!';
+INFO['Kebun Praktik & Kandang Desa'] = 'Kebun Praktik & Kandang Desa Gerduren di tepi Jl. Sawah Glempang: ada 12 petak tanah untuk menanam 7 jenis tanaman — Bayam, Tomat, Melon, Jagung, Semangka, Padi & Jahe — plus Kandang Ayam dan Kandang Sapi Perah. Beli bibit & pakan di Koperasi Sekolah, tanam di petak, siram memakai EP, beri Pupuk Cerdas agar panennya SUPER (2× lipat!), lalu panen hasilnya — bisa dimakan dari Tas, dimasak di Kantin, atau dijual ke Kantin!';
 INFO['Petak Tanah Kosong'] = 'Petak tanah subur Kebun Praktik. Tekan E untuk menanam bibit dari Tasmu (beli bibitnya di Koperasi Sekolah).';
 INFO['Kandang Ayam Desa'] = 'Kandang ayam Kebun Praktik. Beri makan ayammu (Pakan Ternak / Jagung Manis), lalu ambil Telur Segarnya!';
 INFO['Kandang Sapi Perah'] = 'Kandang sapi perah Kebun Praktik. Beri makan sapimu (Pakan Ternak / Jagung Manis), lalu perah Susu Murninya!';
@@ -16591,7 +17726,8 @@ var CROPS = {
   jagung:{seed:'bibitJagung', name:'Jagung', grow:135, col:0x84cc16, fruit:0xfacc15, yieldId:'hasilJagung', yieldName:'Jagung Manis'},
   padi:  {seed:'bibitPadi',   name:'Padi',   grow:165, col:0xa3e635, fruit:0xfde047, yieldId:'hasilPadi',   yieldName:'Beras Gerduren'},
   semangka:{seed:'bibitSemangka', name:'Semangka Emas', grow:150, col:0x16a34a, fruit:0x22c55e, yieldId:'hasilSemangka', yieldName:'Semangka Emas'},
-  melon: {seed:'bibitMelon',  name:'Melon Gerduren', grow:120, col:0x65a30d, fruit:0xfde047, yieldId:'hasilMelon',  yieldName:'Melon Gerduren'}
+  melon: {seed:'bibitMelon',  name:'Melon Gerduren', grow:120, col:0x65a30d, fruit:0xfde047, yieldId:'hasilMelon',  yieldName:'Melon Gerduren'},
+  jahe:  {seed:'bibitJahe',   name:'Jahe',   grow:180, col:0x4d7c0f, fruit:0xd97706, yieldId:'hasilJahe',   yieldName:'Jahe Segar'}
 };
 var FARM_QUIZ = [
   {q:'Tanaman menyerap air dan zat hara dari tanah melalui…', o:['daun','akar','bunga'], a:1, x:'Akar menyerap air & mineral dari tanah untuk dibawa ke seluruh tubuh tanaman.'},
@@ -16603,7 +17739,10 @@ var FARM_QUIZ = [
   {q:'Hewan ternak yang menghasilkan susu untuk diminum manusia adalah…', o:['ayam','sapi perah','bebek'], a:1, x:'Sapi perah dipelihara khusus untuk diambil susunya.'},
   {q:'Harga 3 ikat bayam Rp6.000. Harga 1 ikat bayam adalah…', o:['Rp1.500','Rp2.000','Rp3.000'], a:1, x:'Rp6.000 ÷ 3 = Rp2.000 per ikat.'},
   {q:'Supaya tanaman tumbuh subur, selain disiram tanaman juga membutuhkan…', o:['cahaya matahari & pupuk','mainan','musik keras'], a:0, x:'Cahaya matahari untuk fotosintesis dan pupuk untuk zat hara tanah.'},
-  {q:'Satu petak ditanami 12 bibit tomat. Jika 3 bibit layu, bibit yang tumbuh ada…', o:['8 bibit','9 bibit','10 bibit'], a:1, x:'12 − 3 = 9 bibit.'}
+  {q:'Satu petak ditanami 12 bibit tomat. Jika 3 bibit layu, bibit yang tumbuh ada…', o:['8 bibit','9 bibit','10 bibit'], a:1, x:'12 − 3 = 9 bibit.'},
+  {q:'Biji padi yang sudah dipanen dan digiling akan menjadi…', o:['beras','tepung terigu','gula pasir'], a:0, x:'Biji padi disebut gabah. Gabah digiling dan dibersihkan menjadi beras — makanan pokok kita yang dimasak menjadi nasi.'},
+  {q:'Biji-biji jagung manis yang kita makan menempel pada bagian yang disebut…', o:['akar','tongkol','daun'], a:1, x:'Biji jagung tumbuh berderet rapi menempel pada tongkol. Tongkol jagung bisa direbus atau dibakar jadi Jagung Bakar!'},
+  {q:'Jahe tumbuh sebagai rimpang di dalam tanah. Rimpang jahe berguna untuk…', o:['bumbu masak & menghangatkan badan','mainan anak','pewarna kain'], a:0, x:'Jahe adalah bumbu dapur dan bahan wedang jahe yang menghangatkan badan. Rimpangnya yang ditanam kembali akan tumbuh menjadi tanaman jahe baru.'}
 ];
 var farmPlotVis = [], farmPlotIts = [], farmHearts = [];
 var heartTex = (function(){
@@ -16690,12 +17829,12 @@ function farmPlotRefresh(i){
   if(!st){ vis.plant.visible = false; it.name = 'Petak Tanah Kosong'; return; }
   var C = CROPS[st.c]; if(!C){ vis.plant.visible = false; it.name = 'Petak Tanah Kosong'; return; }
   vis.plant.visible = true;
-  var s = 0.25 + st.p * 1.05;
+  var s = (0.25 + st.p * 1.05) * (st.s ? 1.35 : 1); // TAHAP 4: petak SUPER tumbuh lebih besar
   vis.plant.scale.set(s, s, s);
-  vis.crown.material.color.setHex(st.p >= 1 ? C.fruit : C.col);
+  vis.crown.material.color.setHex(st.p >= 1 ? (st.s ? 0xffd34d : C.fruit) : C.col); // SUPER matang = mahkota emas
   vis.fruit.visible = st.p >= 0.55;
-  vis.fruit.material.color.setHex(C.fruit);
-  it.name = st.p >= 1 ? (C.name + ' Siap Panen!') : ('Petak ' + C.name + ' — ' + Math.floor(st.p * 100) + '%');
+  vis.fruit.material.color.setHex(st.s ? 0xfacc15 : C.fruit);
+  it.name = st.p >= 1 ? (st.s ? ('SUPER — ' + C.name + ' Siap Panen!') : (C.name + ' Siap Panen!')) : ('Petak ' + C.name + (st.s ? ' SUPER' : '') + ' — ' + Math.floor(st.p * 100) + '%');
 }
 for(var fpi = 0; fpi < 12; fpi++) farmPlotRefresh(fpi);
 var farmLastTick = Date.now();
@@ -16759,7 +17898,7 @@ function renderFarmPanel(){
       btns.appendChild(farmBtn('Tanam ' + C.name + ' (Bibit di Tas: ×' + n + ')', '', n <= 0, function(){
         if((eco.inv[C.seed] || 0) <= 0) return;
         eco.inv[C.seed] -= 1;
-        eco.farm.plots[i] = {c:key, p:0, w:0};
+        eco.farm.plots[i] = {c:key, p:0, w:0, s:0};
         saveEco(); updateStatsUI(); farmPlotRefresh(i);
         AudioSys.sfx('pop');
         showToast(C.name + ' tertanam di Petak No. ' + (i + 1) + '! Sekarang SIRAM petaknya (memakai 3 EP) supaya tumbuh.', 4400);
@@ -16770,10 +17909,11 @@ function renderFarmPanel(){
     var C = CROPS[st.c], pct = Math.floor(st.p * 100), mature = st.p >= 1;
     sub.textContent = mature ? (C.name + ' sudah matang — siap dipanen!') : ('Menanam ' + C.name + ' — tumbuh ' + pct + '%');
     var stBox2 = document.createElement('div'); stBox2.className = 'farm-status';
-    stBox2.innerHTML = '<b>' + C.name + '</b> • Tumbuh: <b>' + pct + '%</b>' +
+    stBox2.innerHTML = '<b>' + C.name + '</b> • Tumbuh: <b>' + pct + '%</b>' + (st.s ? ' • 🌟 <b>SUPER</b> — panen 2× lipat!' : '') +
       '<div class="farm-prog"><i style="width:' + pct + '%;"></i></div>' +
-      (mature ? 'Sudah MATANG! Panen untuk mendapat 2 × ' + C.yieldName + ' — bisa dimakan dari Tas (+HP & +EP) atau dijual ke Kantin.'
-              : (st.w > 0 ? 'Tanah masih basah (' + st.w + ' detik) — tanaman sedang tumbuh. Pupuk Cerdas mempercepat +50%!'
+      (mature ? (st.s ? 'Sudah MATANG SUPER! Panen untuk mendapat 4 × ' + C.yieldName + ' — bisa dimakan dari Tas (+HP & +EP) atau dijual ke Kantin.'
+                      : 'Sudah MATANG! Panen untuk mendapat 2 × ' + C.yieldName + ' — bisa dimakan dari Tas (+HP & +EP) atau dijual ke Kantin.')
+              : (st.w > 0 ? 'Tanah masih basah (' + st.w + ' detik) — tanaman sedang tumbuh. Pupuk Cerdas mempercepat +50% dan membuat petak jadi SUPER!'
                           : 'Tanah KERING — tanaman berhenti tumbuh. Siram dulu memakai 3 EP!'));
     body.appendChild(stBox2);
     if(!mature){
@@ -16792,16 +17932,18 @@ function renderFarmPanel(){
         showToast(extra ? 'Gembor Siram Emas menyiram ' + (extra + 1) + ' petak sekaligus! Tanah basah 45 detik.' : 'Petak disiram! Tanah basah 45 detik — ' + C.name + ' tumbuh selama tanah basah.', 3400);
         renderFarmPanel();
       }));
-      btns.appendChild(farmBtn('🌟 Pupuk Cerdas — Jawab 1 Soal (+50% Tumbuh)', 'warn', farmQuizUsed, function(){ renderFarmQuiz(i); }));
+      btns.appendChild(farmBtn('🌟 Pupuk Cerdas — Jawab 1 Soal (+50% Tumbuh + SUPER)', 'warn', farmQuizUsed, function(){ renderFarmQuiz(i); }));
     }
-    btns.appendChild(farmBtn('🧺 Panen ' + C.name + ' (+2 ' + C.yieldName + ')', '', !mature, function(){
+    btns.appendChild(farmBtn('🧺 Panen ' + C.name + ' (+' + (st.s ? 4 : 2) + ' ' + C.yieldName + ')' + (st.s ? ' 🌟 SUPER' : ''), '', !mature, function(){
       if(st.p < 1) return;
-      eco.inv[C.yieldId] = (eco.inv[C.yieldId] || 0) + 2;
+      var superHarvest = !!st.s, gain = superHarvest ? 4 : 2; // TAHAP 4: panen SUPER = 2× hasil normal
+      eco.inv[C.yieldId] = (eco.inv[C.yieldId] || 0) + gain;
       eco.farm.plots[i] = null;
       saveEco(); updateStatsUI(); renderBag(); farmPlotRefresh(i);
       questOnActWin('tanamKebun'); // progres Quest Harian "Menanam & Memanen"
       AudioSys.sfx('win');
-      showToast('Panen berhasil: +2 ' + C.yieldName + ' masuk ke Tas! Makan dari Tas untuk +HP & +EP, atau jual ke Kantin untuk Kredit.', 5200);
+      showToast(superHarvest ? ('🌟 PANEN SUPER! +' + gain + ' ' + C.yieldName + ' masuk ke Tas — 2× lipat berkat Pupuk Cerdas! Makan dari Tas, masak di Kantin, atau jual untuk Kredit.')
+                             : ('Panen berhasil: +2 ' + C.yieldName + ' masuk ke Tas! Makan dari Tas untuk +HP & +EP, atau jual ke Kantin untuk Kredit.'), 5200);
       renderFarmPanel();
     }));
   }
@@ -16811,7 +17953,7 @@ function renderFarmQuiz(i){
   var st = eco.farm.plots[i]; if(!st) return;
   var Q = pickFreshOne(FARM_QUIZ, 'kebun|' + questTodayStr() + '|' + Date.now()) || FARM_QUIZ[0]; // anti-ulang: soal Pupuk Cerdas tidak mengulang soal yang sudah dijawab
   var body = document.getElementById('farmBody');
-  document.getElementById('farmSub').textContent = 'Pupuk Cerdas: jawab BENAR untuk mempercepat pertumbuhan +50%!';
+  document.getElementById('farmSub').textContent = 'Pupuk Cerdas: jawab BENAR untuk mempercepat pertumbuhan +50% dan membuat petak jadi SUPER (panen 2× lipat)!';
   body.innerHTML = '';
   var qEl = document.createElement('div'); qEl.className = 'farm-quiz-q'; qEl.textContent = Q.q;
   body.appendChild(qEl);
@@ -16827,9 +17969,10 @@ function renderFarmQuiz(i){
       if(o.ok){
         b.classList.add('right');
         st.p = Math.min(1, st.p + 0.5);
+        st.s = 1; // TAHAP 4: jawaban benar juga menandai petak SUPER (panen 2×)
         saveEco(); farmPlotRefresh(i);
         AudioSys.sfx('correct');
-        showToast('BENAR! Pupuk Cerdas bekerja — pertumbuhan ' + CROPS[st.c].name + ' melompat +50% (sekarang ' + Math.floor(st.p * 100) + '%).', 4400);
+        showToast('BENAR! Pupuk Cerdas bekerja — pertumbuhan ' + CROPS[st.c].name + ' melompat +50% (sekarang ' + Math.floor(st.p * 100) + '%) dan petak ini jadi 🌟 SUPER: panennya 2× lipat (+4 hasil)!', 4400);
       } else {
         b.classList.add('wrong');
         AudioSys.sfx('error');
@@ -17621,7 +18764,7 @@ function renderKopdes(){
   }
   body.appendChild(mem);
   /* --- Jual hasil kebun/ternak (SHU) --- */
-  var sellIds = ['hasilBayam','hasilTomat','hasilJagung','hasilPadi','hasilSemangka','hasilMelon','telur','susuSapi','telurEmas','susuCokelat','ikanLaut','ikanMas','ikanGoreng'];
+  var sellIds = ['hasilBayam','hasilTomat','hasilJagung','hasilPadi','hasilSemangka','hasilMelon','hasilJahe','nasiGerduren','jagungBakar','telur','susuSapi','telurEmas','susuCokelat','ikanLaut','ikanMas','ikanGoreng','kristalDimensi','esensiKabut','mahkotaPenjaga'];
   var hasSell = sellIds.some(function(id){ return (eco.inv[id] || 0) > 0; });
   var hS = document.createElement('div'); hS.className = 'kp-sec'; hS.textContent = '💰 Jual Hasil Kebun, Ternak & Tangkap — ' + (eco.kopdesMember ? 'harga +20% (SHU anggota!)' : 'jadi anggota untuk harga +20%');
   body.appendChild(hS);
@@ -20068,6 +21211,9 @@ function chuteSegments(S, C, E, colors, sign){
   zones.push({name:'Kolam Renang Sekolah', minX:1, maxX:28.5, minZ:-62, maxZ:-47});
   DESTS.push({name:'Kolam Renang & Taman Bermain', x:-6, z:-47.2, kind:'tempat', label:'Kolam & Taman'});
   DESTS.push({name:'Lapangan Sepak Bola Desa', x:-64, z:17.6, kind:'tempat', label:'Bola Desa'});
+  zones.push({name:'Markas GARDA GARUDA FORCE', minX:-72, maxX:-32, minZ:-68, maxZ:-44});
+  zones.push({name:'Alun-Alun Purwokerto', minX:549, maxX:583, minZ:557, maxZ:587});
+  zones.push({name:'Kota Purwokerto', minX:545, maxX:655, minZ:545, maxZ:655});
 })();
 /* ---------- Percikan air (splash) ---------- */
 var splashP = [];
@@ -20416,6 +21562,305 @@ setInterval(function(){
   var el = document.getElementById(id);
   if(el) el.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
 });
+
+/* =====================================================================
+   TAHAP 3 — BENGKEL LAS PAK KARSO (Tempa Senjata, Bumper & Soket Kristal)
+   Adaptasi BlacksmithWeldingSystem (modul blueprint) ke pola game: satu
+   script klasik, tanpa import/export, tanpa playerState / Kredit kedua —
+   SEMUA biaya memakai Kredit eco (eco.kredit, saveEco, updateStatsUI) dan
+   SEMUA hasil tersimpan di eco (senjata di eco.inv + eco.weaponTiers,
+   soket di eco.weaponSockets, bumper di eco.bumper). Material dungeon
+   DITUNDA ke Tahap 5: resep Tahap 3 memakai Kredit saja (+ kuis bumper).
+   LOKASI (keputusan koordinator, terverifikasi dari kode v53): bengkel di
+   (70,14), tapak 12x10 (x 64..76, z 9..19). Lokasi blueprint (35,40) =
+   Dealer; saran spec (24,40) = Masjid Al-Ikhlas; x 60..80 z ~40 = bekas
+   lokasi Stasiun (stasiun kini di (77,-33), timur Puskesmas). Tapak (70,14) kosong terverifikasi: rumah (56,16) collider
+   berakhir x 59,8 (jarak 4,2 m), Polsek (74,30) collider mulai z 25,5
+   (jarak 6,5 m), sawah timur mulai z 0 (±11 m), Jalan Lingkar timur mulai
+   x 84,5 (8,5 m), jalan cabang timur berakhir x 56,5 (7,5 m). TIDAK ada
+   bangunan lain yang dipindah. Panel mengikuti pola Kopdes/Kebun (sheet-ovl
+   + flag di uiBlocked) — TANPA tombol DOM fixed baru. PointLight baru: 0.
+   ===================================================================== */
+INFO['Bengkel Las Pak Karso'] = 'Bengkel Las Pak Karso di timur desa, di antara Perumahan dan Kantor Polsek: tempat menempa Senjata Ajaib, menaikkan tier senjata, memasang soket kristal, dan mengelas Bumper Baja untuk kendaraanmu. Tekan Aksi lalu pilih Buka Bengkel untuk bicara dengan Pak Karso. Bengkel ini juga tempat aman dari zombie di malam hari!';
+INFO['Pak Karso'] = 'Pak Karso: tukang las dan pandai besi Desa Gerduren. Ia bisa menempa Tongkat Pramuka Bintang, Tombak Bara Merapi, dan Ketapel Peluru Cahaya, menaikkan tier Senjata Ajaibmu, memasang soket kristal, dan mengelas Bumper Baja + Lampu Kristal untuk kendaraanmu. Tekan Aksi lalu pilih Buka Bengkel!';
+DESTS.push({name:'Bengkel Las Pak Karso', x:70, z:20.2, kind:'tempat', label:'Bengkel'});
+
+/* ---------- Bangunan bengkel (Pembangun Nusantara Tahap 1B) ---------- */
+flat(12.5, 11, 0xc9ced4, 70, 14.5, scene, 0.035);   // lantai kerja beton tapak bengkel
+buildNusantara({x:70, z:14, w:10, d:7, h:3.8, rh:2.3, wall:0xe6b98a, roofColor:0x9a3412,
+  sign:'BENGKEL LAS PAK KARSO', signBg:'#7c2d12', solid:true});
+labelAt('Bengkel Las Pak Karso', 70, 7.1, 14, 0.6);
+addInteractable(70, 20.2, 5.5, 'Bengkel Las Pak Karso', null, {bengkel:true});
+/* Tumpukan besi tua di halaman barat bengkel (prosedural + collider) */
+(function(){
+  var g = new THREE.Group(); g.position.set(65, 0, 10.6); scene.add(g);
+  box(2.2, 0.5, 1.6, 0x78716c, 0, 0.25, 0, g);
+  box(1.8, 0.45, 1.3, 0x57534e, 0.2, 0.72, 0.1, g);
+  box(1.2, 0.4, 1.0, 0x92400e, -0.3, 1.12, 0, g);
+  var p1 = cyl(0.09, 0.09, 2.6, 0x94a3b8, 0, 1.35, 0.2, g, 8); p1.rotation.z = Math.PI / 2.15;
+  var p2 = cyl(0.07, 0.07, 2.2, 0x64748b, 0.5, 1.3, -0.3, g, 8); p2.rotation.z = Math.PI / 1.9; p2.rotation.x = 0.35;
+  addCollider(65, 10.6, 1.4, 1.1);
+})();
+/* Meja kerja + landasan las di halaman depan bengkel */
+(function(){
+  box(2.4, 0.12, 0.9, 0x8a5a2b, 73.6, 0.95, 19.6, scene);
+  box(0.14, 0.9, 0.8, 0x5f4126, 72.6, 0.45, 19.6, scene); box(0.14, 0.9, 0.8, 0x5f4126, 74.6, 0.45, 19.6, scene);
+  box(0.55, 0.3, 0.3, 0x1f2937, 73.2, 1.16, 19.6, scene, false);        // landasan besi
+  box(0.5, 0.28, 0.34, 0xdc2626, 74.2, 1.15, 19.6, scene, false);       // kotak perkakas merah
+  addCollider(73.6, 19.6, 1.35, 0.6);
+})();
+/* Pak Karso berdiri di halaman depan bengkel (pola NPC warga game) */
+villagerStand(67.6, 20.4, 0x374151, 0.2);
+labelAt('Pak Karso', 67.6, 2.25, 20.4, 0.5);
+addInteractable(67.6, 20.4, 3.4, 'Pak Karso', null, {bengkel:true});
+
+/* ---------- Bumper Baja + Lampu Kristal: visual di kendaraan milik pemain ----------
+   Menempel sebagai anak grup kendaraan (mobil polisi & motor cross yang bisa
+   dikendarai, plus mobil/motor pajangan di Rumah Kamu). Lampu kristal memakai
+   MeshBasicMaterial bercahaya — TANPA PointLight baru. Tampil hanya bila
+   eco.bumper sudah terpasang; refreshBumperVis() dipanggil setelah pengelasan. */
+var bsBumperMeshes = [];
+function bsMakeBumper(parent, w, zFront, y){
+  if(!parent) return;
+  var g = new THREE.Group(); parent.add(g);
+  box(w, 0.34, 0.22, 0x9aa3ab, 0, y, zFront, g);                        // palang bumper baja
+  box(w * 0.7, 0.15, 0.1, 0x64748b, 0, y + 0.27, zFront, g, false);     // dudukan lampu
+  var lamp = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.17, 0.08), new THREE.MeshBasicMaterial({color:0xffe066}));
+  lamp.position.set(0, y + 0.3, zFront + 0.13); g.add(lamp);            // lampu kristal
+  g.visible = false; bsBumperMeshes.push(g);
+}
+bsMakeBumper(policeCarGroup, 2.1, 2.3, 0.55);
+bsMakeBumper(homeCarGroup, 2.1, 2.3, 0.55);
+bsMakeBumper(crossBikeGroup, 0.7, 1.05, 0.6);
+bsMakeBumper(homeBikeGroup, 0.7, 1.05, 0.6);
+function refreshBumperVis(){ for(var i = 0; i < bsBumperMeshes.length; i++) bsBumperMeshes[i].visible = !!eco.bumper; }
+refreshBumperVis();
+/* Tabrakan bumper: kendaraan MILIK pemain (vehDrive = motor cross / mobil
+   polisi dari Dealer) yang ber-bumper menabrak zombie dengan kecepatan > 6
+   -> zombie diusir (damage 150, hadiah Kredit normal lewat nzDefeat).
+   vehDrive tidak pernah berisi Bis Keliling / kendaraan sewaan, dan zombie
+   nonaktif saat Main Bareng — kedua syarat spec terpenuhi secara struktur. */
+ambients.push(function(dt){
+  if(!playing || !vehDrive || !eco.bumper || !nightZombieActive) return;
+  if(typeof mp !== 'undefined' && (mp.joined || mp.connecting)) return;
+  if(Math.abs(vehSpeed) <= 6) return;
+  for(var i = nz.list.length - 1; i >= 0; i--){
+    var z = nz.list[i]; if(!z) continue;
+    var dx = z.mesh.position.x - player.position.x, dz = z.mesh.position.z - player.position.z;
+    if(dx * dx + dz * dz < 2.7 * 2.7) nzDamage(z, 150, {color:0xffd54f});
+  }
+});
+
+/* ---------- Panel Bengkel (pola sheet Kopdes / Kebun Praktik) ---------- */
+var blacksmithOpen = false;
+var bsOverlay = document.createElement('div');
+bsOverlay.className = 'sheet-ovl'; bsOverlay.id = 'bsOverlay';
+bsOverlay.innerHTML = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="bsTitle">' +
+  '<div class="sheet-head"><div><h2 class="sheet-title" id="bsTitle">🔨 Bengkel Las Pak Karso</h2>' +
+  '<p class="sheet-sub">Tempa Senjata Ajaib, naikkan tier, pasang soket kristal & las bumper kendaraanmu. Kreditmu: <b id="bsKredit">0</b></p></div>' +
+  '<button class="sheet-x" id="bsClose" type="button" aria-label="Tutup Bengkel">×</button></div>' +
+  '<div id="bsBody"></div></div>';
+document.body.appendChild(bsOverlay);
+function openBlacksmith(){ blacksmithOpen = true; bsOverlay.classList.add('on'); renderBlacksmith(); AudioSys.sfx('pop'); }
+function closeBlacksmith(){ blacksmithOpen = false; bsOverlay.classList.remove('on'); }
+document.getElementById('bsClose').addEventListener('click', closeBlacksmith);
+bsOverlay.addEventListener('click', function(e){ if(e.target === bsOverlay) closeBlacksmith(); });
+function bsBtn(label, cls, fn){
+  var b = document.createElement('button'); b.type = 'button'; b.className = 'kp-btn' + (cls ? ' ' + cls : '');
+  b.textContent = label; b.addEventListener('click', fn); return b;
+}
+function bsSpend(price){
+  if(eco.kredit < price){ AudioSys.sfx('error'); showToast('Kredit tidak cukup — kamu punya ' + eco.kredit + ' Kredit, butuh ' + price + '. Kumpulkan Kredit dari quest, misi, dan mengusir zombie dulu, ya!', 4200); return false; }
+  eco.kredit -= price; return true;
+}
+function bsSparks(color){ nzBurst(player.position, color || 0xffb020, 16); }
+var BS_FORGE = [
+  {id:'tongkatBintang', price:120, req:'lenteraTajum', reqName:'Lentera Kristal Tajum'},
+  {id:'tombakMerapi',   price:180, req:'tongkatBintang', reqName:'Tongkat Pramuka Bintang'},
+  {id:'ketapelCahaya',  price:150, req:'tombakMerapi', reqName:'Tombak Bara Merapi'},
+  {id:'pedangDimensi',  price:100, mat:'kristalDimensi', matN:3, matName:'Kristal Dimensi'}
+];
+var BS_SOCKETS = [
+  {id:'lifesteal', name:'Kristal Lifesteal', desc:'+8 HP setiap kali kamu mengusir zombie dengan senjata ini.', color:0x4ade80},
+  {id:'greed',     name:'Kristal Greed',     desc:'+25% Kredit hadiah dari zombie yang diusir senjata ini.', color:0xfacc15},
+  {id:'vision',    name:'Kristal Vision',    desc:'+10 radius aura cahaya pemain saat senjata ini dipakai.', color:0x7dd3fc}
+];
+function bsSocketName(id){ for(var i = 0; i < BS_SOCKETS.length; i++) if(BS_SOCKETS[i].id === id) return BS_SOCKETS[i].name; return id; }
+function renderBlacksmith(){
+  if(!eco.weaponSockets || typeof eco.weaponSockets !== 'object') eco.weaponSockets = {};
+  document.getElementById('bsKredit').textContent = eco.kredit;
+  var body = document.getElementById('bsBody'); body.innerHTML = '';
+  /* --- 1. Tempa Senjata Ajaib --- */
+  var h1 = document.createElement('div'); h1.className = 'kp-sec'; h1.textContent = '⚔️ Tempa Senjata Ajaib'; body.appendChild(h1);
+  var g1 = document.createElement('div'); g1.className = 'kp-grid';
+  BS_FORGE.forEach(function(r){
+    var w = WEAPONS[r.id];
+    var card = document.createElement('div'); card.className = 'kp-card';
+    var owned = (eco.inv[r.id] || 0) > 0;
+    var isMat = !!r.mat;
+    var matHave = isMat ? (eco.inv[r.mat] || 0) : 0;
+    var reqOk = isMat ? (matHave >= r.matN) : ((eco.inv[r.req] || 0) > 0);
+    if(isMat) card.innerHTML = '<b>' + w.name + '</b><span>Damage ' + w.dmg + ' • Jangkauan ' + w.range + ' m • Syarat: ' + r.matN + ' ' + r.matName + ' (punya ' + matHave + ').</span>';
+    else card.innerHTML = '<b>' + w.name + '</b><span>Damage ' + w.dmg + ' • Jangkauan ' + w.range + ' m • Syarat: punya ' + r.reqName + '.</span>';
+    if(owned){
+      card.innerHTML += '<span class="kp-price">Sudah ditempa ✓ — ada di Tas (Tier ' + ((eco.weaponTiers && eco.weaponTiers[r.id]) || 1) + ')</span>';
+      card.appendChild(bsBtn('Sudah Dimiliki', '', function(){})).disabled = true;
+    } else if(!reqOk){
+      if(isMat){
+        card.innerHTML += '<span class="kp-price">Terkunci — butuh ' + r.matN + ' ' + r.matName + ' (punya ' + matHave + ')</span>';
+        card.appendChild(bsBtn('Tempa — ' + r.price + ' Kredit', '', function(){ AudioSys.sfx('error'); showToast('Belum bisa ditempa: kumpulkan ' + r.matN + ' Kristal Dimensi dari zombie di Dimensi Lain dulu.', 3600); }));
+      } else {
+        card.innerHTML += '<span class="kp-price">Terkunci — butuh ' + r.reqName + ' dulu</span>';
+        card.appendChild(bsBtn('Tempa — ' + r.price + ' Kredit', '', function(){ AudioSys.sfx('error'); showToast('Belum bisa ditempa: kamu harus punya ' + r.reqName + ' dulu.', 3600); }));
+      }
+    } else {
+      card.innerHTML += '<span class="kp-price">' + r.price + ' Kredit' + (isMat ? ' + ' + r.matN + ' ' + r.matName : '') + '</span>';
+      card.appendChild(bsBtn('Tempa — ' + r.price + ' Kredit', 'gold', function(){
+        if(!bsSpend(r.price)) { renderBlacksmith(); return; }
+        if(isMat) eco.inv[r.mat] = Math.max(0, (eco.inv[r.mat] || 0) - r.matN);
+        eco.inv[r.id] = 1;
+        if(!eco.weaponTiers) eco.weaponTiers = {};
+        eco.weaponTiers[r.id] = 1;
+        eco.equippedWeapon = r.id;
+        saveEco(); updateStatsUI(); updateWeaponChip();
+        bsSparks(w.color); AudioSys.sfx('win');
+        showToast('🔨 Pak Karso menempa ' + w.name + ' Tier I untukmu — langsung terpasang! Buka Tas untuk mengganti senjata kapan saja.', 5200);
+        renderBlacksmith();
+      }));
+    }
+    g1.appendChild(card);
+  });
+  body.appendChild(g1);
+  /* --- 2. Upgrade Tier --- */
+  var h2 = document.createElement('div'); h2.className = 'kp-sec'; h2.textContent = '⬆️ Upgrade Tier Senjata (150 Kredit / tier, maks Tier III, damage +35% / tier)'; body.appendChild(h2);
+  var g2 = document.createElement('div'); g2.className = 'kp-grid';
+  var anyWeapon = false;
+  Object.keys(WEAPONS).forEach(function(id){
+    if((eco.inv[id] || 0) <= 0) return;
+    anyWeapon = true;
+    var w = WEAPONS[id], tier = (eco.weaponTiers && eco.weaponTiers[id]) || 1;
+    var card = document.createElement('div'); card.className = 'kp-card';
+    card.innerHTML = '<b>' + w.name + '</b><span>Tier saat ini: <b>' + tier + '</b> • Damage efektif: ' + Math.round(w.dmg * (1 + (tier - 1) * 0.35)) + (tier < 3 ? ' → Tier ' + (tier + 1) + ': ' + Math.round(w.dmg * (1 + tier * 0.35)) : '') + '</span>';
+    if(tier >= 3){
+      card.innerHTML += '<span class="kp-price">Tier MAKSIMUM (III) ✓</span>';
+      card.appendChild(bsBtn('Tier Maksimum', '', function(){})).disabled = true;
+    } else {
+      card.innerHTML += '<span class="kp-price">150 Kredit</span>';
+      card.appendChild(bsBtn('Upgrade ke Tier ' + (tier + 1) + ' — 150 Kredit', 'alt', function(){
+        if(!bsSpend(150)) { renderBlacksmith(); return; }
+        eco.weaponTiers[id] = tier + 1;
+        saveEco(); updateStatsUI(); updateWeaponChip();
+        bsSparks(0xffb020); AudioSys.sfx('buy');
+        showToast(w.name + ' naik ke Tier ' + (tier + 1) + '! Damage-nya bertambah 35%.', 4200);
+        renderBlacksmith();
+      }));
+    }
+    g2.appendChild(card);
+  });
+  if(!anyWeapon){
+    var none = document.createElement('p'); none.className = 'sheet-note';
+    none.textContent = 'Kamu belum punya Senjata Ajaib. Ambil Lentera Kristal Tajum di Ruang Briefing Markas GARDA, lalu tempa senjata berikutnya di sini!';
+    body.appendChild(none);
+  } else body.appendChild(g2);
+  /* --- 3. Las Bumper Baja + Lampu Kristal --- */
+  var h3 = document.createElement('div'); h3.className = 'kp-sec'; h3.textContent = '🚗 Las Bumper Baja + Lampu Kristal (Kendaraan Milikmu)'; body.appendChild(h3);
+  var bc = document.createElement('div'); bc.className = 'kp-card'; bc.style.maxWidth = '520px';
+  if(eco.bumper){
+    bc.innerHTML = '<b>Bumper Baja + Lampu Kristal — TERPASANG ✓</b><span>Motor cross & mobil polisi milikmu kini ber-bumper baja. Saat malam, tabrak zombie dengan kecepatan di atas 6 untuk mengusirnya jadi warga lagi (hadiah Kredit normal). Tidak berlaku untuk Bis Keliling / kendaraan sewaan.</span>';
+  } else if(!eco.bumperQuiz){
+    bc.innerHTML = '<b>Bumper Baja + Lampu Kristal — 250 Kredit + Lulus Kuis</b><span>Pak Karso hanya mengelas bumper untuk pengemudi yang paham keselamatan berkendara. Jawab 1 soal kuis keselamatan dengan benar dulu, baru bumper bisa dilas.</span>';
+    bc.appendChild(bsBtn('Ikuti Kuis Keselamatan', 'gold', function(){ renderBsQuiz(); }));
+  } else {
+    bc.innerHTML = '<b>Bumper Baja + Lampu Kristal — 250 Kredit</b><span>Kuis keselamatan: LULUS ✓. Sekali las, bumper terpasang permanen di motor cross & mobil polisi milikmu: menabrak zombie di kecepatan di atas 6 pada malam hari akan mengusirnya kembali menjadi warga.</span><span class="kp-price">250 Kredit</span>';
+    bc.appendChild(bsBtn('Las Bumper — 250 Kredit', 'gold', function(){
+      if(!bsSpend(250)) { renderBlacksmith(); return; }
+      eco.bumper = true; saveEco(); updateStatsUI(); refreshBumperVis();
+      bsSparks(0xffd54f); AudioSys.sfx('win');
+      showToast('🔧 Bumper Baja + Lampu Kristal terpasang di kendaraanmu! Saat malam, tabrak zombie dengan kecepatan di atas 6 untuk mengusirnya.', 5400);
+      renderBlacksmith();
+    }));
+  }
+  body.appendChild(bc);
+  /* --- 4. Soket Kristal --- */
+  var h4 = document.createElement('div'); h4.className = 'kp-sec'; h4.textContent = '💎 Soket Kristal (1 slot per senjata — pasang baru menggantikan yang lama, 100 Kredit)'; body.appendChild(h4);
+  if(!anyWeapon){
+    var none2 = document.createElement('p'); none2.className = 'sheet-note';
+    none2.textContent = 'Belum ada senjata untuk dipasangi kristal.';
+    body.appendChild(none2);
+  } else {
+    var g4 = document.createElement('div'); g4.className = 'kp-grid';
+    Object.keys(WEAPONS).forEach(function(id){
+      if((eco.inv[id] || 0) <= 0) return;
+      var w = WEAPONS[id], cur = eco.weaponSockets[id] || null;
+      var card = document.createElement('div'); card.className = 'kp-card';
+      card.innerHTML = '<b>' + w.name + '</b><span>Soket sekarang: <b>' + (cur ? bsSocketName(cur) : '— kosong —') + '</b></span>';
+      BS_SOCKETS.forEach(function(s){
+        if(cur === s.id){
+          var bb = bsBtn(s.name + ' — Terpasang ✓', '', function(){}); bb.disabled = true; card.appendChild(bb);
+        } else {
+          card.appendChild(bsBtn(s.name + ' — 100 Kredit', 'alt', function(){
+            if(!bsSpend(100)) { renderBlacksmith(); return; }
+            var old = eco.weaponSockets[id];
+            eco.weaponSockets[id] = s.id;
+            saveEco(); updateStatsUI();
+            bsSparks(s.color); AudioSys.sfx('buy');
+            showToast(s.name + ' terpasang di ' + w.name + (old ? ' (menggantikan ' + bsSocketName(old) + ')' : '') + '! ' + s.desc, 4600);
+            renderBlacksmith();
+          }));
+        }
+      });
+      g4.appendChild(card);
+    });
+    body.appendChild(g4);
+  }
+  var note = document.createElement('p'); note.className = 'sheet-note';
+  note.textContent = 'Semua pembayaran memakai Kredit game-mu dan hasil tempa tersimpan otomatis. Bengkel ini juga zona aman: zombie tidak berani masuk ke sini.';
+  body.appendChild(note);
+}
+/* Kuis syarat bumper — pola kuis dalam panel seperti Pupuk Cerdas di Kebun
+   Praktik (bank soal {q,o,a,x} + pickFreshOne anti-ulang). runQuiz game
+   terikat panel Pos Pramuka tanpa callback selesai, jadi kuis gerbang
+   pembelian mengikuti pola kuis panel yang satu ini. */
+var BS_QUIZ = [
+  {q:'Sebelum menyeberang jalan, apa yang harus kamu lakukan?', o:['Lari secepat-cepatnya menyeberang','Tengok kanan, kiri, lalu kanan lagi sampai aman','Menutup mata supaya tidak takut'], a:1, x:'Tengok kanan, kiri, lalu kanan lagi — pastikan tidak ada kendaraan sebelum menyeberang.'},
+  {q:'Saat dibonceng motor oleh orang tua, perlengkapan wajib untuk melindungi kepala adalah…', o:['Topi sekolah','Helm yang dikaitkan sampai berbunyi klik','Peci'], a:1, x:'Helm melindungi kepala saat berkendara motor — kaitkan talinya sampai klik!'},
+  {q:'Lampu lalu lintas menyala MERAH. Kendaraan harus…', o:['Berhenti di belakang garis berhenti','Jalan terus pelan-pelan','Berbelok ke mana saja'], a:0, x:'Merah = berhenti. Kuning = bersiap, hijau = jalan dengan hati-hati.'},
+  {q:'Tempat paling aman untuk menyeberang jalan adalah…', o:['Di tikungan jalan','Di zebra cross sambil tengok kanan-kiri','Di tengah jalan yang sepi'], a:1, x:'Zebra cross adalah tempat menyeberang yang ditandai untuk pejalan kaki.'},
+  {q:'Mengapa kendaraan tidak boleh melaju terlalu kencang di jalan desa?', o:['Supaya bensin awet saja','Karena ada anak-anak, warga, dan hewan yang bisa menyeberang tiba-tiba','Supaya tidak berisik'], a:1, x:'Jalan desa ramai warga dan anak-anak — kecepatan harus aman untuk semua.'}
+];
+function renderBsQuiz(){
+  var Q = pickFreshOne(BS_QUIZ, 'bengkel-bumper|' + Date.now()) || BS_QUIZ[0];
+  document.getElementById('bsKredit').textContent = eco.kredit;
+  var body = document.getElementById('bsBody'); body.innerHTML = '';
+  var h = document.createElement('div'); h.className = 'kp-sec'; h.textContent = '📝 Kuis Keselamatan Berkendara — Syarat Las Bumper'; body.appendChild(h);
+  var qEl = document.createElement('div'); qEl.className = 'farm-quiz-q'; qEl.textContent = Q.q; body.appendChild(qEl);
+  var opts = document.createElement('div'); opts.className = 'farm-quiz-opts';
+  var order = Q.o.map(function(t, ix){ return {t:t, ok:ix === Q.a}; });
+  for(var s = order.length - 1; s > 0; s--){ var r = Math.floor(Math.random() * (s + 1)); var tmp = order[s]; order[s] = order[r]; order[r] = tmp; }
+  order.forEach(function(o){
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = o.t;
+    b.addEventListener('click', function(){
+      opts.querySelectorAll('button').forEach(function(x){ x.disabled = true; if(x === b && !o.ok){} });
+      order.forEach(function(o2, ix2){ if(o2.ok) opts.children[ix2].classList.add('right'); });
+      if(o.ok){
+        b.classList.add('right');
+        eco.bumperQuiz = true; saveEco();
+        AudioSys.sfx('correct');
+        showToast('LULUS! Kamu paham keselamatan berkendara. Pak Karso siap mengelas Bumper Baja untuk kendaraanmu — 250 Kredit.', 4800);
+      } else {
+        b.classList.add('wrong');
+        AudioSys.sfx('error');
+        showToast('Belum tepat. ' + Q.x + ' Coba lagi, ya!', 5200);
+      }
+      setTimeout(renderBlacksmith, 1500);
+    });
+    opts.appendChild(b);
+  });
+  body.appendChild(opts);
+  var note = document.createElement('p'); note.className = 'sheet-note';
+  note.textContent = 'Jawab benar untuk membuka resep Las Bumper Baja. Salah tidak apa-apa — kamu bisa mencoba lagi.';
+  body.appendChild(note);
+}
 
 /* ---------- Inisialisasi pembaruan ---------- */
 syncFaseUI();
