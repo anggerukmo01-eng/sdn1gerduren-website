@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Latihan SAS 1 Kelas 1 — SD Negeri 1 Gerduren</title>
+<meta name="description" content="Kuis latihan interaktif bersuara untuk menghadapi SAS 1 Kelas 1: Bahasa Indonesia, Matematika, dan Pancasila — masing-masing 5 soal. Tulis soal dan jawaban di Buku Pelajaran.">
+<meta property="og:title" content="Kuis Latihan SAS 1 Kelas 1 — SD Negeri 1 Gerduren">
+<meta property="og:description" content="Latihan SAS 1 Kelas 1 yang interaktif dan bersuara: Bahasa Indonesia, Matematika, dan Pancasila.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SD Negeri 1 Gerduren">
+<meta property="og:url" content="https://sdn1gerduren.pages.dev/kuis-sas-kelas-1/">
+<meta property="og:image" content="https://sdn1gerduren.pages.dev/images/galeri-gedung.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sdn1gerduren.pages.dev/images/galeri-gedung.png">
+<link rel="icon" href="/images/logo-sdn1gerduren.png">
+<script>try{var t=localStorage.getItem('sdn-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+  .quiz-wrap{max-width:860px;margin:0 auto}
+  .quiz-note{background:var(--amber-soft);border:2px solid var(--amber);border-radius:var(--radius);padding:16px 20px;margin:0 0 22px;color:var(--amber-text)}
+  .quiz-note strong{display:block;font-size:18px;margin-bottom:4px}
+  .quiz-note p{margin:0;font-size:15.5px;line-height:1.55}
+  .quiz-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:26px}
+  .quiz-card h2{margin:0 0 6px;font-size:26px}
+  .quiz-card .sub{color:var(--muted);margin:0 0 20px;font-size:16px}
+  .mapel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 14px}
+  @media (max-width:640px){.mapel-grid{grid-template-columns:1fr}}
+  .mapel-btn{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:18px;cursor:pointer;font-family:inherit;color:var(--ink)}
+  .mapel-btn:hover{border-color:var(--primary);transform:translateY(-2px);transition:.15s}
+  .mapel-btn .m-ico{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .mapel-btn .m-ico svg{width:26px;height:26px;color:#fff}
+  .mapel-btn b{display:block;font-size:19px;font-family:"Plus Jakarta Sans",sans-serif}
+  .mapel-btn small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+  .mapel-btn .mulai{display:inline-block;margin-top:10px;font-weight:700;font-size:14.5px;color:var(--primary)}
+  .m-bindo .m-ico{background:var(--sky)}
+  .m-mtk .m-ico{background:var(--amber)}
+  .m-pancasila .m-ico{background:var(--leaf)}
+  .btn-semua{width:100%;display:block;text-align:center;background:var(--primary);color:#fff;border:0;border-radius:999px;padding:15px 22px;font-weight:700;font-size:17px;cursor:pointer;font-family:inherit}
+  .btn-semua:hover{background:var(--primary-hover)}
+  .nama-row{margin:0 0 18px}
+  .nama-row label{display:block;font-weight:700;margin-bottom:6px}
+  .nama-row input{width:100%;box-sizing:border-box;padding:13px 16px;font-size:17px;font-family:inherit;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+  .nama-row input:focus{outline:2px solid var(--primary);border-color:var(--primary)}
+  .cara{margin:18px 0 0;padding:16px 20px;background:var(--primary-tint);border-radius:var(--radius);font-size:15.5px;line-height:1.7}
+  .cara b{color:var(--primary-hover)}
+  .quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:var(--primary-tint);color:var(--primary-hover);font-weight:700;font-size:14px;padding:6px 13px;border-radius:999px}
+  .chip.skb{background:var(--sky-tint);color:var(--sky)}
+  .chip.amb{background:var(--amber-soft);color:var(--amber-text)}
+  .chip.lf{background:var(--leaf-tint);color:var(--leaf)}
+  .suara-btn{background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:999px;padding:8px 15px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+  .suara-btn:hover{border-color:var(--primary)}
+  .prog{height:12px;background:var(--line);border-radius:999px;overflow:hidden;margin:0 0 20px}
+  .prog i{display:block;height:100%;background:linear-gradient(90deg,var(--leaf),var(--primary));border-radius:999px;transition:width .35s}
+  .soal-nomor{color:var(--muted);font-weight:700;font-size:14.5px;margin:0 0 6px}
+  .soal-teks{font-family:"Plus Jakarta Sans",sans-serif;font-weight:700;font-size:clamp(24px,4.4vw,31px);line-height:1.35;margin:0 0 8px}
+  .soal-tulis{color:var(--muted);font-size:14.5px;margin:0 0 16px}
+  .dengar-btn{display:inline-flex;align-items:center;gap:8px;background:var(--sky);color:#fff;border:0;border-radius:999px;padding:11px 20px;font-weight:700;font-size:15.5px;cursor:pointer;font-family:inherit;margin-bottom:20px}
+  .dengar-btn:hover{filter:brightness(1.08)}
+  .dengar-btn svg{width:20px;height:20px}
+  .pilihan{display:grid;gap:12px}
+  .pilihan button{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;font-family:inherit;color:var(--ink);font-size:clamp(19px,3.4vw,22px);font-weight:600;line-height:1.35}
+  .pilihan button:hover:not(:disabled){border-color:var(--primary);background:var(--primary-tint)}
+  .pilihan button:disabled{cursor:default}
+  .pilihan .huruf{flex:none;width:44px;height:44px;border-radius:50%;background:var(--primary-tint);color:var(--primary-hover);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;font-family:"Plus Jakarta Sans",sans-serif}
+  .pilihan button.benar{border-color:var(--leaf);background:var(--leaf-tint)}
+  .pilihan button.benar .huruf{background:var(--leaf);color:#fff}
+  .pilihan button.salah{border-color:#DC2626;background:#FEE2E2}
+  .pilihan button.salah .huruf{background:#DC2626;color:#fff}
+  [data-theme="dark"] .pilihan button.salah{background:#3F1D1D}
+  .umpan{margin-top:18px;border-radius:var(--radius);padding:16px 18px;font-size:16.5px;line-height:1.55;display:none}
+  .umpan.ok{display:block;background:var(--leaf-tint);border:2px solid var(--leaf)}
+  .umpan.no{display:block;background:#FEE2E2;border:2px solid #DC2626}
+  [data-theme="dark"] .umpan.no{background:#3F1D1D}
+  .umpan b{display:block;font-size:18px;margin-bottom:2px}
+  .lanjut-row{margin-top:18px;text-align:right}
+  .hasil-bintang{display:flex;justify-content:center;gap:8px;margin:6px 0 10px}
+  .hasil-bintang svg{width:56px;height:56px}
+  .hasil-bintang .isi{fill:var(--amber);stroke:#B45309;stroke-width:1}
+  .hasil-bintang .kosong{fill:var(--line);stroke:var(--muted);stroke-width:1}
+  .hasil-skor{text-align:center;font-size:clamp(26px,5vw,34px);font-weight:800;font-family:"Plus Jakarta Sans",sans-serif;margin:0 0 4px}
+  .hasil-puji{text-align:center;color:var(--muted);font-size:17px;margin:0 0 22px}
+  .rekap{border-top:2px dashed var(--line);margin-top:6px;padding-top:18px}
+  .rekap h3{margin:0 0 4px;font-size:20px}
+  .rekap>p{color:var(--muted);margin:0 0 14px;font-size:15px}
+  .rekap ol{margin:0;padding-left:22px;font-size:16.5px;line-height:1.6}
+  .rekap li{margin-bottom:10px}
+  .rekap li b{color:var(--primary-hover)}
+  .hasil-aksi{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .btn-abu{background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+  .btn-abu:hover{border-color:var(--primary)}
+  @media print{
+    .utilbar,header,.nav-backdrop,footer,.quiz-note,.dengar-btn,.suara-btn,.hasil-aksi,.lanjut-row,.pilihan,.umpan,.prog,.quiz-top{display:none !important}
+    body{background:#fff}
+    .quiz-card{box-shadow:none;border:0;padding:0}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#konten">Lewati ke konten utama</a>
+<!-- 1. Top Utility Bar -->
+<div class="utilbar"><div class="wrap utilbar-inner"><span class="util-left"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> NPSN: 20302352 <span class="util-addr">&bull; Desa Gerduren, Kec. Purwojati, Kab. Banyumas</span></span><span class="util-right"><span class="clock" id="clock-widget">Memuat jam&hellip;</span></span></div></div>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+    <a class="brand" href="/" aria-label="Beranda SD Negeri 1 Gerduren">
+      <span class="brand-logos" aria-hidden="true"><img src="/images/logo-sdn1gerduren.png" alt=""><img class="logo-bms" src="/images/logo-banyumas.png" alt=""></span>
+      <span><b>SD Negeri 1 Gerduren</b><span class="brand-sub">Purwojati &bull; Banyumas</span></span>
+    </a>
+    <div class="header-actions">
+      <button class="theme-btn" type="button" id="theme-btn" aria-label="Ubah mode gelap atau terang"><span class="theme-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span><span class="theme-label">Mode Gelap</span></button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-utama" id="menu-btn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg> Menu</button>
+    </div>
+    </div>
+    <nav aria-label="Navigasi utama" id="nav-utama">
+      <button class="drawer-close" type="button" id="drawer-close"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> Tutup</button>
+      <a href="/" class="nav-link"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg> Profil <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/profil/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg><span><b>Profil &amp; Visi Misi</b><small>Visi, misi &amp; sejarah sekolah</small></span></a><a href="/guru/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span><b>Guru &amp; Tendik</b><small>10 pendidik &amp; tenaga kependidikan</small></span></a><a href="/kontak/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><b>Kontak</b><small>Alamat, email &amp; lokasi sekolah</small></span></a></div></div>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle active" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg> Akademik <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/akademik/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg><span><b>Kurikulum Merdeka</b><small>Fase A, B &amp; C Kurikulum Merdeka</small></span></a><a href="/jadwal/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span><b>Jadwal Pelajaran</b><small>Jadwal Kelas 1&ndash;6 Senin&ndash;Jumat</small></span></a><a href="/kegiatan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg><span><b>Kegiatan &amp; Prestasi</b><small>Galeri, ekstrakurikuler &amp; prestasi</small></span></a><a href="/perpustakaan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg><span><b>Perpustakaan Online</b><small>174 buku digital Kurikulum Merdeka</small></span></a><a href="/kuis-sas-kelas-1/" class="active"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg><span><b>Kuis Latihan SAS Kelas 1</b><small>15 soal bersuara: B. Indonesia, Matematika &amp; Pancasila</small></span></a></div></div>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> Zona Digital <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/digitalisasi/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 21 14 3"/><path d="M20.5 21 10 3"/><path d="M15.5 21 12 15l-3.5 6"/><path d="M2 21h20"/></svg><span><b>Media Pramuka Siaga</b><small>9 Pos latihan Pesta Siaga</small></span></a><a href="/dunia/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg><span><b>Dunia SDN 1 Gerduren</b><small>Game dunia virtual sekolah</small></span></a><a href="/kompas/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg><span><b>Pos Kompas Interaktif</b><small>Roda kompas &amp; kuis derajat</small></span></a><a href="#" onclick="return bukaKhususGuru(event)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span><b>Aplikasi Administrasi Guru</b><small>Khusus guru &mdash; kata sandi NPSN</small></span></a></div></div>
+      <div class="nav-drop"><button type="button" class="nav-drop-toggle" aria-haspopup="true" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8"/></svg> Informasi <svg class="ico caret" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button><div class="nav-sub"><a href="/berita/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8"/></svg><span><b>Berita Sekolah</b><small>Kabar &amp; pengumuman terbaru</small></span></a><a href="/unduhan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg><span><b>Pusat Unduhan</b><small>Formulir &amp; dokumen resmi</small></span></a></div></div>
+      <a class="nav-cta" href="/ppdb/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Info PPDB 2026/2027</a>
+    </nav>
+  </div>
+</header>
+<div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+<main id="konten">
+  <div class="page-head"><div class="wrap"><img class="page-corner" src="/images/ilustrasi-pojok.png" alt="" aria-hidden="true"><p class="eyebrow" style="color:#ffe082">Latihan SAS 1 &bull; Kelas 1 &bull; Semester 1</p><h1>Kuis Latihan SAS 1 Kelas 1</h1><p>Bahasa Indonesia, Matematika, dan Pancasila &mdash; masing-masing 5 soal. Dengarkan soalnya, pilih jawabanmu, lalu tulis soal dan jawaban di Buku Pelajaran.</p></div></div>
+  <section>
+    <div class="wrap quiz-wrap">
+      <div class="quiz-note" role="note">
+        <strong>Tugas di Buku Pelajaran</strong>
+        <p>Tulis nomor soal dan jawabanmu di <b>Buku Pelajaran</b>. Di akhir kuis ada rekap jawaban yang benar &mdash; salin ke bukumu dan minta orang tua atau gurumu memeriksa.</p>
+      </div>
+      <div class="quiz-card" id="app"></div>
+      <p style="color:var(--muted);font-size:13.5px;margin:16px 4px 0">Kuis ini berjalan sepenuhnya di perangkatmu &mdash; tidak ada nama atau jawaban yang dikirim ke mana pun. Suara dibacakan oleh perangkat (teks-ke-suara); bila suara tidak terdengar, periksa volume dan izin suara peramban.</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-logos"><img src="/images/logo-sdn1gerduren.png" alt="Logo SD Negeri 1 Gerduren"><img src="/images/logo-banyumas.png" alt="Logo Kabupaten Banyumas"></div>
+      <strong class="footer-brand">SD Negeri 1 Gerduren</strong>
+      <p>Desa Gerduren, Kecamatan Purwojati,<br>Kabupaten Banyumas, Jawa Tengah<br>NPSN 20302352</p>
+      <p class="footer-privacy">Portal resmi informasi publik sekolah. Kami menjaga privasi dan tidak mempublikasikan data pribadi siswa.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Profil &amp; Akademik</h3>
+      <ul>
+        <li><a href="/profil/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Profil &amp; Visi Misi</a></li>
+        <li><a href="/guru/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Guru &amp; Tendik</a></li>
+        <li><a href="/akademik/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Akademik</a></li>
+        <li><a href="/jadwal/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Jadwal Pelajaran</a></li>
+        <li><a href="/kegiatan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Kegiatan &amp; Prestasi</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Layanan Digital &amp; Siswa</h3>
+      <ul>
+        <li><a href="/perpustakaan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Perpustakaan Online</a></li>
+        <li><a href="/digitalisasi/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Media Pramuka Siaga</a></li>
+        <li><a href="/dunia/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Dunia Virtual</a></li>
+        <li><a href="/kuis-sas-kelas-1/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Kuis Latihan SAS Kelas 1</a></li>
+        <li><a href="/unduhan/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Pusat Unduhan</a></li>
+        <li><a href="/ppdb/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Info PPDB</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>&copy; 2026 SD Negeri 1 Gerduren &bull; NPSN 20302352</span>
+    <a class="footer-admin" href="/admin"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Kelola Berita (Admin)</a>
+  </div>
+</footer>
+<script src="/assets/site.js"></script>
+<script>
+(function(){
+'use strict';
+var HURUF=['A','B','C'];
+var MAPEL={
+  bindo:{nama:'Bahasa Indonesia',cls:'skb',ikon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>'},
+  mtk:{nama:'Matematika',cls:'amb',ikon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'},
+  pancasila:{nama:'Pancasila',cls:'lf',ikon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>'}
+};
+var SOAL={
+  bindo:[
+    {t:'Huruf pertama dari kata BOLA adalah huruf ...',p:['B','K','L'],b:0,e:'Kata BOLA diawali huruf B.'},
+    {t:'Kata KAKI terdiri atas suku kata ...',p:['ka - ki','ki - ka','ka - ka'],b:0,e:'KATA KAKI dibaca ka-ki, dua suku kata.'},
+    {t:'Manakah kata yang diawali huruf L?',p:['lari','bola','kucing'],b:0,e:'Kata lari diawali huruf L.'},
+    {t:'Kalimat tanya diakhiri dengan tanda ...',p:['tanda tanya (?)','tanda seru (!)','titik (.)'],b:0,e:'Kalimat tanya diakhiri tanda tanya.'},
+    {t:'Supaya kuman hilang dari tangan, kita harus ...',p:['mencuci tangan','bermain lumpur','mengusap baju'],b:0,e:'Mencuci tangan dengan sabun menghilangkan kuman.'}
+  ],
+  mtk:[
+    {t:'3 + 4 = ...',p:['6','7','8'],b:1,e:'3 ditambah 4 sama dengan 7.'},
+    {t:'8 \u2212 3 = ...',p:['4','5','6'],b:1,e:'8 dikurangi 3 sama dengan 5.'},
+    {t:'Bentuk yang mempunyai 3 sisi adalah ...',p:['lingkaran','segitiga','persegi'],b:1,e:'Segitiga mempunyai 3 sisi.'},
+    {t:'Bilangan sesudah 14 adalah ...',p:['13','15','16'],b:1,e:'Sesudah 14 adalah 15.'},
+    {t:'Ibu membeli 5 buah apel. Dimakan 2 buah. Sisa apel Ibu ada ...',p:['2 buah','3 buah','7 buah'],b:1,e:'5 dikurangi 2 sama dengan 3.'}
+  ],
+  pancasila:[
+    {t:'Aturan di rumah dibuat supaya ...',p:['rumah tertib dan aman','rumah berantakan','semua orang takut'],b:0,e:'Aturan membuat rumah tertib dan aman.'},
+    {t:'Contoh mematuhi aturan di rumah adalah ...',p:['merapikan mainan setelah bermain','membuang sampah sembarangan','berteriak di dalam rumah'],b:0,e:'Merupakan contoh mematuhi aturan di rumah.'},
+    {t:'Sikap peduli terhadap tempat tinggal adalah ...',p:['menyapu halaman rumah','membuang sampah ke sungai','mencoret dinding'],b:0,e:'Menyapu halaman adalah bentuk peduli tempat tinggal.'},
+    {t:'Contoh kerja sama menjaga lingkungan adalah ...',p:['membersihkan kelas bersama-sama','bermain sendiri saja','membiarkan sampah berserakan'],b:0,e:'Membersihkan kelas bersama adalah kerja sama.'},
+    {t:'Contoh nilai Pancasila di keluarga adalah ...',p:['saling menyayangi anggota keluarga','bertengkar dengan kakak','tidak mau berbagi'],b:0,e:'Saling menyayangi adalah nilai Pancasila di keluarga.'}
+  ]
+};
+var app=document.getElementById('app');
+var st={mode:'menu',list:[],idx:0,skor:0,nama:'',suara:true,terkunci:false,percobaan:0};
+var suaraDidukung=('speechSynthesis' in window);
+var actx=null;
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function ucap(teks){
+  if(!st.suara||!suaraDidukung)return;
+  try{
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(teks);
+    u.lang='id-ID';u.rate=0.9;u.pitch=1.05;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function nada(frek,awal,dur){
+  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){return;}}
+  try{
+    var o=actx.createOscillator(),g=actx.createGain();
+    o.type='sine';o.frequency.value=frek;
+    g.gain.setValueAtTime(0.0001,actx.currentTime+awal);
+    g.gain.exponentialRampToValueAtTime(0.25,actx.currentTime+awal+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+awal+dur);
+    o.connect(g);g.connect(actx.destination);
+    o.start(actx.currentTime+awal);o.stop(actx.currentTime+awal+dur+0.05);
+  }catch(e){}
+}
+function bunyi(ok){if(ok){nada(660,0,0.18);nada(880,0.16,0.28);}else{nada(220,0,0.3);}}
+function soalUcap(q){
+  var teks=q.t.replace(/\.\.\./g,' berapa').replace(/\u2212/g,' dikurangi ');
+  return teks+' Pilihan A: '+q.p[0]+'. Pilihan B: '+q.p[1]+'. Pilihan C: '+q.p[2]+'.';
+}
+function tampilMenu(){
+  st.mode='menu';
+  var h='<h2>Pilih Mapelnya</h2><p class="sub">Setiap mapel ada 5 soal. Soal dibacakan dengan suara &mdash; tekan tombol pengeras suara bila ingin mendengarnya lagi.</p>';
+  h+='<div class="nama-row"><label for="nama">Nama kamu (boleh kosong)</label><input id="nama" type="text" maxlength="40" placeholder="Tulis namamu di sini" autocomplete="off"></div>';
+  h+='<div class="mapel-grid">';
+  Object.keys(MAPEL).forEach(function(k){
+    var m=MAPEL[k];
+    h+='<button type="button" class="mapel-btn m-'+k+'" data-mapel="'+k+'"><span class="m-ico">'+m.ikon+'</span><b>'+m.nama+'</b><small>5 soal latihan SAS 1</small><span class="mulai">Mulai &rarr;</span></button>';
+  });
+  h+='</div>';
+  h+='<button type="button" class="btn-semua" id="btnSemua">Main Semua Mapel &mdash; 15 Soal</button>';
+  h+='<div class="cara"><b>Cara bermain:</b><br>1. Pilih mapel, lalu dengarkan soalnya.<br>2. Pilih jawaban A, B, atau C. Kalau belum tepat, kamu boleh mencoba lagi.<br>3. <b>Tulis nomor soal dan jawabanmu di Buku Pelajaran</b> &mdash; di akhir kuis ada rekap jawaban benar untuk disalin.</div>';
+  app.innerHTML=h;
+  var namaInput=document.getElementById('nama');
+  if(st.nama)namaInput.value=st.nama;
+  namaInput.addEventListener('input',function(){st.nama=namaInput.value.trim();});
+  app.querySelectorAll('.mapel-btn').forEach(function(b){
+    b.addEventListener('click',function(){mulai([b.getAttribute('data-mapel')]);});
+  });
+  document.getElementById('btnSemua').addEventListener('click',function(){mulai(['bindo','mtk','pancasila']);});
+  ucap('Halo! Pilih mapelnya: Bahasa Indonesia, Matematika, atau Pancasila. Atau main semua mapel, lima belas soal.');
+}
+function mulai(kunci){
+  st.list=[];
+  kunci.forEach(function(k){
+    SOAL[k].forEach(function(q){st.list.push({mapel:k,q:q});});
+  });
+  st.idx=0;st.skor=0;st.mode='quiz';
+  tampilSoal();
+}
+function tampilSoal(){
+  st.terkunci=false;st.percobaan=0;
+  var item=st.list[st.idx],m=MAPEL[item.mapel],q=item.q;
+  var total=st.list.length;
+  var h='<div class="quiz-top"><span class="chip '+m.cls+'">'+m.nama+'</span><button type="button" class="suara-btn" id="btnSuara">Suara: '+(st.suara?'Hidup':'Mati')+'</button></div>';
+  h+='<div class="prog" role="progressbar" aria-valuenow="'+(st.idx+1)+'" aria-valuemax="'+total+'"><i style="width:'+Math.round(((st.idx)/total)*100)+'%"></i></div>';
+  h+='<p class="soal-nomor">Soal '+(st.idx+1)+' dari '+total+'</p>';
+  h+='<p class="soal-teks">'+esc(q.t)+'</p>';
+  h+='<p class="soal-tulis">Tulis jawabanmu di Buku Pelajaran ya!</p>';
+  h+='<button type="button" class="dengar-btn" id="btnDengar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Dengarkan Soal</button>';
+  h+='<div class="pilihan" id="pilihan">';
+  q.p.forEach(function(pil,i){
+    h+='<button type="button" data-i="'+i+'"><span class="huruf">'+HURUF[i]+'</span><span>'+esc(pil)+'</span></button>';
+  });
+  h+='</div>';
+  h+='<div class="umpan" id="umpan"></div>';
+  h+='<div class="lanjut-row" id="lanjutRow" style="display:none"><button type="button" class="btn btn-green" id="btnLanjut">'+(st.idx+1===total?'Lihat Hasil':'Soal Berikutnya')+' &rarr;</button></div>';
+  app.innerHTML=h;
+  document.getElementById('btnSuara').addEventListener('click',function(){
+    st.suara=!st.suara;
+    this.textContent='Suara: '+(st.suara?'Hidup':'Mati');
+    if(st.suara)ucap(soalUcap(q));
+  });
+  document.getElementById('btnDengar').addEventListener('click',function(){ucap(soalUcap(q));});
+  app.querySelectorAll('#pilihan button').forEach(function(b){
+    b.addEventListener('click',function(){pilih(parseInt(b.getAttribute('data-i'),10));});
+  });
+  document.getElementById('btnLanjut').addEventListener('click',function(){
+    st.idx++;
+    if(st.idx>=st.list.length){tampilHasil();}else{tampilSoal();}
+  });
+  ucap(soalUcap(q));
+}
+function pilih(i){
+  if(st.terkunci)return;
+  var item=st.list[st.idx],q=item.q;
+  var btns=app.querySelectorAll('#pilihan button');
+  var umpan=document.getElementById('umpan');
+  if(i===q.b){
+    st.terkunci=true;
+    if(st.percobaan===0)st.skor++;
+    btns[i].classList.add('benar');
+    btns.forEach(function(b){b.disabled=true;});
+    umpan.className='umpan ok';
+    umpan.innerHTML='<b>Benar! Hebat sekali!</b>'+esc(q.e);
+    document.getElementById('lanjutRow').style.display='block';
+    bunyi(true);
+    ucap('Benar! Hebat sekali! '+q.e);
+  }else{
+    st.percobaan++;
+    btns[i].classList.add('salah');
+    btns[i].disabled=true;
+    umpan.className='umpan no';
+    umpan.innerHTML='<b>Belum tepat, coba lagi ya!</b>Dengarkan soalnya sekali lagi, lalu pilih jawaban yang lain.';
+    bunyi(false);
+    ucap('Belum tepat. Coba lagi ya!');
+  }
+}
+function bintangSvg(isi){
+  return '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon class="'+(isi?'isi':'kosong')+'" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+}
+function tampilHasil(){
+  st.mode='hasil';
+  var total=st.list.length;
+  var persen=Math.round(st.skor/total*100);
+  var bintang=persen>=90?3:(persen>=60?2:1);
+  var puji=persen===100?'Luar biasa! Semua jawaban benar!':(persen>=80?'Hebat sekali! Hampir semua benar!':(persen>=60?'Bagus! Terus berlatih ya!':'Tidak apa-apa, ayo coba lagi sampai bisa!'));
+  var nama=st.nama?esc(st.nama):'Teman Kelas 1';
+  var h='<h2 style="text-align:center">Hasil Kuis Kamu</h2>';
+  h+='<div class="hasil-bintang" role="img" aria-label="'+bintang+' dari 3 bintang">'+bintangSvg(bintang>=1)+bintangSvg(bintang>=2)+bintangSvg(bintang>=3)+'</div>';
+  h+='<p class="hasil-skor">'+st.skor+' dari '+total+' benar</p>';
+  h+='<p class="hasil-puji">'+puji+' &mdash; '+nama+'</p>';
+  h+='<div class="rekap"><h3>Salin ke Buku Pelajaran</h3><p>Tulis soal dan jawaban yang benar ini di Buku Pelajaranmu.</p><ol>';
+  st.list.forEach(function(item,n){
+    var m=MAPEL[item.mapel];
+    h+='<li><b>['+m.nama+']</b> '+esc(item.q.t)+' &mdash; Jawaban benar: <b>'+esc(item.q.p[item.q.b])+'</b></li>';
+  });
+  h+='</ol></div>';
+  h+='<div class="hasil-aksi"><button type="button" class="btn btn-green" id="btnUlang">Main Lagi</button><button type="button" class="btn-abu" id="btnCetak">Cetak Rekap</button><button type="button" class="btn-abu" id="btnMenu">Pilih Mapel Lain</button></div>';
+  app.innerHTML=h;
+  document.getElementById('btnUlang').addEventListener('click',function(){
+    var kunci=[...new Set(st.list.map(function(x){return x.mapel;}))];
+    mulai(kunci);
+  });
+  document.getElementById('btnCetak').addEventListener('click',function(){window.print();});
+  document.getElementById('btnMenu').addEventListener('click',tampilMenu);
+  ucap('Selesai! Kamu menjawab benar '+st.skor+' dari '+total+' soal. '+puji+' Jangan lupa salin jawaban yang benar ke Buku Pelajaranmu.');
+}
+if(suaraDidukung){try{window.speechSynthesis.getVoices();}catch(e){}}
+tampilMenu();
+})();
+</script>
+</body>
+</html>
