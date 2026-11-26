@@ -2865,15 +2865,23 @@ function house(x, z, wall, roof, ry){
   addCollider(x, z, swp ? 3.8 : 4.5, swp ? 4.5 : 3.8);
   return g;
 }
-/* ORIENTASI RUMAH (audit spasial): pintu + jendela depan + teras (muka lokal +z)
-   wajib menghadap JALAN RAYA terdekat, bukan ke belakang/sungai:
-   - (-26,42), (64,44), (-52,44): muka ke selatan → Jl. Sawah Glempang ✓ bawaan.
-   - (-40,64) = Rumah No. 03 & (48,62) = Rumah No. 08: jalan ada di UTARA → putar π.
-   - (56,16): jalan cabang timur ada di BARAT → putar -π/2 (muka ke barat). */
-house(-26, 42, 0xfde68a, 0xb45309); house(-40, 64, 0xfce7f3, 0x9e3d2c, Math.PI);
-house(48, 62, 0xbbf7d0, 0x8a3320, Math.PI);  house(64, 44, 0xbfdbfe, 0x7c4a21);
-house(56, 16, 0xfed7aa, 0x9a3412, -Math.PI / 2);  house(-52, 44, 0xf3e8ff, 0x8a3320);
-addInteractable(-26, 42, 7.5, 'Rumah Warga', null, {enterRoom:'warga'});
+/* TAHAP 8A — RELOKASI RUMAH WARGA KE TEPI PANTAI: ke-12 rumah warga
+   (10 panggilan house() langsung + No. 04 & 07 dari array HOUSES) pindah
+   dari klaster lama di sekitar Jl. Sawah Glempang ke tepi Pantai Pasir
+   Putih, tersusun di sepanjang Jalan Pantai & Jalan Lingkar Selatan,
+   PINTU SELALU MENGHADAP JALAN RAYA (muka lokal +z house()):
+   - Kolom TIMUR Jalan Pantai (x -34, pintu ke barat ry=-π/2): No. 01–04, 06.
+   - Kolom BARAT Jalan Pantai (x -49,5, pintu ke timur ry=π/2): Rumah Warga
+     kuning + No. 07.
+   - Baris LINGKAR (z 90, pintu ke utara ry=π, menghadap Jalan Lingkar
+     Selatan): 4 rumah warga tanpa nomor.
+   - Bibir pantai (x -34, z 133,5, pintu ke barat ry=-π/2): No. 08.
+   Rumah No. 05 / Rumah Dijual (-14,62) TIDAK dipindah. Uji tumpang tindih
+   terprogram vs semua collider = 0 (berkas bukti di folder evidence). */
+house(-49.5, 115.5, 0xfde68a, 0xb45309, Math.PI / 2); house(-34, 106, 0xfce7f3, 0x9e3d2c, -Math.PI / 2);
+house(-24, 128, 0xbbf7d0, 0x8a3320, -Math.PI / 2);  house(-20, 90, 0xbfdbfe, 0x7c4a21, Math.PI);
+house(-10, 90, 0xfed7aa, 0x9a3412, Math.PI);  house(10, 90, 0xf3e8ff, 0x8a3320, Math.PI);
+addInteractable(-49.5, 115.5, 7.5, 'Rumah Warga', null, {enterRoom:'warga'});
 
 /* ================= GERBANG KUNING-HIJAU + PAGAR + TIANG BENDERA + PODIUM (Lampiran B) =================
    Gerbang mengikuti acuan foto Nov 2026: tiang kuning berlis hijau + tutup piramida hijau,
@@ -3662,6 +3670,12 @@ function exitRoom(){
   if(poseMode) standPose(true);
   activeRoomId = null;
   var r = roomReturn; roomReturn = null; interiorClamp = null; roomFloorY = 0;
+  /* TAHAP 9B: Bioskop Purwokerto dimasuki dari KANTONG KOTA (600,600) — titik
+     kembali pemain ada di dalam kantong, jadi jepit gerak harus dipulihkan ke
+     batas kantong, BUKAN null. Tanpa ini resolveCollisions (p.z > 120 tanpa
+     interiorClamp) melempar pemain keluar kantong ke dunia utama. */
+  if(r && r.x >= 547 && r.x <= 653 && r.z >= 547 && r.z <= 653)
+    interiorClamp = {minX:547, maxX:653, minZ:547, maxZ:653};
   if(r){ player.position.set(r.x, 0, r.z); player.rotation.y = r.ry; camYawT = r.ry; camYaw = r.ry; }
   player.position.y = 0; vy = 0; grounded = true;
   AudioSys.sfx('pop');
@@ -4109,8 +4123,8 @@ addInteractable(-33, -10.6, 1.6, 'Pintu Koperasi', null, {enterRoom:'koperasi'})
   addInteractable(-52, 30, 8, 'Taman Desa');
 })();
 
-/* --- Rumah warga tambahan --- */
-house(79, 40, 0xdbeafe, 0x8a3320); house(-70, 64, 0xfce7f3, 0x7c4a21); house(-1, 64, 0xdcfce7, 0x9e3d2c); house(-79, 58, 0xfef9c3, 0x8a3320);
+/* --- Rumah warga tambahan (TAHAP 8A: ikut pindah ke tepi pantai) --- */
+house(0, 90, 0xdbeafe, 0x8a3320, Math.PI); house(-34, 97, 0xfce7f3, 0x7c4a21, -Math.PI / 2); house(-34, 124, 0xdcfce7, 0x9e3d2c, -Math.PI / 2); house(-34, 88, 0xfef9c3, 0x8a3320, -Math.PI / 2);
 
 /* --- Sudut istirahat dekat gerbang (bekas Halte Bis lama — bis kini berangkat
    dari Terminal Gerduren di perempatan timur; halte lama menutupi lajur
@@ -4702,7 +4716,7 @@ function villagerStand(x, z, shirt, ry){
 }
 villagerStand(11.9, 43.6, 0x16a34a, 2.7);    // pelanggan menunggu di gerobak bakso
 villagerStand(-79.5, -29.2, 0xb45309, 0.4);  // warga di depan Balai Desa
-villagerStand(-23.6, 46.8, 0x2563eb, -0.8);  // warga di depan rumah (sisi teras selatan rumah)
+villagerStand(-45.6, 120.5, 0x2563eb, -0.8);  // TAHAP 8A: warga di depan Rumah Warga kuning di kolom barat Jalan Pantai (sisi teras timurnya)
 villagerStand(26.2, 16.8, 0xdb2777, 2.9);    // ibu-ibu mengobrol dekat Kantin & UKS
 
 /* ---------- Ayam berkeliaran (berjalan pelan + mematuk) ---------- */
@@ -5190,6 +5204,118 @@ INFO['Purwokerto City Mall'] = 'Purwokerto City Mall: pusat perbelanjaan besar b
   addInteractable(SX, SZ + 4.8, 5.5, 'Stasiun Gerduren', null, {teleport:'pwt'});
   labelAt('Stasiun Gerduren', SX, 6.4, SZ, 0.6);
 })();
+/* ================= TAHAP 9A — REL KERETA API + KERETA GERDUREN =================
+   Perpanjangan rel lama Stasiun Gerduren (x 70..84, z -38,2) membentuk huruf L:
+   kaki timur x 84..90, lengkung r=5 m berpusat (90,-43,2), lalu kaki utara
+   x=95 sampai terminus (95,-84). Total rel terlihat +/- 71 m. Rute ini bersih
+   dari bangunan: kaki timur hanya memotong aspal Jalan Lingkar timur (tanpa
+   collider), kaki utara memotong Jalan Lingkar utara dan berjalan 1,65 m di
+   barat tepi galian sungai. DILARANG ke barat (collider Puskesmas + Kolam
+   Ikan tepat di garis rel) dan DILARANG loop (kaki pulang menembus sawah
+   timur laut). Rel TIDAK ditarik keluar WORLD_BOUNDS menuju kantong
+   Purwokerto — sambungan ke jalur Purwokerto tetap lewat stasiun +
+   fast-travel yang sudah ada (teleportToCity/teleportToGerduren).
+   Kereta = lokomotif + 2 gerbong skala makeCar, gerak PING-PONG (balik arah
+   + jeda di ujung, BUKAN wrap-around seperti cityVehicleRun), berhenti dan
+   jeda di Stasiun Gerduren (s=11) dan di terminus utara (s=66,5). Berjalan
+   LOKAL per pemain lewat ambients (pola cityVehicles), TANPA guard
+   multiplayer — tidak dibubarkan saat gabung Main Bareng. PointLight baru
+   9A = 0. Naik kereta = panel INFO lama: boardTrainToCity() memainkan
+   peluit AudioSys.sfx('whistle') + kereta berangkat, lalu teleportToCity()
+   yang sama. Interactable selatan (77,-28,2) tetap; DITAMBAH interactable
+   kedua di peron utara (77,-39,8) yang membuka panel INFO yang sama. */
+var TRAIN9_ARC = Math.PI / 2 * 5;                 // panjang busur lengkung r=5
+var TRAIN9_S_STATION = 11.6, TRAIN9_S_TERM = 66.5;  // posisi lokomotif (jarak busur dari x=70); 11,6 = ujung barat gerbong terakhir x 69,55, bersih 0,55 m dari dinding Puskesmas
+var train9 = {s: TRAIN9_S_STATION, cur: 0, state: 'dwellStation', dwell: 2.2};
+function train9PosAt(s){
+  var x, z, tx, tz;
+  if(s < 0) s = 0;
+  if(s < 20){ x = 70 + s; z = -38.2; tx = 1; tz = 0; }
+  else if(s < 20 + TRAIN9_ARC){
+    var th = Math.PI / 2 - (s - 20) / 5;
+    x = 90 + 5 * Math.cos(th); z = -43.2 + 5 * Math.sin(th); tx = Math.sin(th); tz = -Math.cos(th);
+  } else { x = 95; z = -43.2 - (s - 20 - TRAIN9_ARC); tx = 0; tz = -1; }
+  return {x: x, z: z, ry: Math.atan2(tx, tz)};
+}
+(function(){ // --- gambar rel baru: kaki timur + lengkung + kaki utara ---
+  var i, th, px, pz, sl, rm, th1, th2, tm, rad;
+  for(var rx = 86.1; rx <= 90.01; rx += 2.1) box(0.55, 0.07, 1.7, 0x78350f, rx, 0.035, -38.2, scene, false); // bantalan kaki timur
+  box(6.4, 0.09, 0.16, 0x9ca3af, 87.1, 0.09, -38.65, scene, false); box(6.4, 0.09, 0.16, 0x9ca3af, 87.1, 0.09, -37.75, scene, false); // batang kaki timur
+  var seg = 7; // lengkung: bantalan radial + 2 batang rel busur (r 4,55 & 5,45)
+  for(i = 0; i <= seg; i++){ th = Math.PI / 2 - (i / seg) * (Math.PI / 2); px = 90 + 5 * Math.cos(th); pz = -43.2 + 5 * Math.sin(th);
+    sl = box(0.55, 0.07, 1.7, 0x78350f, px, 0.035, pz, scene, false); sl.rotation.y = Math.PI / 2 - th; }
+  for(var rr = 0; rr < 2; rr++){ rad = rr === 0 ? 4.55 : 5.45;
+    for(i = 0; i < seg; i++){ th1 = Math.PI / 2 - (i / seg) * (Math.PI / 2); th2 = Math.PI / 2 - ((i + 1) / seg) * (Math.PI / 2); tm = (th1 + th2) / 2;
+      rm = box(rad * (th1 - th2) + 0.12, 0.09, 0.16, 0x9ca3af, 90 + rad * Math.cos(tm), 0.09, -43.2 + rad * Math.sin(tm), scene, false); rm.rotation.y = Math.PI / 2 - tm; } }
+  for(var rz = -45.4; rz >= -83.4; rz -= 2.1) box(1.7, 0.07, 0.55, 0x78350f, 95, 0.035, rz, scene, false); // bantalan kaki utara
+  box(0.16, 0.09, 40.8, 0x9ca3af, 94.55, 0.09, -63.6, scene, false); box(0.16, 0.09, 40.8, 0x9ca3af, 95.45, 0.09, -63.6, scene, false); // batang kaki utara
+  box(2.4, 0.75, 0.35, 0xb91c1c, 95, 0.45, -84.35, scene, false);      // bumper ujung rel terminus
+  box(2.4, 0.22, 0.37, 0xf8fafc, 95, 0.72, -84.35, scene, false);
+  postSign('Terminus Rel Gerduren', 92.2, -81.5, 0.5, {w: 2.6, bg: '#7c2d12', fg: '#fef3c7'});
+  flat(14, 1.8, 0xd6d3cd, 77.5, -40.15, scene, 0.028);                 // lantai peron utara
+  addInteractable(77, -39.8, 4.5, 'Stasiun Gerduren', null, {teleport: 'pwt'}); // titik naik sisi utara rel — panel INFO yang sama
+  postSign('Peron Utara — Naik Kereta', 83.5, -40.4, 0, {w: 3.2, bg: '#7c2d12', fg: '#fef3c7'});
+})();
+function makeTrainUnit9(isLoco, col){
+  var g = new THREE.Group();
+  box(2.0, 0.35, 4.5, 0x111827, 0, 0.42, 0, g);                        // sasis
+  if(isLoco){
+    box(1.9, 1.0, 2.9, col, 0, 1.1, 0.55, g);                          // kap mesin (depan +z)
+    box(1.94, 0.22, 2.94, 0xfacc15, 0, 0.92, 0.55, g, false);          // garis kuning
+    box(1.9, 1.5, 1.3, col, 0, 1.35, -1.5, g);                         // kabin masinis
+    box(1.7, 0.5, 0.06, 0xcfeeff, 0, 1.62, -0.83, g, false);           // kaca kabin
+    cyl(0.16, 0.22, 0.7, 0x111827, 0, 1.95, 1.45, g);                  // cerobong
+    box(0.34, 0.2, 0.08, 0xfef08a, 0, 1.15, 2.02, g, false);           // lampu depan
+  } else {
+    box(1.95, 1.35, 4.1, col, 0, 1.28, 0, g);                          // badan gerbong penumpang
+    box(2.05, 0.18, 4.25, 0xe5e7eb, 0, 2.05, 0, g);                    // atap gerbong
+    [-1.35, -0.45, 0.45, 1.35].forEach(function(wz){ box(1.99, 0.55, 0.62, 0xcfeeff, 0, 1.45, wz, g, false); }); // jendela gerbong
+  }
+  [[-0.85, 1.4], [0.85, 1.4], [-0.85, -1.4], [0.85, -1.4]].forEach(function(w){
+    var wh = cyl(0.36, 0.36, 0.16, 0x111827, w[0], 0.36, w[1], g, 12); wh.rotation.z = Math.PI / 2;
+  });
+  scene.add(g);
+  return g;
+}
+var train9Units = [makeTrainUnit9(true, 0xdc2626), makeTrainUnit9(false, 0x2563eb), makeTrainUnit9(false, 0x0d9488)];
+function train9Place(){
+  for(var k = 0; k < train9Units.length; k++){
+    var p = train9PosAt(train9.s - k * 4.9);
+    train9Units[k].position.set(p.x, 0, p.z); train9Units[k].rotation.y = p.ry;
+  }
+}
+train9Place();
+ambients.push(function(dt){ // gerak ping-pong kereta — lokal per pemain, tanpa guard mp (pola cityVehicles)
+  var T = train9;
+  if(T.state === 'dwellStation'){
+    T.dwell -= dt; T.cur = 0;
+    if(T.dwell <= 0){ T.state = 'toTerm';
+      if(typeof player !== 'undefined' && player && player.position && Math.hypot(player.position.x - 77, player.position.z + 33) < 38){ try{ AudioSys.sfx('whistle'); }catch(e){} } }
+  } else if(T.state === 'dwellTerm'){
+    T.dwell -= dt; T.cur = 0;
+    if(T.dwell <= 0) T.state = 'toStation';
+  } else {
+    var target = T.state === 'toTerm' ? TRAIN9_S_TERM : TRAIN9_S_STATION;
+    var dist = Math.abs(target - T.s), dirS = target > T.s ? 1 : -1;
+    var desired = Math.min(8.5, Math.max(1.7, dist * 0.55));
+    var step = 5 * dt, diff = desired - T.cur;
+    T.cur += Math.max(-step, Math.min(step, diff));
+    T.s += dirS * T.cur * dt;
+    if(dist <= 0.08 || (dirS > 0 && T.s >= target) || (dirS < 0 && T.s <= target)){
+      T.s = target; T.cur = 0;
+      if(T.state === 'toTerm'){ T.state = 'dwellTerm'; T.dwell = 2.5; } else { T.state = 'dwellStation'; T.dwell = 4.5; }
+    }
+  }
+  train9Place();
+});
+function train9Depart(){ if(train9.state === 'dwellStation'){ train9.state = 'toTerm'; train9.dwell = 0; } }
+function boardTrainToCity(){ // naik kereta: peluit + kereta berangkat (visual), lalu fast-travel yang SUDAH ADA
+  if(!playing) return;
+  if(interiorClamp || riding || vehDrive || tourActive){ teleportToCity(); return; } // biar teleportToCity yang menampilkan toast alasannya
+  try{ AudioSys.sfx('whistle'); }catch(e){}
+  train9Depart();
+  setTimeout(function(){ teleportToCity(); }, 900);
+}
 /* --- KANTONG KOTA PURWOKERTO (pusat 600,600, luas +/- 60 m) --- */
 function cityGlassTex(){
   if(cityGlassTex._t) return cityGlassTex._t;
@@ -5280,6 +5406,248 @@ function cityGlassTex(){
     addCollider(tw2[0], tw2[1], 7, 7);
   });
 })();
+/* ================= TAHAP 8B — ASET PURWOKERTO: BANGUNAN BARU + KERAMAIAN KOTA =================
+   6 bangunan baru di tapak kosong kantong (600,600), mengikuti gaya kantong
+   yang sudah ada (kaca cityGlassTex + bata/lambert seperti mal & stasiun):
+   deret 3 ruko di tepi jalan utama utara-selatan, Gedung Kantor Graha
+   Banyumas, Pasar Rakyat Purwokerto, dan Toko Serba Ada. Keramaian: 3
+   kendaraan kota ber-loop LOKAL di jalan kantong (pola makeCar/
+   makeMotorRider + matematika jaga-jarak & berhenti di lampu lalu lintas
+   yang sama seperti vehicles[] di Jl. Sawah Glempang — BUKAN loop global),
+   lampu jalan + pohon jalan + rambu tambahan. NPC pejalan kaki kota ada di
+   blok addNPC TAHAP 8B (properti path pada updateNPCWorld). PointLight
+   baru Tahap 8B = 0. */
+(function(){
+  var t8Brick = mat(0xb4532a), t8Cream = mat(0xfef3c7);
+  function t8Tree(x, z){
+    cyl(0.09, 0.12, 1.1, 0x6d4c2f, x, 0.55, z, scene, 7);
+    var c1 = new THREE.Mesh(new THREE.SphereGeometry(0.95, 10, 8), mat(0x3e9e4f)); c1.position.set(x, 1.75, z); c1.castShadow = true; scene.add(c1);
+    var c2 = new THREE.Mesh(new THREE.SphereGeometry(0.65, 10, 8), mat(0x55b765)); c2.position.set(x + 0.45, 1.35, z + 0.2); scene.add(c2);
+    addCollider(x, z, 0.4, 0.4);
+  }
+  // --- Deret 3 Ruko: sisi timur jalan utama utara-selatan, pintu menghadap jalan (barat) ---
+  var RUKO8B = [
+    {z:550, col:0xfde68a, sign:'TOKO BERKAH', bg:'#92400e'},
+    {z:560, col:0xfef3c7, sign:'WARUNG KOPI KOTA', bg:'#7c2d12'},
+    {z:570, col:0xfdba74, sign:'TOKO BUKU CAHAYA', bg:'#0c4a6e'}
+  ];
+  RUKO8B.forEach(function(r){
+    var g = new THREE.Group(); g.position.set(613.5, 0, r.z); g.rotation.y = -Math.PI / 2; scene.add(g);
+    var body = new THREE.Mesh(new THREE.BoxGeometry(8, 5, 10), mat(r.col)); body.position.y = 2.5; body.castShadow = true; body.receiveShadow = true; g.add(body);
+    box(8.6, 0.4, 10.6, 0x334155, 0, 5.2, 0, g, false);
+    box(1.2, 2.3, 0.14, 0x7c4a21, 0, 1.15, 5.02, g, false);
+    box(2.6, 1.1, 0.1, 0xcfeeff, -2.2, 3.1, 5.02, g, false);
+    box(2.6, 1.1, 0.1, 0xcfeeff, 2.2, 3.1, 5.02, g, false);
+    wallSign(g, r.sign, 0, 4.35, 5.06, 4.6, {bg:r.bg, fg:'#ffffff', frame:0x334155});
+    scene.add(g);
+    addCollider(613.5, r.z, 5, 4);
+  });
+  addInteractable(613.5, 578, 6, 'Ruko Purwokerto');
+  labelAt('Ruko Purwokerto', 613.5, 7.2, 560, 0.6);
+  INFO['Ruko Purwokerto'] = 'Ruko Purwokerto: deret toko di sisi timur jalan utama kota — ada Toko Berkah, Warung Kopi Kota, dan Toko Buku Cahaya. Deretan ruko seperti ini ramai dikunjungi warga kota setiap hari.';
+  // --- Gedung Kantor Graha Banyumas: kaca, kuadran barat-daya, menghadap jalan utama (utara) ---
+  (function(){
+    var g = new THREE.Group(); g.position.set(580, 0, 622); g.rotation.y = Math.PI; scene.add(g);
+    var km = new THREE.Mesh(new THREE.BoxGeometry(16, 16, 14), new THREE.MeshLambertMaterial({map:cityGlassTex()}));
+    km.position.y = 8; km.castShadow = true; km.receiveShadow = true; g.add(km);
+    box(17, 0.5, 15, 0x334155, 0, 16.25, 0, g, false);
+    box(3.6, 3.0, 0.2, 0x0ea5e9, 0, 1.5, 7.05, g, false);
+    wallSign(g, 'KANTOR GRAHA BANYUMAS', 0, 13.8, 7.06, 8.5, {bg:'#0f2f4a', fg:'#ffffff', frame:0x082f49});
+    scene.add(g);
+    addCollider(580, 622, 8.5, 7.5);
+    addInteractable(580, 612.5, 6, 'Kantor Graha Banyumas');
+    labelAt('Kantor Graha Banyumas', 580, 18.2, 622, 0.62);
+  })();
+  INFO['Kantor Graha Banyumas'] = 'Kantor Graha Banyumas: gedung perkantoran berkaca di selatan jalan utama Purwokerto. Setiap pagi para pegawai berangkat ke sini — kota terasa hidup dan sibuk!';
+  // --- Pasar Rakyat Purwokerto: balai bata beratap pelana, kuadran timur-daya, menghadap jalan (utara) ---
+  (function(){
+    var g = new THREE.Group(); g.position.set(622, 0, 622); g.rotation.y = Math.PI; scene.add(g);
+    var pb = new THREE.Mesh(new THREE.BoxGeometry(20, 5.5, 13), t8Brick); pb.position.y = 2.75; pb.castShadow = true; pb.receiveShadow = true; g.add(pb);
+    gableRoof(g, 20, 13, 2.6, 5.5, 0x9e3d2c, 0x7c2d1e);
+    box(4.2, 3.2, 0.16, 0x7c4a21, 0, 1.6, 6.55, g, false);
+    box(3.2, 1.6, 0.1, 0xcfeeff, -6, 3.4, 6.53, g, false);
+    box(3.2, 1.6, 0.1, 0xcfeeff, 6, 3.4, 6.53, g, false);
+    wallSign(g, 'PASAR RAKYAT PURWOKERTO', 0, 4.9, 6.6, 10, {bg:'#7c2d12', fg:'#fef3c7', frame:0x7c2d12});
+    scene.add(g);
+    addCollider(622, 622, 10.5, 7);
+    addInteractable(622, 612.5, 6.5, 'Pasar Rakyat Purwokerto');
+    labelAt('Pasar Rakyat Purwokerto', 622, 9.6, 622, 0.64);
+  })();
+  INFO['Pasar Rakyat Purwokerto'] = 'Pasar Rakyat Purwokerto: pasar tradisional kota — tempat warga membeli sayur, buah, dan kebutuhan sehari-hari. Paling ramai di pagi hari!';
+  // --- Toko Serba Ada: selatan City Mall, menghadap jalan utama (selatan) ---
+  (function(){
+    var g = new THREE.Group(); g.position.set(626, 0, 584); scene.add(g);
+    var tb = new THREE.Mesh(new THREE.BoxGeometry(12, 5.5, 8), t8Cream); tb.position.y = 2.75; tb.castShadow = true; tb.receiveShadow = true; g.add(tb);
+    box(12.6, 0.4, 8.6, 0x334155, 0, 5.7, 0, g, false);
+    box(1.2, 2.3, 0.14, 0x7c4a21, 0, 1.15, 4.02, g, false);
+    box(2.6, 1.1, 0.1, 0xcfeeff, -2.6, 3.4, 4.02, g, false);
+    box(2.6, 1.1, 0.1, 0xcfeeff, 2.6, 3.4, 4.02, g, false);
+    wallSign(g, 'TOKO SERBA ADA', 0, 4.5, 4.06, 5.5, {bg:'#0369a1', fg:'#ffffff', frame:0x334155});
+    scene.add(g);
+    addCollider(626, 584, 6.5, 4.5);
+    addInteractable(626, 590.8, 5.5, 'Toko Serba Ada');
+    labelAt('Toko Serba Ada', 626, 7.6, 584, 0.6);
+  })();
+  INFO['Toko Serba Ada'] = 'Toko Serba Ada: toko kelontong besar di selatan Purwokerto City Mall — hampir semua kebutuhan ada di sini.';
+  // --- Lampu jalan, pohon jalan, dan rambu tambahan agar kota terasa ramai ---
+  lampPost(556, 609); lampPost(644, 591);
+  t8Tree(616, 590.6); t8Tree(640, 590.6); t8Tree(560, 590.6);
+  t8Tree(584, 609.4); t8Tree(648, 609.4); t8Tree(552, 609.4);
+  postSign('Pasar Rakyat', 605, 613.5, -0.5, {w:2.6, bg:'#7c2d12', fg:'#fef3c7'});
+  // --- Kendaraan kota: loop LOKAL kantong Purwokerto ---
+  var cityVehicles = [];
+  function cityVehicleRun(g, axis, lane, dir, speed, start, lo, hi){
+    var v = {g:g, axis:axis, lane:lane, dir:dir, speed:speed, pos:start, lo:lo, hi:hi, span:hi - lo};
+    if(axis === 'x'){ g.position.set(start, 0, lane); g.rotation.y = dir > 0 ? Math.PI / 2 : -Math.PI / 2; }
+    else { g.position.set(lane, 0, start); g.rotation.y = dir > 0 ? 0 : Math.PI; }
+    cityVehicles.push(v);
+  }
+  cityVehicleRun(makeCar(0x0ea5e9), 'x', 603.5, 1, 10, 566, 544, 656);        // mobil biru ke timur, lajur selatan
+  cityVehicleRun(makeCar(0xf43f5e), 'x', 596.5, -1, 11, 634, 544, 656);       // mobil merah ke barat, lajur utara
+  cityVehicleRun(makeMotorRider(0xf59e0b), 'z', 596.5, -1, 12.5, 636, 548, 640); // motor ke utara; putaran dibatasi z<=640 agar tidak menembus Stasiun Purwokerto
+  ambients.push(function(dt){
+    for(var i = 0; i < cityVehicles.length; i++){
+      var v = cityVehicles[i], eff = v.speed, gapMin = Infinity, leadSpeed = 0;
+      for(var j = 0; j < cityVehicles.length; j++){
+        if(j === i) continue;
+        var o = cityVehicles[j];
+        if(o.axis !== v.axis || o.lane !== v.lane || o.dir !== v.dir) continue;
+        var gap = (o.pos - v.pos) * v.dir;
+        gap = ((gap % v.span) + v.span) % v.span;
+        if(gap > 0.01 && gap < gapMin){ gapMin = gap; leadSpeed = o.speed; }
+      }
+      if(gapMin < 9){
+        var f = Math.max(0, Math.min(1, (gapMin - 4.6) / 4.4));
+        eff = Math.min(eff, leadSpeed * f);
+        if(gapMin <= 4.6) eff = 0;
+      }
+      // berhenti di garis henti simpang tengah (591/609) saat lampu bukan hijau — fase TL global yang sama
+      if(typeof TL !== 'undefined' && TL.phase !== 'green'){
+        var stopAt = v.dir > 0 ? 591 : 609;
+        var sd = (stopAt - v.pos) * v.dir;
+        if(sd > 0 && sd < 8){ eff = Math.min(eff, Math.max(0, (sd - 2.2) * 1.6)); if(sd <= 2.3) eff = 0; }
+      }
+      v.pos += v.dir * eff * dt;
+      if(v.pos > v.hi) v.pos -= v.span;
+      if(v.pos < v.lo) v.pos += v.span;
+      if(v.axis === 'x') v.g.position.x = v.pos; else v.g.position.z = v.pos;
+    }
+  });
+})();
+/* ================= TAHAP 9B — KONSER MUSIK + BIOSKOP PURWOKERTO =================
+   Panggung konser di sudut timur-laut Alun-Alun: pusat (576,562), tapak
+   12x10 m (x 570..582, z 557..567); area penonton x 570..583, z 569..587 di
+   selatannya (NPC-nya di blok addNPC TAHAP 9B). Bioskop: gedung fasad
+   13x10 m di lot timur-laut (642,583; x 635,5..648,5, z 578..588) + papan
+   poster film FIKTIF; interiornya memakai pola yang sama seperti SEMUA
+   interior lain di game ini (buildRoomShell di strip interior selatan,
+   (96,336)) — layar terang + 3 baris kursi; masuk lewat interactable fasad
+   {enterRoom:'bioskop'}, keluar lewat Pintu Keluar + patch exitRoom
+   TAHAP 9B yang memulihkan jepit kantong. PointLight baru Tahap 9B = 1
+   (lampu panggung); interior bioskop 0 (id 'bioskop' tidak termasuk daftar
+   PointLight buildRoomShell). Musik konser: riff AudioSys.sfx('gitar')
+   berkala bila pemain dekat panggung — TANPA mengubah AudioSys (lagu
+   penuh ditunda). Semua elemen gerak lokal per pemain lewat ambients/NPC,
+   tanpa guard mp — sama seperti kendaraan kota & pejalan kaki Tahap 8B. */
+var t9bBulbs = [];   // material lampu hias panggung konser (diwarnai bergantian)
+var t9bBulbCols = [0xef4444, 0xf59e0b, 0x22c55e, 0x38bdf8, 0xe879f9, 0xfacc15];
+(function(){
+  // --- Panggung Konser: dek + backdrop + atap + spanduk + lampu hias ---
+  var g = new THREE.Group(); g.position.set(576, 0, 562); scene.add(g);
+  box(12, 0.55, 10, 0x92400e, 0, 0.275, 0, g);                              // dek panggung (permukaan atas 0,55 m)
+  box(12.3, 0.18, 10.3, 0x7c2d12, 0, 0.09, 0, g, false);                    // alas dek
+  box(12, 3.4, 0.3, 0x7f1d1d, 0, 2.25, -4.85, g);                           // backdrop merah tua
+  box(12.2, 0.22, 0.34, 0xd4a017, 0, 4.0, -4.85, g, false);                 // lis emas backdrop
+  [[-5.7,-4.6],[5.7,-4.6],[-5.7,4.6],[5.7,4.6]].forEach(function(p){       // 4 tiang atap
+    cyl(0.09, 0.09, 4.05, 0x374151, p[0], 2.55, p[1], g, 8);
+  });
+  box(13, 0.25, 11, 0x9e3d2c, 0, 4.7, 0, g);                                // atap panggung
+  wallSign(g, 'KONSER MUSIK PURWOKERTO', 0, 3.95, 4.68, 9.5, {bg:'#991b1b', fg:'#fef3c7', frame:0x7f1d1d}); // spanduk gantung depan
+  box(1.1, 2.2, 1.1, 0x1f2937, -5.2, 1.65, 3.9, g, false);                  // menara speaker kiri & kanan di atas dek
+  box(1.1, 2.2, 1.1, 0x1f2937, 5.2, 1.65, 3.9, g, false);
+  box(10, 0.16, 0.16, 0x111827, 0, 4.3, 4.4, g, false);                     // palang lampu hias
+  for(var bi = 0; bi < 6; bi++){
+    var bm = new THREE.MeshLambertMaterial({color:0x1f2937, emissive:t9bBulbCols[bi % t9bBulbCols.length]});
+    t9bBulbs.push(bm);
+    var bulb = new THREE.Mesh(new THREE.SphereGeometry(0.17, 10, 8), bm);
+    bulb.position.set(-4 + bi * 1.6, 4.08, 4.4); g.add(bulb);
+  }
+  scene.add(g);
+  addCollider(576, 562, 6, 5);
+  addInteractable(576, 569.5, 6, 'Konser Musik');
+  labelAt('Konser Musik', 576, 6.3, 562, 0.62);
+  var spl = new THREE.PointLight(0xffd9a3, 0.7, 26, 1.8);                  // SATU-SATUNYA PointLight baru Tahap 9B
+  spl.position.set(576, 3.4, 565); scene.add(spl);
+})();
+INFO['Konser Musik'] = 'Konser Musik Purwokerto: panggung hiburan di sudut timur-laut Alun-Alun! Band Kota Purwokerto tampil membawakan lagu-lagu ceria dan penontonnya ramai bergoyang mengikuti irama. Dekati panggungnya — dari dekat kamu bisa mendengar petikan gitarnya!';
+(function(){
+  // --- Gedung Bioskop (fasad): lot timur-laut, pintu menghadap selatan ---
+  var g = new THREE.Group(); g.position.set(642, 0, 583); scene.add(g);
+  var body = new THREE.Mesh(new THREE.BoxGeometry(13, 6.5, 10), mat(0x334155));
+  body.position.y = 3.25; body.castShadow = true; body.receiveShadow = true; g.add(body);
+  box(13.5, 0.45, 10.5, 0x991b1b, 0, 6.7, 0, g, false);                     // lis atap merah
+  box(9.5, 0.35, 2.4, 0x991b1b, 0, 3.15, 6.0, g, false);                    // kanopi marquee di atas pintu (selatan)
+  for(var mi = 0; mi < 5; mi++){                                            // bola lampu marquee (MeshBasic, tanpa PointLight)
+    var mb = new THREE.Mesh(new THREE.SphereGeometry(0.13, 8, 6), new THREE.MeshBasicMaterial({color:0xffd97a}));
+    mb.position.set(-3.6 + mi * 1.8, 2.92, 7.22); g.add(mb);
+  }
+  wallSign(g, 'BIOSKOP PURWOKERTO', 0, 4.9, 5.06, 9, {bg:'#111827', fg:'#fbbf24', frame:0x991b1b});
+  box(1.6, 2.6, 0.14, 0x7c4a21, -1.3, 1.3, 5.02, g, false);                 // pintu ganda
+  box(1.6, 2.6, 0.14, 0x7c4a21, 1.3, 1.3, 5.02, g, false);
+  box(2.4, 1.6, 0.1, 0xcfeeff, -4.4, 2.1, 5.02, g, false);                  // jendela kaca kiri & kanan pintu
+  box(2.4, 1.6, 0.1, 0xcfeeff, 4.4, 2.1, 5.02, g, false);
+  scene.add(g);
+  addCollider(642, 583, 6.5, 5);
+  addInteractable(642, 590.6, 4.5, 'Bioskop Purwokerto', null, {enterRoom:'bioskop'});
+  labelAt('BIOSKOP', 642, 8.4, 583, 0.66);
+  // --- Papan poster film FIKTIF di depan gedung (tanpa collider, pola postSign) ---
+  function t9bPoster(x, sub){
+    var pg = new THREE.Group(); pg.position.set(x, 0, 591.6); scene.add(pg);
+    box(0.14, 2.2, 0.14, 0x6d4c2f, -1.55, 1.1, 0, pg); box(0.14, 2.2, 0.14, 0x6d4c2f, 1.55, 1.1, 0, pg);
+    var bk = new THREE.Mesh(new THREE.BoxGeometry(3.6, 1.15, 0.09), mat(0x6d4c2f)); bk.position.set(0, 1.5, 0); pg.add(bk);
+    var fc = new THREE.Mesh(new THREE.PlaneGeometry(3.44, 1.07),
+      new THREE.MeshLambertMaterial({map: signTexture('SEDANG TAYANG', '#7f1d1d', '#fef3c7', sub)}));
+    fc.position.set(0, 1.5, 0.06); pg.add(fc);
+    scene.add(pg);
+  }
+  t9bPoster(637.3, 'Kancil Cerdik 10.00 • Bintang Kecil 09.30');
+  t9bPoster(646.7, 'Menara Teratai 11.30 • Kereta Terakhir 15.30');
+})();
+INFO['Bioskop Purwokerto'] = 'Bioskop Purwokerto: gedung bioskop kota di timur-laut, dekat City Mall. Film yang sedang tayang (semua judul karangan, lho): Petualangan Si Kancil Cerdik (10.00 & 13.00), Petualangan Bintang Kecil (09.30 & 14.15), Rahasia Menara Teratai (11.30 & 16.45), dan Kereta Terakhir ke Gerduren (15.30 & 19.00). Tekan Aksi lalu pilih Masuk ke Dalam untuk melihat layarnya!';
+(function(){
+  // --- Interior Bioskop: buildRoomShell di strip interior selatan (96,336),
+  //        pola yang sama seperti Kelas/UKS/Koperasi — layar + 3 baris kursi ---
+  var cx = 96, cz = 336;
+  var g = buildRoomShell('bioskop', 'Bioskop Purwokerto', cx, cz, 13, 10,
+    {wall:0x1e293b, floor:0x7f1d1d, sign:'BIOSKOP', signBg:'#991b1b'});
+  box(7.9, 2.3, 0.06, 0x111827, 0, 1.32, -4.83, g, false);                  // bingkai layar (dinding utara)
+  var scr = new THREE.Mesh(new THREE.BoxGeometry(7.6, 2.05, 0.08), new THREE.MeshBasicMaterial({color:0xe0f2fe}));
+  scr.position.set(0, 1.32, -4.78); g.add(scr);                             // layar menyala (MeshBasic, tanpa PointLight)
+  var hill = new THREE.Mesh(new THREE.PlaneGeometry(7.6, 0.95), new THREE.MeshBasicMaterial({color:0x4ade80}));
+  hill.position.set(0, 0.78, -4.73); g.add(hill);                           // gambar di layar: bukit hijau + matahari
+  var sun = new THREE.Mesh(new THREE.CircleGeometry(0.36, 16), new THREE.MeshBasicMaterial({color:0xfacc15}));
+  sun.position.set(2.9, 1.5, -4.73); g.add(sun);
+  [-1.2, 0.6, 2.4].forEach(function(rz){                                    // 3 baris x 5 kursi merah menghadap layar
+    [-3.2, -1.6, 0, 1.6, 3.2].forEach(function(rx){ furnChair(g, rx, rz, Math.PI, 0x991b1b); });
+    colL(cx, cz, 0, rz, 3.9, 0.38);
+  });
+})();
+/* Lampu hias panggung berganti warna bergantian (lokal per pemain) */
+ambients.push(function(dt, t){
+  var idx = Math.floor(t * 2.2);
+  for(var i = 0; i < t9bBulbs.length; i++)
+    t9bBulbs[i].emissive.setHex(t9bBulbCols[(idx + i) % t9bBulbCols.length]);
+});
+/* Musik konser: riff gitar berkala bila pemain dekat panggung (tanpa ubah AudioSys) */
+var t9bRiffT = 1.2;
+ambients.push(function(dt){
+  t9bRiffT -= dt;
+  if(t9bRiffT > 0) return;
+  t9bRiffT = 2.6;
+  if(!playing) return;
+  var pp = player.position;
+  if(Math.hypot(pp.x - 576, pp.z - 562) < 27) AudioSys.sfx('gitar');
+});
 /* Updater Tahap 1 (dipanggil dari animate() lewat updateAmbients):
    hologram Garuda berputar; kaca Pembangun Nusantara + kelopak Teratai
    menyala hanya saat malam mengikuti WX.hour (19,6-4,8). */
@@ -6092,7 +6460,7 @@ var zones = [
   {name:'Halaman Sekolah',      minX:-39, maxX:39,  minZ:-18, maxZ:17},
   {name:'Lapangan Gerduren',   minX:-86, maxX:-46, minZ:-18, maxZ:18},
   {name:'Kebun Praktik & Kandang Desa', minX:-64, maxX:-43, minZ:56, maxZ:69},
-  {name:'Perumahan Gerduren',   minX:-84, maxX:53,  minZ:56,  maxZ:70},
+  {name:'Perumahan Gerduren',   minX:-57, maxX:17,  minZ:81,  maxZ:139},
   {name:'Parit Irigasi',        minX:-110,maxX:110, minZ:67,  maxZ:77},
   {name:'Sawah',                minX:44,  maxX:72,  minZ:-28, maxZ:0},
   {name:'Sawah',                minX:-72, maxX:-44, minZ:83,  maxZ:110},
@@ -6466,7 +6834,7 @@ actionBtn.addEventListener('click', function(){
     var tp = document.createElement('button');
     tp.type = 'button'; tp.className = 'info-act-btn';
     tp.textContent = t.teleport === 'pwt' ? 'Naik Kereta ke Purwokerto' : (t.teleport === 'dimensi' ? 'Masuk ke Dimensi Lain' : (t.teleport === 'dimensiBack' ? 'Kembali ke Markas GARDA' : 'Naik Kereta Kembali ke Gerduren'));
-    (function(dst){ tp.addEventListener('click', function(){ hideInfo(); if(dst === 'pwt') teleportToCity(); else if(dst === 'dimensi') teleportToDimensi(); else if(dst === 'dimensiBack') teleportToDimensiBack(); else teleportToGerduren(); }); })(t.teleport);
+    (function(dst){ tp.addEventListener('click', function(){ hideInfo(); if(dst === 'pwt') boardTrainToCity(); else if(dst === 'dimensi') teleportToDimensi(); else if(dst === 'dimensiBack') teleportToDimensiBack(); else teleportToGerduren(); }); })(t.teleport);
     infoActions.appendChild(tp);
     infoActions.classList.add('show');
   } else if(t.act){
@@ -10810,7 +11178,7 @@ var NPC_QUEST_DEFS = {
   penjaga:{questName:'Jaga Gerbang Sekolah', reward:100, desc:'Jawab pertanyaan Pak Nartam tentang keamanan sekolah dengan benar.', quiz:{q:'Kalau menemukan benda tajam yang berbahaya di sekolah, kamu harus…', opts:['Membawanya pulang','Melapor ke Pak Penjaga atau Bapak/Ibu Guru','Membuangnya ke sungai'], ans:1}, doneText:'Betul! Anak yang peduli keamanan sekolah itu hebat. Gerbang dan lingkungan sekolah kita aman berkat anak-anak yang tertib.'},
   polisi:{questName:'Patroli Jalan Raya', reward:260, desc:'Kunjungi 3 titik patroli berurutan: Gerbang Sekolah → Lapangan Gerduren → Kantor Polsek. Berdirilah di lingkaran emas pada tiap titik.', doneText:'Patroli yang rapi! Jalan raya aman berkat anak-anak yang tertib dan patuh lampu lalu lintas.'},
   lurah:{questName:'Menyapa Warga Desa', reward:210, desc:'Sapa 3 warga desa: dekati Bu Tini, Pak Darto, dan Bu Wati lalu bicara dengan mereka.', doneText:'Terima kasih sudah menyapa warga. Desa kita rukun karena warganya saling menyapa!'},
-  warga:{questName:'Antar Surat ke Rumah Warga', reward:150, desc:'Antarkan surat ini ke Rumah Warga (rumah kuning di barat desa) — cukup dekati rumahnya sampai surat terkirim, lalu kembali melapor ke warga mana pun.', doneText:'Suratnya sudah sampai dengan selamat. Terima kasih banyak, Nak!'},
+  warga:{questName:'Antar Surat ke Rumah Warga', reward:150, desc:'Antarkan surat ini ke Rumah Warga (rumah kuning di tepi pantai) — cukup dekati rumahnya sampai surat terkirim, lalu kembali melapor ke warga mana pun.', doneText:'Suratnya sudah sampai dengan selamat. Terima kasih banyak, Nak!'},
   siswa:{questName:'Bola yang Hilang', reward:120, desc:'Bola oranye temanmu hilang di sekitar Taman Desa. Temukan bola bercahaya itu (dekati untuk mengambilnya), lalu kembali ke siswa mana pun.', doneText:'Hore, bolanya ketemu! Ayo kapan-kapan main bola bareng lagi di Lapangan!'}
 };
 var NPC_CHECKPOINTS = [{x:0, z:19, n:'Gerbang Sekolah'}, {x:-66, z:0, n:'Lapangan Gerduren'}, {x:65, z:26, n:'Kantor Polsek'}];
@@ -10898,13 +11266,13 @@ addNPC({key:'polisi', def:'polisi', name:'Pak Polisi Budi', role:'Polisi — Kan
 addNPC({key:'lurah', def:'lurah', name:'Pak Lurah', role:'Lurah Desa Gerduren — Balai Desa', color:'#92400e', x:-76, z:-28.5, ry:0.7,
   greet:'Sugeng rawuh di Desa Gerduren! Saya Lurah di sini. Desa kita ramai dan rukun — warganya saling menyapa setiap hari.',
   fig:{skin:0xb07a45, hair:'peci', shirt:0x92400e, batik:true, bottom:0x292524, tag:true}});
-addNPC({key:'warga1', def:'warga', name:'Bu Tini', role:'Warga Desa — Taman Desa', color:'#db2777', x:-50, z:27, ry:0.6, wander:3,
+addNPC({key:'warga1', def:'warga', name:'Bu Tini', role:'Warga Desa — Taman Desa', color:'#db2777', x:-38.5, z:102.5, ry:0.6, wander:3,
   greet:'Eh, ada anak sekolah! Bu Tini lagi santai di Taman Desa. Taman kita makin ramai dan asri, ya.',
   fig:{skin:0xf2c79b, hair:'long', hairColor:0x3b2416, shirt:0xdb2777, bottom:0x7c2d12}});
-addNPC({key:'warga2', def:'warga', name:'Pak Darto', role:'Warga Desa Gerduren', color:'#16a34a', x:-21, z:46, ry:-0.7, wander:2,
+addNPC({key:'warga2', def:'warga', name:'Pak Darto', role:'Warga Desa Gerduren', color:'#16a34a', x:-15, z:85.5, ry:-0.7, wander:2,
   greet:'Halo, Nak! Pak Darto baru pulang dari sawah. Cuaca cerah begini enak buat jalan-jalan keliling desa.',
   fig:{skin:0x8a5a2e, hair:'cap', capCol:0x16a34a, shirt:0x65a30d, bottom:0x44403c}});
-addNPC({key:'warga3', def:'warga', name:'Bu Wati', role:'Warga Desa Gerduren', color:'#7c3aed', x:56, z:59, ry:2.9, wander:1.8,
+addNPC({key:'warga3', def:'warga', name:'Bu Wati', role:'Warga Desa Gerduren', color:'#7c3aed', x:-38.6, z:130, ry:2.9, wander:1.8,
   greet:'Halo! Bu Wati habis belanja di warung. Nanti kalau lapar, jajan saja di gerobak bakso keliling — enak dan murah!',
   fig:{skin:0xd9a066, hair:'hijab', hijabCol:0x7c3aed, shirt:0xa78bfa, bottom:0x4c1d95}});
 addNPC({key:'siswa1', def:'siswa', name:'Raka', role:'Siswa SDN 1 Gerduren', color:'#dc2626', x:-8, z:7, ry:0.4, wander:5, speed:0.95,
@@ -10950,6 +11318,123 @@ addNPC({key:'kopda', def:'garda', name:'Kopda Sari', role:'Anggota GARDA — Mar
   greet:'Halo! Saya Kopda Sari, anggota GARDA. Saya yang merawat Motor GARDA di hanggar — motornya boleh langsung kamu naiki, gratis. TIPS: Portal Dimensi di sudut barat daya markas menuju Dimensi Lain, tempat zombie dan Penjaga Dimensi menanti. Masuklah dengan senjata lengkap — sendiri bisa, bareng teman Main Bareng juga bisa!',
   fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x1e3a5f, shirt:0x1e40af, bottom:0x172554, tag:true}});
 refreshNPCMarkers();   // TAHAP 7: sembunyikan penanda quest NPC ambient baru sejak awal
+/* TAHAP 8B — 8 NPC pejalan kaki Kota Purwokerto: nama fiktif, ambient,
+   noQuest, berjalan menyusuri jalur trotoar & Alun-Alun lewat properti
+   path (lihat updateNPCWorld) — bukan diam di tempat. */
+addNPC({key:'kotatini', def:'kotatini', name:'Bu Tini', role:'Warga Kota Purwokerto', color:'#db2777', x:556, z:592.2, ry:1.4, noQuest:true, speed:0.9, path:[[552,592.2],[588,592.2]],
+  greet:'Halo, Nak! Saya Bu Tini, warga Purwokerto. Saya suka jalan pagi di trotoar kota ini — bersih dan rindang. TIPS: kalau menyeberang jalan utama, tunggu lampu lalu lintas hijau untuk pejalan kaki dan lewat zebra cross di simpang tengah, ya!',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0xdb2777, shirt:0xf9a8d4, bottom:0x831843}});
+addNPC({key:'kotadedi', def:'kotadedi', name:'Pak Dedi', role:'Pegawai Kantoran — Purwokerto', color:'#0f766e', x:616, z:592.2, ry:1.4, noQuest:true, speed:1.0, path:[[614,592.2],[652,592.2]],
+  greet:'Selamat pagi! Saya Pak Dedi, kerja di Kantor Graha Banyumas di selatan jalan sana. Kota ini sibuk tiap hari kerja — mobil dan motor lalu-lalang terus. TIPS: kendaraan kota berhenti di lampu merah simpang tengah, sama tertibnya seperti di desa!',
+  fig:{skin:0xb07a45, hair:'cap', capCol:0x0f766e, shirt:0x99f6e4, bottom:0x134e4a, tag:true}});
+addNPC({key:'kotarara', def:'kotarara', name:'Mbak Rara', role:'Mahasiswa — Purwokerto', color:'#7c3aed', x:556, z:607.8, ry:1.4, noQuest:true, speed:0.95, path:[[552,607.8],[588,607.8]],
+  greet:'Hai! Saya Rara, mahasiswa di Purwokerto. Saya sering jalan kaki lewat trotoar selatan ini menuju Pasar Rakyat — sekalian olahraga! TIPS: Pasar Rakyat paling ramai pagi hari, banyak jajanan enak di sekitarnya.',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x7c3aed, shirt:0xc4b5fd, bottom:0x4c1d95}});
+addNPC({key:'kotabima', def:'kotabima', name:'Mas Bima', role:'Kurir Kota — Purwokerto', color:'#ea580c', x:650, z:607.8, ry:-1.4, noQuest:true, speed:1.05, path:[[614,607.8],[652,607.8]],
+  greet:'Halo! Saya Bima, kurir paket keliling Purwokerto. Jalan kaki di trotoar itu lebih cepat daripada terjebak macet, lho. TIPS: deret ruko di timur jalan utama menjual macam-macam — ada warung kopi dan toko buku juga!',
+  fig:{skin:0xc98a4b, hair:'spiky', shirt:0xfb923c, bottom:0x1c1917}});
+addNPC({key:'kotasari', def:'kotasari', name:'Bu Sari', role:'Pedagang — Pasar Rakyat Purwokerto', color:'#b45309', x:556, z:580, ry:1.4, noQuest:true, speed:0.9, path:[[552,580],[568,580]],
+  greet:'Halo, Nak! Saya Bu Sari, pedagang di Pasar Rakyat. Kalau pagi saya jalan dulu keliling Alun-Alun ini sebelum buka lapak. TIPS: dari Alun-Alun ini kelihatan Menara Pandang Teratai — ikon kota Purwokerto yang terkenal itu!',
+  fig:{skin:0xd9a066, hair:'hijab', hijabCol:0xb45309, shirt:0xfde68a, bottom:0x78350f}});
+addNPC({key:'kotahadi', def:'kotahadi', name:'Pak Hadi', role:'Warga Kota Purwokerto', color:'#334155', x:558, z:564, ry:0, noQuest:true, speed:0.85, path:[[558,560],[558,584]],
+  greet:'Selamat datang di Alun-Alun Purwokerto! Saya Pak Hadi, tiap sore jalan santai memutari lapangan ini. Anak-anak kota suka bermain di sini. TIPS: naik kereta dari Stasiun Gerduren adalah cara tercepat sampai ke kota ini.',
+  fig:{skin:0xb07a45, hair:'peci', shirt:0x64748b, bottom:0x1f2937}});
+addNPC({key:'kotawulan', def:'kotawulan', name:'Mbak Wulan', role:'Pengunjung City Mall — Purwokerto', color:'#0369a1', x:622, z:576.5, ry:1.4, noQuest:true, speed:0.95, path:[[620,576.5],[644,576.5]],
+  greet:'Hai! Saya Wulan, baru selesai belanja di Purwokerto City Mall. Di selatan mal ada Toko Serba Ada juga, lengkap! TIPS: gedung-gedung kaca tinggi di empat sudut kota ini adalah ciri khas pusat kota Purwokerto.',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x0369a1, shirt:0x7dd3fc, bottom:0x0c4a6e}});
+addNPC({key:'kotagilang', def:'kotagilang', name:'Mas Gilang', role:'Warga Kota Purwokerto', color:'#15803d', x:584, z:607.8, ry:1.4, noQuest:true, speed:1.0, path:[[584,607.8],[652,607.8]],
+  greet:'Halo! Saya Gilang, rumah saya di ujung timur kota. Saya jalan menyusuri trotoar selatan ini tiap hari — melewati kantor, pasar, sampai dekat stasiun. TIPS: Stasiun Purwokerto ada di ujung selatan jalan utama; dari sana kamu bisa naik kereta pulang ke Gerduren.',
+  fig:{skin:0x8a5a2e, hair:'buzz', shirt:0x4ade80, bottom:0x14532d}});
+refreshNPCMarkers();   // TAHAP 8B: sembunyikan penanda quest pejalan kaki kota sejak awal
+
+/* TAHAP 9B — Band Kota Purwokerto (4 pemain musik di atas panggung konser)
+   + 11 penonton konser di Alun-Alun: semua nama fiktif, ambient, noQuest,
+   LOKAL per pemain (tanpa guard mp, pola Tahap 8B).
+   MEKANISME NPC DI ATAS PANGGUNG: updateNPCWorld hanya menggerakkan x/z dan
+   menulis ulang position.y tiap frame, jadi pemain musik diberi properti
+   baseY:0,55 (= tinggi dek panggung) yang ditambahkan updateNPCWorld pada
+   baris position.y-nya — tanpa baseY, position.y mereka akan ditimpa ke 0
+   dan mereka tenggelam ke tanah di dalam dek. Pemain musik TANPA path &
+   TANPA wander: mereka berdiri menghadap penonton (selatan) sambil memegang
+   alat musik prosedural yang ditempel ke grup figurnya di bawah.
+   Penonton memakai path 2 titik mikro (±0,5-0,8 m) dari mekanisme path
+   Tahap 8B sehingga bergoyang di tempat — BUKAN wander acak (bisa keluar
+   area penonton / menembus panggung karena NPC tidak cek collider). */
+var t9bVokal = addNPC({key:'bandvokal', def:'bandvokal', name:'Mas Angga', role:'Vokalis — Band Kota Purwokerto', color:'#dc2626', x:576, z:561.5, ry:0, noQuest:true, baseY:0.55,
+  greet:'Halo, adik-adik! Saya Angga, vokalis Band Kota Purwokerto. Kami tampil di Alun-Alun ini tiap akhir pekan — penontonnya selalu ramai! TIPS: berdiri di depan panggung biar bisa mendengar musik kami dengan jelas!',
+  fig:{skin:0xc98a4b, hair:'cap', capCol:0xdc2626, shirt:0xf8fafc, bottom:0x1e3a8a}});
+var t9bGitar = addNPC({key:'bandgitar', def:'bandgitar', name:'Mas Raka', role:'Gitaris — Band Kota Purwokerto', color:'#b45309', x:573.2, z:561.8, ry:0, noQuest:true, baseY:0.55,
+  greet:'Hai! Saya Raka, gitarisnya. Gitar ini tidak pernah lepas dari tangan saya kalau sudah di atas panggung. TIPS: kalau kamu berdiri dekat panggung, petikan gitar saya terdengar paling jelas!',
+  fig:{skin:0xd9a066, hair:'spiky', shirt:0xf59e0b, bottom:0x1f2937}});
+var t9bDrum = addNPC({key:'banddrum', def:'banddrum', name:'Mas Yoga', role:'Drummer — Band Kota Purwokerto', color:'#0f766e', x:578.6, z:560.6, ry:0, noQuest:true, baseY:0.55,
+  greet:'Halo! Saya Yoga, drummer Band Kota Purwokerto. Ketukan drum saya yang menjaga irama lagu tetap semangat dari awal sampai akhir konser. TIPS: habis nonton konser, mampir juga ke Bioskop Purwokerto di timur-laut kota — filmnya seru-seru!',
+  fig:{skin:0x8a5a2e, hair:'cap', capCol:0x0f766e, shirt:0x99f6e4, bottom:0x134e4a}});
+var t9bKibor = addNPC({key:'bandkibor', def:'bandkibor', name:'Mbak Dewi', role:'Kibordis — Band Kota Purwokerto', color:'#7c3aed', x:580.6, z:561.8, ry:0, noQuest:true, baseY:0.55,
+  greet:'Hai, hai! Saya Dewi, pemain kibor band ini. Melodi kibor saya yang bikin lagu-lagu kami terdengar merdu. TIPS: lampu hias panggung kami berganti-ganti warna mengikuti irama — perhatikan, ya!',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x7c3aed, shirt:0xc4b5fd, bottom:0x4c1d95}});
+/* Alat musik prosedural sederhana, ditempel ke grup figur tiap pemain musik
+   (ikut posisi figur di atas dek; bayangan arah dimatikan seperti NPC lain) */
+(function(){
+  var S, f;
+  f = t9bVokal.fig3; S = f.S;   // stan mikrofon vokalis
+  cyl(0.025 * S, 0.025 * S, 1.5 * S, 0x111827, 0.22 * S, 0.75 * S, 0.38 * S, f.g, 8);
+  cyl(0.16 * S, 0.18 * S, 0.04 * S, 0x111827, 0.22 * S, 0.02 * S, 0.38 * S, f.g, 10);
+  var mic = new THREE.Mesh(new THREE.SphereGeometry(0.075 * S, 10, 8), mat(0x1f2937));
+  mic.position.set(0.22 * S, 1.53 * S, 0.40 * S); f.g.add(mic);
+  f = t9bGitar.fig3; S = f.S;   // gitar akustik gitaris
+  var gg = new THREE.Group(); gg.position.set(0.10 * S, 1.02 * S, 0.30 * S); gg.rotation.z = -0.45; gg.rotation.x = 0.15; f.g.add(gg);
+  box(0.55 * S, 0.66 * S, 0.14 * S, 0xb45309, 0, 0, 0, gg, false);
+  box(0.09 * S, 0.62 * S, 0.06 * S, 0x6d4c2f, 0.16 * S, 0.55 * S, 0, gg, false);
+  f = t9bDrum.fig3; S = f.S;    // set drum drummer (di depan figur, di atas dek)
+  var bd = cyl(0.30 * S, 0.30 * S, 0.34 * S, 0xdc2626, 0, 0.30 * S, 0.58 * S, f.g, 14); bd.rotation.x = Math.PI / 2;
+  cyl(0.16 * S, 0.16 * S, 0.2 * S, 0xf8fafc, -0.3 * S, 0.62 * S, 0.5 * S, f.g, 12);
+  cyl(0.18 * S, 0.18 * S, 0.2 * S, 0xf8fafc, 0.3 * S, 0.62 * S, 0.5 * S, f.g, 12);
+  cyl(0.02 * S, 0.02 * S, 0.85 * S, 0x374151, 0.62 * S, 0.42 * S, 0.45 * S, f.g, 6);
+  cyl(0.27 * S, 0.27 * S, 0.025 * S, 0xd4a017, 0.62 * S, 0.88 * S, 0.45 * S, f.g, 14);
+  f = t9bKibor.fig3; S = f.S;   // kibor di atas stan, di depan figur
+  box(0.06 * S, 0.92 * S, 0.06 * S, 0x374151, -0.4 * S, 0.46 * S, 0.45 * S, f.g, false);
+  box(0.06 * S, 0.92 * S, 0.06 * S, 0x374151, 0.4 * S, 0.46 * S, 0.45 * S, f.g, false);
+  box(1.0 * S, 0.09 * S, 0.32 * S, 0x1f2937, 0, 0.97 * S, 0.45 * S, f.g, false);
+  box(0.92 * S, 0.03 * S, 0.2 * S, 0xf8fafc, 0, 1.03 * S, 0.48 * S, f.g, false);
+  [t9bVokal, t9bGitar, t9bDrum, t9bKibor].forEach(function(m){
+    m.fig3.g.traverse(function(mm){ if(mm.isMesh) mm.castShadow = false; });
+  });
+})();
+/* 11 penonton konser: path 2 titik mikro di area penonton (x 570..583, z 569..587) */
+addNPC({key:'konser1', def:'konser1', name:'Mas Rizky', role:'Penonton Konser — Purwokerto', color:'#0284c7', x:572.5, z:573, ry:0, noQuest:true, speed:0.6, path:[[572.5,573],[573.2,573.4]],
+  greet:'Seru banget konsernya! Saya Rizky, tiap ada konser di Alun-Alun pasti datang paling depan. TIPS: ajak teman-temanmu — nonton konser ramai-ramai jauh lebih asyik!',
+  fig:{skin:0xc98a4b, hair:'spiky', shirt:0x38bdf8, bottom:0x0c4a6e}});
+addNPC({key:'konser2', def:'konser2', name:'Mbak Sinta', role:'Penonton Konser — Purwokerto', color:'#db2777', x:575.5, z:572.5, ry:0, noQuest:true, speed:0.65, path:[[575.5,572.5],[574.8,572.9]],
+  greet:'Hai! Saya Sinta. Lagu-lagu Band Kota Purwokerto itu enak-enak semua, saya sampai ikut bergoyang terus. TIPS: dari sini Menara Pandang Teratai kelihatan jelas — ikon kota kita!',
+  fig:{skin:0xf2c79b, hair:'long', shirt:0xf9a8d4, bottom:0x831843}});
+addNPC({key:'konser3', def:'konser3', name:'Pak Bowo', role:'Penonton Konser — Purwokerto', color:'#92400e', x:579, z:573.5, ry:0, noQuest:true, speed:0.55, path:[[579,573.5],[579.7,573.1]],
+  greet:'Selamat sore! Saya Bowo, menemani anak saya nonton konser. Musik yang baik itu menyehatkan hati, kata orang tua dulu. TIPS: jangan berdiri terlalu dekat speaker, ya — suaranya keras!',
+  fig:{skin:0xb07a45, hair:'peci', shirt:0xfde68a, bottom:0x78350f}});
+addNPC({key:'konser4', def:'konser4', name:'Bu Lastri', role:'Penonton Konser — Purwokerto', color:'#0e7a5f', x:582, z:572.8, ry:0, noQuest:true, speed:0.6, path:[[582,572.8],[581.3,573.3]],
+  greet:'Halo, Nak! Ibu Lastri suka sekali suasana Alun-Alun kalau ada konser — ramai dan meriah. TIPS: kalau lapar, di Pasar Rakyat banyak jajanan enak, tidak jauh dari sini!',
+  fig:{skin:0xd9a066, hair:'hijab', hijabCol:0x0e7a5f, shirt:0x6ee7b7, bottom:0x064e3b}});
+addNPC({key:'konser5', def:'konser5', name:'Mas Dimas', role:'Penonton Konser — Purwokerto', color:'#ea580c', x:571.8, z:577, ry:0, noQuest:true, speed:0.7, path:[[571.8,577],[572.5,577.5]],
+  greet:'Wah, ramai ya! Saya Dimas — bagian paling seru itu pas semua penonton ikut bernyanyi bersama. TIPS: konsernya dekat Menara Teratai; habis ini kamu bisa jalan-jalan keliling Alun-Alun!',
+  fig:{skin:0x8a5a2e, hair:'buzz', shirt:0xfb923c, bottom:0x1c1917}});
+addNPC({key:'konser6', def:'konser6', name:'Mbak Ayu', role:'Penonton Konser — Purwokerto', color:'#7c3aed', x:575, z:577.5, ry:0, noQuest:true, speed:0.6, path:[[575,577.5],[574.3,577.1]],
+  greet:'Hai! Saya Ayu. Saya paling suka suara kibornya Mbak Dewi — merdu sekali! TIPS: Bioskop Purwokerto ada di timur-laut kota, dekat City Mall — habis konser bisa lanjut nonton film!',
+  fig:{skin:0xf2c79b, hair:'hijab', hijabCol:0x7c3aed, shirt:0xc4b5fd, bottom:0x4c1d95}});
+addNPC({key:'konser7', def:'konser7', name:'Pak Slamet', role:'Penonton Konser — Purwokerto', color:'#334155', x:578.5, z:577.2, ry:0, noQuest:true, speed:0.55, path:[[578.5,577.2],[579.2,577.6]],
+  greet:'Halo! Saya Slamet, warga sini. Dulu Alun-Alun ini sepi, sekarang tiap ada konser penuh orang — kota kita makin hidup. TIPS: pulangnya naik kereta dari Stasiun Purwokerto di selatan kota, cepat dan nyaman!',
+  fig:{skin:0xb07a45, hair:'cap', capCol:0x334155, shirt:0x94a3b8, bottom:0x1f2937}});
+addNPC({key:'konser8', def:'konser8', name:'Bu Warti', role:'Penonton Konser — Purwokerto', color:'#b45309', x:581.8, z:577.6, ry:0, noQuest:true, speed:0.65, path:[[581.8,577.6],[581.1,577.2]],
+  greet:'Halo, Nak! Ibu Warti jualan minuman di sekitar Alun-Alun — kalau ada konser, dagangan Ibu laris manis! TIPS: jaga kebersihan Alun-Alun ya, buang sampah pada tempatnya supaya konser berikutnya tetap nyaman!',
+  fig:{skin:0xd9a066, hair:'hijab', hijabCol:0xb45309, shirt:0xfde68a, bottom:0x78350f}});
+addNPC({key:'konser9', def:'konser9', name:'Mas Eko', role:'Penonton Konser — Purwokerto', color:'#15803d', x:573.5, z:581.5, ry:0, noQuest:true, speed:0.7, path:[[573.5,581.5],[574.2,581.9]],
+  greet:'Hai! Saya Eko. Saya berdiri agak di belakang supaya bisa melihat seluruh panggung dan lampu hiasnya yang warna-warni. TIPS: lampu panggungnya berganti warna terus — coba perhatikan polanya!',
+  fig:{skin:0xc98a4b, hair:'cap', capCol:0x15803d, shirt:0x4ade80, bottom:0x14532d}});
+addNPC({key:'konser10', def:'konser10', name:'Mbak Rina', role:'Penonton Konser — Purwokerto', color:'#0369a1', x:577, z:582, ry:0, noQuest:true, speed:0.6, path:[[577,582],[576.3,581.6]],
+  greet:'Hai, saya Rina! Saya dan teman-teman selalu janjian nonton konser di sini — titik kumpulnya di bawah Menara Teratai. TIPS: kalau tersesat di kota, cari Menara Teratai — dari mana-mana kelihatan!',
+  fig:{skin:0xf2c79b, hair:'long', shirt:0x7dd3fc, bottom:0x0c4a6e}});
+addNPC({key:'konser11', def:'konser11', name:'Pak Joko', role:'Penonton Konser — Purwokerto', color:'#78716c', x:580.5, z:581.8, ry:0, noQuest:true, speed:0.55, path:[[580.5,581.8],[581.2,582.2]],
+  greet:'Selamat datang di konser Alun-Alun! Saya Joko — musik membuat warga kota berkumpul dan bergembira bersama. TIPS: di sebelah timur laut kota ada Bioskop Purwokerto; jadwal filmnya ada di papan poster depan gedung!',
+  fig:{skin:0xb07a45, hair:'buzz', shirt:0xa8a29e, bottom:0x44403c}});
+refreshNPCMarkers();   // TAHAP 9B: sembunyikan penanda quest band + penonton konser sejak awal
 
 /* Penanda titik patroli (quest Polisi) & bola hilang (quest Siswa) di dunia */
 var patrolRing = new THREE.Mesh(new THREE.RingGeometry(1.7, 2.15, 26), new THREE.MeshBasicMaterial({color:0xf59e0b, side:THREE.DoubleSide, transparent:true, opacity:0.9}));
@@ -11183,7 +11668,27 @@ function updateNPCWorld(dt){
   npcT += dt;
   for(var i = 0; i < NPCS.length; i++){
     var n = NPCS[i], f = n.fig3, p = f.g.position, moving = false;
-    if(n.wander){
+    /* TAHAP 8B: NPC ber-path (pejalan kaki Kota Purwokerto) berjalan menyusuri
+       titik-titik jalurnya (trotoar & alun-alun) berurutan dan berputar terus,
+       memakai mesin jalan NPC yang sama (rotasi menghadap arah jalan + ayunan
+       kaki/tangan di bawah) — bukan wander acak, supaya terbaca berjalan di
+       jalur pejalan kaki. */
+    if(n.path){
+      var ptg = n.path[n.pathPi || 0];
+      var pdx = ptg[0] - p.x, pdz = ptg[1] - p.z, pd = Math.hypot(pdx, pdz);
+      if(n.wait > 0){ n.wait -= dt; }
+      else if(pd < 0.35){
+        n.pathPi = ((n.pathPi || 0) + 1) % n.path.length;
+        n.wait = 0.4 + Math.random() * 1.4;
+      } else {
+        moving = true;
+        var psp = n.speed || 0.9;
+        f.g.rotation.y = Math.atan2(pdx, pdz);
+        p.x += Math.sin(f.g.rotation.y) * psp * dt;
+        p.z += Math.cos(f.g.rotation.y) * psp * dt;
+      }
+    }
+    else if(n.wander){
       var dx = n.tx - p.x, dz = n.tz - p.z, d = Math.hypot(dx, dz);
       if(n.wait > 0){ n.wait -= dt; }
       else if(d < 0.3){
@@ -11201,7 +11706,11 @@ function updateNPCWorld(dt){
     var sw = moving ? Math.sin(npcT * 8 + n.ph) * 0.55 : Math.sin(npcT * 1.7 + n.ph) * 0.05;
     f.legL.rotation.x = sw; f.legR.rotation.x = -sw;
     f.armL.rotation.x = -sw * 0.8; f.armR.rotation.x = sw * 0.8;
-    f.g.position.y = moving ? Math.abs(Math.sin(npcT * 8 + n.ph)) * 0.04 : 0;
+    /* TAHAP 9B: n.baseY = tinggi alas berdiri NPC (0 untuk semua NPC lama);
+       pemain musik Konser Purwokerto berdiri di atas dek panggung (0,55 m),
+       jadi tinggi alasnya ditambahkan di sini — satu-satunya titik yang
+       menulis position.y NPC tiap frame. */
+    f.g.position.y = (n.baseY || 0) + (moving ? Math.abs(Math.sin(npcT * 8 + n.ph)) * 0.04 : 0);
     f.headG.rotation.y = Math.sin(npcT * 0.6 + n.ph) * 0.3;
     n.marker.position.set(p.x, 2.5 * f.S + Math.sin(npcT * 2.4 + n.ph) * 0.08, p.z);
     if(n.it){ n.it.x = p.x; n.it.z = p.z; }
@@ -11236,11 +11745,11 @@ function updateNPCWorld(dt){
       }
     }
   } else patrolRing.visible = false;
-  // Quest Warga: antar surat ke Rumah Warga (-26, 42)
+  // Quest Warga: antar surat ke Rumah Warga (-49.5, 115.5) — TAHAP 8A: rumah kuning pindah ke tepi pantai
   if(npcState('warga') === 'active'){
     ensureNPCDay();
     var pw = eco.npcQuests.prog.warga || (eco.npcQuests.prog.warga = {delivered:false});
-    if(!pw.delivered && Math.hypot(pp.x - (-26), pp.z - 42) < 4.5){
+    if(!pw.delivered && Math.hypot(pp.x - (-49.5), pp.z - 115.5) < 4.5){
       pw.delivered = true; saveEco();
       setNPCState('warga', 'ready');
       AudioSys.sfx('win');
@@ -11272,7 +11781,7 @@ makeDuck(30, 67.6);
 makeCat(-52, 28.5, 0.5);
 makeBird(0, 40, 26, 17, 0.1, 1.2);
 tree(92, 58, 1.1); tree(-96, 44, 1.0);
-palm(70, 86, 1); banana(-30, 84, 0.9);
+palm(70, 86, 1); banana(-27, 84.5, 0.9);   // TAHAP 8A: pisang digeser 3 m ke timur — titik lama (-30,84) menabrak sudut collider Rumah No. 01
 (function(){ // Pos Ronda dekat Balai Desa: tempat warga berjaga malam
   [[-1.6,-1.2],[1.6,-1.2],[-1.6,1.2],[1.6,1.2]].forEach(function(p){ box(0.16, 2.4, 0.16, 0x7c4a21, -70 + p[0], 1.2, -22 + p[1], scene); });
   box(4.4, 0.14, 3.6, 0x9e3d2c, -70, 2.5, -22, scene);
@@ -11790,7 +12299,7 @@ DESTS.push(
   {name:'Kolam Ikan', x:16, z:-36.2, kind:'tempat', label:'Kolam Ikan'},
   {name:'Dealer Gerduren', x:38, z:42, kind:'tempat', label:'Dealer'},
   {name:'Kebun Praktik & Kandang Desa', x:-54, z:62, kind:'tempat', label:'Kebun Praktik'},
-  {name:'Perumahan Gerduren (Rumah No. 01–08)', x:-14, z:60, kind:'tempat', label:'Perumahan'},
+  {name:'Perumahan Gerduren (Rumah No. 01–08)', x:-41.7, z:100, kind:'tempat', label:'Perumahan'},
   {name:'Terminal Gerduren (Naik Bis)', x:66, z:62, kind:'tempat', label:'Terminal'},
   {name:'Helikopter (Terbang)', x:-82, z:-14, kind:'tempat', label:'Helikopter'},
   {name:'Taman Desa', x:-52, z:30, kind:'tempat', label:'Taman'},
@@ -11806,7 +12315,11 @@ DESTS.push(
   {name:'Alun-Alun Purwokerto', x:566, z:572, kind:'tempat', label:'Alun-Alun'},
   {name:'Menara Pandang Teratai', x:566, z:579, kind:'tempat', label:'Teratai'},
   {name:'Stasiun Purwokerto', x:600, z:643.5, kind:'tempat', label:'Stasiun Pwt'},
-  {name:'Purwokerto City Mall', x:632, z:575.5, kind:'tempat', label:'City Mall'}
+  {name:'Purwokerto City Mall', x:632, z:575.5, kind:'tempat', label:'City Mall'},
+  {name:'Pasar Rakyat Purwokerto', x:622, z:612.5, kind:'tempat', label:'Pasar'},
+  {name:'Kantor Graha Banyumas', x:580, z:612.5, kind:'tempat', label:'Kantor'},
+  {name:'Konser Musik', x:576, z:578, kind:'tempat', label:'Konser'},
+  {name:'Bioskop Purwokerto', x:642, z:591, kind:'tempat', label:'Bioskop'}
 );
 DESTS.push(
 );
@@ -13990,7 +14503,7 @@ var NZ_TYPES = {
    salah): sekolah (0,0) r30 menutup kelas di z -24; perumahan (55,45) r25
    menutup rumah z 16..64; masjid (24,38) r18; balai desa (-76,-36) r18.
    TAHAP 3: Bengkel Las Pak Karso (70,14) r14 ditambahkan sebagai zona aman. */
-var NZ_SAFE = [ {x:0, z:0, r:30}, {x:55, z:45, r:25}, {x:24, z:38, r:18}, {x:-76, z:-36, r:18}, {x:70, z:14, r:14} ];
+var NZ_SAFE = [ {x:0, z:0, r:30}, {x:-41, z:108, r:25}, {x:24, z:38, r:18}, {x:-76, z:-36, r:18}, {x:70, z:14, r:14} ];   // TAHAP 8A: zona aman Perumahan ikut pindah ke klaster rumah baru di tepi pantai (pusat Jalan Pantai)
 /* TAHAP 7: seaActive = pemain sedang berada di sekitar Pulau Tropis /
    Zona Berbahaya laut (diperbarui tiap frame di updateNightZombies). */
 var seaActive = false;
@@ -14701,10 +15214,11 @@ function animate(){
          WASD relatif kamera). Jalur gerak jalan kaki di bawah dilewati
          selama berkendara. */
       var vehControlled = !!(riding || vehDrive);
+      var boatControlled = (typeof boatDrive !== 'undefined' && !!boatDrive);   // TAHAP 8A: perahu diperlakukan seperti kendaraan di loop utama
       if(vehControlled){
         vehGroundStep(dt);
         mx = 0; mz = 0; mLen = 0; moving = false;
-      } else if(moving){
+      } else if(moving && !boatControlled){
         // belok halus: laju putar dibatasi + diredam, jadi tidak liar dan tidak menyentak
         var want = Math.atan2(mx, mz);
         var diff = want - player.rotation.y;
@@ -14716,7 +15230,7 @@ function animate(){
       // EP habis = kehabisan tenaga: kecepatan jalan tinggal separuh sampai minum susu lagi
       // Shift (kiri/kanan) ditahan = lari 1,5x saat jalan kaki
       var sprinting = !riding && !vehDrive && !!(keys['ShiftLeft'] || keys['ShiftRight']);
-      if(!vehControlled){
+      if(!vehControlled && !boatControlled){
         var targetSpeed = moving ? 10.5 * Math.min(1, mLen) * (eco.ep <= 0 ? 0.5 : 1) * (sprinting ? 1.5 : 1) * (swimOn ? 0.45 : 1) * footBoostMul() : 0;
         curSpeed += (targetSpeed - curSpeed) * Math.min(1, dt*7);
         if(curSpeed > 0.05){
@@ -14759,9 +15273,19 @@ function animate(){
         legL.rotation.x = -0.95 + pedal; legR.rotation.x = -0.95 - pedal;
         armL.rotation.x = -0.55; armR.rotation.x = -0.55;
         bodyG.position.y = 0.30;
+      } else if(boatControlled){
+        // TAHAP 8A — POSE TENANG DI PERAHU: kaki sedikit menekuk, tangan
+        // memegang tepi perahu, badan mengikuti goyangan ombak — TANPA
+        // ayunan jalan (salah satu sumber getar visual versi lama).
+        bodyG.rotation.x += (0 - bodyG.rotation.x) * Math.min(1, dt*8);
+        bodyG.rotation.z = Math.sin(clock.elapsedTime * 0.8) * 0.03;
+        bodyG.position.y = 0.30;
+        legL.rotation.x = -0.85; legR.rotation.x = -0.85;
+        armL.rotation.x = -0.45; armR.rotation.x = -0.45;
       } else {
         // animasi jalan: ayun kaki & tangan, badan sedikit memantul
         bodyG.rotation.x += (0 - bodyG.rotation.x) * Math.min(1, dt*8);
+        if(bodyG.rotation.z) bodyG.rotation.z *= 0.6;   // TAHAP 8A: sisa goyangan badan dari pose perahu meluruh halus
         var swing = curSpeed > 0.05 ? Math.sin(walkPhase)*0.55 : 0;
         legL.rotation.x = swing; legR.rotation.x = -swing;
         armL.rotation.x = -swing*0.8; armR.rotation.x = swing*0.8;
@@ -14815,21 +15339,27 @@ function animate(){
         armL.rotation.x = -0.5; armR.rotation.x = -0.5;
         bodyG.position.y = vehDrive.kind === 'polisi' ? 0.12 : 0.30;
       }
+      // TAHAP 8A: perahu diperbarui di sini, di dalam animate() dengan dt
+      // asli — satu-satunya penulis posisi perahu & pemain selama berlayar.
+      if(boatControlled) updateBoatDrive(dt);
 
       // lompat / gravitasi — lantai dasar mengikuti konteks: interior +0,15 m,
-      // pematang sawah (auto-step) +0,3 m, berenang di bawah permukaan air
-      if(!grounded || player.position.y > groundLevel()){
+      // pematang sawah (auto-step) +0,3 m, berenang di bawah permukaan air.
+      // TAHAP 8A: selama berperahu ketiganya DILEWATI — posisi pemain diatur
+      // penuh oleh updateBoatDrive (dulu gravitasi + auto-step + tabrakan
+      // melawan interval perahu = sumber getar hebat & perahu tembus tanah).
+      if(!boatControlled && (!grounded || player.position.y > groundLevel())){
         vy -= 24 * dt; player.position.y += vy * dt;
         var gl = groundLevel();
         if(player.position.y <= gl){ player.position.y = gl; vy = 0; grounded = true; }
       }
       // auto-step climbing: menaiki/menuruni undakan rendah secara landai — tidak tersangkut
-      if(grounded && !poseMode && !swimOn && !interiorClamp && !vehDrive && !riding){
+      if(grounded && !poseMode && !swimOn && !interiorClamp && !vehDrive && !riding && !boatControlled){
         var gls = groundLevel();
         if(Math.abs(player.position.y - gls) > 0.01)
           player.position.y += Math.max(-dt * 2.4, Math.min(dt * 2.4, gls - player.position.y));
       }
-      resolveCollisions(player.position);
+      if(!boatControlled) resolveCollisions(player.position);
       if(vehDrive) vehMultiPointCollide();
       if(typeof wahanaRide !== 'undefined' && wahanaRide && typeof wahanaPoseStep === 'function') wahanaPoseStep(dt);
       if(tourActive) updateTour(dt);
@@ -17972,15 +18502,18 @@ ambients.push(function(dt, t){
    tiap unit tersimpan lokal (eco.houses / eco.houseOwners) dan DISIARKAN
    ke ruangan lewat HOUSE1| — rumah yang sudah dimiliki pemain lain
    terkunci di Dealer & di papan depan rumahnya. */
+/* TAHAP 8A: Perumahan Gerduren pindah ke tepi pantai — papan nomor (sx/sz/
+   sry) selalu berdiri di SISI JALAN dan menghadap jalan: kolom timur
+   sry=-π/2 di x-5, kolom barat sry=π/2 di x+5. No. 05 TIDAK berubah. */
 var HOUSES = [
-  {no:1, x:-79, z:58, sx:-79, sz:56.9, sry:Math.PI},   // papan di depan rumah menghadap Jl. Sawah Glempang (utara), tepat di luar aspal (tepi 56,5)
-  {no:2, x:-70, z:64},
-  {no:3, x:-40, z:64},
-  {no:4, x:-28, z:63, build:true, wall:0xe0f2fe, roof:0x2563eb},
+  {no:1, x:-34, z:88, sx:-39, sz:88, sry:-Math.PI / 2},
+  {no:2, x:-34, z:97, sx:-39, sz:97, sry:-Math.PI / 2},
+  {no:3, x:-34, z:106, sx:-39, sz:106, sry:-Math.PI / 2},
+  {no:4, x:-34, z:115, build:true, wall:0xe0f2fe, roof:0x2563eb, ry:-Math.PI / 2, sx:-39, sz:115, sry:-Math.PI / 2},
   {no:5, x:-14, z:62},
-  {no:6, x:-1,  z:64},
-  {no:7, x:24,  z:63, build:true, wall:0xfef9c3, roof:0x16a34a},
-  {no:8, x:48,  z:62}
+  {no:6, x:-34, z:124, sx:-39, sz:124, sry:-Math.PI / 2},
+  {no:7, x:-49.5, z:124.5, build:true, wall:0xfef9c3, roof:0x16a34a, ry:Math.PI / 2, sx:-44.5, sz:124.5, sry:Math.PI / 2, gx:-55.3},
+  {no:8, x:-24, z:128, sx:-29, sz:128, sry:-Math.PI / 2}
 ];
 function houseMine(no){ return !!(eco.houses && eco.houses[no]) || (no === 5 && !!eco.assets.rumah); }
 function houseOwnerName(no){
@@ -18084,7 +18617,7 @@ function openHouseInfo(t){
   infoTimer = setTimeout(hideInfo, 9000);
 }
 HOUSES.forEach(function(H){
-  if(H.build) house(H.x, H.z, H.wall, H.roof, Math.PI);   // No. 04 & 07 di z 63: pintu/jendela/teras menghadap utara ke Jl. Sawah Glempang
+  if(H.build) house(H.x, H.z, H.wall, H.roof, H.ry !== undefined ? H.ry : Math.PI);   // TAHAP 8A: No. 04 pintu ke barat & No. 07 pintu ke timur — keduanya menghadap Jalan Pantai
   houseSignBuild(H);
   glowDoorMat((H.sx !== undefined ? H.sx : H.x), (H.sz !== undefined ? H.sz : H.z - 4.9) + 0.55);
   if(H.no !== 5) addInteractable(H.x, H.z, 7.5, 'Rumah No. ' + ('0' + H.no).slice(-2), null, {houseNo:H.no});
@@ -19014,7 +19547,7 @@ function footBoostMul(){
 })();
 
 /* ================= KOPDES MERAH PUTIH GERDUREN ================= */
-INFO['Kopdes Merah Putih Gerduren'] = 'Kopdes Merah Putih Gerduren: koperasi desa di simpang utama Jl. Sawah Glempang. Belanja bibit & pakan istimewa, kuliner Banyumas, kostum, dekorasi rumah, sampai Sepeda Onthel & Speedboat. Temui Bu Endang di meja kasir!';
+INFO['Kopdes Merah Putih Gerduren'] = 'Kopdes Merah Putih Gerduren: koperasi desa di kaki Bukit Barat, tepi Jalan Lingkar Barat. Belanja bibit & pakan istimewa, kuliner Banyumas, kostum, dekorasi rumah, sampai Sepeda Onthel & Speedboat. Temui Bu Endang di meja kasir!';
 INFO['Bu Endang — Kopdes Merah Putih'] = 'Bu Endang, pengurus Kopdes Merah Putih Gerduren. Tekan Aksi untuk membuka Katalog Kopdes: daftar Kartu Anggota (diskon 10% + bonus SHU 20% saat menjual hasil kebun/ternak), belanja 5 kategori, dan jual hasil panenmu di sini!';
 var KOPDES_ITEMS = [
   {id:'batik',   name:'Baju Batik Banyumasan', desc:'Batik khas Banyumas bermotif daun & sungai — gagah untuk acara desa.', price:350, type:'outfit', outfit:'batik', cat:'kostum'},
@@ -19267,11 +19800,11 @@ function renderWardrobe(){
 })();
 
 
-/* ---------- Gedung Kopdes Merah Putih (simpang Jl. Sawah Glempang) ---------- */
+/* ---------- Gedung Kopdes Merah Putih (TAHAP 8A: kaki Bukit Barat, tepi Jalan Lingkar Barat) ---------- */
 var KOPDES_CUT = null;   // atap & dinding Kopdes untuk CUTAWAY INDOOR VIEW (bangunan walk-in)
-var KOPDES_RECT = {minX:-19.6, maxX:-9.4, minZ:35.1, maxZ:44.9};
+var KOPDES_RECT = {minX:-105.1, maxX:-94.9, minZ:27.25, maxZ:36.75};
 (function buildKopdes(){
-  var CX = -14.5, CZ = 40, wall = 0xf8fafc, red = 0xdc2626, darkred = 0x991b1b;
+  var CX = -100, CZ = 32, wall = 0xf8fafc, red = 0xdc2626, darkred = 0x991b1b;
   box(11, 0.3, 9.5, 0xe7e2d6, CX, 0, CZ, scene, false).receiveShadow = true;      // lantai +0.15 m
   addStepCollider(CX, CZ, 5.5, 4.75);
   box(11.4, 0.5, 9.9, red, CX, 0.32, CZ, scene, false);                            // lis merah keliling dasar
@@ -19325,7 +19858,7 @@ var KOPDES_RECT = {minX:-19.6, maxX:-9.4, minZ:35.1, maxZ:44.9};
   labelAt('Bu Endang • Pengurus Kopdes', CX - 4.15, 2.6, CZ + 1.15, 0.62);
   addInteractable(CX - 3.1, CZ + 0.6, 3.6, 'Bu Endang — Kopdes Merah Putih', null, {kopdes:true});
   addInteractable(CX + 4.4, CZ, 3.4, 'Kopdes Merah Putih Gerduren', null, {kopdes:true});
-  zones.push({name:'Kopdes Merah Putih', minX:-20.5, maxX:-8.5, minZ:35, maxZ:45});
+  zones.push({name:'Kopdes Merah Putih', minX:-106, maxX:-94, minZ:27, maxZ:37});
 })();
 
 /* ---------- Dekorasi Rumah Kamu + cermin Lemari + gitar ---------- */
@@ -19372,7 +19905,7 @@ var gitarCd = 0;
 /* ---------- Garasi di samping setiap rumah Perumahan ---------- */
 (function buildGarages(){
   HOUSES.forEach(function(H){
-    var gx = H.x + 5.8, gz = H.z + 0.5;
+    var gx = (H.gx !== undefined ? H.gx : H.x + 5.8), gz = (H.gz !== undefined ? H.gz : H.z + 0.5);   // TAHAP 8A: No. 07 garasinya di sisi barat (gx) agar tidak menimpa Jalan Pantai
     box(5.0, 0.12, 3.8, 0xb8b2a4, gx, 0.06, gz, scene, false).receiveShadow = true;
     box(0.14, 2.3, 0.14, 0x78716c, gx - 2.3, 1.15, gz - 1.7, scene); box(0.14, 2.3, 0.14, 0x78716c, gx + 2.3, 1.15, gz - 1.7, scene);
     box(5.2, 0.1, 4.0, 0x9e3d2c, gx, 2.36, gz, scene);
@@ -19404,7 +19937,7 @@ for(var gi = 0; gi < interactables.length; gi++){
 function myHouseNo(){ for(var i = 0; i < HOUSES.length; i++) if(houseMine(HOUSES[i].no)) return HOUSES[i]; return null; }
 function refreshGarage(){
   var H = myHouseNo();
-  var gx = H ? H.x + 5.8 : -999, gz = H ? H.z + 0.5 : -999;
+  var gx = H ? (H.gx !== undefined ? H.gx : H.x + 5.8) : -999, gz = H ? (H.gz !== undefined ? H.gz : H.z + 0.5) : -999;
   garageCar.visible = !!(H && eco.assets.mobil); garageBike.visible = !!(H && eco.assets.motor);
   if(H){ garageCar.position.set(gx, 0, gz - 0.6); garageBike.position.set(gx + 1.4, 0, gz + 1.1); }
   garageCarIt.x = garageCar.visible ? gx : -999; garageCarIt.z = garageCar.visible ? gz - 0.6 : -999;
@@ -19423,10 +19956,10 @@ var ontheGroup = (function(){
   box(0.55, 0.06, 0.06, 0x374151, 0, 1.05, 0.92, g, false);
   box(0.5, 0.3, 0.4, 0x9a6a38, 0, 0.95, 1.05, g, false);   // keranjang anyaman depan
   box(0.55, 0.06, 0.35, 0x78350f, 0, 0.82, -0.95, g, false); // bagasi belakang
-  g.position.set(-7.4, 0, 44.8); g.rotation.y = 0.7; g.visible = false;
+  g.position.set(-92.9, 0, 36.8); g.rotation.y = 0.7; g.visible = false;   // TAHAP 8A: ikut pindah ke depan Kopdes baru (relatif sama: CX+7,1, CZ+4,8)
   scene.add(g); return g;
 })();
-addInteractable(-7.4, 44.8, 2.6, 'Sepeda Onthel Klasik', null, {onthel:true});
+addInteractable(-92.9, 36.8, 2.6, 'Sepeda Onthel Klasik', null, {onthel:true});
 var ontheSpot = null;
 for(var oi = 0; oi < interactables.length; oi++){ if(interactables[oi].onthel) ontheSpot = interactables[oi]; }
 function refreshOnthel(){ ontheGroup.visible = !!eco.owned['sepedaOnthel']; if(!eco.owned['sepedaOnthel']){ ontheSpot.x = -999; ontheSpot.z = -999; } else if(!riding){ ontheSpot.x = ontheGroup.position.x; ontheSpot.z = ontheGroup.position.z; } }
@@ -19633,7 +20166,7 @@ var seaMesh = null;
   flat(0.22, 49, 0xf8fafc, -43.9, 103.5, scene, 0.038);                    // garis tepi barat
   flat(0.22, 49, 0xf8fafc, -39.5, 103.5, scene, 0.038);                    // garis tepi timur
   for(var mz = 83; mz <= 125; mz += 4) flat(0.28, 1.8, 0xfde68a, -41.7, mz, scene, 0.038);   // marka tengah putus-putus
-  postSign('Pantai Pasir Putih', -36.6, 86.5, Math.PI, {w:3.2, bg:'#0284c7', fg:'#ffffff'}); // papan petunjuk di mulut jalan, sisi timur (tiang terdekat 1,75 m dari tepi jalan)
+  postSign('Pantai Pasir Putih', -38.8, 84.5, Math.PI, {w:3.2, bg:'#0284c7', fg:'#ffffff'}); // papan petunjuk di mulut jalan, sisi timur (TAHAP 8A: digeser dari (-36,6, 86,5) karena titik lama kini di dalam tapak Rumah No. 01)
   lampPost(-38.5, 96); lampPost(-45.2, 112); lampPost(-38.5, 124);         // lampu Jalan Pantai (tiang & collider di luar badan jalan, berselang-seling sisi)
   addInteractable(-41.7, 86, 4.5, 'Jalan Pantai');
   flat(104, 10, 0xf7ecc8, -58, 131, scene, 0.01);                          // bibir pantai
@@ -19643,7 +20176,7 @@ var seaMesh = null;
   shallow.rotation.x = -Math.PI / 2; shallow.position.set(-52, -0.1, 137); scene.add(shallow);
   ambients.push(function(dt, t){ if(seaMesh) seaMesh.position.y = -0.28 + Math.sin(t * 0.8) * 0.045; });  // gelombang ringan
   /* pohon kelapa & batu karang di pantai */
-  [[-100, 116], [-88, 122], [-74, 114], [-38, 116], [-26, 123], [-96, 127]].forEach(function(p){ palm(p[0], p[1], 1.05); });
+  [[-100, 116], [-88, 122], [-74, 114], [-44, 133], [-26, 123], [-96, 127]].forEach(function(p){ palm(p[0], p[1], 1.05); });   // TAHAP 8A: kelapa (-38,116) digeser ke (-44,133) di sisi dermaga — titik lama menabrak collider Rumah No. 04
   [[-102, 130, 1.3], [-30, 132, 1.0], [-84, 133, 0.8]].forEach(function(r){ var rk = sphG(r[2], 0x8a8d91, r[0], 0.1, r[1], scene); rk.scale.y = 0.62; });
   /* Pulau Tropis */
   cyl(17, 18.6, 0.7, 0xf2e2ac, -92, -0.05, 203, scene, 26);
@@ -19868,49 +20401,116 @@ function mountBoat(kind){
   boatDrive = {kind:kind, group:g, heading:g.rotation.y, speed:0, spot: kind === 'speed' ? speedSpot : perahuSpot};
   player.position.set(g.position.x, 0.3, g.position.z);
   AudioSys.sfx('bell');
-  showToast(kind === 'speed' ? 'Speedboat melesat! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju. Berlabuh di Dermaga Pantai atau dermaga kecil Pulau Tropis, lalu tekan Turun.' : 'Kamu mengemudikan Perahu Nelayan. Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju. Berlayarlah ke Pulau Tropis di seberang laut (arah selatan-barat)!', 5600);
+  showToast(kind === 'speed' ? 'Speedboat melesat! Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju. Berlabuh di Dermaga Pantai atau dermaga kecil Pulau Tropis, lalu tekan Turun.' : 'Kamu mengemudikan Perahu Nelayan. Kendalinya sama seperti berjalan: gerakkan joystick / WASD ke arah yang dituju. Berlayarlah ke Pulau Tropis di seberang laut (arah selatan-barat)! Untuk turun, berlabuh di dermaga atau berhentikan perahu di tepi pantai dangkal.', 5600);
 }
 function boatNearDock(){
-  if(Math.hypot(player.position.x + 46, player.position.z - 150) < 7) return 'pantai';
+  if(Math.hypot(player.position.x + 46, player.position.z - 150) < 8) return 'pantai';   // TAHAP 8A: radius 7 -> 8 agar perahu yang berhenti di ujung selatan dermaga (haluan z 154,5) tetap bisa menurunkan pemain
   if(Math.hypot(player.position.x + 92, player.position.z - 187) < 7.5) return 'pulau';
+  return null;
+}
+/* TAHAP 8A — BATAS BERLAYAR = AIR, diuji pada titik HALUAN (posisi + 2,7 m
+   searah haluan), bukan titik tengah: haluan tidak pernah lagi menembus
+   pasir pulau, pasir pantai, atau dek dermaga. Dua koridor labuh resmi:
+   koridor dermaga pantai (berhenti di ujung selatan dermaga, haluan
+   z >= 154,5 — tidak berlayar ke bawah dek) dan koridor selatan Pulau
+   Tropis (berhenti di dIsl >= 19,5 dari pusat pulau). */
+function boatWaterOK(bx, bz){
+  if(inSeaWater(bx, bz)) return true;
+  if(bx > -49 && bx < -43 && bz >= 154.5 && bz < 158) return true;                          // koridor dermaga Pantai Pasir Putih
+  if(Math.abs(bx + 92) < 4 && bz >= 184 && bz <= 203 && Math.hypot(bx + 92, bz - 203) >= 19.5) return true;   // koridor labuh selatan Pulau Tropis
+  return false;
+}
+/* Titik pendaratan di darat: cari titik terdekat yang TIDAK di dalam
+   collider padat mana pun (collider undakan/step dikecualikan — pemain
+   memang melangkah naik di atasnya, mis. dek dermaga & pasir pulau). */
+function boatShoreSpot(cands){
+  for(var i = 0; i < cands.length; i++){
+    var cx = cands[i][0], cz = cands[i][1], ok = true;
+    for(var j = 0; j < colliders.length; j++){
+      var c = colliders[j];
+      if(c.step) continue;
+      if(cx > c.minX - 0.5 && cx < c.maxX + 0.5 && cz > c.minZ - 0.5 && cz < c.maxZ + 0.5){ ok = false; break; }
+    }
+    if(ok) return {x:cx, z:cz};
+  }
   return null;
 }
 function dismountBoat(){
   if(!boatDrive) return;
-  var dock = boatNearDock();
-  if(!dock){ showToast('Berlabuh dulu di Dermaga Pantai atau dermaga kecil Pulau Tropis untuk turun dari perahu!', 3800); return; }
   var g = boatDrive.group;
+  var dock = boatNearDock();
+  var spot = null, kind = null;
+  if(dock === 'pantai'){ spot = {x:-46, z:148}; kind = 'pantai'; }
+  else if(dock === 'pulau'){ spot = {x:-92, z:189.8}; kind = 'pulau'; }
+  else if(Math.abs(boatDrive.speed) < 0.5){
+    /* TAHAP 8A — TURUN DI TEPI PANTAI: perahu yang BERHENTI di pita dangkal
+       boleh menurunkan pemain ke daratan terdekat yang bisa dipijak. */
+    var px = g.position.x, pz = g.position.z;
+    var dIsl = Math.hypot(px + 92, pz - 203);
+    if(pz >= 133 && pz <= 143 && px > -110 && px < -6){
+      spot = boatShoreSpot([[px, 134.5], [px - 5, 134.5], [px + 5, 134.5], [-58, 130], [-64, 126]]);
+      kind = 'tepi';
+    } else if(dIsl >= 18 && dIsl <= 24){
+      var ux = (px + 92) / dIsl, uz = (pz - 203) / dIsl;
+      spot = boatShoreSpot([[-92 + ux * 13, 203 + uz * 13], [-92, 189.8]]);
+      kind = 'tepiPulau';
+    }
+  }
+  if(!spot){ showToast('Berlabuh dulu di Dermaga Pantai, dermaga kecil Pulau Tropis, atau berhentikan perahu di tepi pantai dangkal untuk turun!', 3800); return; }
   if(boatDrive.spot){ boatDrive.spot.x = g.position.x; boatDrive.spot.z = g.position.z; }
   boatDrive = null;
-  if(dock === 'pantai') player.position.set(-46, 0, 148);
-  else player.position.set(-92, 0, 189.8);
+  player.position.set(spot.x, 0, spot.z);
   player.position.y = 0; vy = 0; grounded = true;
   AudioSys.sfx('bell');
-  showToast(dock === 'pantai' ? 'Kamu berlabuh kembali di Dermaga Pantai Pasir Putih.' : 'Selamat datang di Pulau Tropis! Jelajahi pulau, memancing di batu karang, atau bermain voli di pantai.', 4400);
+  showToast(kind === 'pantai' ? 'Kamu berlabuh kembali di Dermaga Pantai Pasir Putih.'
+    : kind === 'pulau' ? 'Selamat datang di Pulau Tropis! Jelajahi pulau, memancing di batu karang, atau bermain voli di pantai.'
+    : kind === 'tepiPulau' ? 'Kamu menepi di pantai Pulau Tropis. Perahumu tertambat di air dangkal — dekati lagi untuk berlayar pulang.'
+    : 'Kamu menepi di pantai dangkal. Perahumu tertambat di air dangkal — dekati lagi untuk berlayar.', 4400);
 }
-setInterval(function(){
+/* TAHAP 8A — UPDATE PERAHU DI DALAM animate() (dt asli), MENGGANTIKAN
+   setInterval 33 ms lama. Diagnosis getar hebat versi lama: DUA penulis
+   posisi pemain — interval perahu (dt tetap 0,033) dan loop utama yang
+   tidak mengenal boatDrive (tetap menggerakkan pemain dengan kecepatan
+   jalan, menerapkan gravitasi ke y=0,3 melawan permukaan laut 0, auto-step,
+   dan resolveCollisions tiap frame) — hasilnya gerak gergaji ±30 Hz yang
+   diikuti kamera. Kini SATU jalur: selama boatDrive aktif, loop utama
+   melewati gerak jalan, gravitasi, auto-step, resolveCollisions pemain,
+   dan animasi jalan; perahu menunggangi permukaan laut yang sama dengan
+   seaMesh (-0,28 + sin(t*0,8)*0,045) dan pemain ikut naik-turun bersamanya.
+   Speedboat memakai jalur yang sama (kind 'speed'). */
+function updateBoatDrive(dt){
   if(!boatDrive) return;
   if(typeof patrolBusy !== 'undefined' && (patrolBusy || patrolOpen)) return; // Patroli Kesehatan: perahu berhenti halus di tempat
-  var dt = 0.033, g = boatDrive.group;
+  var g = boatDrive.group;
   // Kendali seperti berjalan biasa: joystick/WASD menunjuk arah tujuan,
   // perahu berbelok mulus ke arah itu & melaju sebanding dorongan joystick.
   var vec = vehWalkVec(uiBlocked());
   var max = boatDrive.kind === 'speed' ? 15 : 7;
   var target = max * vec.mag;
   boatDrive.speed = vehApproach(boatDrive.speed, target, (vec.mag > 0.05 ? 5 : 6) * dt);
-  if(vec.mag > 0.05 && boatDrive.speed > 0.25)
-    boatDrive.heading = vehTurnToward(boatDrive.heading, Math.atan2(vec.x, vec.z), 1.9 * dt * (0.35 + 0.65 * Math.min(1, boatDrive.speed / 6)));
-  var nx = g.position.x + Math.sin(boatDrive.heading) * boatDrive.speed * dt;
-  var nz = g.position.z + Math.cos(boatDrive.heading) * boatDrive.speed * dt;
-  nx = Math.max(-120, Math.min(2, nx)); nz = Math.max(133, Math.min(238, nz));
-  var dIsl = Math.hypot(nx + 92, nz - 203);
-  if(dIsl < 18.6 && !(Math.abs(nx + 92) < 4 && nz < 203)){ nx = g.position.x; nz = g.position.z; boatDrive.speed *= 0.4; }
-  if(nz < 135.5 && !(nx > -49 && nx < -43)) { nz = 135.5; boatDrive.speed *= 0.5; }
+  if(vec.mag > 0.05){
+    if(boatDrive.speed > 0.25)
+      boatDrive.heading = vehTurnToward(boatDrive.heading, Math.atan2(vec.x, vec.z), 1.9 * dt * (0.35 + 0.65 * Math.min(1, boatDrive.speed / 6)));
+    else
+      boatDrive.heading = vehTurnToward(boatDrive.heading, Math.atan2(vec.x, vec.z), 0.9 * dt);   // TAHAP 8A: belok di tempat pelan — perahu kandas selalu bisa mengarah kembali ke laut
+  }
+  var sx = Math.sin(boatDrive.heading), cz2 = Math.cos(boatDrive.heading);
+  var nx = g.position.x + sx * boatDrive.speed * dt;
+  var nz = g.position.z + cz2 * boatDrive.speed * dt;
+  // uji batas pada titik HALUAN (2,7 m di depan titik tengah perahu)
+  function bowOK(cx, cz){ return boatWaterOK(cx + sx * 2.7, cz + cz2 * 2.7); }
+  if(!bowOK(nx, nz)){
+    if(bowOK(nx, g.position.z)) nz = g.position.z;              // geser menyamping masih di air: lanjut sumbu x saja
+    else if(bowOK(g.position.x, nz)) nx = g.position.x;         // lanjut sumbu z saja
+    else { nx = g.position.x; nz = g.position.z; }
+    if(nx === g.position.x && nz === g.position.z) boatDrive.speed *= Math.pow(0.4, dt / 0.033);   // tertahan daratan: melambat seperti versi lama
+  }
+  nx = Math.max(-124, Math.min(6, nx)); nz = Math.max(130, Math.min(242, nz));
   g.position.x = nx; g.position.z = nz; g.rotation.y = boatDrive.heading;
-  g.position.y = 0.02 + Math.sin(performance.now() / 480) * 0.05;
-  player.position.set(nx, 0.3, nz); player.rotation.y = boatDrive.heading;
+  g.position.y = -0.28 + Math.sin(clock.elapsedTime * 0.8) * 0.045 + 0.30;   // menunggangi ombak yang sama dengan seaMesh + offset lambung
+  player.position.set(nx, g.position.y + 0.28, nz); player.rotation.y = boatDrive.heading;
   if(boatDrive.spot){ boatDrive.spot.x = nx; boatDrive.spot.z = nz; }
-}, 33);
+}
 /* ---------- Voli Pantai (bola sinkron VOLI1) ---------- */
 var VOL = {x:-70, z:120};
 (function buildVolley(){
@@ -20237,7 +20837,7 @@ document.getElementById('photoClose').addEventListener('click', function(){ phot
 
 /* ================= PETA VISUAL BARU (PAKET B2) ================= */
 DESTS.push(
-  {name:'Kopdes Merah Putih Gerduren', x:-11, z:40, kind:'tempat', label:'Kopdes'},
+  {name:'Kopdes Merah Putih Gerduren', x:-100, z:32, kind:'tempat', label:'Kopdes'},
   {name:'Pantai Pasir Putih', x:-58, z:118, kind:'tempat', label:'Pantai'},
   {name:'Jalan Pantai', x:-41.7, z:104, kind:'tempat', label:'Jln. Pantai'},
   {name:'Dermaga Pantai', x:-46, z:148, kind:'tempat', label:'Dermaga'},
@@ -20487,7 +21087,7 @@ function startPatrol(){
   var atSea = false;
   try{ atSea = (typeof inSeaWater === 'function' && inSeaWater(player.position.x, player.position.z)) || !!boatDrive; }catch(e){}
   if(!atSea){ try{ exitRide(); }catch(e){} }   // kendaraan/wahana berhenti halus: pemain turun di tempat
-  // bila di laut: pemain tetap di perahunya — interval perahu berhenti selama patrolBusy
+  // bila di laut: pemain tetap di perahunya — update perahu (di animate) berhenti selama patrolBusy
   var fx = Math.sin(player.rotation.y), fz = Math.cos(player.rotation.y);
   var sx = player.position.x + fx * 7, sz = player.position.z + fz * 7;
   if(!atSea && ((typeof inSeaWater === 'function' && inSeaWater(sx, sz)) || sx < -100 || sx > 100 || sz < -76 || sz > 100)){
