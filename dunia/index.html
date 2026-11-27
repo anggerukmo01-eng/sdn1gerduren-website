@@ -13549,6 +13549,7 @@ function mpConnect(code, asGM){
       if(mpVehKind()) mpSendVehState(); // sudah berkendara saat gabung ruangan: beri tahu semua pemain kendaraan kita
       mpSendHouseState(); // beri tahu ruangan rumah Perumahan mana saja yang sudah milikku (kunci eksklusif)
       mpStartRefresh(); // jaga pendaftaran diri sendiri di daftar server
+      try{ hofServerFetch(); }catch(e){} // Tahap 10: setelah joined, ambil registri HoF server
       var gmAda = false;
       for(var gid in mp.players){ if(mp.players[gid].isGM){ gmAda = true; break; } }
       if(gmAda){
@@ -15695,6 +15696,48 @@ function hofHandleRemote(msg){
     fase:['A','B','C'].indexOf(parts[3]) >= 0 ? parts[3] : 'B', gender:parts[4] === 'putri' ? 'putri' : 'putra',
     badge:hofCleanField(parts[5], 30), misi:parseInt(parts[6], 10) || 0, pd:0, pdDate:''});
 }
+/* ---------- Hall of Fame server (Tahap 10) ----------
+   Registri rekor sepanjang masa kini juga tersimpan di server Worker
+   (GET/POST /hof) supaya skor tertinggi terlihat lintas-perangkat, bukan
+   hanya di perangkat yang pernah satu ruangan. Siaran HOF1| tetap jadi
+   jalur update live + fallback saat server tak terjangkau.
+   KOREKSI BENTUK RECORD: server menyimpan + mengembalikan field PENDEK
+   {n,f,g,b,pb,m,ts} (sama seperti entri hofDB lokal), sedangkan
+   hofMergeRecord() membaca field PANJANG {name,fase,gender,badge,pb,misi}.
+   Jadi GET memetakan nama field dulu (1 baris mapping, TANPA logika merge
+   baru) sebelum memanggil hofMergeRecord. POST memakai hofMyRecord()
+   yang memang sudah berbentuk panjang. */
+var hofServerLastSent = null; // {pb, m} rekor terakhir yang sukses di-POST
+var hofServerLastPostT = 0;
+function hofServerPost(){
+  if(typeof fetch !== 'function' || typeof MP_HTTP === 'undefined') return;
+  var rec = hofMyRecord();
+  var pb = rec.pb | 0, m = rec.misi | 0;
+  if(pb <= 0 && m <= 0) return; // belum ada rekor: jangan kirim entri kosong
+  var last = hofServerLastSent;
+  if(last && pb <= last.pb && m <= last.m) return; // hanya bila membaik
+  var now = performance.now();
+  if(now - hofServerLastPostT < 1500) return; // selaras throttle hofSave
+  hofServerLastPostT = now;
+  fetch(MP_HTTP + '/hof', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({name:rec.name, fase:rec.fase, gender:rec.gender, badge:rec.badge, pb:pb, misi:m})})
+    .then(function(res){ return res.json(); }).then(function(data){
+      if(data && data.ok === true) hofServerLastSent = {pb:pb, m:m};
+    }).catch(function(){ /* server tak terjangkau: diam-diam, coba lagi saat rekor membaik */ });
+}
+function hofServerFetch(){
+  if(typeof fetch !== 'function' || typeof MP_HTTP === 'undefined') return;
+  fetch(MP_HTTP + '/hof').then(function(res){ return res.json(); }).then(function(data){
+    if(!data || data.ok !== true || !Array.isArray(data.records)) return;
+    data.records.forEach(function(r){
+      if(!r || typeof r.n !== 'string') return;
+      hofMergeRecord({cid:null, name:r.n, fase:r.f, gender:r.g, badge:r.b, pb:r.pb | 0, misi:r.m | 0, pd:0, pdDate:''});
+    });
+    try{ if(typeof lbOverlay !== 'undefined' && lbOverlay && lbOverlay.classList.contains('on') && typeof renderLB === 'function') renderLB(); }catch(e){}
+  }).catch(function(){ /* diam-diam: pakai hofDB lokal + siaran seperti biasa */ });
+}
+setInterval(function(){ if(playing) hofServerPost(); }, 15000); // kirim rekor bila membaik
+hofServerFetch(); // lobi dimuat: ambil registri server sekali
 function statBroadcast(force){
   if(typeof mp === 'undefined' || !mp.joined) return;
   var now = performance.now();
@@ -18161,7 +18204,7 @@ function renderLB(){
   document.getElementById('lbList').innerHTML = html;
   document.getElementById('lbCertBtn').textContent = certGranted() ? 'Lihat & Unduh Sertifikat Digital' : 'Sertifikat Digital (Progres ' + posIlmuDone() + '/5 Pos)';
 }
-function openLB(){ lbState.fase = eco.fase; try{ hofBroadcast(true); }catch(e){} renderLB(); lbOverlay.classList.add('on'); AudioSys.sfx('pop'); }
+function openLB(){ lbState.fase = eco.fase; try{ hofBroadcast(true); }catch(e){} try{ hofServerFetch(); }catch(e){} renderLB(); lbOverlay.classList.add('on'); AudioSys.sfx('pop'); }
 lbOverlay.querySelectorAll('[data-tab]').forEach(function(b){ b.addEventListener('click', function(){ lbState.tab = b.getAttribute('data-tab'); AudioSys.sfx('click'); renderLB(); }); });
 lbOverlay.querySelectorAll('#lbSub [data-fase]').forEach(function(b){ b.addEventListener('click', function(){ lbState.fase = b.getAttribute('data-fase'); AudioSys.sfx('click'); renderLB(); }); });
 lbOverlay.querySelector('#lbCloseBtn').addEventListener('click', function(){ AudioSys.sfx('click'); lbOverlay.classList.remove('on'); });
